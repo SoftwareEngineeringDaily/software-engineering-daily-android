@@ -45,6 +45,9 @@ class MainActivity : PlaybackActivity() {
         // Set up nav menu
         binding.navigationView.setupWithNavController(navController)
 
+        // Set up media
+        this.setUp()
+
         UserRepository.getInstance().getToken()?.apply {
             if (UserRepository.getInstance().getToken() == "") return
             val authItem = binding.navigationView.menu.getItem(2)
@@ -58,11 +61,7 @@ class MainActivity : PlaybackActivity() {
         }
 
         checkForPermissions()
-
         handleIntent(intent)
-
-        // Set up media
-        this.setUp()
     }
 
     override fun onNewIntent(intent: Intent) {

@@ -1,6 +1,5 @@
 package com.koalatea.sedaily.home
 
-import android.util.Log
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -58,7 +57,6 @@ class HomeFeedViewModel internal constructor(
                 .subscribe(
                     { result -> onRetrievePostListSuccess(result) },
                     {
-                        Log.v("keithtest", it.localizedMessage)
                         onRetrievePostListError()
                     }
                 )
@@ -87,7 +85,6 @@ class HomeFeedViewModel internal constructor(
                         result -> onRetrievePostPageSuccess(result)
                     },
                     {
-                        Log.v("keithtest", it.localizedMessage)
                         onRetrievePostListError()
                     }
                 )
@@ -113,7 +110,6 @@ class HomeFeedViewModel internal constructor(
                     result -> onRetrievePostSearchSuccess(result)
                 },
                 {
-                    Log.v("keithtest", it.localizedMessage)
                     onRetrievePostListError()
                 }
             )

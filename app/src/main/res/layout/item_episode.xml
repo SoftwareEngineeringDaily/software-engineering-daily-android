@@ -91,6 +91,20 @@
                 app:mutableVisibility="@{viewModel.getPlayVisible()}"
                 android:onClick="@{playClickListener}"
                 />
+
+            <Button
+                android:id="@+id/stream_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Stream"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/button"
+                app:mutableVisibility="@{viewModel.getStreamVisible()}"
+                android:onClick="@{playClickListener}"
+                />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </layout>

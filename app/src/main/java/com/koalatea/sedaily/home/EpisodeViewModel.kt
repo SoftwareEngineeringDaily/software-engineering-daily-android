@@ -1,11 +1,9 @@
 package com.koalatea.sedaily.home
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.koalatea.sedaily.SingleLiveEvent
 import com.koalatea.sedaily.downloads.DownloadRepository
 import com.koalatea.sedaily.downloads.Downloader
 import com.koalatea.sedaily.models.Episode
@@ -22,6 +20,7 @@ class EpisodeViewModel: ViewModel() {
     private val downloadVisible = MutableLiveData<Int>()
     private val progressVisible = MutableLiveData<Int>()
     private val playVisible = MutableLiveData<Int>()
+    private val streamVisible = MutableLiveData<Int>()
     private var episodeData: Episode? = null
 
     fun bind(episode: Episode) {
@@ -33,6 +32,7 @@ class EpisodeViewModel: ViewModel() {
         postImage.value = episode.featuredImage
         progress.value = 0
         downloadVisible.value = View.VISIBLE
+        streamVisible.value = View.VISIBLE
     }
 
     fun getPostTitle(): MutableLiveData<String> {
@@ -53,7 +53,10 @@ class EpisodeViewModel: ViewModel() {
 
     @SuppressLint("CheckResult")
     fun getDownloadVisible() : MutableLiveData<Int> {
-        if (postMp3.value == null) downloadVisible.value =  View.GONE
+        if (postMp3.value == null) {
+            downloadVisible.value = View.GONE
+            streamVisible.value = View.GONE
+        }
         // @TODO: Correct way to check for null?
         // @TOOD: handle disposable
         postId.value?.let {
@@ -85,11 +88,16 @@ class EpisodeViewModel: ViewModel() {
         return playVisible
     }
 
+    fun getStreamVisible(): MutableLiveData<Int> {
+        return streamVisible
+    }
+
     fun download() {
         // @TODO: Check if downloaded from download repo
         postMp3?.apply {
             val progressWatcher = Downloader.downloadMp3(postMp3.value!!, postId.value!!)
-            downloadVisible.value =  View.GONE
+            downloadVisible.value = View.GONE
+            streamVisible.value = View.GONE
             progressVisible.value =  View.VISIBLE
             // @TOOD: Get rid of disposables correctly
             progressWatcher?.subscribe {
