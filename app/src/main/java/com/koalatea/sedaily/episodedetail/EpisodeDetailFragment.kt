@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.koalatea.sedaily.PlaybackActivity
 import com.koalatea.sedaily.R
 import com.koalatea.sedaily.ViewModelFactory
 import com.koalatea.sedaily.databinding.FragmentEpisodeDetailBinding
@@ -48,6 +49,10 @@ class EpisodeDetailFragment : Fragment() {
                     .replace(Regex("<audio class=\"wp-audio-shortcode\".*</audio>"), "")
                     .replace(Regex("<p class=\"powerpress_links powerpress_links_mp3\">.*Download</a></p>"), "")
             binding.plantDetail.loadData(htmlContent, "text/html", "UTF-8")
+        })
+
+        detailViewModel?.playRequested?.observe(this, Observer {
+            (this.activity as PlaybackActivity).playMedia(it)
         })
 
         return binding.root

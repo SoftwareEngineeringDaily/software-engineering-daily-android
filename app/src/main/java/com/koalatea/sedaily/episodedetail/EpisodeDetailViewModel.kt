@@ -7,6 +7,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.koalatea.sedaily.SEDApp
+import com.koalatea.sedaily.SingleLiveEvent
 import com.koalatea.sedaily.downloads.DownloadRepository
 import com.koalatea.sedaily.models.Download
 import com.koalatea.sedaily.models.Episode
@@ -26,6 +27,8 @@ class EpisodeDetailViewModel internal constructor(
     private val postImage = MutableLiveData<String>()
     private val postMp3 = MutableLiveData<String>()
     private val postContent = MutableLiveData<String>()
+    val playRequested = SingleLiveEvent<Episode>()
+    private var episode: Episode? = null
 
     // @TODO: Replace with composite disposable
     private lateinit var subscription: Disposable
@@ -81,6 +84,8 @@ class EpisodeDetailViewModel internal constructor(
     }
 
     private fun onRetrievePostListSuccess(episode: Episode) {
+        this.episode = episode
+
         postTitle.value = episode.title?.rendered
         postImage.value = episode.featuredImage
         postContent.value = episode.content?.rendered ?: ""
@@ -98,5 +103,10 @@ class EpisodeDetailViewModel internal constructor(
     fun removeDownloadForId(episodeId: String) {
         hasDownload.value = View.GONE
         DownloadRepository.removeDownloadForId(episodeId)
+    }
+
+    fun playRequest() {
+        // @TODO: Create download Episode
+        playRequested.value = episode
     }
 }
