@@ -1,0 +1,42 @@
+<resources>
+    <string name="app_name">SEDaily</string>
+    <string name="navigation_drawer_header_title" translatable="false">SoftwareDaily</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="downloads_title">Downloads</string>
+    <string name="auth_title">Authentication</string>
+    <string name="home_title" >Home</string>
+    <string name="episode_details_title">Episode</string>
+    <string name="garden_empty">Your garden is empty</string>
+    <string name="post_error">An error occurred while loading the posts</string>
+    <string name="search_hint">Search for a podcast</string>
+
+    <!-- Accessibility -->
+    <string name="a11y_plant_item_image" translation_description="Accessibility text for each of the plant images shown in the 'My garden' and 'Plant list' screens.">Picture of plant</string>
+
+    <!-- Notificaiton Channel -->
+    <string name="notification_channel">Now Playing</string>
+    <string name="notification_channel_description">Shows what music is currently playing in UAMP</string>
+
+    <!-- Notification actions -->
+    <string name="notification_skip_to_previous">Skip to previous track</string>
+    <string name="notification_skip_to_next">Skip to next track</string>
+    <string name="notification_play">Play</string>
+    <string name="notification_pause">Pause</string>
+
+    <!-- Error messages -->
+    <string name="error_media_not_found">Could not locate requested media.</string>
+
+    <!-- Playbar -->
+    <string name="speed">Speed</string>
+
+    <!-- Auth -->
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="email">Email</string>
+    <string name="username">Username</string>
+    <string name="usernameOrEmail">Username or Email</string>
+    <string name="forgotPassword">Forgot Password</string>
+    <string name="password">Password</string>
+</resources>

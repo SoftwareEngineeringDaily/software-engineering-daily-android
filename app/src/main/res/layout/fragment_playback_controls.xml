@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:id="@+id/content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:orientation="vertical"
+        android:layout_toStartOf="@+id/speed"
+        android:layout_centerVertical="true">
+
+        <TextView
+            android:id="@+id/title"
+            tools:text="The Best Music EVAH1111 THE BEST"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="Current Song"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="?android:attr/textColorPrimary"
+            />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp">
+
+            <TextView
+                android:id="@+id/startText"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_marginStart="5dp"
+                android:layout_alignParentStart="true"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:text="0:00"
+                android:textColor="@color/colorAccent"
+                />
+
+            <SeekBar
+                android:id="@+id/seekBar1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_toStartOf="@+id/endText"
+                android:layout_toEndOf="@+id/startText"
+                />
+
+            <TextView
+                android:id="@+id/endText"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_marginEnd="5dp"
+                android:layout_alignParentEnd="true"
+                android:gravity="center_vertical"
+                android:layout_alignWithParentIfMissing="true"
+                android:maxLines="1"
+                android:text="0:00"
+                android:textColor="@color/colorAccent"
+                />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/back15"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:text="Back 15" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/skip15"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:text="Skip 15" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/speed"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/play_pause"
+        android:layout_toStartOf="@+id/play_pause"
+        android:padding="8dp"
+        android:background="?selectableItemBackgroundBorderless"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:text="1x"
+        android:contentDescription="Speed"
+        android:tint="@color/colorAccent"
+        />
+
+    <ImageButton
+        android:id="@+id/play_pause"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:layout_alignParentEnd="true"
+        android:background="?selectableItemBackgroundBorderless"
+        android:src="@drawable/exo_controls_play"
+        android:contentDescription="Play/Pause"
+        android:tint="@color/colorAccent"
+        />
+</RelativeLayout>

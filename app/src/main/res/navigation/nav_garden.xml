@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@+id/garden_fragment">
+
+    <fragment
+        android:id="@+id/garden_fragment"
+        android:name="com.koalatea.sedaily.home.MainFragment"
+        android:label="@string/home_title"
+        tools:layout="@layout/fragment_main" >
+        <action
+            android:id="@+id/action_plant_list_fragment_to_plant_detail_fragment"
+            app:destination="@id/episode_detail_fragment"
+        />
+    </fragment>
+
+    <fragment
+        android:id="@+id/downloads_fragment"
+        android:name="com.koalatea.sedaily.downloads.DownloadsFragment"
+        android:label="@string/downloads_title"
+        tools:layout="@layout/fragment_downloads">
+
+        <action
+            android:id="@+id/action_plant_list_fragment_to_plant_detail_fragment"
+            app:destination="@id/episode_detail_fragment"
+            />
+        <!--app:enterAnim="@anim/slide_in_right"-->
+        <!--app:exitAnim="@anim/slide_out_left"-->
+        <!--app:popEnterAnim="@anim/slide_in_left"-->
+        <!--app:popExitAnim="@anim/slide_out_right" -->
+    </fragment>
+
+    <fragment
+        android:id="@+id/auth_fragment"
+        android:name="com.koalatea.sedaily.auth.AuthFragment"
+        android:label="@string/auth_title"
+        tools:layout="@layout/fragment_auth">
+    </fragment>
+
+    <fragment
+        android:id="@+id/episode_detail_fragment"
+        android:name="com.koalatea.sedaily.episodedetail.EpisodeDetailFragment"
+        android:label="@string/episode_details_title"
+        tools:layout="@layout/fragment_episode_detail">
+        <argument
+            android:name="episodeId"
+            app:argType="string" />
+    </fragment>
+</navigation>

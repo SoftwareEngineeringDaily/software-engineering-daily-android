@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ResourceBundleManager">
+    <file url="file://$USER_HOME$/.gradle/gradle.properties" />
+    <file url="file://$USER_HOME$/.gradle/gradle_english.properties" />
+    <custom-resource-bundle>
+      <file value="file://$USER_HOME$/.gradle/gradle.properties" />
+      <file value="file://$USER_HOME$/.gradle/gradle_english.properties" />
+      <base-name>gradle</base-name>
+    </custom-resource-bundle>
+  </component>
+</project>
