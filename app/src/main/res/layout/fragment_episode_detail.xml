@@ -70,14 +70,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:onClick="@{removeDownload}"
-                    android:text="Remove Download"
-                    app:layout_constraintTop_toTopOf="@id/plantDetail"
-                    app:mutableVisibility="@{viewModel.getHasDownload()}" />
+                <RelativeLayout
+                    android:id="@+id/actionItems"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="4dp"
+                        android:onClick="@{removeDownload}"
+                        android:text="@string/remove_download"
+                        app:mutableVisibility="@{viewModel.getHasDownload()}" />
+                </RelativeLayout>
 
                 <WebView
                     android:id="@+id/plantDetail"
@@ -102,7 +107,7 @@
             android:layout_margin="@dimen/fab_margin"
             android:onClick="@{() -> viewModel.playRequest()}"
             android:tint="@android:color/white"
-            app:layout_anchor="@id/content"
+            app:layout_anchor="@id/actionItems"
             app:layout_anchorGravity="center|end"
             app:srcCompat="@drawable/exo_controls_play" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
