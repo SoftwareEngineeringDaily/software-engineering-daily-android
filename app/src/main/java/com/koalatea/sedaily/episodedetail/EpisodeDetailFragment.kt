@@ -13,11 +13,11 @@ import androidx.lifecycle.ViewModelProviders
 import com.koalatea.sedaily.R
 import com.koalatea.sedaily.ViewModelFactory
 import com.koalatea.sedaily.databinding.FragmentEpisodeDetailBinding
-import com.koalatea.sedaily.downloads.DownloadRepository
 
 class EpisodeDetailFragment : Fragment() {
 
     var episodeId: String? = null
+    var detailViewModel: EpisodeDetailViewModel? = null
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -26,8 +26,8 @@ class EpisodeDetailFragment : Fragment() {
 
         episodeId = EpisodeDetailFragmentArgs.fromBundle(arguments).episodeId
 
-        val detailViewModel = ViewModelProviders.of(this, ViewModelFactory(this.activity as AppCompatActivity)).get(EpisodeDetailViewModel::class.java)
-        detailViewModel.loadEpisode(episodeId!!)
+        detailViewModel = ViewModelProviders.of(this, ViewModelFactory(this.activity as AppCompatActivity)).get(EpisodeDetailViewModel::class.java)
+        detailViewModel?.loadEpisode(episodeId!!)
 //        viewModel.errorMessage.observe(this, Observer {
 //            errorMessage -> if(errorMessage != null) showError(errorMessage) else hideError()
 //        })
@@ -43,7 +43,7 @@ class EpisodeDetailFragment : Fragment() {
             }
         }
 
-        detailViewModel.getPostContent().observe(this, Observer {
+        detailViewModel?.getPostContent()?.observe(this, Observer {
             binding.plantDetail.loadData(it, "text/html", "UTF-8")
         })
 
@@ -60,6 +60,8 @@ class EpisodeDetailFragment : Fragment() {
     }
 
     private fun removeDownloadFromDB() {
-        DownloadRepository.removeDownloadForId(episodeId!!)
+        episodeId?.apply {
+            detailViewModel?.removeDownloadForId(this)
+        }
     }
 }

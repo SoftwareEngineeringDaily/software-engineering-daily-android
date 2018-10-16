@@ -49,8 +49,6 @@ class EpisodeDetailViewModel internal constructor(
 //                        onRetrievePostListError()
                 }
             )
-
-        checkForDownload(episodeId)
     }
 
     fun checkForDownload(episodeId: String) {
@@ -89,9 +87,16 @@ class EpisodeDetailViewModel internal constructor(
         hasDownload.value = View.GONE
         postMp3.value = episode.mp3
         postId.value = episode._id
+
+        checkForDownload(episode._id)
     }
 
     private fun onRetrieveDownloadSuccess(download: Download) {
         hasDownload.value = View.VISIBLE
+    }
+
+    fun removeDownloadForId(episodeId: String) {
+        hasDownload.value = View.GONE
+        DownloadRepository.removeDownloadForId(episodeId)
     }
 }
