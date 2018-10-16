@@ -44,7 +44,10 @@ class EpisodeDetailFragment : Fragment() {
         }
 
         detailViewModel?.getPostContent()?.observe(this, Observer {
-            binding.plantDetail.loadData(it, "text/html", "UTF-8")
+            val htmlContent = it
+                    .replace(Regex("<audio class=\"wp-audio-shortcode\".*</audio>"), "")
+                    .replace(Regex("<p class=\"powerpress_links powerpress_links_mp3\">.*Download</a></p>"), "")
+            binding.plantDetail.loadData(htmlContent, "text/html", "UTF-8")
         })
 
         return binding.root
