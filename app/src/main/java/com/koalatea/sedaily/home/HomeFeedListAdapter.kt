@@ -12,7 +12,7 @@ import com.koalatea.sedaily.databinding.ItemEpisodeBinding
 import com.koalatea.sedaily.models.Episode
 
 class HomeFeedListAdapter (
-        private val homeFeedViewModel: HomeFeedViewModel
+    private val homeFeedViewModel: HomeFeedViewModel
 ): ListAdapter<Episode, HomeFeedListAdapter.ViewHolder>(EpisodeDiffCallback()) {
     // @TODO: Currently public for HomeFeedModel,but we probably need a better way to get last element
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeFeedListAdapter.ViewHolder {
@@ -20,12 +20,12 @@ class HomeFeedListAdapter (
                 LayoutInflater.from(parent.context),
                 R.layout.item_episode, parent,
                 false)
-        return ViewHolder(binding)
+        return ViewHolder(binding, homeFeedViewModel)
     }
 
     override fun onBindViewHolder(holder: HomeFeedListAdapter.ViewHolder, position: Int) {
         val episode = getItem(position)
-        holder.bind(createOnClickListener(episode._id), createPlayClickListener(episode), episode)
+        holder.bind(createOnClickListener(episode._id), episode)
     }
 
     private fun createOnClickListener(episodeId: String): View.OnClickListener {
@@ -35,22 +35,16 @@ class HomeFeedListAdapter (
         }
     }
 
-    private fun createPlayClickListener(episode: Episode): View.OnClickListener {
-        return View.OnClickListener {
-           homeFeedViewModel.play(episode)
-        }
-    }
-
     class ViewHolder(
-        private val binding: ItemEpisodeBinding
+        private val binding: ItemEpisodeBinding,
+        private val homeFeedViewModel: HomeFeedViewModel
     ): RecyclerView.ViewHolder(binding.root) {
-        private val viewModel = EpisodeViewModel()
+        private val viewModel = EpisodeViewModel(homeFeedViewModel)
 
-        fun bind(listener: View.OnClickListener, playListener: View.OnClickListener, episode: Episode) {
+        fun bind(listener: View.OnClickListener, episode: Episode) {
             viewModel.bind(episode)
             binding.viewModel = viewModel
             binding.clickListener = listener
-            binding.playClickListener = playListener
         }
     }
 }

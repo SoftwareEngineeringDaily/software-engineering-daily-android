@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.koalatea.sedaily.R
 import com.koalatea.sedaily.SingleLiveEvent
+import com.koalatea.sedaily.models.DownloadDao
 import com.koalatea.sedaily.models.Episode
 import com.koalatea.sedaily.models.EpisodeDao
 import com.koalatea.sedaily.network.NetworkHelper
@@ -21,7 +22,7 @@ class HomeFeedViewModel internal constructor(
 
     val loadingVisibility: MutableLiveData<Int> = MutableLiveData()
     val errorMessage: MutableLiveData<Int> = MutableLiveData()
-    val playRequested = SingleLiveEvent<Episode>()
+    val playRequested = SingleLiveEvent<DownloadDao.DownloadEpisode>()
     val episodes: MutableLiveData<List<Episode>> = MutableLiveData()
 
     private val compositeDisposable = CompositeDisposable()
@@ -141,7 +142,7 @@ class HomeFeedViewModel internal constructor(
         errorMessage.value = R.string.post_error
     }
 
-    fun play(episode: Episode) {
+    fun play(episode: DownloadDao.DownloadEpisode) {
         playRequested.value = episode
     }
 }

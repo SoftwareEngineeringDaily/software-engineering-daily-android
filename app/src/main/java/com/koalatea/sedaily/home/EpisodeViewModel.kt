@@ -4,13 +4,15 @@ import android.annotation.SuppressLint
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.koalatea.sedaily.SingleLiveEvent
 import com.koalatea.sedaily.downloads.DownloadRepository
 import com.koalatea.sedaily.downloads.Downloader
+import com.koalatea.sedaily.models.DownloadDao
 import com.koalatea.sedaily.models.Episode
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
-class EpisodeViewModel: ViewModel() {
+class EpisodeViewModel(private val homeFeedViewModel: HomeFeedViewModel): ViewModel() {
     private val postTitle = MutableLiveData<String>()
     private val postBody = MutableLiveData<String>()
     private val postMp3 = MutableLiveData<String>()
@@ -22,6 +24,7 @@ class EpisodeViewModel: ViewModel() {
     private val playVisible = MutableLiveData<Int>()
     private val streamVisible = MutableLiveData<Int>()
     private var episodeData: Episode? = null
+    private var downloadFile: String? = null
 
     fun bind(episode: Episode) {
         episodeData = episode
@@ -68,6 +71,7 @@ class EpisodeViewModel: ViewModel() {
                     if (it != null) downloadVisible.value =  View.GONE
                     playVisible.value = View.VISIBLE
                     streamVisible.value = View.GONE
+                    downloadFile = it.filename
                 }, {
                     _ ->
                     // @TODO: Log distrbute
@@ -111,5 +115,26 @@ class EpisodeViewModel: ViewModel() {
             }
         }
         // @TODO log null
+    }
+
+    fun playRequest() {
+        val downloadEpisode: DownloadDao.DownloadEpisode
+        if (downloadFile != null) {
+            downloadEpisode = DownloadDao.DownloadEpisode(
+                postId.value!!,
+                downloadFile!!,
+                postTitle.value!!,
+                postImage.value
+            )
+        } else {
+            downloadEpisode = DownloadDao.DownloadEpisode(
+                postId.value!!,
+                postMp3.value!!,
+                postTitle.value!!,
+                postImage.value
+            )
+        }
+
+        homeFeedViewModel.play(downloadEpisode)
     }
 }

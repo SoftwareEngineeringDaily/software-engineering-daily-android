@@ -10,6 +10,7 @@ import com.koalatea.sedaily.SEDApp
 import com.koalatea.sedaily.SingleLiveEvent
 import com.koalatea.sedaily.downloads.DownloadRepository
 import com.koalatea.sedaily.models.Download
+import com.koalatea.sedaily.models.DownloadDao
 import com.koalatea.sedaily.models.Episode
 import com.koalatea.sedaily.models.EpisodeDao
 import io.reactivex.Observable
@@ -27,8 +28,9 @@ class EpisodeDetailViewModel internal constructor(
     private val postImage = MutableLiveData<String>()
     private val postMp3 = MutableLiveData<String>()
     private val postContent = MutableLiveData<String>()
-    val playRequested = SingleLiveEvent<Episode>()
+    val playRequested = SingleLiveEvent<DownloadDao.DownloadEpisode>()
     private var episode: Episode? = null
+    private var downloadFile: String? = null
 
     // @TODO: Replace with composite disposable
     private lateinit var subscription: Disposable
@@ -98,6 +100,7 @@ class EpisodeDetailViewModel internal constructor(
 
     private fun onRetrieveDownloadSuccess(download: Download) {
         hasDownload.value = View.VISIBLE
+        downloadFile = download.filename
     }
 
     fun removeDownloadForId(episodeId: String) {
@@ -107,6 +110,22 @@ class EpisodeDetailViewModel internal constructor(
 
     fun playRequest() {
         // @TODO: Create download Episode
-        playRequested.value = episode
+        val downloadEpisode: DownloadDao.DownloadEpisode
+        if (downloadFile != null) {
+            downloadEpisode = DownloadDao.DownloadEpisode(
+                    postId.value!!,
+                    downloadFile!!,
+                    postTitle.value!!,
+                    postImage.value
+            )
+        } else {
+            downloadEpisode = DownloadDao.DownloadEpisode(
+                    postId.value!!,
+                    postMp3.value!!,
+                    postTitle.value!!,
+                    postImage.value
+            )
+        }
+        playRequested.value = downloadEpisode
     }
 }

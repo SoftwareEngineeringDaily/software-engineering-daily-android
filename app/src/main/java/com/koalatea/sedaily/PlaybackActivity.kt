@@ -66,28 +66,8 @@ open class PlaybackActivity : AppCompatActivity() {
         }
     }
 
-    fun playMedia(episode: Episode) {
-        val item: MediaMetadataCompat  = MediaMetadataCompat.Builder()
-                .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, episode._id)
-                .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI, episode.mp3)
-                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, episode.title?.rendered)
-                .build()
-
-        val bItem = MediaBrowserCompat.MediaItem(item.description,
-                MediaBrowserCompat.MediaItem.FLAG_PLAYABLE)
-
-        PodcastSource.setItem(item)
-
-        val podcastSessionStateManager = PodcastSessionStateManager.getInstance()
-        val currentPLayingTitle = podcastSessionStateManager.currentTitle
-        val isSameMedia = currentPLayingTitle == episode.title?.rendered
-
-        onMediaItemSelected(bItem, isSameMedia)
-    }
-
     // Local play
     fun playMedia(episode: DownloadDao.DownloadEpisode) {
-        // @TODO: How do we play local?
         val item: MediaMetadataCompat  = MediaMetadataCompat.Builder()
                 .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, episode.postId)
                 .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI, episode.filename)
