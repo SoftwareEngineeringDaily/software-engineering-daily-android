@@ -77,6 +77,10 @@ class HomeFeedViewModel internal constructor(
         map.set("createdAtBefore", lastEpisode?.date as String)
 
         val subscription = sedailyApi.getPosts(map)
+                .concatMap {
+                    apiPostList -> episodeDao.inserAll(*apiPostList.toTypedArray())
+                    Observable.just(apiPostList)
+                }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { onRetrivePostListStart() }
@@ -102,6 +106,10 @@ class HomeFeedViewModel internal constructor(
         map.set("search", query)
 
         val subscription = sedailyApi.getPosts(map)
+            .concatMap {
+                apiPostList -> episodeDao.inserAll(*apiPostList.toTypedArray())
+                Observable.just(apiPostList)
+            }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe { onRetrivePostListStart() }
