@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import br.com.bemobi.medescope.Medescope
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.squareup.leakcanary.LeakCanary
 
 class SEDApp : Application() {
 
@@ -11,7 +12,14 @@ class SEDApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        SEDApp.appContext = getApplicationContext()
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        LeakCanary.install(this);
+
+        SEDApp.appContext = applicationContext
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
         Medescope.getInstance(this).setApplicationName("My Application Name")
     }

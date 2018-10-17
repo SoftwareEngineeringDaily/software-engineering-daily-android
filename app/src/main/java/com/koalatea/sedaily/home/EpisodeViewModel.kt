@@ -67,6 +67,7 @@ class EpisodeViewModel: ViewModel() {
                 .subscribe ({ it ->
                     if (it != null) downloadVisible.value =  View.GONE
                     playVisible.value = View.VISIBLE
+                    streamVisible.value = View.GONE
                 }, {
                     _ ->
                     // @TODO: Log distrbute
@@ -95,7 +96,7 @@ class EpisodeViewModel: ViewModel() {
     fun download() {
         // @TODO: Check if downloaded from download repo
         postMp3?.apply {
-            val progressWatcher = Downloader.downloadMp3(postMp3.value!!, postId.value!!)
+            val progressWatcher= Downloader.downloadMp3(postMp3.value!!, postId.value!!)
             downloadVisible.value = View.GONE
             streamVisible.value = View.GONE
             progressVisible.value =  View.VISIBLE
