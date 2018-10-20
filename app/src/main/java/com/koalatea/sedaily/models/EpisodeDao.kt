@@ -2,6 +2,7 @@ package com.koalatea.sedaily.models
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
 @Dao
@@ -12,6 +13,6 @@ interface EpisodeDao {
     @Query("SELECT * FROM episode WHERE _id = :id LIMIT 1")
     fun findById(id: String): Episode
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun inserAll(vararg episodes: Episode)
 }
