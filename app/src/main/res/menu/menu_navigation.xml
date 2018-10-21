@@ -10,4 +10,9 @@
     <item
         android:id="@+id/auth_fragment"
         android:title="@string/auth_title"/>
+
+    <item
+        android:id="@+id/about_application"
+        android:title="@string/about_app_title"
+        />
 </menu>

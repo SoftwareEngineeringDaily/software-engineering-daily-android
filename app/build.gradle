@@ -51,7 +51,8 @@ dependencies {
     implementation "com.google.android.material:material:$rootProject.supportLibraryVersion"
     kapt "com.github.bumptech.glide:compiler:$rootProject.glideVersion"
     implementation "com.github.bumptech.glide:glide:$rootProject.glideVersion"
-
+    implementation "com.mikepenz:aboutlibraries:6.2.0"
+    
     // Media
     implementation 'androidx.media2:media2:1.0.0-alpha03'
 
@@ -59,7 +60,7 @@ dependencies {
     implementation 'br.com.bemobi:medescope:1.1.0'
 
     // Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
     // Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
@@ -95,6 +96,6 @@ dependencies {
 
     // Testing
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
+    androidTestImplementation 'androidx.test:runner:1.1.0-beta02'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-beta02'
 }

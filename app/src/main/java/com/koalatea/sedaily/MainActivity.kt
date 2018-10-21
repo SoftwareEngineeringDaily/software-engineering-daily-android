@@ -5,24 +5,24 @@ import android.app.SearchManager
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.koalatea.sedaily.auth.UserRepository
 import com.koalatea.sedaily.databinding.ActivityMainBinding
-import com.koalatea.sedaily.home.HomeFeedViewModel
 import com.koalatea.sedaily.home.PodcastSearchRepo
+import com.mikepenz.aboutlibraries.Libs
+import com.mikepenz.aboutlibraries.LibsBuilder
+import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : PlaybackActivity() {
 
@@ -44,7 +44,15 @@ class MainActivity : PlaybackActivity() {
 
         // Set up nav menu
         binding.navigationView.setupWithNavController(navController)
-
+        navigation_view.setNavigationItemSelectedListener { menuItem: MenuItem ->
+            return@setNavigationItemSelectedListener when(menuItem.itemId) {
+                R.id.about_application -> {
+                    showAboutInfo()
+                    true
+                }
+                else -> false
+            }
+        }
         // Set up media
         this.setUp()
 
@@ -62,6 +70,18 @@ class MainActivity : PlaybackActivity() {
 
         checkForPermissions()
         handleIntent(intent)
+    }
+
+
+    private fun showAboutInfo() {
+        LibsBuilder()
+            .withLicenseShown(true)
+            .withAboutAppName(getString(R.string.app_name))
+            .withAboutIconShown(true)
+            .withAboutVersionShown(true)
+            .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
+            .withActivityTitle("${getString(R.string.about_app_title)} ${getString(R.string.app_name)}")
+            .start(this)
     }
 
     override fun onNewIntent(intent: Intent) {
