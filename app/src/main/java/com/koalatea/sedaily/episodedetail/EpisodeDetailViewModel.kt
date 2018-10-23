@@ -23,6 +23,7 @@ class EpisodeDetailViewModel internal constructor(
     private val episodeDao: EpisodeDao
 ) : ViewModel() {
     private val hasDownload = MutableLiveData<Int>()
+    private val canPlay = MutableLiveData<Int>()
     private val postTitle = MutableLiveData<String>()
     private val postId = MutableLiveData<String>()
     private val postImage = MutableLiveData<String>()
@@ -85,6 +86,10 @@ class EpisodeDetailViewModel internal constructor(
         return hasDownload
     }
 
+    fun getCanPlay(): MutableLiveData<Int> {
+        return canPlay
+    }
+
     private fun onRetrievePostListSuccess(episode: Episode) {
         this.episode = episode
 
@@ -94,6 +99,12 @@ class EpisodeDetailViewModel internal constructor(
         hasDownload.value = View.GONE
         postMp3.value = episode.mp3
         postId.value = episode._id
+
+        if (postMp3.value == null) {
+            canPlay.value = View.GONE
+        } else {
+            canPlay.value = View.VISIBLE
+        }
 
         checkForDownload(episode._id)
     }

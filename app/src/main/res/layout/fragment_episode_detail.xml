@@ -106,6 +106,7 @@
             android:layout_gravity="center"
             android:layout_margin="@dimen/fab_margin"
             android:onClick="@{() -> viewModel.playRequest()}"
+            app:mutableVisibility="@{viewModel.getCanPlay()}"
             android:tint="@android:color/white"
             app:layout_anchor="@id/actionItems"
             app:layout_anchorGravity="center|end"
