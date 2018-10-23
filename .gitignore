@@ -12,4 +12,5 @@
 
 app/release/
 app/google-services.json
+fastlane/report.xml
 .google/key.json
