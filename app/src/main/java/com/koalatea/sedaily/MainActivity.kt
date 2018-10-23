@@ -48,6 +48,10 @@ class MainActivity : PlaybackActivity() {
         // Set up media
         this.setUp()
 
+        checkForPermissions()
+
+        handleIntent(intent)
+
         UserRepository.getInstance().getToken()?.apply {
             if (UserRepository.getInstance().getToken() == "") return
             val authItem = binding.navigationView.menu.getItem(2)
@@ -59,9 +63,6 @@ class MainActivity : PlaybackActivity() {
                 false
             }
         }
-
-        checkForPermissions()
-        handleIntent(intent)
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -101,26 +102,14 @@ class MainActivity : PlaybackActivity() {
     private fun checkForPermissions() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
-            // Permission is not granted
-
-            // Permission is not granted
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-            } else {
-                // No explanation needed, we can request the permission.
+//            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+//                            Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+//            } else {
                 ActivityCompat.requestPermissions(this,
                         arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
                         SEDAILY_EXTERNAL_PERMISSION_REQUEST)
 
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
-            }
-
+//            }
         }
     }
 
