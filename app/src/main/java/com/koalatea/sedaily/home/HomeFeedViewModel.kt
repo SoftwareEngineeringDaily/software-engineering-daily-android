@@ -39,20 +39,29 @@ class HomeFeedViewModel internal constructor(
     private fun loadHomeFeed() {
         val map = mutableMapOf<String, String>()
 
-        val subscription = Observable.fromCallable { episodeDao.all }
+        val subscription = sedailyApi.getPosts(map)
                 .concatMap {
-                    dbEpisodeList ->
-                        if (dbEpisodeList.isEmpty()) {
-                            sedailyApi.getPosts(map).concatMap {
-                                apiPostList -> episodeDao.inserAll(*apiPostList.toTypedArray())
-                                Observable.just(apiPostList)
-                            }
-                        } else {
-                            Observable.just(dbEpisodeList)
-                        }
+                    apiPostList -> episodeDao.inserAll(*apiPostList.toTypedArray())
+                    Observable.just(apiPostList)
                 }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe { onRetrivePostListStart() }
+                .doOnTerminate { onRetrievePostListFinish() }
+                .subscribe(
+                        { result -> onRetrievePostListSuccess(result) },
+                        {
+                            loadHomeFeedFromLocal()
+                        }
+                )
+
+        compositeDisposable.add(subscription)
+    }
+
+    private fun loadHomeFeedFromLocal() {
+        val subscription  = Observable.fromCallable { episodeDao.all }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { onRetrivePostListStart() }
                 .doOnTerminate { onRetrievePostListFinish() }
                 .subscribe(
@@ -61,7 +70,6 @@ class HomeFeedViewModel internal constructor(
                         onRetrievePostListError()
                     }
                 )
-
         compositeDisposable.add(subscription)
     }
 
