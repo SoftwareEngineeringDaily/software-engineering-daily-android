@@ -4,9 +4,10 @@ import android.annotation.SuppressLint
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.koalatea.sedaily.SingleLiveEvent
+import com.koalatea.sedaily.SEDApp
 import com.koalatea.sedaily.downloads.DownloadRepository
 import com.koalatea.sedaily.downloads.Downloader
+import com.koalatea.sedaily.downloads.DownloaderServiceManager
 import com.koalatea.sedaily.models.DownloadDao
 import com.koalatea.sedaily.models.Episode
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -60,8 +61,8 @@ class EpisodeViewModel(private val homeFeedViewModel: HomeFeedViewModel): ViewMo
             downloadVisible.value = View.GONE
             streamVisible.value = View.GONE
         }
-        // @TODO: Correct way to check for null?
-        // @TOOD: handle disposable
+
+        // @TODO: handle disposable
         postId.value?.let {
             DownloadRepository
                 .getDownloadForId(it)
@@ -74,7 +75,7 @@ class EpisodeViewModel(private val homeFeedViewModel: HomeFeedViewModel): ViewMo
                     downloadFile = it.filename
                 }, {
                     _ ->
-                    // @TODO: Log distrbute
+                    // @TODO: Log distribute
                 })
         }
 
@@ -100,12 +101,14 @@ class EpisodeViewModel(private val homeFeedViewModel: HomeFeedViewModel): ViewMo
     fun download() {
         // @TODO: Check if downloaded from download repo
         postMp3?.apply {
-            val progressWatcher= Downloader.downloadMp3(postMp3.value!!, postId.value!!)
+            DownloaderServiceManager.startBackgroundDownload(SEDApp.appContext!!, postId.value, postMp3.value)
+
             downloadVisible.value = View.GONE
             streamVisible.value = View.GONE
             progressVisible.value =  View.VISIBLE
-            // @TOOD: Get rid of disposables correctly
-            progressWatcher?.subscribe {
+
+            // @TODO: Get rid of disposables correctly
+            Downloader?.downloadingFiles[postId.value]?.subscribe {
                 progress.value = it!!
 
                 if (it == 100) {

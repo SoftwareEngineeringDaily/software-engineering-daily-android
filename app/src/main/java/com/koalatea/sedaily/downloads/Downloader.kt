@@ -26,6 +26,11 @@ class Downloader {
 
             val downloadTask = DownloadTask(object: DownloadTaskEventListener {
                 override fun onProgressUpdate(progress: Int?, downloadId: String) {
+                    if (progress != null) {
+                        DownloadNotification.setProgress(progress)
+
+                        if (progress == 100) DownloadNotification.hide()
+                    }
                     downloadingFiles[downloadId]?.onNext(progress!!)
                 }
             }, episodeId)
