@@ -21,6 +21,7 @@ class DownloadsViewModel internal constructor(
     val errorMessage: MutableLiveData<Int> = MutableLiveData()
     val errorClickListener = View.OnClickListener { loadFeed() }
     val playRequested = SingleLiveEvent<DownloadDao.DownloadEpisode>()
+    val removeDownload = SingleLiveEvent<DownloadDao.DownloadEpisode>()
 
     private lateinit var subscription: Disposable
 
@@ -58,7 +59,9 @@ class DownloadsViewModel internal constructor(
     }
 
     private fun onRetrievePostListSuccess(feedList: List<DownloadDao.DownloadEpisode>) {
-        downloadListAdapter.updateFeedList(feedList)
+        val list = mutableListOf<DownloadDao.DownloadEpisode>()
+        list.addAll(feedList)
+        downloadListAdapter.updateFeedList(list)
     }
 
     private fun onRetrievePostListError() {
@@ -67,5 +70,15 @@ class DownloadsViewModel internal constructor(
 
     fun play(episode: DownloadDao.DownloadEpisode) {
         playRequested.value = episode
+    }
+
+    fun requestRemoveDownload(download: DownloadDao.DownloadEpisode) {
+        removeDownload.value = download
+    }
+
+    fun removeDownloadForId(downloadId: String) {
+        DownloadRepository.removeDownloadForId(downloadId)
+        // @TODO: Is this correct? I think we are supposed to update a local list or send an event
+        downloadListAdapter.removeItem(downloadId)
     }
 }

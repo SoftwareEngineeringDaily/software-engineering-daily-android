@@ -8,13 +8,13 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.koalatea.sedaily.R
 import com.koalatea.sedaily.databinding.ItemDownloadBinding
-import com.koalatea.sedaily.models.DownloadDao.DownloadEpisode
 import com.koalatea.sedaily.models.DownloadDao
+import com.koalatea.sedaily.models.DownloadDao.DownloadEpisode
 
 class DownloadsListAdapter(
     private val downloadsViewModel: DownloadsViewModel
 ): RecyclerView.Adapter<DownloadsListAdapter.ViewHolder>() {
-    private lateinit var postList: List<DownloadDao.DownloadEpisode>
+    private lateinit var postList: MutableList<DownloadDao.DownloadEpisode>
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DownloadsListAdapter.ViewHolder {
         val binding: ItemDownloadBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_download, parent, false)
@@ -23,11 +23,23 @@ class DownloadsListAdapter(
 
     override fun onBindViewHolder(holder: DownloadsListAdapter.ViewHolder, position: Int) {
         val episode = postList[position]
-        holder.bind(createOnClickListener(episode.postId), createPlayClickListener(episode), episode)
+        holder.bind(createOnClickListener(episode.postId),
+                createPlayClickListener(episode),
+                createRemoveClickListener(episode),
+                episode)
     }
 
     override fun getItemCount(): Int {
         return if(::postList.isInitialized) postList.size else 0
+    }
+
+    fun removeItem(downloadId: String) {
+        val download = postList.find { download -> download.postId == downloadId } ?: return
+
+        val index = postList.indexOf(download)
+        postList.removeAt(index)
+
+        notifyItemRemoved(index)
     }
 
     private fun createOnClickListener(episodeId: String): View.OnClickListener {
@@ -43,7 +55,13 @@ class DownloadsListAdapter(
         }
     }
 
-    fun updateFeedList(postList: List<DownloadDao.DownloadEpisode>) {
+    private fun createRemoveClickListener(download: DownloadEpisode): View.OnClickListener {
+        return View.OnClickListener {
+            downloadsViewModel.requestRemoveDownload(download)
+        }
+    }
+
+    fun updateFeedList(postList: MutableList<DownloadDao.DownloadEpisode>) {
         this.postList = postList
         notifyDataSetChanged()
     }
@@ -51,11 +69,15 @@ class DownloadsListAdapter(
     class ViewHolder(private val binding: ItemDownloadBinding): RecyclerView.ViewHolder(binding.root) {
         private val viewModel = DownloadViewModel()
 
-        fun bind(listener: View.OnClickListener, playListener: View.OnClickListener, download: DownloadDao.DownloadEpisode) {
+        fun bind(listener: View.OnClickListener,
+                 playListener: View.OnClickListener,
+                 removeListener: View.OnClickListener,
+                 download: DownloadDao.DownloadEpisode) {
             viewModel.bind(download)
             binding.viewModel = viewModel
             binding.clickListener = listener
             binding.playClickListener = playListener
+            binding.removeClickListener = removeListener
         }
     }
 }

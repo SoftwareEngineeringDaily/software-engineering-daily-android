@@ -1,6 +1,7 @@
 package com.koalatea.sedaily.downloads
 
 import android.annotation.SuppressLint
+import android.util.Log
 import com.koalatea.sedaily.models.DatabaseModule
 import com.koalatea.sedaily.models.Download
 import io.reactivex.Observable
@@ -27,9 +28,11 @@ class DownloadRepository {
         fun removeDownloadForId(episodeId: String): Disposable? {
             return getDownloadForId(episodeId)
                     .subscribeOn(Schedulers.io())
-                    .subscribe{
-                       DatabaseModule.getDatabase().downloadDao().delete(it)
-                    }
+                    .subscribe({
+                        DatabaseModule.getDatabase().downloadDao().delete(it)
+                    }, {
+                        Log.v("sedaily", it.localizedMessage)
+                    })
         }
     }
 }

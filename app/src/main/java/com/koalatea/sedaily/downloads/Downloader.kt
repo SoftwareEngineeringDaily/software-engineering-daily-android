@@ -1,12 +1,22 @@
 package com.koalatea.sedaily.downloads
 
 import android.os.Environment
+import android.util.Log
+import io.reactivex.Completable
+import io.reactivex.Observable
+import io.reactivex.Scheduler
 import io.reactivex.subjects.PublishSubject
 import java.io.File
+
+data class DownloadEpisodeEvent(
+    val progress: Int? = null,
+    val episodeId: String? = null
+)
 
 class Downloader {
     companion object {
         val downloadingFiles = mutableMapOf<String, PublishSubject<Int>>()
+        val currentDownloadProgress: PublishSubject<DownloadEpisodeEvent> = PublishSubject.create()
 
         fun getDirectoryForEpisodes(): String {
             val dirString = "/sedaily-mp3s/"
@@ -22,21 +32,32 @@ class Downloader {
 
             downloadingFiles[episodeId] = PublishSubject.create()
 
-            DownloadRepository.createDownload(episodeId, url)
-
             val downloadTask = DownloadTask(object: DownloadTaskEventListener {
                 override fun onProgressUpdate(progress: Int?, downloadId: String) {
-                    if (progress != null) {
-                        DownloadNotification.setProgress(progress)
+                    Log.v("keithtest", Thread.currentThread().name)
 
-                        if (progress == 100) DownloadNotification.hide()
+                    GlobalScope.launch {
+
                     }
-                    downloadingFiles[downloadId]?.onNext(progress!!)
+
+
                 }
             }, episodeId)
             downloadTask.execute(url, episodeId + ".mp3")
 
             return downloadingFiles[episodeId]
+        }
+
+        fun handleProgressUpdate(progress: Int?, downloadId: String) {
+            if (progress != null) {
+                DownloadNotification.setProgress(progress)
+                downloadingFiles[downloadId]?.onNext(progress)
+                currentDownloadProgress.onNext(DownloadEpisodeEvent(progress, downloadId))
+                if (progress == 100) {
+                    DownloadNotification.hide()
+                    DownloadRepository.createDownload(episodeId, url)
+                }
+            }
         }
     }
 }

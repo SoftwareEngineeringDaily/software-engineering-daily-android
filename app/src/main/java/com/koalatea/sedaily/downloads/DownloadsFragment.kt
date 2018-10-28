@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -15,6 +16,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.koalatea.sedaily.PlaybackActivity
 import com.koalatea.sedaily.ViewModelFactory
 import com.koalatea.sedaily.databinding.FragmentDownloadsBinding
+import com.koalatea.sedaily.models.DownloadDao
 
 class DownloadsFragment : Fragment() {
     private lateinit var binding: FragmentDownloadsBinding
@@ -38,10 +40,26 @@ class DownloadsFragment : Fragment() {
         viewModel.playRequested.observe(this, Observer {
             (this.activity as PlaybackActivity).playMedia(it)
         })
+        viewModel.removeDownload.observe(this, Observer { download ->
+            queryRemoveDownload(download)
+        })
 
         binding.viewModel = viewModel
 
         return binding.root
+    }
+
+    private fun queryRemoveDownload(download: DownloadDao.DownloadEpisode) {
+        AlertDialog.Builder(this.context!!)
+            .setTitle("SoftwareDaily")
+            .setMessage("Do you really want to remove this download?")
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .setPositiveButton(android.R.string.yes) { _, _ ->  removeDownloadFromDB(download) }
+            .setNegativeButton(android.R.string.no, null).show()
+    }
+
+    private fun removeDownloadFromDB(download: DownloadDao.DownloadEpisode) {
+        viewModel.removeDownloadForId(download.postId)
     }
 
     private fun showError(@StringRes errorMessage:Int){

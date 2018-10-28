@@ -12,6 +12,9 @@
         <variable
             name="playClickListener"
             type="android.view.View.OnClickListener"/>
+        <variable
+            name="removeClickListener"
+            type="android.view.View.OnClickListener"/>
     </data>
 
     <androidx.cardview.widget.CardView
@@ -67,6 +70,19 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/post_title2"
                 android:onClick="@{playClickListener}"
+                />
+
+            <Button
+                android:id="@+id/remove_Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Remove"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/play_button"
+                android:onClick="@{removeClickListener}"
                 />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
