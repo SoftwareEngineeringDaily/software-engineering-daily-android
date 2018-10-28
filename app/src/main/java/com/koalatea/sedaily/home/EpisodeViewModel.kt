@@ -1,6 +1,7 @@
 package com.koalatea.sedaily.home
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,7 +15,6 @@ import com.koalatea.sedaily.models.Episode
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import java.util.concurrent.TimeUnit
 
 class EpisodeViewModel(private val homeFeedViewModel: HomeFeedViewModel): ViewModel() {
     private val postTitle = MutableLiveData<String>()
@@ -120,10 +120,10 @@ class EpisodeViewModel(private val homeFeedViewModel: HomeFeedViewModel): ViewMo
 
             val subscriber = Downloader
                 .currentDownloadProgress
-                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-                .debounce(300, TimeUnit.MILLISECONDS)
-                .subscribe (this@EpisodeViewModel::handleDownloadEvent, {})
+//                .debounce(300, TimeUnit.MILLISECONDS)
+                .subscribe (this@EpisodeViewModel::handleDownloadEvent) {
+                    Log.v("sedaily-debug", it.localizedMessage)
+                }
             compositeDisposable.add(subscriber)
         }
         // @TODO log null
@@ -133,7 +133,7 @@ class EpisodeViewModel(private val homeFeedViewModel: HomeFeedViewModel): ViewMo
         if (downloadEvent.episodeId == postId.value && downloadEvent.progress != progress.value) {
             progress.value = downloadEvent.progress!!
             if (downloadEvent.progress == 100) {
-                progressVisible.value =  View.VISIBLE
+                progressVisible.value =  View.GONE
                 playVisible.value = View.VISIBLE
             }
         }

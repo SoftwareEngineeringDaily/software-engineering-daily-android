@@ -1,11 +1,10 @@
 package com.koalatea.sedaily.downloads
 
 import android.os.Environment
-import android.util.Log
-import io.reactivex.Completable
-import io.reactivex.Observable
-import io.reactivex.Scheduler
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.io.File
 
 data class DownloadEpisodeEvent(
@@ -13,10 +12,17 @@ data class DownloadEpisodeEvent(
     val episodeId: String? = null
 )
 
+data class DownloadQueueItem(
+    val episodeId: String? = null,
+    val url: String? = null
+)
+
 class Downloader {
     companion object {
-        val downloadingFiles = mutableMapOf<String, PublishSubject<Int>>()
+        private val downloadingFiles = mutableMapOf<String, PublishSubject<Int>>()
         val currentDownloadProgress: PublishSubject<DownloadEpisodeEvent> = PublishSubject.create()
+        private var downloadTask: DownloadTask? = null
+        private val downloadQueue: ArrayList<DownloadQueueItem> = ArrayList()
 
         fun getDirectoryForEpisodes(): String {
             val dirString = "/sedaily-mp3s/"
@@ -32,30 +38,54 @@ class Downloader {
 
             downloadingFiles[episodeId] = PublishSubject.create()
 
-            val downloadTask = DownloadTask(object: DownloadTaskEventListener {
-                override fun onProgressUpdate(progress: Int?, downloadId: String) {
-                    Log.v("keithtest", Thread.currentThread().name)
 
-                    GlobalScope.launch {
-
+            if (downloadTask == null) {
+                downloadTask = DownloadTask(object: DownloadTaskEventListener {
+                    override fun onProgressUpdate(progress: Int?, downloadId: String, url: String) {
+                        GlobalScope.launch {
+                            handleProgressUpdate(progress, downloadId, url)
+                        }
                     }
+                }, episodeId, url)
+                downloadTask?.execute(url, episodeId + ".mp3")
+            } else {
+                downloadQueue.add(DownloadQueueItem(episodeId, url))
+            }
 
-
-                }
-            }, episodeId)
-            downloadTask.execute(url, episodeId + ".mp3")
 
             return downloadingFiles[episodeId]
         }
 
-        fun handleProgressUpdate(progress: Int?, downloadId: String) {
+        fun handleProgressUpdate(progress: Int?, downloadId: String, url: String) {
             if (progress != null) {
-                DownloadNotification.setProgress(progress)
-                downloadingFiles[downloadId]?.onNext(progress)
-                currentDownloadProgress.onNext(DownloadEpisodeEvent(progress, downloadId))
-                if (progress == 100) {
+                var progressCurrent = progress
+
+                DownloadNotification.setProgress(progressCurrent)
+                downloadingFiles[downloadId]?.onNext(progressCurrent)
+
+                // @TODO: HAck progress goes 99 after 100 for some reasons
+                if (progress == 99) progressCurrent = 100
+
+                GlobalScope.launch(Dispatchers.Main) {
+                    val downloadEvent = DownloadEpisodeEvent(progressCurrent, downloadId)
+                    currentDownloadProgress.onNext(downloadEvent)
+                }
+
+                if (progressCurrent == 100) {
                     DownloadNotification.hide()
-                    DownloadRepository.createDownload(episodeId, url)
+                    DownloadRepository.createDownload(downloadId, url)
+
+                    if (downloadQueue.size > 0) {
+                        val newTask = downloadQueue.removeAt(0)
+                        downloadTask = DownloadTask(object: DownloadTaskEventListener {
+                            override fun onProgressUpdate(progress: Int?, downloadId: String, url: String) {
+                                GlobalScope.launch {
+                                    handleProgressUpdate(progress, downloadId, url)
+                                }
+                            }
+                        }, newTask.episodeId!!, url = newTask.url!!)
+                        downloadTask?.execute(newTask.url, newTask.episodeId + ".mp3")
+                    }
                 }
             }
         }

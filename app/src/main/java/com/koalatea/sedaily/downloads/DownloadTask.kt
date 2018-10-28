@@ -9,12 +9,13 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 interface DownloadTaskEventListener {
-    fun onProgressUpdate(progress: Int?, downloadId: String)
+    fun onProgressUpdate(progress: Int?, downloadId: String, url: String)
 }
 
 class DownloadTask(
-    val downloadListener: DownloadTaskEventListener?,
-    val downloadId: String
+        private val downloadListener: DownloadTaskEventListener?,
+        private val downloadId: String,
+        private val url: String
 ): AsyncTask<String, Int, String>() {
     override fun doInBackground(vararg args: String): String {
         var input: InputStream? = null
@@ -79,6 +80,6 @@ class DownloadTask(
     override fun onProgressUpdate(vararg values: Int?) {
         super.onProgressUpdate(*values)
 
-        downloadListener?.onProgressUpdate(values[0], downloadId)
+        downloadListener?.onProgressUpdate(values[0], downloadId, url)
     }
 }
