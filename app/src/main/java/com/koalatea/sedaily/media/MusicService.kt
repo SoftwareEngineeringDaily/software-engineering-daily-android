@@ -44,9 +44,9 @@ import com.koalatea.sedaily.R
 import com.koalatea.sedaily.media.audiofocus.AudioFocusExoPlayerDecorator
 import com.koalatea.sedaily.media.extensions.flag
 import com.koalatea.sedaily.media.library.BrowseTree
+import com.koalatea.sedaily.media.library.MusicSource
 import com.koalatea.sedaily.media.library.PodcastSource
 import com.koalatea.sedaily.media.library.UAMP_BROWSABLE_ROOT
-import com.koalatea.sedaily.media.library.MusicSource
 
 /**
  * This class is the entry point for browsing and playback commands from the APP's UI
@@ -219,21 +219,19 @@ class MusicService : MediaBrowserServiceCompat() {
         try {
             val current = exoPlayer.getPlaybackParameters()
             val newParams = PlaybackParameters(speedFloat, current.pitch)
-            exoPlayer.setPlaybackParameters(newParams)
+            exoPlayer.playbackParameters = newParams
         } catch (e: Exception) {
 //            FirebaseCrash.report(Exception(e))
         }
     }
 
     fun moveForward(distance: Int) {
-        if (exoPlayer == null) return
-        val currentPos = exoPlayer.getCurrentPosition()
+        val currentPos = exoPlayer.currentPosition
         exoPlayer.seekTo(currentPos + distance)
     }
 
     fun moveBack(distance: Int) {
-        if (exoPlayer == null) return
-        val currentPos = exoPlayer.getCurrentPosition()
+        val currentPos = exoPlayer.currentPosition
         exoPlayer.seekTo(currentPos - distance)
     }
 

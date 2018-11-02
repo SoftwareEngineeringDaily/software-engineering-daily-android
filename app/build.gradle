@@ -1,10 +1,10 @@
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'androidx.navigation.safeargs'
 apply plugin: 'com.google.gms.google-services'
-apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion 28
@@ -73,8 +73,8 @@ dependencies {
 
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.0.0-RC1'
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.0.0-RC1"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.0.0'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.0.0"
 
     // Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"

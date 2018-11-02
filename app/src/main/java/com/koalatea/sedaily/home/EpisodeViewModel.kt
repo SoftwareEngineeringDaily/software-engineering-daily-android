@@ -77,11 +77,11 @@ class EpisodeViewModel(private val homeFeedViewModel: HomeFeedViewModel): ViewMo
                 .getDownloadForId(it)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe ({ it ->
-                    if (it != null) downloadVisible.value =  View.GONE
+                .subscribe ({ download ->
+                    if (download != null) downloadVisible.value =  View.GONE
                     playVisible.value = View.VISIBLE
                     streamVisible.value = View.GONE
-                    downloadFile = it.filename
+                    downloadFile = download.filename
                 }, {
                     _ ->
                     // @TODO: Log distribute

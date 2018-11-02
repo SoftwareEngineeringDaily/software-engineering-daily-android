@@ -19,7 +19,6 @@ import com.koalatea.sedaily.R
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.fragment_playback_controls.*
 import kotlinx.android.synthetic.main.fragment_playback_controls.view.*
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledFuture
@@ -218,8 +217,8 @@ class PlaybarFragment: Fragment() {
         }
 
         val duration = metadata.getLong(MediaMetadataCompat.METADATA_KEY_DURATION).toInt()
-        seekBar1.max = duration
-        endText.text = DateUtils.formatElapsedTime((duration / 1000).toLong())
+        rootView?.seekBar1?.max = duration
+        rootView?.endText?.text = DateUtils.formatElapsedTime((duration / 1000).toLong())
     }
 
     private fun scheduleSeekbarUpdate() {
