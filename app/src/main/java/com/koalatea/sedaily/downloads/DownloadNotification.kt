@@ -8,7 +8,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
-import com.koalatea.sedaily.BuildConfig
 import com.koalatea.sedaily.R
 import com.koalatea.sedaily.SEDApp
 
@@ -26,13 +25,16 @@ class DownloadNotification {
             val notificationIntent = Intent(context, DownloadIntentService::class.java)
             val pendingIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0)
             mNotifyManager = context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
-            val CHANNEL_ID = BuildConfig.APPLICATION_ID
+
+            val CHANNEL_ID = "sedaily-music"
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val name = context?.getString(R.string.app_name)
                 val importance = NotificationManager.IMPORTANCE_LOW
                 val mChannel = NotificationChannel(CHANNEL_ID, name, importance)
                 mNotifyManager?.createNotificationChannel(mChannel)
             }
+
             mBuilder = NotificationCompat.Builder(context!!, CHANNEL_ID)
                     .setContentTitle(context?.getString(R.string.downloading_title))
                     .setContentText(notificationMessage)

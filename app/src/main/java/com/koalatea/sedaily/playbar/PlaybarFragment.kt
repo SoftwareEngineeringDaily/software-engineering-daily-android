@@ -317,6 +317,7 @@ class PlaybarFragment: Fragment() {
     }
 
     private fun setSpeedTextView(): Int {
+        if (!isAdded) return 1
         val currentSpeed = PodcastSessionStateManager.getInstance().currentSpeed
         val speedArray = resources.getStringArray(R.array.speed_options)
         rootView?.speed?.text = speedArray[currentSpeed]
