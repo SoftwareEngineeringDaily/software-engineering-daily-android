@@ -27,7 +27,7 @@ platform :android do
         task: 'assemble',
         build_type: 'Release'
     )
-    upload_to_play_store(track: 'beta', apk_paths=)
+    upload_to_play_store(track: 'beta')
   end
 
   desc "Deploy a new version to the Google Play"
