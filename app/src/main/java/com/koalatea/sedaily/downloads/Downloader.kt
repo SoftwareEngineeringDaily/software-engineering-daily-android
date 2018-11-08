@@ -34,6 +34,7 @@ class Downloader {
         }
 
         fun downloadMp3(url: String, episodeId: String): PublishSubject<Int>? {
+
             if (downloadingFiles.containsKey(url)) return null
 
             downloadingFiles[episodeId] = PublishSubject.create()
@@ -73,7 +74,7 @@ class Downloader {
 
                 if (progressCurrent == 100) {
                     DownloadNotification.hide()
-                    DownloadRepository.createDownload(downloadId, url)
+                    DownloadRepository.createDownload(downloadId, Downloader.getDirectoryForEpisodes() + downloadId + ".mp3")
 
                     if (downloadQueue.size > 0) {
                         val newTask = downloadQueue.removeAt(0)

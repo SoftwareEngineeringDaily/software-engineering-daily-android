@@ -9,12 +9,12 @@ import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.koalatea.sedaily.media.MusicService
 import com.koalatea.sedaily.media.library.PodcastSource
 import com.koalatea.sedaily.models.DownloadDao
-import com.koalatea.sedaily.models.Episode
 import com.koalatea.sedaily.playbar.PodcastSessionStateManager
 import kotlinx.android.synthetic.main.activity_main.*
 
