@@ -55,7 +55,7 @@ class DownloadNotification {
         }
 
         fun hide() {
-            mBuilder?.setContentText("Upload complete")
+            mBuilder?.setContentText("Download complete")
             mBuilder?.setProgress(0, 0, false)
             mNotifyManager?.notify(notificationId, mBuilder?.build())
         }

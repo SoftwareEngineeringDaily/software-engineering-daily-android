@@ -1,6 +1,7 @@
 package com.koalatea.sedaily.downloadManager
 
 import android.os.Environment
+import android.util.Log
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -19,7 +20,7 @@ data class DownloadQueueItem(
 
 class Downloader {
     companion object {
-        private val downloadingFiles = mutableMapOf<String, PublishSubject<Int>>()
+        val downloadingFiles = mutableMapOf<String, PublishSubject<Int>>()
         val currentDownloadProgress: PublishSubject<DownloadEpisodeEvent> = PublishSubject.create()
         private var downloadTask: DownloadTask? = null
         private val downloadQueue: ArrayList<DownloadQueueItem> = ArrayList()
@@ -34,11 +35,9 @@ class Downloader {
         }
 
         fun downloadMp3(url: String, episodeId: String): PublishSubject<Int>? {
-
             if (downloadingFiles.containsKey(url)) return null
 
             downloadingFiles[episodeId] = PublishSubject.create()
-
 
             if (downloadTask == null) {
                 downloadTask = DownloadTask(object: DownloadTaskEventListener {
@@ -58,6 +57,7 @@ class Downloader {
         }
 
         fun handleProgressUpdate(progress: Int?, downloadId: String, url: String) {
+            Log.v("keithtest1", progress.toString());
             if (progress != null) {
                 var progressCurrent = progress
 
@@ -66,13 +66,14 @@ class Downloader {
 
                 // @TODO: HAck progress goes 99 after 100 for some reasons
                 if (progress == 99) progressCurrent = 100
-
+                
                 GlobalScope.launch(Dispatchers.Main) {
                     val downloadEvent = DownloadEpisodeEvent(progressCurrent, downloadId)
                     currentDownloadProgress.onNext(downloadEvent)
                 }
 
                 if (progressCurrent == 100) {
+                    downloadingFiles.remove(downloadId)
                     DownloadNotification.hide()
                     DownloadRepository.createDownload(downloadId, Downloader.getDirectoryForEpisodes() + downloadId + ".mp3")
 

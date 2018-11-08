@@ -96,6 +96,10 @@ class EpisodeViewModel(private val homeFeedViewModel: HomeFeedViewModel): ViewMo
     fun getProgressVisible() : MutableLiveData<Int> {
         progressVisible.value =  View.GONE
 
+        if (Downloader.downloadingFiles.contains(episodeData?._id)) {
+            subscribeToDownload()
+        }
+
         return progressVisible
     }
 
@@ -113,20 +117,22 @@ class EpisodeViewModel(private val homeFeedViewModel: HomeFeedViewModel): ViewMo
         // @TODO: Check if downloaded from download repo
         postMp3.apply {
             DownloaderServiceManager.startBackgroundDownload(SEDApp.appContext!!, postId.value, postMp3.value)
+            subscribeToDownload()
+        }
+        // @TODO log null
+    }
 
-            downloadVisible.value = View.GONE
-            streamVisible.value = View.GONE
-            progressVisible.value =  View.VISIBLE
+    private fun subscribeToDownload() {
+        downloadVisible.value = View.GONE
+        streamVisible.value = View.GONE
+        progressVisible.value =  View.VISIBLE
 
-            val subscriber = Downloader
+        val subscriber = Downloader
                 .currentDownloadProgress
-//                .debounce(300, TimeUnit.MILLISECONDS)
                 .subscribe (this@EpisodeViewModel::handleDownloadEvent) {
                     Log.v("sedaily-debug", it.localizedMessage)
                 }
-            compositeDisposable.add(subscriber)
-        }
-        // @TODO log null
+        compositeDisposable.add(subscriber)
     }
 
     private fun handleDownloadEvent(downloadEvent: DownloadEpisodeEvent) {

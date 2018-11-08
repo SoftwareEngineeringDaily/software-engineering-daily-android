@@ -20,7 +20,6 @@ class DownloadsViewModel internal constructor(
 
     val loadingVisibility: MutableLiveData<Int> = MutableLiveData()
     val errorMessage: MutableLiveData<Int> = MutableLiveData()
-    val errorClickListener = View.OnClickListener { loadFeed() }
     val playRequested = SingleLiveEvent<DownloadDao.DownloadEpisode>()
     val removeDownload = SingleLiveEvent<DownloadDao.DownloadEpisode>()
 
