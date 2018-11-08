@@ -1,4 +1,4 @@
-package com.koalatea.sedaily.downloads
+package com.koalatea.sedaily.downloadList
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +8,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.koalatea.sedaily.R
 import com.koalatea.sedaily.databinding.ItemDownloadBinding
+import com.koalatea.sedaily.downloadManager.DownloadsFragmentDirections
 import com.koalatea.sedaily.models.DownloadDao
 import com.koalatea.sedaily.models.DownloadDao.DownloadEpisode
 
@@ -16,12 +17,12 @@ class DownloadsListAdapter(
 ): RecyclerView.Adapter<DownloadsListAdapter.ViewHolder>() {
     private lateinit var postList: MutableList<DownloadDao.DownloadEpisode>
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DownloadsListAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding: ItemDownloadBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_download, parent, false)
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: DownloadsListAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val episode = postList[position]
         holder.bind(createOnClickListener(episode.postId),
                 createPlayClickListener(episode),

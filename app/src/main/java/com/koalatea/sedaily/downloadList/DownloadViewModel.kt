@@ -1,4 +1,4 @@
-package com.koalatea.sedaily.downloads
+package com.koalatea.sedaily.downloadList
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

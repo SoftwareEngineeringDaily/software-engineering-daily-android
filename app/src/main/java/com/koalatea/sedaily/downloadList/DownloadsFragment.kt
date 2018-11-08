@@ -1,4 +1,4 @@
-package com.koalatea.sedaily.downloads
+package com.koalatea.sedaily.downloadList
 
 import android.os.Bundle
 import android.view.LayoutInflater

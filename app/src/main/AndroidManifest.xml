@@ -37,7 +37,7 @@
                 <action android:name="android.media.browse.MediaBrowserService" />
             </intent-filter>
         </service>
-        <service android:name=".downloads.DownloadIntentService"/>
+        <service android:name=".downloadManager.DownloadIntentService"/>
 
         <!--
            A receiver that will receive media buttons and send as

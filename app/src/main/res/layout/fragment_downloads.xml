@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.koalatea.sedaily.downloads.DownloadsViewModel" />
+            type="com.koalatea.sedaily.downloadList.DownloadsViewModel" />
     </data>
 
     <FrameLayout

@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/downloads_fragment"
-        android:name="com.koalatea.sedaily.downloads.DownloadsFragment"
+        android:name="com.koalatea.sedaily.downloadList.DownloadsFragment"
         android:label="@string/downloads_title"
         tools:layout="@layout/fragment_downloads">
 

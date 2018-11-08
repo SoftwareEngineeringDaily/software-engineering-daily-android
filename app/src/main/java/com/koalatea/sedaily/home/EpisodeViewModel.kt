@@ -6,10 +6,10 @@ import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.koalatea.sedaily.SEDApp
-import com.koalatea.sedaily.downloads.DownloadEpisodeEvent
-import com.koalatea.sedaily.downloads.DownloadRepository
-import com.koalatea.sedaily.downloads.Downloader
-import com.koalatea.sedaily.downloads.DownloaderServiceManager
+import com.koalatea.sedaily.downloadManager.DownloadEpisodeEvent
+import com.koalatea.sedaily.downloadManager.DownloadRepository
+import com.koalatea.sedaily.downloadManager.Downloader
+import com.koalatea.sedaily.downloadManager.DownloaderServiceManager
 import com.koalatea.sedaily.models.DownloadDao
 import com.koalatea.sedaily.models.Episode
 import io.reactivex.android.schedulers.AndroidSchedulers

@@ -1,4 +1,4 @@
-package com.koalatea.sedaily.downloads
+package com.koalatea.sedaily.downloadList
 
 import android.util.Log
 import android.view.View
@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.koalatea.sedaily.R
 import com.koalatea.sedaily.SingleLiveEvent
+import com.koalatea.sedaily.downloadManager.DownloadRepository
 import com.koalatea.sedaily.models.DownloadDao
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers

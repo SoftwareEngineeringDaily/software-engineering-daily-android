@@ -2,13 +2,10 @@ package com.koalatea.sedaily.episodedetail
 
 import android.util.Log
 import android.view.View
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.koalatea.sedaily.SEDApp
 import com.koalatea.sedaily.SingleLiveEvent
-import com.koalatea.sedaily.downloads.DownloadRepository
+import com.koalatea.sedaily.downloadManager.DownloadRepository
 import com.koalatea.sedaily.models.Download
 import com.koalatea.sedaily.models.DownloadDao
 import com.koalatea.sedaily.models.Episode

@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.koalatea.sedaily.auth.AuthViewModel
-import com.koalatea.sedaily.downloads.DownloadsViewModel
+import com.koalatea.sedaily.downloadList.DownloadsViewModel
 import com.koalatea.sedaily.episodedetail.EpisodeDetailViewModel
 import com.koalatea.sedaily.home.HomeFeedViewModel
 import com.koalatea.sedaily.models.DatabaseModule
