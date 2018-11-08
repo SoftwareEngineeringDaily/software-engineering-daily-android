@@ -327,6 +327,7 @@ class PlaybarFragment: Fragment() {
     private fun setSpeedText() {
         val currentSpeed = setSpeedTextView()
 
+        if (this.activity == null) return
         // @TODO: Make reactive
         playbarViewModel?.sendSpeedChangeIntent(currentSpeed, this.activity as Activity)
     }
