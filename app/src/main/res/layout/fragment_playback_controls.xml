@@ -21,7 +21,7 @@
             android:maxLines="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="Current Song"
+            android:contentDescription="@string/playbarTitleViewDesc"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="?android:attr/textColorPrimary"
             />
@@ -38,7 +38,7 @@
                 android:layout_alignParentStart="true"
                 android:gravity="center_vertical"
                 android:maxLines="1"
-                android:text="0:00"
+                android:text="@string/playbarStartTextDefault"
                 android:textColor="@color/colorAccent"
                 />
 
@@ -63,7 +63,7 @@
                 android:gravity="center_vertical"
                 android:layout_alignWithParentIfMissing="true"
                 android:maxLines="1"
-                android:text="0:00"
+                android:text="@string/playbarStartTextDefault"
                 android:textColor="@color/colorAccent"
                 />
 
@@ -77,14 +77,14 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/back15"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:text="Back 15" />
+                android:text="@string/back_15" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/skip15"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:text="Skip 15" />
+                android:text="@string/skip_15" />
         </LinearLayout>
     </LinearLayout>
 
@@ -93,13 +93,12 @@
         android:layout_centerVertical="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/play_pause"
         android:layout_toStartOf="@+id/play_pause"
         android:padding="8dp"
         android:background="?selectableItemBackgroundBorderless"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:text="1x"
-        android:contentDescription="Speed"
+        android:text="@string/_1x"
+        android:contentDescription="@string/speed"
         android:tint="@color/colorAccent"
         />
 
@@ -112,7 +111,7 @@
         android:layout_alignParentEnd="true"
         android:background="?selectableItemBackgroundBorderless"
         android:src="@drawable/exo_controls_play"
-        android:contentDescription="Play/Pause"
+        android:contentDescription="@string/play_pause"
         android:tint="@color/colorAccent"
         />
 </RelativeLayout>
