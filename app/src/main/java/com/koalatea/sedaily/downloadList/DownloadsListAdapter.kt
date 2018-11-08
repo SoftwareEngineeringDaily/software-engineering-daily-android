@@ -8,7 +8,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.koalatea.sedaily.R
 import com.koalatea.sedaily.databinding.ItemDownloadBinding
-import com.koalatea.sedaily.downloadManager.DownloadsFragmentDirections
+import com.koalatea.sedaily.downloadList.DownloadsFragmentDirections
 import com.koalatea.sedaily.models.DownloadDao
 import com.koalatea.sedaily.models.DownloadDao.DownloadEpisode
 
