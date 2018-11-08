@@ -19,6 +19,7 @@
             tools:text="The Best Music EVAH1111 THE BEST"
             android:ellipsize="end"
             android:maxLines="1"
+            android:minWidth="200dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/playbarTitleViewDesc"
