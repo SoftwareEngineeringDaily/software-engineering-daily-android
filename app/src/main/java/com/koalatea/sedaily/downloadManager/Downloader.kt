@@ -66,7 +66,7 @@ class Downloader {
 
                 // @TODO: HAck progress goes 99 after 100 for some reasons
                 if (progress == 99) progressCurrent = 100
-                
+
                 GlobalScope.launch(Dispatchers.Main) {
                     val downloadEvent = DownloadEpisodeEvent(progressCurrent, downloadId)
                     currentDownloadProgress.onNext(downloadEvent)

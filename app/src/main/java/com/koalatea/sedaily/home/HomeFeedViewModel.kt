@@ -80,9 +80,13 @@ class HomeFeedViewModel internal constructor(
 
         val map = mutableMapOf<String, String>()
 
-        val lastIndex = episodes.value?.size?.minus(1)
-        val lastEpisode = lastIndex?.let { episodes.value?.get(it) }
-        map.set("createdAtBefore", lastEpisode?.date as String)
+        val lastIndex = episodes.value?.size?.minus(1) ?: return
+
+        val episodeSize = episodes.value?.size ?: -1
+        if (lastIndex > episodeSize) return
+
+        val lastEpisode = lastIndex.let { episodes.value?.get(it) }
+        map["createdAtBefore"] = lastEpisode?.date as String
 
         val subscription = sedailyApi.getPosts(map)
                 .concatMap {
