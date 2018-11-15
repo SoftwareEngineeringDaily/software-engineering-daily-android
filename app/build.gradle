@@ -17,8 +17,8 @@ android {
         applicationId "com.koalatea.sedaily"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 9
-        versionName "0.09"
+        versionCode 10
+        versionName "0.10"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
