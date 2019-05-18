@@ -251,7 +251,8 @@ class PlaybarFragment: Fragment() {
 
     /* Speed */
     private fun showSpeedDialog() {
-        SpeedDialog().show(this.fragmentManager, "tag")
+        // @TODO: unwrap
+        SpeedDialog().show(this.fragmentManager!!, "tag")
     }
 
     private fun setUpSpeedSubscription() {

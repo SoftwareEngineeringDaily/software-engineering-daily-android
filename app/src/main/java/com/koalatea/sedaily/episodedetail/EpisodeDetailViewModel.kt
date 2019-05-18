@@ -117,6 +117,8 @@ class EpisodeDetailViewModel internal constructor(
     }
 
     fun playRequest() {
+        if (postMp3.value == null) return
+
         // @TODO: Create download Episode
         val downloadEpisode: DownloadDao.DownloadEpisode
         if (downloadFile != null) {

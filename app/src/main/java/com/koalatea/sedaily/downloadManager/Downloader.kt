@@ -1,7 +1,6 @@
 package com.koalatea.sedaily.downloadManager
 
 import android.os.Environment
-import android.util.Log
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -10,7 +9,8 @@ import java.io.File
 
 data class DownloadEpisodeEvent(
     val progress: Int? = null,
-    val episodeId: String? = null
+    val episodeId: String? = null,
+    val url: String? = null
 )
 
 data class DownloadQueueItem(
@@ -57,7 +57,6 @@ class Downloader {
         }
 
         fun handleProgressUpdate(progress: Int?, downloadId: String, url: String) {
-            Log.v("keithtest1", progress.toString());
             if (progress != null) {
                 var progressCurrent = progress
 
@@ -68,7 +67,7 @@ class Downloader {
                 if (progress == 99) progressCurrent = 100
 
                 GlobalScope.launch(Dispatchers.Main) {
-                    val downloadEvent = DownloadEpisodeEvent(progressCurrent, downloadId)
+                    val downloadEvent = DownloadEpisodeEvent(progressCurrent, downloadId, url)
                     currentDownloadProgress.onNext(downloadEvent)
                 }
 

@@ -5,23 +5,22 @@ import android.app.SearchManager
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
+import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.bottomappbar.BottomAppBar
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.koalatea.sedaily.auth.UserRepository
 import com.koalatea.sedaily.databinding.ActivityMainBinding
-import com.koalatea.sedaily.home.HomeFeedViewModel
 import com.koalatea.sedaily.home.PodcastSearchRepo
 
 class MainActivity : PlaybackActivity() {
@@ -34,35 +33,17 @@ class MainActivity : PlaybackActivity() {
 
         val binding: ActivityMainBinding = DataBindingUtil.setContentView(this,
                 R.layout.activity_main)
-        drawerLayout = binding.drawerLayout
 
-        val navController = Navigation.findNavController(this, R.id.garden_nav_fragment)
-
-        // Actionbar
-        setSupportActionBar(binding.toolbar)
-        NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout)
-
-        // Set up nav menu
-        binding.navigationView.setupWithNavController(navController)
+        // Set set up bar
+        val fab = findViewById<FloatingActionButton>(R.id.fab)
+        fab.visibility = View.GONE
+        val bar = findViewById<BottomAppBar>(R.id.bar)
+        setSupportActionBar(bar)
 
         // Set up media
         this.setUp()
-
         checkForPermissions()
-
         handleIntent(intent)
-
-        UserRepository.getInstance().getToken()?.apply {
-            if (UserRepository.getInstance().getToken() == "") return
-            val authItem = binding.navigationView.menu.getItem(2)
-            authItem?.title = "Logout"
-            authItem.setOnMenuItemClickListener {
-                UserRepository.getInstance().setToken("")
-                val intent = Intent(this@MainActivity, MainActivity::class.java)
-                startActivity(intent)
-                false
-            }
-        }
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -73,6 +54,12 @@ class MainActivity : PlaybackActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.menu_main, menu)
+        UserRepository.getInstance().getToken()?.apply {
+            if (UserRepository.getInstance().getToken() != "") {
+                setLogout(menu)
+            }
+        }
+
         return true
     }
 
@@ -81,6 +68,24 @@ class MainActivity : PlaybackActivity() {
         return when (item.itemId) {
             R.id.search -> {
                 onSearchRequested()
+                true
+            }
+            R.id.home -> {
+                Navigation
+                        .findNavController(this, R.id.garden_nav_fragment)
+                        .navigate(R.id.garden_fragment)
+                true
+            }
+            R.id.downloads -> {
+                Navigation
+                        .findNavController(this, R.id.garden_nav_fragment)
+                        .navigate(R.id.downloads_fragment)
+                true
+            }
+            R.id.auth -> {
+                Navigation
+                        .findNavController(this, R.id.garden_nav_fragment)
+                        .navigate(R.id.auth_fragment)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -142,10 +147,19 @@ class MainActivity : PlaybackActivity() {
     }
 
     override fun onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
+        super.onBackPressed()
+        val fab = findViewById<FloatingActionButton>(R.id.fab)
+        fab.visibility = View.GONE
+    }
+
+    fun setLogout (menu: Menu) {
+        val authItem = menu.findItem(R.id.auth)
+        authItem?.title = "Logout"
+        authItem.setOnMenuItemClickListener {
+            UserRepository.getInstance().setToken("")
+            val intent = Intent(this@MainActivity, MainActivity::class.java)
+            startActivity(intent)
+            false
         }
     }
 }

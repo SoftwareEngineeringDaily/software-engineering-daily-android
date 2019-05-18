@@ -1,71 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <androidx.drawerlayout.widget.DrawerLayout android:id="@+id/drawer_layout"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        >
-
+        xmlns:tools="http://schemas.android.com/tools">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            >
-                <com.google.android.material.appbar.AppBarLayout
-                    android:id="@+id/appbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:theme="@style/AppTheme.AppBarOverlay">
+            android:orientation="vertical" >
 
-                    <androidx.appcompat.widget.Toolbar
-                        android:id="@+id/toolbar"
-                        android:layout_width="match_parent"
-                        android:layout_height="?attr/actionBarSize"
-                        app:popupTheme="@style/AppTheme.PopupOverlay"/>
-
-                </com.google.android.material.appbar.AppBarLayout>
-
-                <fragment
-                    android:id="@+id/garden_nav_fragment"
-                    android:name="androidx.navigation.fragment.NavHostFragment"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="?attr/actionBarSize"
-                    app:defaultNavHost="true"
-                    app:navGraph="@navigation/nav_garden"
-                    app:layout_constraintTop_toBottomOf="@id/appbar" />
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/playbarControls"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:cardElevation="8dp"
-                    android:visibility="gone"
-                    >
-                    <fragment
-                        android:name="com.koalatea.sedaily.playbar.PlaybarFragment"
-                        android:id="@+id/fragment_playback_controls"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        tools:layout="@layout/fragment_playback_controls" />
-                </androidx.cardview.widget.CardView>
+            <fragment
+                android:id="@+id/garden_nav_fragment"
+                android:name="androidx.navigation.fragment.NavHostFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:defaultNavHost="true"
+                app:navGraph="@navigation/nav_garden"
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.google.android.material.navigation.NavigationView
-            android:id="@+id/navigation_view"
-            style="@style/Widget.MaterialComponents.NavigationView"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            app:headerLayout="@layout/nav_header"
-            app:menu="@menu/menu_navigation"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom">
 
-    </androidx.drawerlayout.widget.DrawerLayout>
+            <include
+                layout="@layout/included_bottom_app_bar"/>
 
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/playbarControls"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:cardElevation="8dp"
+                android:visibility="gone"
+                >
+                <fragment
+                    android:name="com.koalatea.sedaily.playbar.PlaybarFragment"
+                    android:id="@+id/fragment_playback_controls"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    tools:layout="@layout/fragment_playback_controls" />
+            </androidx.cardview.widget.CardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

@@ -15,6 +15,7 @@ class DownloadIntentService: IntentService("SEDDownloadIntentService") {
             startForeground(this.hashCode(), DownloadNotification.show())
         }
 
-        Downloader.downloadMp3(url, id)
+        val httpsurl = url.replace("http", "https")
+        Downloader.downloadMp3(httpsurl, id)
     }
 }

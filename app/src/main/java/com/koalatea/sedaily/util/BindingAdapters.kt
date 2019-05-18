@@ -8,6 +8,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.bumptech.glide.request.RequestOptions
+import java.net.URL
 
 @BindingAdapter("isGone")
 fun bindIsGone(view: View, isGone: Boolean) {
@@ -21,9 +24,12 @@ fun bindIsGone(view: View, isGone: Boolean) {
 @BindingAdapter("imageFromUrl")
 fun bindImageFromUrl(view: ImageView, imageUrl: String?) {
     if (!imageUrl.isNullOrEmpty()) {
+        val urlString = imageUrl.toString().replace("http", "https")
+        val httpsImageUrl = URL(urlString)
         Glide.with(view.context)
-                .load(imageUrl)
-//                .transition(DrawableTransitionOptions.withCrossFade())
+                .load(httpsImageUrl)
+                .apply(RequestOptions.circleCropTransform())
+                .transition(DrawableTransitionOptions.withCrossFade())
                 .into(view)
     }
 }

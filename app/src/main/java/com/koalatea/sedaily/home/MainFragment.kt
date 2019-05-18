@@ -48,7 +48,9 @@ class MainFragment : Fragment() {
         }
         binding.postList.addOnScrollListener(scrollListener)
 
-        viewModel = ViewModelProviders.of(this, ViewModelFactory(this.activity as AppCompatActivity)).get(HomeFeedViewModel::class.java)
+        viewModel = ViewModelProviders
+                .of(this, ViewModelFactory(this.activity as AppCompatActivity))
+                .get(HomeFeedViewModel::class.java)
 
         val adapter = HomeFeedListAdapter(viewModel)
         binding.postList.adapter = adapter
@@ -73,6 +75,13 @@ class MainFragment : Fragment() {
         compositeDisposable.add(disposable)
 
         binding.viewModel = viewModel
+
+        val query = PodcastSearchRepo.getInstance().currentSearch
+        if (query.isEmpty()) {
+            viewModel.loadHomeFeed()
+        } else {
+            viewModel.performSearch(query)
+        }
 
         return binding.root
     }

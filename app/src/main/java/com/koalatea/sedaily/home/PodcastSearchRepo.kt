@@ -6,11 +6,13 @@ import io.reactivex.subjects.PublishSubject
 
 class PodcastSearchRepo private constructor() {
     private val searchChange = PublishSubject.create<String>()
+    var currentSearch = ""
 
     val getSearchChange: Observable<String>
         get() = searchChange
 
     fun setSearch(newSearch: String) {
+        currentSearch = newSearch
         searchChange.onNext(newSearch)
     }
 

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/playbarControls"
+
+        app:backgroundTint="@color/colorPrimaryDark"
+        android:background="@color/colorPrimaryDark"
+        app:fabCradleRoundedCornerRadius="30dp"
+        app:fabCradleMargin="10dp"
+        app:hideOnScroll="true"
+        tools:ignore="BottomAppBar"
+        tools:targetApi="lollipop" />
+
+    <!--app:navigationIcon="@drawable/sedaily_logo"-->
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:src="@drawable/ic_play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_anchor="@id/bar"
+        app:backgroundTint="@color/colorPrimaryDark"
+        android:tint="#fff"
+        app:elevation="0dp"
+        tools:targetApi="lollipop" />
+
+</merge>

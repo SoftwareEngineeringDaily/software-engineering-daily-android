@@ -2,7 +2,22 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/search"
-        android:icon="@android:drawable/ic_menu_search"
+        android:icon="@drawable/ic_search_white_24dp"
         android:title="@string/search_hint"
         app:showAsAction="always" />
+
+    <item android:id="@+id/home"
+        android:iconTint="#fff"
+        android:title="Home"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/downloads"
+        android:iconTint="#fff"
+        android:title="Downloads"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/auth"
+        android:iconTint="#fff"
+        android:title="Login"
+        app:showAsAction="never" />
 </menu>

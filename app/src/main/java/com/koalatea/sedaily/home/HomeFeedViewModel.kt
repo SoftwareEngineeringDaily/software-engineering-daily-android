@@ -27,16 +27,12 @@ class HomeFeedViewModel internal constructor(
 
     private val compositeDisposable = CompositeDisposable()
 
-    init {
-        loadHomeFeed()
-    }
-
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.dispose()
     }
 
-    private fun loadHomeFeed() {
+    fun loadHomeFeed() {
         val map = mutableMapOf<String, String>()
 
         val subscription = sedailyApi.getPosts(map)

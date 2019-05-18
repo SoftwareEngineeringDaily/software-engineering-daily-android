@@ -141,6 +141,8 @@ class EpisodeViewModel(private val homeFeedViewModel: HomeFeedViewModel): ViewMo
             if (downloadEvent.progress == 100) {
                 progressVisible.value =  View.GONE
                 playVisible.value = View.VISIBLE
+
+                downloadFile = Downloader.getDirectoryForEpisodes() + postId.value
             }
         }
     }
