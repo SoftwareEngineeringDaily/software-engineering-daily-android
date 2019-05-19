@@ -65,11 +65,13 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="16dp"
+            android:maxWidth="300dp"
             app:layout_constraintTop_toBottomOf="@id/post_title"
             app:layout_constraintStart_toStartOf="parent"
             android:textColor="#616467"
-            android:text="A Description of stuff. And more stuff."/>
-        <!--app:mutableText="@{viewModel.getPostDe()}"-->
+            android:text="A Description of stuff. And more stuff."
+            app:mutableText="@{viewModel.getPostBody()}"
+            />
 
         <ImageView
             android:id="@+id/mainImage"

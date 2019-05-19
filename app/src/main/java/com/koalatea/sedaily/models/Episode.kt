@@ -10,6 +10,7 @@ data class Episode (
     val mp3: String?,
     val title: Title?,
     val content: Content?,
+    val excerpt: Excerpt?,
     val featuredImage: String?,
     val date: String?
 )

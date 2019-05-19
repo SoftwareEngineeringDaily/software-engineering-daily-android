@@ -3,6 +3,7 @@ package com.koalatea.sedaily.home
 import android.annotation.SuppressLint
 import android.util.Log
 import android.view.View
+import androidx.core.text.HtmlCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.koalatea.sedaily.SEDApp
@@ -40,7 +41,7 @@ class EpisodeViewModel(private val homeFeedViewModel: HomeFeedViewModel): ViewMo
     fun bind(episode: Episode) {
         episodeData = episode
         postTitle.value = episode.title?.rendered
-        postBody.value = episode.content?.rendered
+        postBody.value = getPostBodyString(episode)
         postMp3.value = episode.mp3
         postId.value = episode._id
         postImage.value = episode.featuredImage
@@ -49,8 +50,19 @@ class EpisodeViewModel(private val homeFeedViewModel: HomeFeedViewModel): ViewMo
         streamVisible.value = View.VISIBLE
     }
 
+    fun getPostBodyString(episode: Episode): String {
+        if (episode.content?.rendered == null) return ""
+
+        return HtmlCompat.fromHtml(episode.excerpt?.rendered!!, HtmlCompat.FROM_HTML_MODE_LEGACY)
+                .toString().subSequence(0, 100).toString() + "..."
+    }
+
     fun getPostTitle(): MutableLiveData<String> {
         return postTitle
+    }
+
+    fun getPostBody(): MutableLiveData<String> {
+        return postBody
     }
 
     fun getProgress(): MutableLiveData<Int>{

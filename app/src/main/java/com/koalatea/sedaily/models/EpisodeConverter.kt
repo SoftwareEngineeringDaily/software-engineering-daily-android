@@ -24,4 +24,15 @@ class EpisodeConverter {
         val content = Content(string)
         return content
     }
+
+    @TypeConverter
+    fun excerptToString(content: Excerpt): String {
+        return content.rendered
+    }
+
+    @TypeConverter
+    fun stringToExcerpt(string: String): Excerpt {
+        val content = Excerpt(string)
+        return content
+    }
 }
