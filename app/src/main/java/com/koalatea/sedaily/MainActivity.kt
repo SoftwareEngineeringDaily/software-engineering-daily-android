@@ -71,6 +71,7 @@ class MainActivity : PlaybackActivity() {
                 true
             }
             R.id.home -> {
+                PodcastSearchRepo.getInstance().setSearch("");
                 Navigation
                         .findNavController(this, R.id.garden_nav_fragment)
                         .navigate(R.id.garden_fragment)
