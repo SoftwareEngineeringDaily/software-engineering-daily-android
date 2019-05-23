@@ -86,6 +86,8 @@ class Downloader {
                             }
                         }, newTask.episodeId!!, url = newTask.url!!)
                         downloadTask?.execute(newTask.url, newTask.episodeId + ".mp3")
+                    } else {
+                        downloadTask = null
                     }
                 }
             }

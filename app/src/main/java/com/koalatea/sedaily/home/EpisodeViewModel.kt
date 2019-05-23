@@ -51,10 +51,15 @@ class EpisodeViewModel(private val homeFeedViewModel: HomeFeedViewModel): ViewMo
     }
 
     fun getPostBodyString(episode: Episode): String {
-        if (episode.content?.rendered == null) return ""
+        if (episode.excerpt?.rendered == null) return ""
+
+        var end = 100
+        if (episode.excerpt?.rendered.length < 100) {
+            end = episode.excerpt?.rendered.length
+        }
 
         return HtmlCompat.fromHtml(episode.excerpt?.rendered!!, HtmlCompat.FROM_HTML_MODE_LEGACY)
-                .toString().subSequence(0, 100).toString() + "..."
+                .toString().subSequence(0, end).toString() + "..."
     }
 
     fun getPostTitle(): MutableLiveData<String> {
@@ -148,13 +153,12 @@ class EpisodeViewModel(private val homeFeedViewModel: HomeFeedViewModel): ViewMo
     }
 
     private fun handleDownloadEvent(downloadEvent: DownloadEpisodeEvent) {
-        if (downloadEvent.episodeId == postId.value && downloadEvent.progress != progress.value) {
+        if (downloadEvent.episodeId == postId.value) {
             progress.value = downloadEvent.progress!!
             if (downloadEvent.progress == 100) {
                 progressVisible.value =  View.GONE
                 playVisible.value = View.VISIBLE
-
-                downloadFile = Downloader.getDirectoryForEpisodes() + postId.value
+                downloadFile = Downloader.getDirectoryForEpisodes() + downloadEvent.episodeId + ".mp3"
             }
         }
     }
