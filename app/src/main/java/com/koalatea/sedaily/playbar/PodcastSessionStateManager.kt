@@ -66,6 +66,10 @@ class PodcastSessionStateManager private constructor() {
         }
     }
 
+    fun getMediaMetaData(): MediaMetadataCompat? {
+        return mediaMetadataCompat
+    }
+
     fun setMediaMetaData(mediaMetaData: MediaMetadataCompat) {
         this.mediaMetadataCompat = mediaMetaData
         mediaMetaDataChange.onNext(mediaMetaData)

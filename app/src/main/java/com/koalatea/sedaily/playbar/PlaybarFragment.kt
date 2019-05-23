@@ -8,6 +8,7 @@ import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.text.format.DateUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +18,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.koalatea.sedaily.R
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_playback_controls.view.*
@@ -33,9 +35,7 @@ class PlaybarFragment: Fragment() {
     private var mScheduleFuture: ScheduledFuture<*>? = null
     private val mExecutorService = Executors.newSingleThreadScheduledExecutor()
     private val mUpdateProgressTask = { updateProgress() }
-    private var speedSubscription: DisposableObserver<Int>? = null
-    private var mediaItemSubscription: DisposableObserver<MediaMetadataCompat>? = null
-    private var playbackStateSub: DisposableObserver<PlaybackStateCompat>? = null
+    private var composeDispose: CompositeDisposable = CompositeDisposable()
 
     // @TODO: Change to binding
     private var rootView: View? = null
@@ -44,6 +44,21 @@ class PlaybarFragment: Fragment() {
                               savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_playback_controls, container, false)
 
+        initDisplay()
+
+        return rootView
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        initListeners()
+        if (rootView != null) {
+            initDisplay()
+        }
+    }
+
+    fun initDisplay() {
         playbarViewModel = ViewModelProviders
                 .of(this)
                 .get(PlaybarViewModel::class.java)
@@ -87,11 +102,14 @@ class PlaybarFragment: Fragment() {
         setUpMediaChangeSubscription()
         setupPlaybackStateSub()
 
-        return rootView
+        val metaData = PodcastSessionStateManager
+                .getInstance().getMediaMetaData()
+        if (metaData != null) {
+            updateWithMeta(metaData)
+        }
     }
 
-    override fun onStart() {
-        super.onStart()
+    fun initListeners() {
         val currentPlayTime = PodcastSessionStateManager.getInstance().currentProgress
         mLastPlaybackState = PodcastSessionStateManager.getInstance().lastPlaybackState
 
@@ -101,15 +119,9 @@ class PlaybarFragment: Fragment() {
         rootView?.startText?.text = DateUtils.formatElapsedTime(currentPlayTime / 1000)
         setSpeedTextView()
 
-        speedSubscription?.isDisposed?.run {
+        composeDispose?.isDisposed?.run {
             setUpSpeedSubscription()
-        }
-
-        mediaItemSubscription?.isDisposed?.run {
             setUpMediaChangeSubscription()
-        }
-
-        playbackStateSub?.isDisposed?.run {
             setupPlaybackStateSub()
         }
     }
@@ -117,10 +129,7 @@ class PlaybarFragment: Fragment() {
     override fun onStop() {
         super.onStop()
 
-        // @TODO: Use composite disposable - See Github Arch example
-        speedSubscription?.dispose()
-        mediaItemSubscription?.dispose()
-        playbackStateSub?.dispose()
+        composeDispose.clear()
 
         stopSeekbarUpdate()
     }
@@ -256,7 +265,7 @@ class PlaybarFragment: Fragment() {
     }
 
     private fun setUpSpeedSubscription() {
-        speedSubscription = object : DisposableObserver<Int>() {
+        val speedSubscription = object : DisposableObserver<Int>() {
             override fun onError(e: Throwable) {}
 
             override fun onComplete() {}
@@ -265,6 +274,8 @@ class PlaybarFragment: Fragment() {
                 setSpeedText()
             }
         }
+
+        composeDispose.addAll(speedSubscription)
 
         PodcastSessionStateManager
                 .getInstance()
@@ -275,7 +286,7 @@ class PlaybarFragment: Fragment() {
     }
 
     private fun setupPlaybackStateSub() {
-        playbackStateSub = object : DisposableObserver<PlaybackStateCompat>() {
+        val playbackStateSub = object : DisposableObserver<PlaybackStateCompat>() {
             override fun onError(e: Throwable) {}
 
             override fun onComplete() {}
@@ -284,6 +295,8 @@ class PlaybarFragment: Fragment() {
                 handlePlaybackState(playbackState)
             }
         }
+
+        composeDispose.addAll(playbackStateSub)
 
         PodcastSessionStateManager
                 .getInstance()
@@ -294,7 +307,7 @@ class PlaybarFragment: Fragment() {
     }
 
     private fun setUpMediaChangeSubscription() {
-        mediaItemSubscription = object : DisposableObserver<MediaMetadataCompat>() {
+        val mediaItemSubscription = object : DisposableObserver<MediaMetadataCompat>() {
             override fun onNext(mediaMetadataCompat: MediaMetadataCompat) {
                 updateDuration(mediaMetadataCompat)
                 updateWithMeta(mediaMetadataCompat)
@@ -308,6 +321,8 @@ class PlaybarFragment: Fragment() {
 
             }
         }
+
+        composeDispose.addAll(mediaItemSubscription)
 
         PodcastSessionStateManager
                 .getInstance()
@@ -327,7 +342,7 @@ class PlaybarFragment: Fragment() {
 
     private fun setSpeedText() {
         val currentSpeed = setSpeedTextView()
-
+        Log.v("keithtest", currentSpeed.toString());
         if (this.activity == null) return
         // @TODO: Make reactive
         playbarViewModel?.sendSpeedChangeIntent(currentSpeed, this.activity as Activity)
