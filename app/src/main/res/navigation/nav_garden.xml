@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/garden_fragment"
-        android:name="com.koalatea.sedaily.home.MainFragment"
+        android:name="com.koalatea.sedaily.feature.home.MainFragment"
         android:label="@string/home_title"
         tools:layout="@layout/fragment_main" >
         <action
@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/downloads_fragment"
-        android:name="com.koalatea.sedaily.downloadList.DownloadsFragment"
+        android:name="com.koalatea.sedaily.feature.downloadList.DownloadsFragment"
         android:label="@string/downloads_title"
         tools:layout="@layout/fragment_downloads">
 
@@ -33,14 +33,14 @@
 
     <fragment
         android:id="@+id/auth_fragment"
-        android:name="com.koalatea.sedaily.auth.AuthFragment"
+        android:name="com.koalatea.sedaily.feature.auth.AuthFragment"
         android:label="@string/auth_title"
         tools:layout="@layout/fragment_auth">
     </fragment>
 
     <fragment
         android:id="@+id/episode_detail_fragment"
-        android:name="com.koalatea.sedaily.episodedetail.EpisodeDetailFragment"
+        android:name="com.koalatea.sedaily.feature.episodedetail.EpisodeDetailFragment"
         android:label="@string/episode_details_title"
         tools:layout="@layout/fragment_episode_detail">
         <argument

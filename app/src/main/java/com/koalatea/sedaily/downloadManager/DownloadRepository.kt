@@ -2,8 +2,8 @@ package com.koalatea.sedaily.downloadManager
 
 import android.annotation.SuppressLint
 import android.util.Log
-import com.koalatea.sedaily.models.DatabaseModule
-import com.koalatea.sedaily.models.Download
+import com.koalatea.sedaily.model.DatabaseModule
+import com.koalatea.sedaily.model.Download
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers

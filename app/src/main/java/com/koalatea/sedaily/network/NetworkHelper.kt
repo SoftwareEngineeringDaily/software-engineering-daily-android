@@ -1,7 +1,7 @@
 package com.koalatea.sedaily.network
 
 import com.koalatea.sedaily.BuildConfig
-import com.koalatea.sedaily.auth.UserRepository
+import com.koalatea.sedaily.feature.auth.UserRepository
 import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

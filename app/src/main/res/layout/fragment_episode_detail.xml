@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.koalatea.sedaily.episodedetail.EpisodeDetailViewModel" />
+            type="com.koalatea.sedaily.feature.episodedetail.EpisodeDetailViewModel" />
         <variable
             name="removeDownload"
             type="android.view.View.OnClickListener"/>

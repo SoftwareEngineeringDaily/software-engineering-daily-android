@@ -1,7 +1,7 @@
 package com.koalatea.sedaily.network
 
-import com.koalatea.sedaily.models.Episode
-import com.koalatea.sedaily.models.User
+import com.koalatea.sedaily.model.Episode
+import com.koalatea.sedaily.model.User
 import io.reactivex.Observable
 import io.reactivex.Single
 import retrofit2.http.*

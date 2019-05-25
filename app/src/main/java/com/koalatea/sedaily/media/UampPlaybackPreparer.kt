@@ -35,7 +35,7 @@ import com.koalatea.sedaily.media.extensions.id
 import com.koalatea.sedaily.media.extensions.toMediaSource
 import com.koalatea.sedaily.media.extensions.trackNumber
 import com.koalatea.sedaily.media.library.MusicSource
-import com.koalatea.sedaily.playbar.PodcastSessionStateManager
+import com.koalatea.sedaily.feature.playbar.PodcastSessionStateManager
 
 /**
  * Class to bridge UAMP to the ExoPlayer MediaSession extension.

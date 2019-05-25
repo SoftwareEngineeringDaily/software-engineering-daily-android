@@ -13,15 +13,13 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
-import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.koalatea.sedaily.auth.UserRepository
+import com.koalatea.sedaily.feature.auth.UserRepository
 import com.koalatea.sedaily.databinding.ActivityMainBinding
-import com.koalatea.sedaily.home.PodcastSearchRepo
+import com.koalatea.sedaily.feature.home.PodcastSearchRepo
 
 class MainActivity : PlaybackActivity() {
 

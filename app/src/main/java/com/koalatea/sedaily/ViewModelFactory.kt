@@ -3,11 +3,11 @@ package com.koalatea.sedaily
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.koalatea.sedaily.auth.AuthViewModel
-import com.koalatea.sedaily.downloadList.DownloadsViewModel
-import com.koalatea.sedaily.episodedetail.EpisodeDetailViewModel
-import com.koalatea.sedaily.home.HomeFeedViewModel
-import com.koalatea.sedaily.models.DatabaseModule
+import com.koalatea.sedaily.feature.auth.AuthViewModel
+import com.koalatea.sedaily.feature.downloadList.DownloadsViewModel
+import com.koalatea.sedaily.feature.episodedetail.EpisodeDetailViewModel
+import com.koalatea.sedaily.feature.home.HomeFeedViewModel
+import com.koalatea.sedaily.model.DatabaseModule
 
 
 class ViewModelFactory(private val activity: AppCompatActivity): ViewModelProvider.Factory{

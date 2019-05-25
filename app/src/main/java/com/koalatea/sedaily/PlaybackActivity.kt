@@ -13,8 +13,8 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.koalatea.sedaily.media.MusicService
 import com.koalatea.sedaily.media.library.PodcastSource
-import com.koalatea.sedaily.models.DownloadDao
-import com.koalatea.sedaily.playbar.PodcastSessionStateManager
+import com.koalatea.sedaily.model.DownloadDao
+import com.koalatea.sedaily.feature.playbar.PodcastSessionStateManager
 import kotlinx.android.synthetic.main.activity_main.*
 
 @SuppressLint("Registered")

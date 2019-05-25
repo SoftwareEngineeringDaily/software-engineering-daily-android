@@ -8,7 +8,7 @@
             type="Boolean" />
         <variable
             name="viewModel"
-            type="com.koalatea.sedaily.home.HomeFeedViewModel" />
+            type="com.koalatea.sedaily.feature.home.HomeFeedViewModel" />
     </data>
 
     <FrameLayout
