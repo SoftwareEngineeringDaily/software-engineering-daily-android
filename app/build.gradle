@@ -24,10 +24,10 @@ android {
 
     signingConfigs {
         release {
-            storeFile file(SEDAILY_RELEASE_STORE_FILE)
-            storePassword SEDAILY_RELEASE_STORE_PASS
-            keyAlias SEDAILY_RELEASE_KEY_ALIAS
-            keyPassword SEDAILY_RELEASE_KEY_PASS
+//            storeFile file(SEDAILY_RELEASE_STORE_FILE)
+//            storePassword SEDAILY_RELEASE_STORE_PASS
+//            keyAlias SEDAILY_RELEASE_KEY_ALIAS
+//            keyPassword SEDAILY_RELEASE_KEY_PASS
         }
     }
 
@@ -35,7 +35,11 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+//            signingConfig signingConfigs.release
+        }
+        debug {
+            applicationIdSuffix '.debug'
+            versionNameSuffix '-debug'
         }
     }
 
