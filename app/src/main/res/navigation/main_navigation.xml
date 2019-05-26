@@ -6,11 +6,11 @@
 
     <fragment
         android:id="@+id/home_fragment"
-        android:name="com.koalatea.sedaily.feature.home.MainFragment"
+        android:name="com.koalatea.sedaily.feature.home.HomeFragment"
         android:label="@string/home_title"
         tools:layout="@layout/fragment_main">
         <action
-            android:id="@+id/action_plant_list_fragment_to_plant_detail_fragment"
+            android:id="@+id/open_episode_details_action"
             app:destination="@id/episode_detail_fragment" />
     </fragment>
 
@@ -21,19 +21,15 @@
         tools:layout="@layout/fragment_downloads">
 
         <action
-            android:id="@+id/action_plant_list_fragment_to_plant_detail_fragment"
+            android:id="@+id/open_episode_details_action"
             app:destination="@id/episode_detail_fragment" />
-        <!--app:enterAnim="@anim/slide_in_right"-->
-        <!--app:exitAnim="@anim/slide_out_left"-->
-        <!--app:popEnterAnim="@anim/slide_in_left"-->
-        <!--app:popExitAnim="@anim/slide_out_right" -->
     </fragment>
 
     <fragment
         android:id="@+id/auth_fragment"
         android:name="com.koalatea.sedaily.feature.auth.AuthFragment"
         android:label="@string/auth_title"
-        tools:layout="@layout/fragment_auth"></fragment>
+        tools:layout="@layout/fragment_auth" />
 
     <fragment
         android:id="@+id/episode_detail_fragment"

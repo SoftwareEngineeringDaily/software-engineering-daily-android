@@ -30,7 +30,7 @@ class HomeFeedListAdapter(
 
     private fun createOnClickListener(episodeId: String): View.OnClickListener {
         return View.OnClickListener {
-            val direction = MainFragmentDirections.actionPlantListFragmentToPlantDetailFragment(episodeId)
+            val direction = HomeFragmentDirections.openEpisodeDetailsAction(episodeId)
             it.findNavController().navigate(direction)
         }
     }

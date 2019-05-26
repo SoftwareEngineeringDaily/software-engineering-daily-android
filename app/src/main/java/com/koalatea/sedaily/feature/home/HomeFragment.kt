@@ -17,7 +17,7 @@ import com.koalatea.sedaily.ViewModelFactory
 import com.koalatea.sedaily.databinding.FragmentMainBinding
 import io.reactivex.disposables.CompositeDisposable
 
-class MainFragment : Fragment() {
+class HomeFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
     private lateinit var viewModel: HomeFeedViewModel
     private var errorSnackbar: Snackbar? = null

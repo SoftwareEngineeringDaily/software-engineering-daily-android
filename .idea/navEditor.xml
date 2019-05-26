@@ -31,7 +31,7 @@
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_plant_list_fragment_to_plant_detail_fragment">
+                            <entry key="downloads_fragment_to_episode_details_fragment">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -64,7 +64,7 @@
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_plant_list_fragment_to_plant_detail_fragment">
+                            <entry key="openEpisode_details_fragment">
                               <value>
                                 <LayoutPositions />
                               </value>

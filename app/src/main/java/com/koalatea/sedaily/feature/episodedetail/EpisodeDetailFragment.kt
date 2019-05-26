@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.koalatea.sedaily.PlaybackActivity
 import com.koalatea.sedaily.R
@@ -18,7 +19,7 @@ import com.koalatea.sedaily.databinding.FragmentEpisodeDetailBinding
 
 class EpisodeDetailFragment : Fragment() {
 
-    var episodeId: String? = null
+    lateinit var episodeId: String
     var detailViewModel: EpisodeDetailViewModel? = null
 
     override fun onCreateView(
@@ -26,11 +27,12 @@ class EpisodeDetailFragment : Fragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?): View? {
 
-        episodeId = EpisodeDetailFragmentArgs.fromBundle(arguments!!).episodeId
+        val safeArgs: EpisodeDetailFragmentArgs by navArgs()
+        episodeId = safeArgs.episodeId
 
         detailViewModel = ViewModelProviders.of(this, ViewModelFactory(this.activity as AppCompatActivity))
                 .get(EpisodeDetailViewModel::class.java)
-        detailViewModel?.loadEpisode(episodeId!!)
+        detailViewModel?.loadEpisode(episodeId)
 //        viewModel.errorMessage.observe(this, Observer {
 //            errorMessage -> if(errorMessage != null) showError(errorMessage) else hideError()
 //        })
@@ -76,8 +78,6 @@ class EpisodeDetailFragment : Fragment() {
     }
 
     private fun removeDownloadFromDB() {
-        episodeId?.apply {
-            detailViewModel?.removeDownloadForId(this)
-        }
+        detailViewModel?.removeDownloadForId(episodeId)
     }
 }

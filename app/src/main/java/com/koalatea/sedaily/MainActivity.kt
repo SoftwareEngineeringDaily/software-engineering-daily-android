@@ -11,12 +11,10 @@ import android.view.MenuItem
 import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.koalatea.sedaily.databinding.ActivityMainBinding
 import com.koalatea.sedaily.feature.auth.UserRepository
 import com.koalatea.sedaily.feature.home.PodcastSearchRepo
 import kotlinx.android.synthetic.main.activity_main.*
@@ -28,9 +26,6 @@ class MainActivity : PlaybackActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val binding: ActivityMainBinding = DataBindingUtil.setContentView(this,
-                R.layout.activity_main)
 
         // Set set up bar
         val fab = findViewById<FloatingActionButton>(R.id.fab)
