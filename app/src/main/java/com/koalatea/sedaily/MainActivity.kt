@@ -141,8 +141,7 @@ class MainActivity : PlaybackActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        return NavigationUI.navigateUp(drawerLayout,
-                Navigation.findNavController(this, R.id.garden_nav_fragment))
+        return NavigationUI.navigateUp(Navigation.findNavController(this, R.id.garden_nav_fragment), drawerLayout)
     }
 
     override fun onBackPressed() {

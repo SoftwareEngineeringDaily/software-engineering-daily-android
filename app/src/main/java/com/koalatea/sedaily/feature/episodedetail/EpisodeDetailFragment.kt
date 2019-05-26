@@ -26,7 +26,7 @@ class EpisodeDetailFragment : Fragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?): View? {
 
-        episodeId = EpisodeDetailFragmentArgs.fromBundle(arguments).episodeId
+        episodeId = EpisodeDetailFragmentArgs.fromBundle(arguments!!).episodeId
 
         detailViewModel = ViewModelProviders.of(this, ViewModelFactory(this.activity as AppCompatActivity))
                 .get(EpisodeDetailViewModel::class.java)

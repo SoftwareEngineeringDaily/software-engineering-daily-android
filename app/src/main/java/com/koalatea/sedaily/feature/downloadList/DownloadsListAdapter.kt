@@ -45,7 +45,7 @@ class DownloadsListAdapter(
 
     private fun createOnClickListener(episodeId: String): View.OnClickListener {
         return View.OnClickListener {
-            val direction = DownloadsFragmentDirections.ActionPlantListFragmentToPlantDetailFragment(episodeId)
+            val direction = DownloadsFragmentDirections.actionPlantListFragmentToPlantDetailFragment(episodeId)
             it.findNavController().navigate(direction)
         }
     }
