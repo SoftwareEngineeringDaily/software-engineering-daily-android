@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:layout_width="match_parent"
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout android:layout_width="match_parent"
         android:layout_height="match_parent"
         xmlns:tools="http://schemas.android.com/tools">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <fragment
                 android:id="@+id/garden_nav_fragment"
@@ -16,8 +17,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:defaultNavHost="true"
-                app:navGraph="@navigation/nav_garden"
-                />
+                app:navGraph="@navigation/nav_garden" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -26,8 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom">
 
-            <include
-                layout="@layout/included_bottom_app_bar"/>
+            <include layout="@layout/included_bottom_app_bar" />
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -35,8 +34,8 @@
                 android:id="@+id/playbarControls"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:cardElevation="8dp"
-                android:visibility="gone"
-                >
+                android:visibility="gone">
+
                 <fragment
                     android:name="com.koalatea.sedaily.feature.playbar.PlaybarFragment"
                     android:id="@+id/fragment_playback_controls"

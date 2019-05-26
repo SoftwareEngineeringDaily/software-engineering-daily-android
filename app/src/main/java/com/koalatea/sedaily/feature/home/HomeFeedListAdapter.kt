@@ -11,9 +11,9 @@ import com.koalatea.sedaily.R
 import com.koalatea.sedaily.databinding.ItemEpisodeBinding
 import com.koalatea.sedaily.model.Episode
 
-class HomeFeedListAdapter (
-    private val homeFeedViewModel: HomeFeedViewModel
-): ListAdapter<Episode, HomeFeedListAdapter.ViewHolder>(EpisodeDiffCallback()) {
+class HomeFeedListAdapter(
+        private val homeFeedViewModel: HomeFeedViewModel
+) : ListAdapter<Episode, HomeFeedListAdapter.ViewHolder>(EpisodeDiffCallback()) {
     // @TODO: Currently public for HomeFeedModel,but we probably need a better way to get last element
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding: ItemEpisodeBinding = DataBindingUtil.inflate(
@@ -36,9 +36,9 @@ class HomeFeedListAdapter (
     }
 
     class ViewHolder(
-        private val binding: ItemEpisodeBinding,
-        private val homeFeedViewModel: HomeFeedViewModel
-    ): RecyclerView.ViewHolder(binding.root) {
+            private val binding: ItemEpisodeBinding,
+            private val homeFeedViewModel: HomeFeedViewModel
+    ) : RecyclerView.ViewHolder(binding.root) {
         private val viewModel = EpisodeViewModel(homeFeedViewModel)
 
         fun bind(listener: View.OnClickListener, episode: Episode) {

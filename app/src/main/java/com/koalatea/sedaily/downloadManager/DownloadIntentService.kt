@@ -4,7 +4,7 @@ import android.app.IntentService
 import android.content.Intent
 import android.os.Build
 
-class DownloadIntentService: IntentService("SEDDownloadIntentService") {
+class DownloadIntentService : IntentService("SEDDownloadIntentService") {
     override fun onHandleIntent(intent: Intent?) {
         val url: String? = intent?.getStringExtra("episode-url")
         val id: String? = intent?.getStringExtra("episode-id")

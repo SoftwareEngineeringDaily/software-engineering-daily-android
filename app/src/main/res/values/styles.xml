@@ -7,10 +7,10 @@
     </style>
 
     <!-- Base Theme for ActivityDetail -->
-    <style name="AppTheme.Transparent.ActivityDetail"/>
+    <style name="AppTheme.Transparent.ActivityDetail" />
 
     <!-- Base Theme for ActivityMain -->
-    <style name="AppTheme.ActivityMain"/>
+    <style name="AppTheme.ActivityMain" />
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">

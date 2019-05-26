@@ -14,11 +14,11 @@ class DownloadRepository {
         fun createDownload(episodeId: String, url: String) {
             // @TODO: Handle disposable
             Observable.just(5)
-                .subscribeOn(Schedulers.io())
-                .subscribe {
-                    val downloadEntry = Download(episodeId, url)
-                    DatabaseModule.getDatabase().downloadDao().inserAll(downloadEntry)
-                }
+                    .subscribeOn(Schedulers.io())
+                    .subscribe {
+                        val downloadEntry = Download(episodeId, url)
+                        DatabaseModule.getDatabase().downloadDao().inserAll(downloadEntry)
+                    }
         }
 
         fun getDownloadForId(episodeId: String): Observable<Download> {

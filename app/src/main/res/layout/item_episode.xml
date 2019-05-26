@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.koalatea.sedaily.feature.home.EpisodeViewModel" />
+
         <variable
             name="clickListener"
-            type="android.view.View.OnClickListener"/>
+            type="android.view.View.OnClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -24,8 +25,7 @@
         android:paddingBottom="16dp"
         android:background="@android:color/white"
         android:foreground="?android:attr/selectableItemBackground"
-        android:onClick="@{clickListener}"
-        >
+        android:onClick="@{clickListener}">
         <!-- Use a separate view for the background, rather than on the root view because it is a
             shared element. Otherwise it interferes with the window enter transition i.e. as it is
             resized for the shared element transition, many views are considered 'off-screen' so
@@ -38,8 +38,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:importantForAccessibility="no"
-            />
+            android:importantForAccessibility="no" />
 
         <TextView
             android:id="@+id/post_title"
@@ -70,8 +69,7 @@
             app:layout_constraintStart_toStartOf="parent"
             android:textColor="#616467"
             android:text="A Description of stuff. And more stuff."
-            app:mutableText="@{viewModel.getPostBody()}"
-            />
+            app:mutableText="@{viewModel.getPostBody()}" />
 
         <ImageView
             android:id="@+id/mainImage"
@@ -83,8 +81,7 @@
             android:src="@drawable/sedaily_logo"
             app:imageFromUrl="@{viewModel.getPostImage()}"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-             />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -121,21 +118,20 @@
             app:layout_constraintStart_toEndOf="@+id/button"
             app:layout_constraintTop_toBottomOf="@+id/progressBar"
             app:mutableVisibility="@{viewModel.getPlayVisible()}"
-            android:onClick="@{() -> viewModel.playRequest()}"
-            />
+            android:onClick="@{() -> viewModel.playRequest()}" />
 
-            <!--<Button-->
-                <!--android:id="@+id/stream_button"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginTop="8dp"-->
-                <!--android:text="Stream"-->
-                <!--style="@style/Widget.MaterialComponents.Button.OutlinedButton"-->
-                <!--app:layout_constraintEnd_toEndOf="parent"-->
-                <!--app:layout_constraintStart_toStartOf="parent"-->
-                <!--app:layout_constraintTop_toBottomOf="@+id/button"-->
-                <!--app:mutableVisibility="@{viewModel.getStreamVisible()}"-->
-                <!--android:onClick="@{() -> viewModel.playRequest()}"-->
-                <!--/>-->
+        <!--<Button-->
+        <!--android:id="@+id/stream_button"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:text="Stream"-->
+        <!--style="@style/Widget.MaterialComponents.Button.OutlinedButton"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/button"-->
+        <!--app:mutableVisibility="@{viewModel.getStreamVisible()}"-->
+        <!--android:onClick="@{() -> viewModel.playRequest()}"-->
+        <!--/>-->
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

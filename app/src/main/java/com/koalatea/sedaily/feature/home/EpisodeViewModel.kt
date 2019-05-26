@@ -17,7 +17,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-class EpisodeViewModel(private val homeFeedViewModel: HomeFeedViewModel): ViewModel() {
+class EpisodeViewModel(private val homeFeedViewModel: HomeFeedViewModel) : ViewModel() {
     private val postTitle = MutableLiveData<String>()
     private val postBody = MutableLiveData<String>()
     private val postMp3 = MutableLiveData<String>()
@@ -54,11 +54,11 @@ class EpisodeViewModel(private val homeFeedViewModel: HomeFeedViewModel): ViewMo
         if (episode.excerpt?.rendered == null) return ""
 
         var end = 100
-        if (episode.excerpt?.rendered.length < 100) {
-            end = episode.excerpt?.rendered.length
+        if (episode.excerpt.rendered.length < 100) {
+            end = episode.excerpt.rendered.length
         }
 
-        return HtmlCompat.fromHtml(episode.excerpt?.rendered!!, HtmlCompat.FROM_HTML_MODE_LEGACY)
+        return HtmlCompat.fromHtml(episode.excerpt.rendered, HtmlCompat.FROM_HTML_MODE_LEGACY)
                 .toString().subSequence(0, end).toString() + "..."
     }
 
@@ -70,11 +70,11 @@ class EpisodeViewModel(private val homeFeedViewModel: HomeFeedViewModel): ViewMo
         return postBody
     }
 
-    fun getProgress(): MutableLiveData<Int>{
+    fun getProgress(): MutableLiveData<Int> {
         return progress
     }
 
-    fun getPostMp3(): MutableLiveData<String>  {
+    fun getPostMp3(): MutableLiveData<String> {
         return postMp3
     }
 
@@ -83,7 +83,7 @@ class EpisodeViewModel(private val homeFeedViewModel: HomeFeedViewModel): ViewMo
     }
 
     @SuppressLint("CheckResult")
-    fun getDownloadVisible() : MutableLiveData<Int> {
+    fun getDownloadVisible(): MutableLiveData<Int> {
         if (postMp3.value == null) {
             downloadVisible.value = View.GONE
             streamVisible.value = View.GONE
@@ -91,18 +91,17 @@ class EpisodeViewModel(private val homeFeedViewModel: HomeFeedViewModel): ViewMo
 
         postId.value?.let {
             val subscriber = DownloadRepository
-                .getDownloadForId(it)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe ({ download ->
-                    if (download != null) downloadVisible.value =  View.GONE
-                    playVisible.value = View.VISIBLE
-                    streamVisible.value = View.GONE
-                    downloadFile = download.filename
-                }, {
-                    _ ->
-                    // @TODO: Log distribute
-                })
+                    .getDownloadForId(it)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({ download ->
+                        if (download != null) downloadVisible.value = View.GONE
+                        playVisible.value = View.VISIBLE
+                        streamVisible.value = View.GONE
+                        downloadFile = download.filename
+                    }, { _ ->
+                        // @TODO: Log distribute
+                    })
 
             compositeDisposable.add(subscriber)
         }
@@ -110,8 +109,8 @@ class EpisodeViewModel(private val homeFeedViewModel: HomeFeedViewModel): ViewMo
         return downloadVisible
     }
 
-    fun getProgressVisible() : MutableLiveData<Int> {
-        progressVisible.value =  View.GONE
+    fun getProgressVisible(): MutableLiveData<Int> {
+        progressVisible.value = View.GONE
 
         if (Downloader.downloadingFiles.contains(episodeData?._id)) {
             subscribeToDownload()
@@ -120,8 +119,8 @@ class EpisodeViewModel(private val homeFeedViewModel: HomeFeedViewModel): ViewMo
         return progressVisible
     }
 
-    fun getPlayVisible() : MutableLiveData<Int> {
-        playVisible.value =  View.GONE
+    fun getPlayVisible(): MutableLiveData<Int> {
+        playVisible.value = View.GONE
 
         return playVisible
     }
@@ -142,11 +141,11 @@ class EpisodeViewModel(private val homeFeedViewModel: HomeFeedViewModel): ViewMo
     private fun subscribeToDownload() {
         downloadVisible.value = View.GONE
         streamVisible.value = View.GONE
-        progressVisible.value =  View.VISIBLE
+        progressVisible.value = View.VISIBLE
 
         val subscriber = Downloader
                 .currentDownloadProgress
-                .subscribe (this@EpisodeViewModel::handleDownloadEvent) {
+                .subscribe(this@EpisodeViewModel::handleDownloadEvent) {
                     Log.v("sedaily-debug", it.localizedMessage)
                 }
         compositeDisposable.add(subscriber)
@@ -156,7 +155,7 @@ class EpisodeViewModel(private val homeFeedViewModel: HomeFeedViewModel): ViewMo
         if (downloadEvent.episodeId == postId.value) {
             progress.value = downloadEvent.progress!!
             if (downloadEvent.progress == 100) {
-                progressVisible.value =  View.GONE
+                progressVisible.value = View.GONE
                 playVisible.value = View.VISIBLE
                 downloadFile = Downloader.getDirectoryForEpisodes() + downloadEvent.episodeId + ".mp3"
             }
@@ -167,17 +166,17 @@ class EpisodeViewModel(private val homeFeedViewModel: HomeFeedViewModel): ViewMo
         val downloadEpisode: DownloadDao.DownloadEpisode
         if (downloadFile != null) {
             downloadEpisode = DownloadDao.DownloadEpisode(
-                postId.value!!,
-                downloadFile!!,
-                postTitle.value!!,
-                postImage.value
+                    postId.value!!,
+                    downloadFile!!,
+                    postTitle.value!!,
+                    postImage.value
             )
         } else {
             downloadEpisode = DownloadDao.DownloadEpisode(
-                postId.value!!,
-                postMp3.value!!,
-                postTitle.value!!,
-                postImage.value
+                    postId.value!!,
+                    postMp3.value!!,
+                    postTitle.value!!,
+                    postImage.value
             )
         }
 

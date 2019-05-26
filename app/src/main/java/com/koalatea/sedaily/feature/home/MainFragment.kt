@@ -59,8 +59,8 @@ class MainFragment : Fragment() {
             if (results != null && results.isNotEmpty())
                 adapter.submitList(results)
         })
-        viewModel.errorMessage.observe(this, Observer {
-            errorMessage -> if(errorMessage != null) showError(errorMessage) else hideError()
+        viewModel.errorMessage.observe(this, Observer { errorMessage ->
+            if (errorMessage != null) showError(errorMessage) else hideError()
         })
 
         viewModel.playRequested.observe(this, Observer {
@@ -68,10 +68,10 @@ class MainFragment : Fragment() {
         })
 
         val disposable = PodcastSearchRepo
-            .getInstance().getSearchChange
-            .subscribe { query ->
-                viewModel.performSearch(query)
-            }
+                .getInstance().getSearchChange
+                .subscribe { query ->
+                    viewModel.performSearch(query)
+                }
         compositeDisposable.add(disposable)
 
         binding.viewModel = viewModel
@@ -91,13 +91,13 @@ class MainFragment : Fragment() {
         super.onDestroy()
     }
 
-    private fun showError(@StringRes errorMessage:Int) {
+    private fun showError(@StringRes errorMessage: Int) {
         errorSnackbar = Snackbar.make(binding.root, errorMessage, Snackbar.LENGTH_INDEFINITE)
 //        errorSnackbar?.setAction(R.string.retry, viewModel.errorClickListener)
         errorSnackbar?.show()
     }
 
-    private fun hideError(){
+    private fun hideError() {
         errorSnackbar?.dismiss()
     }
 }

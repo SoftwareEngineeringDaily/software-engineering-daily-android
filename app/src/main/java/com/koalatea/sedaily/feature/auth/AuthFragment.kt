@@ -18,7 +18,7 @@ import com.koalatea.sedaily.ViewModelFactory
 import com.koalatea.sedaily.databinding.FragmentAuthBinding
 import retrofit2.HttpException
 
-class AuthFragment: Fragment() {
+class AuthFragment : Fragment() {
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -32,19 +32,19 @@ class AuthFragment: Fragment() {
         ).apply {
             viewModel = authViewModel
 
-            setLifecycleOwner(this@AuthFragment)
+            lifecycleOwner = this@AuthFragment
 
-            loginRegButton.setOnClickListener{
+            loginRegButton.setOnClickListener {
                 loginRegButton.isEnabled = false
                 val usernameString = username.text.toString()
                 val passwordString = password.text.toString()
                 val emailString = email.text.toString()
-                loginRegButton.setEnabled(false)
+                loginRegButton.isEnabled = false
 
                 viewModel?.authenticate(usernameString, passwordString, emailString)
             }
 
-            forgotPassword.setOnClickListener{
+            forgotPassword.setOnClickListener {
                 forgotPasswordClick()
             }
         }

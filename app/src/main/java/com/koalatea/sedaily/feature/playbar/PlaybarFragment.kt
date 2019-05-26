@@ -26,7 +26,7 @@ import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
 
-class PlaybarFragment: Fragment() {
+class PlaybarFragment : Fragment() {
     private var playbarViewModel: PlaybarViewModel? = null
     private var mLastPlaybackState: PlaybackStateCompat? = null
     private val PROGRESS_UPDATE_INTERNAL: Long = 1000
@@ -67,14 +67,14 @@ class PlaybarFragment: Fragment() {
             handlePlayClick()
         }
 
-        rootView?.back15?.setOnClickListener{
+        rootView?.back15?.setOnClickListener {
             back15()
         }
-        rootView?.skip15?.setOnClickListener{
+        rootView?.skip15?.setOnClickListener {
             skip15()
         }
 
-        rootView?.speed?.setOnClickListener{
+        rootView?.speed?.setOnClickListener {
             showSpeedDialog()
         }
 
@@ -119,7 +119,7 @@ class PlaybarFragment: Fragment() {
         rootView?.startText?.text = DateUtils.formatElapsedTime(currentPlayTime / 1000)
         setSpeedTextView()
 
-        composeDispose?.isDisposed?.run {
+        composeDispose.isDisposed.run {
             setUpSpeedSubscription()
             setUpMediaChangeSubscription()
             setupPlaybackStateSub()
@@ -161,7 +161,8 @@ class PlaybarFragment: Fragment() {
     }
 
     private fun handlePlayClick() {
-        val controller = MediaControllerCompat.getMediaController(this.activity as Activity) ?: return
+        val controller = MediaControllerCompat.getMediaController(this.activity as Activity)
+                ?: return
         playbarViewModel?.playPause(controller)
     }
 
@@ -177,7 +178,7 @@ class PlaybarFragment: Fragment() {
 
         updateDuration(metadata)
 
-        rootView?.title?.text  = metadata.description.title
+        rootView?.title?.text = metadata.description.title
 
         val postTile = metadata.description.title.toString()
         val controller = MediaControllerCompat.getMediaController(this.activity as Activity)
@@ -214,7 +215,7 @@ class PlaybarFragment: Fragment() {
             rootView?.play_pause?.setImageDrawable(ContextCompat.getDrawable(this.activity as Activity, R.drawable.exo_controls_play))
         } else {
             rootView?.play_pause?.setImageDrawable(
-                ContextCompat.getDrawable(this.activity as Activity, R.drawable.exo_controls_pause)
+                    ContextCompat.getDrawable(this.activity as Activity, R.drawable.exo_controls_pause)
             )
         }
     }
@@ -342,7 +343,7 @@ class PlaybarFragment: Fragment() {
 
     private fun setSpeedText() {
         val currentSpeed = setSpeedTextView()
-        Log.v("keithtest", currentSpeed.toString());
+        Log.v("keithtest", currentSpeed.toString())
         if (this.activity == null) return
         // @TODO: Make reactive
         playbarViewModel?.sendSpeedChangeIntent(currentSpeed, this.activity as Activity)

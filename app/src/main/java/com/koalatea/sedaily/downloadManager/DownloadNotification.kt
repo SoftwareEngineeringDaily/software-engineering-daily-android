@@ -36,7 +36,7 @@ class DownloadNotification {
             }
 
             mBuilder = NotificationCompat.Builder(context!!, CHANNEL_ID)
-                    .setContentTitle(context?.getString(R.string.downloading_title))
+                    .setContentTitle(context.getString(R.string.downloading_title))
                     .setContentText(notificationMessage)
                     .setSmallIcon(R.drawable.sedaily_logo)
                     .setContentIntent(pendingIntent)

@@ -45,7 +45,7 @@ class EpisodeDetailFragment : Fragment() {
                 inflater, R.layout.fragment_episode_detail, container, false
         ).apply {
             viewModel = detailViewModel
-            setLifecycleOwner(this@EpisodeDetailFragment)
+            lifecycleOwner = this@EpisodeDetailFragment
 //            fab.setOnClickListener{}
             removeDownload = View.OnClickListener {
                 queryRemoveDownload()
@@ -68,11 +68,11 @@ class EpisodeDetailFragment : Fragment() {
 
     private fun queryRemoveDownload() {
         AlertDialog.Builder(this.context!!)
-            .setTitle("SoftwareDaily")
-            .setMessage("Do you really want to remove this download?")
-            .setIcon(android.R.drawable.ic_dialog_alert)
-            .setPositiveButton(android.R.string.yes) { _, _ ->  removeDownloadFromDB() }
-            .setNegativeButton(android.R.string.no, null).show()
+                .setTitle("SoftwareDaily")
+                .setMessage("Do you really want to remove this download?")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton(android.R.string.yes) { _, _ -> removeDownloadFromDB() }
+                .setNegativeButton(android.R.string.no, null).show()
     }
 
     private fun removeDownloadFromDB() {

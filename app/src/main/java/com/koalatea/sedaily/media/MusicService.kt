@@ -145,7 +145,7 @@ class MusicService : MediaBrowserServiceCompat() {
                     exoPlayer,
                     dataSourceFactory)
 
-            val speedChangeAction = object: MediaSessionConnector.CustomActionProvider {
+            val speedChangeAction = object : MediaSessionConnector.CustomActionProvider {
                 override fun getCustomAction(): PlaybackStateCompat.CustomAction {
                     return PlaybackStateCompat.CustomAction.Builder("SPEED_CHANGE", "SPEED_CHANGE", R.drawable.exo_icon_fastforward)
                             .build()
@@ -163,7 +163,7 @@ class MusicService : MediaBrowserServiceCompat() {
                 }
             }
 
-            val moveForwardAction = object: MediaSessionConnector.CustomActionProvider {
+            val moveForwardAction = object : MediaSessionConnector.CustomActionProvider {
                 override fun getCustomAction(): PlaybackStateCompat.CustomAction {
                     return PlaybackStateCompat.CustomAction.Builder("MOVE_BACK", "MOVE_BACK", R.drawable.exo_controls_rewind)
                             .build()
@@ -182,7 +182,7 @@ class MusicService : MediaBrowserServiceCompat() {
                 }
             }
 
-            val moveBackwardAction = object: MediaSessionConnector.CustomActionProvider {
+            val moveBackwardAction = object : MediaSessionConnector.CustomActionProvider {
                 override fun getCustomAction(): PlaybackStateCompat.CustomAction {
                     return PlaybackStateCompat.CustomAction.Builder("MOVE_FORWARD", "MOVE_FORWARD", R.drawable.exo_icon_fastforward)
                             .build()
@@ -217,7 +217,7 @@ class MusicService : MediaBrowserServiceCompat() {
         }
 
         try {
-            val current = exoPlayer.getPlaybackParameters()
+            val current = exoPlayer.playbackParameters
             val newParams = PlaybackParameters(speedFloat, current.pitch)
             exoPlayer.playbackParameters = newParams
         } catch (e: Exception) {

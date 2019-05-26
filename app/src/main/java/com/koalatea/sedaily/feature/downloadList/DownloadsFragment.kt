@@ -32,8 +32,8 @@ class DownloadsFragment : Fragment() {
         binding.postList.layoutManager = LinearLayoutManager(this.activity, RecyclerView.VERTICAL, false)
 //
         viewModel = ViewModelProviders.of(this, ViewModelFactory(this.activity as AppCompatActivity)).get(DownloadsViewModel::class.java)
-        viewModel.errorMessage.observe(this, Observer {
-            errorMessage -> if(errorMessage != null) showError(errorMessage) else hideError()
+        viewModel.errorMessage.observe(this, Observer { errorMessage ->
+            if (errorMessage != null) showError(errorMessage) else hideError()
         })
 
         // Play listener
@@ -51,24 +51,24 @@ class DownloadsFragment : Fragment() {
 
     private fun queryRemoveDownload(download: DownloadDao.DownloadEpisode) {
         AlertDialog.Builder(this.context!!)
-            .setTitle("SoftwareDaily")
-            .setMessage("Do you really want to remove this download?")
-            .setIcon(android.R.drawable.ic_dialog_alert)
-            .setPositiveButton(android.R.string.yes) { _, _ ->  removeDownloadFromDB(download) }
-            .setNegativeButton(android.R.string.no, null).show()
+                .setTitle("SoftwareDaily")
+                .setMessage("Do you really want to remove this download?")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton(android.R.string.yes) { _, _ -> removeDownloadFromDB(download) }
+                .setNegativeButton(android.R.string.no, null).show()
     }
 
     private fun removeDownloadFromDB(download: DownloadDao.DownloadEpisode) {
         viewModel.removeDownloadForId(download.postId)
     }
 
-    private fun showError(@StringRes errorMessage:Int){
+    private fun showError(@StringRes errorMessage: Int) {
         errorSnackbar = Snackbar.make(binding.root, errorMessage, Snackbar.LENGTH_INDEFINITE)
 //        errorSnackbar?.setAction(R.string.retry, viewModel.errorClickListener)
         errorSnackbar?.show()
     }
 
-    private fun hideError(){
+    private fun hideError() {
         errorSnackbar?.dismiss()
     }
 }

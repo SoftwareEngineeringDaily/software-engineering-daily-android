@@ -40,41 +40,43 @@ fun setAdapter(view: RecyclerView, adapter: RecyclerView.Adapter<*>) {
 }
 
 @BindingAdapter("mutableVisibility")
-fun setMutableVisibility(view: View,  visibility: MutableLiveData<Int>?) {
-    val parentActivity:AppCompatActivity? = view.getParentActivity()
-    if(parentActivity != null && visibility != null) {
-        visibility.observe(parentActivity, Observer { value -> view.visibility = value?:View.VISIBLE})
+fun setMutableVisibility(view: View, visibility: MutableLiveData<Int>?) {
+    val parentActivity: AppCompatActivity? = view.getParentActivity()
+    if (parentActivity != null && visibility != null) {
+        visibility.observe(parentActivity, Observer { value ->
+            view.visibility = value ?: View.VISIBLE
+        })
     }
 }
 
 @BindingAdapter("mutableText")
 fun setMutableText(view: TextView, text: MutableLiveData<String>?) {
     val parentActivity: AppCompatActivity? = view.getParentActivity()
-    if(parentActivity != null && text != null) {
-        text.observe(parentActivity, Observer { value -> view.text = value?:""})
+    if (parentActivity != null && text != null) {
+        text.observe(parentActivity, Observer { value -> view.text = value ?: "" })
     }
 }
 
 @BindingAdapter("mutableText")
 fun setMutableText(view: Button, text: MutableLiveData<String>?) {
     val parentActivity: AppCompatActivity? = view.getParentActivity()
-    if(parentActivity != null && text != null) {
-        text.observe(parentActivity, Observer { value -> view.text = value?:""})
+    if (parentActivity != null && text != null) {
+        text.observe(parentActivity, Observer { value -> view.text = value ?: "" })
     }
 }
 
 @BindingAdapter("mutableHint")
 fun setMutableHint(view: EditText, text: MutableLiveData<String>?) {
     val parentActivity: AppCompatActivity? = view.getParentActivity()
-    if(parentActivity != null && text != null) {
-        text.observe(parentActivity, Observer { value -> view.hint = value?:""})
+    if (parentActivity != null && text != null) {
+        text.observe(parentActivity, Observer { value -> view.hint = value ?: "" })
     }
 }
 
 @BindingAdapter("mutableProgress")
 fun setMutableProgress(view: ProgressBar, progress: MutableLiveData<Int>?) {
     val parentActivity: AppCompatActivity? = view.getParentActivity()
-    if(parentActivity != null && progress != null) {
-        progress.observe(parentActivity, Observer { value -> view.progress = value?:0})
+    if (parentActivity != null && progress != null) {
+        progress.observe(parentActivity, Observer { value -> view.progress = value ?: 0 })
     }
 }

@@ -5,7 +5,8 @@ import com.koalatea.sedaily.SEDApp
 
 class DatabaseModule {
     companion object {
-        @Volatile private var dbInstance: AppDatabase? = null
+        @Volatile
+        private var dbInstance: AppDatabase? = null
 
         fun getDatabase(): AppDatabase {
             return dbInstance ?: synchronized(this) {
@@ -15,9 +16,9 @@ class DatabaseModule {
 
         fun buildDatabase(): AppDatabase {
             return Room
-                .databaseBuilder(SEDApp.appContext!!, AppDatabase::class.java, "sedaily")
-                .fallbackToDestructiveMigration()
-                .build()
+                    .databaseBuilder(SEDApp.appContext!!, AppDatabase::class.java, "sedaily")
+                    .fallbackToDestructiveMigration()
+                    .build()
         }
     }
 }

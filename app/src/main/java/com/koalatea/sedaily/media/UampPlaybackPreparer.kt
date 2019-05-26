@@ -30,12 +30,12 @@ import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
 import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.upstream.DataSource
+import com.koalatea.sedaily.feature.playbar.PodcastSessionStateManager
 import com.koalatea.sedaily.media.extensions.album
 import com.koalatea.sedaily.media.extensions.id
 import com.koalatea.sedaily.media.extensions.toMediaSource
 import com.koalatea.sedaily.media.extensions.trackNumber
 import com.koalatea.sedaily.media.library.MusicSource
-import com.koalatea.sedaily.feature.playbar.PodcastSessionStateManager
 
 /**
  * Class to bridge UAMP to the ExoPlayer MediaSession extension.
@@ -99,45 +99,45 @@ class UampPlaybackPreparer(
 
                 exoPlayer.prepare(mediaSource)
                 exoPlayer.seekTo(initialWindowIndex, 0)
-                exoPlayer.addListener(object: Player.EventListener {
+                exoPlayer.addListener(object : Player.EventListener {
                     override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters?) {
-                         //To change body of created functions use File | Settings | File Templates.
+                        //To change body of created functions use File | Settings | File Templates.
                     }
 
                     override fun onSeekProcessed() {
-                         //To change body of created functions use File | Settings | File Templates.
+                        //To change body of created functions use File | Settings | File Templates.
                     }
 
                     override fun onTracksChanged(trackGroups: TrackGroupArray?, trackSelections: TrackSelectionArray?) {
-                         //To change body of created functions use File | Settings | File Templates.
+                        //To change body of created functions use File | Settings | File Templates.
                     }
 
                     override fun onPlayerError(error: ExoPlaybackException?) {
-                         //To change body of created functions use File | Settings | File Templates.
+                        //To change body of created functions use File | Settings | File Templates.
                     }
 
                     override fun onLoadingChanged(isLoading: Boolean) {
-                         //To change body of created functions use File | Settings | File Templates.
+                        //To change body of created functions use File | Settings | File Templates.
                     }
 
                     override fun onPositionDiscontinuity(reason: Int) {
-                         //To change body of created functions use File | Settings | File Templates.
+                        //To change body of created functions use File | Settings | File Templates.
                     }
 
                     override fun onRepeatModeChanged(repeatMode: Int) {
-                         //To change body of created functions use File | Settings | File Templates.
+                        //To change body of created functions use File | Settings | File Templates.
                     }
 
                     override fun onShuffleModeEnabledChanged(shuffleModeEnabled: Boolean) {
-                         //To change body of created functions use File | Settings | File Templates.
+                        //To change body of created functions use File | Settings | File Templates.
                     }
 
                     override fun onTimelineChanged(timeline: Timeline?, manifest: Any?, reason: Int) {
-                         //To change body of created functions use File | Settings | File Templates.
+                        //To change body of created functions use File | Settings | File Templates.
                     }
 
                     override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
-                         //To change body of created functions use File | Settings | File Templates.
+                        //To change body of created functions use File | Settings | File Templates.
                         when (playbackState) {
                             Player.STATE_READY -> {
                                 val trackIndex = exoPlayer.currentWindowIndex
@@ -215,7 +215,7 @@ class UampPlaybackPreparer(
     fun startHandlerThread() {
         mHandlerThread = HandlerThread("HandlerThread")
         mHandlerThread?.start()
-        handler = Handler(mHandlerThread?.getLooper())
+        handler = Handler(mHandlerThread?.looper)
     }
 
     private fun updateProgressBar() {
@@ -229,7 +229,7 @@ class UampPlaybackPreparer(
         val playbackState = if (exoPlayer == null) Player.STATE_IDLE else exoPlayer.currentPosition
         if (playbackState != Player.STATE_IDLE && playbackState != Player.STATE_ENDED) {
             var delayMs: Long
-            if (exoPlayer.getPlayWhenReady() && playbackState == Player.STATE_READY) {
+            if (exoPlayer.playWhenReady && playbackState == Player.STATE_READY) {
                 delayMs = 1000 - position % 1000
                 if (delayMs < 200) {
                     delayMs += 1000

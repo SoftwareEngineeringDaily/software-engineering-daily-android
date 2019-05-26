@@ -98,7 +98,7 @@ class AuthViewModel : ViewModel() {
         authError.value = error
     }
 
-    private fun getQuery(username: String,  password: String, email: String): Single<User> {
+    private fun getQuery(username: String, password: String, email: String): Single<User> {
         val mService = sedailyApi
         return if (screen === "Register") {
             mService.register(username, email, password)

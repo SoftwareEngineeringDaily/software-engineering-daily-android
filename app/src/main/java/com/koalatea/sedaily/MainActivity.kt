@@ -17,14 +17,14 @@ import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.koalatea.sedaily.feature.auth.UserRepository
 import com.koalatea.sedaily.databinding.ActivityMainBinding
+import com.koalatea.sedaily.feature.auth.UserRepository
 import com.koalatea.sedaily.feature.home.PodcastSearchRepo
 
 class MainActivity : PlaybackActivity() {
 
     private lateinit var drawerLayout: DrawerLayout
-    private val SEDAILY_EXTERNAL_PERMISSION_REQUEST = 987;
+    private val SEDAILY_EXTERNAL_PERMISSION_REQUEST = 987
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,7 +69,7 @@ class MainActivity : PlaybackActivity() {
                 true
             }
             R.id.home -> {
-                PodcastSearchRepo.getInstance().setSearch("");
+                PodcastSearchRepo.getInstance().setSearch("")
                 Navigation
                         .findNavController(this, R.id.garden_nav_fragment)
                         .navigate(R.id.home_fragment)
@@ -109,9 +109,9 @@ class MainActivity : PlaybackActivity() {
 //            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
 //                            Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
 //            } else {
-                ActivityCompat.requestPermissions(this,
-                        arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                        SEDAILY_EXTERNAL_PERMISSION_REQUEST)
+            ActivityCompat.requestPermissions(this,
+                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    SEDAILY_EXTERNAL_PERMISSION_REQUEST)
 
 //            }
         }
@@ -150,7 +150,7 @@ class MainActivity : PlaybackActivity() {
         fab.visibility = View.GONE
     }
 
-    fun setLogout (menu: Menu) {
+    fun setLogout(menu: Menu) {
         val authItem = menu.findItem(R.id.auth)
         authItem?.title = "Logout"
         authItem.setOnMenuItemClickListener {

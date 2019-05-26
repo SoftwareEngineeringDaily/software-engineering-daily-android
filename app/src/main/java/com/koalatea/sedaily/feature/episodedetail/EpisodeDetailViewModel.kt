@@ -17,7 +17,7 @@ import io.reactivex.schedulers.Schedulers
 
 
 class EpisodeDetailViewModel internal constructor(
-    private val episodeDao: EpisodeDao
+        private val episodeDao: EpisodeDao
 ) : ViewModel() {
     private val hasDownload = MutableLiveData<Int>()
     private val canPlay = MutableLiveData<Int>()
@@ -41,17 +41,17 @@ class EpisodeDetailViewModel internal constructor(
 
     fun loadEpisode(episodeId: String) {
         subscription = Observable.fromCallable { episodeDao.findById(episodeId) }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
 //            .doOnSubscribe { onRetrivePostListStart() }
 //            .doOnTerminate { onRetrievePostListFinish() }
-            .subscribe(
-                { result -> onRetrievePostListSuccess(result) },
-                {
-                    Log.v("keithtest", it.localizedMessage)
+                .subscribe(
+                        { result -> onRetrievePostListSuccess(result) },
+                        {
+                            Log.v("keithtest", it.localizedMessage)
 //                        onRetrievePostListError()
-                }
-            )
+                        }
+                )
     }
 
     fun checkForDownload(episodeId: String) {
@@ -59,11 +59,11 @@ class EpisodeDetailViewModel internal constructor(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                    { result -> onRetrieveDownloadSuccess(result) },
-                    {
-                        Log.v("keithtest", it.localizedMessage)
+                        { result -> onRetrieveDownloadSuccess(result) },
+                        {
+                            Log.v("keithtest", it.localizedMessage)
 //                        onRetrievePostListError()
-                    }
+                        }
                 )
     }
 

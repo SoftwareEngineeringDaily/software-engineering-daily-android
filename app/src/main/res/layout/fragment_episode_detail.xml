@@ -4,12 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.koalatea.sedaily.feature.episodedetail.EpisodeDetailViewModel" />
+
         <variable
             name="removeDownload"
-            type="android.view.View.OnClickListener"/>
+            type="android.view.View.OnClickListener" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -85,13 +87,13 @@
                         app:layout_constraintBottom_toTopOf="@id/plantDetail">
 
                         <!--<Button-->
-                            <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:layout_marginStart="8dp"-->
-                            <!--android:layout_marginTop="4dp"-->
-                            <!--android:onClick="@{removeDownload}"-->
-                            <!--android:text="@string/remove_download"-->
-                            <!--app:mutableVisibility="@{viewModel.getHasDownload()}" />-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_marginStart="8dp"-->
+                        <!--android:layout_marginTop="4dp"-->
+                        <!--android:onClick="@{removeDownload}"-->
+                        <!--android:text="@string/remove_download"-->
+                        <!--app:mutableVisibility="@{viewModel.getHasDownload()}" />-->
                     </RelativeLayout>
 
                     <WebView
@@ -109,17 +111,17 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!--<com.google.android.material.floatingactionbutton.FloatingActionButton-->
-            <!--android:id="@+id/fab"-->
-            <!--style="@style/Widget.MaterialComponents.FloatingActionButton"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="center"-->
-            <!--android:layout_margin="@dimen/fab_margin"-->
-            <!--android:onClick="@{() -> viewModel.playRequest()}"-->
-            <!--app:mutableVisibility="@{viewModel.getCanPlay()}"-->
-            <!--android:tint="@android:color/white"-->
-            <!--app:layout_anchor="@id/actionItems"-->
-            <!--app:layout_anchorGravity="center|end"-->
-            <!--app:srcCompat="@drawable/exo_controls_play" />-->
+        <!--android:id="@+id/fab"-->
+        <!--style="@style/Widget.MaterialComponents.FloatingActionButton"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:layout_margin="@dimen/fab_margin"-->
+        <!--android:onClick="@{() -> viewModel.playRequest()}"-->
+        <!--app:mutableVisibility="@{viewModel.getCanPlay()}"-->
+        <!--android:tint="@android:color/white"-->
+        <!--app:layout_anchor="@id/actionItems"-->
+        <!--app:layout_anchorGravity="center|end"-->
+        <!--app:srcCompat="@drawable/exo_controls_play" />-->
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

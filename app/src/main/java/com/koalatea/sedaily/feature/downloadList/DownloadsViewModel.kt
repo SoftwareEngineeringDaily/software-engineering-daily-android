@@ -36,17 +36,17 @@ class DownloadsViewModel internal constructor(
 
     private fun loadFeed() {
         subscription = Observable.fromCallable { downloadsDao.allDownloadsWithEpisodes }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe { onRetrievePostListStart() }
-            .doOnTerminate { onRetrievePostListFinish() }
-            .subscribe(
-                { result -> onRetrievePostListSuccess(result) },
-                {
-                    Log.v("keithtest", it.localizedMessage)
-                    onRetrievePostListError()
-                }
-            )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe { onRetrievePostListStart() }
+                .doOnTerminate { onRetrievePostListFinish() }
+                .subscribe(
+                        { result -> onRetrievePostListSuccess(result) },
+                        {
+                            Log.v("keithtest", it.localizedMessage)
+                            onRetrievePostListError()
+                        }
+                )
     }
 
     private fun onRetrievePostListStart() {

@@ -1,7 +1,10 @@
 package com.koalatea.sedaily.model
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
 import androidx.room.OnConflictStrategy.REPLACE
+import androidx.room.Query
 
 @Dao
 interface DownloadDao {
@@ -23,9 +26,9 @@ interface DownloadDao {
     fun delete(download: Download)
 
     data class DownloadEpisode(
-        val postId: String,
-        val filename: String,
-        val title: String,
-        val featuredImage: String?
+            val postId: String,
+            val filename: String,
+            val title: String,
+            val featuredImage: String?
     )
 }

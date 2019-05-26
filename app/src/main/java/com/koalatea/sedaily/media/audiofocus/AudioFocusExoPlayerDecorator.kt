@@ -24,12 +24,7 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.media.AudioAttributesCompat
-import com.google.android.exoplayer2.ExoPlaybackException
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.PlaybackParameters
-import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.SimpleExoPlayer
-import com.google.android.exoplayer2.Timeline
+import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 
@@ -75,7 +70,7 @@ class AudioFocusExoPlayerDecorator(private val audioAttributes: AudioAttributesC
             }
             AudioManager.AUDIOFOCUS_LOSS -> {
                 // This will chain through to abandonAudioFocus().
-                AudioFocusExoPlayerDecorator@playWhenReady = false
+                AudioFocusExoPlayerDecorator@ playWhenReady = false
             }
         }
     }

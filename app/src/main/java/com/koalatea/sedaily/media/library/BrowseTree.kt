@@ -19,7 +19,6 @@ package com.koalatea.sedaily.media.library
 import android.support.v4.media.MediaBrowserCompat.MediaItem
 import android.support.v4.media.MediaMetadataCompat
 import com.koalatea.sedaily.media.extensions.*
-import com.koalatea.sedaily.media.library.MusicSource
 
 /**
  * Represents a tree of media that's used by [MusicService.onLoadChildren].

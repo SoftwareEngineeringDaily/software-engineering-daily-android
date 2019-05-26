@@ -24,8 +24,7 @@
             android:layout_height="wrap_content"
             android:contentDescription="@string/playbarTitleViewDesc"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="?android:attr/textColorPrimary"
-            />
+            android:textColor="?android:attr/textColorPrimary" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -40,8 +39,7 @@
                 android:gravity="center_vertical"
                 android:maxLines="1"
                 android:text="@string/playbarStartTextDefault"
-                android:textColor="@color/colorAccent"
-                />
+                android:textColor="@color/colorAccent" />
 
             <SeekBar
                 android:id="@+id/seekBar1"
@@ -52,8 +50,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:layout_toStartOf="@+id/endText"
-                android:layout_toEndOf="@+id/startText"
-                />
+                android:layout_toEndOf="@+id/startText" />
 
             <TextView
                 android:id="@+id/endText"
@@ -65,14 +62,14 @@
                 android:layout_alignWithParentIfMissing="true"
                 android:maxLines="1"
                 android:text="@string/playbarStartTextDefault"
-                android:textColor="@color/colorAccent"
-                />
+                android:textColor="@color/colorAccent" />
 
         </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -100,8 +97,7 @@
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:text="@string/_1x"
         android:contentDescription="@string/speed"
-        android:tint="@color/colorAccent"
-        />
+        android:tint="@color/colorAccent" />
 
     <ImageButton
         android:id="@+id/play_pause"
@@ -113,6 +109,5 @@
         android:background="?selectableItemBackgroundBorderless"
         android:src="@drawable/exo_controls_play"
         android:contentDescription="@string/play_pause"
-        android:tint="@color/colorAccent"
-        />
+        android:tint="@color/colorAccent" />
 </RelativeLayout>

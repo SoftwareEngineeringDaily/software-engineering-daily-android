@@ -3,18 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.koalatea.sedaily.feature.downloadList.DownloadViewModel" />
+
         <variable
             name="clickListener"
-            type="android.view.View.OnClickListener"/>
+            type="android.view.View.OnClickListener" />
+
         <variable
             name="playClickListener"
-            type="android.view.View.OnClickListener"/>
+            type="android.view.View.OnClickListener" />
+
         <variable
             name="removeClickListener"
-            type="android.view.View.OnClickListener"/>
+            type="android.view.View.OnClickListener" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -27,8 +31,8 @@
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
         android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        >
+        android:paddingBottom="4dp">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -37,8 +41,7 @@
             android:layout_marginBottom="16dp"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:onClick="@{clickListener}"
-            >
+            android:onClick="@{clickListener}">
 
             <ImageView
                 android:id="@+id/mainImage"
@@ -69,8 +72,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/post_title2"
-                android:onClick="@{playClickListener}"
-                />
+                android:onClick="@{playClickListener}" />
 
             <Button
                 android:id="@+id/remove_Button"
@@ -82,8 +84,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/play_button"
-                android:onClick="@{removeClickListener}"
-                />
+                android:onClick="@{removeClickListener}" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </layout>

@@ -8,13 +8,12 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.koalatea.sedaily.R
 import com.koalatea.sedaily.databinding.ItemDownloadBinding
-import com.koalatea.sedaily.feature.downloadList.DownloadsFragmentDirections
 import com.koalatea.sedaily.model.DownloadDao
 import com.koalatea.sedaily.model.DownloadDao.DownloadEpisode
 
 class DownloadsListAdapter(
-    private val downloadsViewModel: DownloadsViewModel
-): RecyclerView.Adapter<DownloadsListAdapter.ViewHolder>() {
+        private val downloadsViewModel: DownloadsViewModel
+) : RecyclerView.Adapter<DownloadsListAdapter.ViewHolder>() {
     private lateinit var postList: MutableList<DownloadDao.DownloadEpisode>
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -31,7 +30,7 @@ class DownloadsListAdapter(
     }
 
     override fun getItemCount(): Int {
-        return if(::postList.isInitialized) postList.size else 0
+        return if (::postList.isInitialized) postList.size else 0
     }
 
     fun removeItem(downloadId: String) {
@@ -67,7 +66,7 @@ class DownloadsListAdapter(
         notifyDataSetChanged()
     }
 
-    class ViewHolder(private val binding: ItemDownloadBinding): RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder(private val binding: ItemDownloadBinding) : RecyclerView.ViewHolder(binding.root) {
         private val viewModel = DownloadViewModel()
 
         fun bind(listener: View.OnClickListener,

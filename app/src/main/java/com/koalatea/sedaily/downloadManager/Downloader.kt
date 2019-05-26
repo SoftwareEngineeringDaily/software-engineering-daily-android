@@ -8,14 +8,14 @@ import kotlinx.coroutines.launch
 import java.io.File
 
 data class DownloadEpisodeEvent(
-    val progress: Int? = null,
-    val episodeId: String? = null,
-    val url: String? = null
+        val progress: Int? = null,
+        val episodeId: String? = null,
+        val url: String? = null
 )
 
 data class DownloadQueueItem(
-    val episodeId: String? = null,
-    val url: String? = null
+        val episodeId: String? = null,
+        val url: String? = null
 )
 
 class Downloader {
@@ -40,7 +40,7 @@ class Downloader {
             downloadingFiles[episodeId] = PublishSubject.create()
 
             if (downloadTask == null) {
-                downloadTask = DownloadTask(object: DownloadTaskEventListener {
+                downloadTask = DownloadTask(object : DownloadTaskEventListener {
                     override fun onProgressUpdate(progress: Int?, downloadId: String, url: String) {
                         GlobalScope.launch {
                             handleProgressUpdate(progress, downloadId, url)
@@ -78,7 +78,7 @@ class Downloader {
 
                     if (downloadQueue.size > 0) {
                         val newTask = downloadQueue.removeAt(0)
-                        downloadTask = DownloadTask(object: DownloadTaskEventListener {
+                        downloadTask = DownloadTask(object : DownloadTaskEventListener {
                             override fun onProgressUpdate(progress: Int?, downloadId: String, url: String) {
                                 GlobalScope.launch {
                                     handleProgressUpdate(progress, downloadId, url)

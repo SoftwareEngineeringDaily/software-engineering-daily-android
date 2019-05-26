@@ -11,12 +11,11 @@ class SpeedDialog : DialogFragment() {
         val builder = AlertDialog.Builder(activity!!)
 
         builder.setTitle(R.string.speed)
-            .setItems(R.array.speed_options) {
-                _, which ->
-                run {
-                    PodcastSessionStateManager.getInstance().currentSpeed = which
+                .setItems(R.array.speed_options) { _, which ->
+                    run {
+                        PodcastSessionStateManager.getInstance().currentSpeed = which
+                    }
                 }
-            }
 
         return builder.create()
     }

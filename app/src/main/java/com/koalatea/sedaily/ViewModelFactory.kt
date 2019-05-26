@@ -10,7 +10,7 @@ import com.koalatea.sedaily.feature.home.HomeFeedViewModel
 import com.koalatea.sedaily.model.DatabaseModule
 
 
-class ViewModelFactory(private val activity: AppCompatActivity): ViewModelProvider.Factory{
+class ViewModelFactory(private val activity: AppCompatActivity) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(HomeFeedViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")

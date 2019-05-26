@@ -16,7 +16,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
 class HomeFeedViewModel internal constructor(
-    private val episodeDao: EpisodeDao
+        private val episodeDao: EpisodeDao
 ) : ViewModel() {
     var sedailyApi: SEDailyApi = NetworkHelper.getApi()
 
@@ -36,8 +36,8 @@ class HomeFeedViewModel internal constructor(
         val map = mutableMapOf<String, String>()
 
         val subscription = sedailyApi.getPosts(map)
-                .concatMap {
-                    apiPostList -> episodeDao.inserAll(*apiPostList.toTypedArray())
+                .concatMap { apiPostList ->
+                    episodeDao.inserAll(*apiPostList.toTypedArray())
                     Observable.just(apiPostList)
                 }
                 .subscribeOn(Schedulers.io())
@@ -55,16 +55,16 @@ class HomeFeedViewModel internal constructor(
     }
 
     private fun loadHomeFeedFromLocal() {
-        val subscription  = Observable.fromCallable { episodeDao.all }
+        val subscription = Observable.fromCallable { episodeDao.all }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { onRetrivePostListStart() }
                 .doOnTerminate { onRetrievePostListFinish() }
                 .subscribe(
-                    { result -> onRetrievePostListSuccess(result) },
-                    {
-                        onRetrievePostListError()
-                    }
+                        { result -> onRetrievePostListSuccess(result) },
+                        {
+                            onRetrievePostListError()
+                        }
                 )
         compositeDisposable.add(subscription)
     }
@@ -85,8 +85,8 @@ class HomeFeedViewModel internal constructor(
         map["createdAtBefore"] = lastEpisode?.date as String
 
         val subscription = sedailyApi.getPosts(map)
-                .concatMap {
-                    apiPostList -> episodeDao.inserAll(*apiPostList.toTypedArray())
+                .concatMap { apiPostList ->
+                    episodeDao.inserAll(*apiPostList.toTypedArray())
                     Observable.just(apiPostList)
                 }
                 .subscribeOn(Schedulers.io())
@@ -94,12 +94,12 @@ class HomeFeedViewModel internal constructor(
                 .doOnSubscribe { onRetrivePostListStart() }
                 .doOnTerminate { onRetrievePostListFinish() }
                 .subscribe(
-                    {
-                        result -> onRetrievePostPageSuccess(result)
-                    },
-                    {
-                        onRetrievePostListError()
-                    }
+                        { result ->
+                            onRetrievePostPageSuccess(result)
+                        },
+                        {
+                            onRetrievePostListError()
+                        }
                 )
 
         compositeDisposable.add(subscription)
@@ -114,22 +114,22 @@ class HomeFeedViewModel internal constructor(
         map.set("search", query)
 
         val subscription = sedailyApi.getPosts(map)
-            .concatMap {
-                apiPostList -> episodeDao.inserAll(*apiPostList.toTypedArray())
-                Observable.just(apiPostList)
-            }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe { onRetrivePostListStart() }
-            .doOnTerminate { onRetrievePostListFinish() }
-            .subscribe(
-                {
-                    result -> onRetrievePostSearchSuccess(result)
-                },
-                {
-                    onRetrievePostListError()
+                .concatMap { apiPostList ->
+                    episodeDao.inserAll(*apiPostList.toTypedArray())
+                    Observable.just(apiPostList)
                 }
-            )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe { onRetrivePostListStart() }
+                .doOnTerminate { onRetrievePostListFinish() }
+                .subscribe(
+                        { result ->
+                            onRetrievePostSearchSuccess(result)
+                        },
+                        {
+                            onRetrievePostListError()
+                        }
+                )
 
         compositeDisposable.add(subscription)
     }

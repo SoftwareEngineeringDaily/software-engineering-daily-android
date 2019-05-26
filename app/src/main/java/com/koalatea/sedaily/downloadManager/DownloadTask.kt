@@ -16,14 +16,13 @@ class DownloadTask(
         private val downloadListener: DownloadTaskEventListener?,
         private val downloadId: String,
         private val url: String
-): AsyncTask<String, Int, String>() {
+) : AsyncTask<String, Int, String>() {
     override fun doInBackground(vararg args: String): String {
         var input: InputStream? = null
         var output: OutputStream? = null
         var connection: HttpURLConnection? = null
 
-        try
-        {
+        try {
             val url = URL(args[0])
             connection = url.openConnection() as HttpURLConnection
             connection.connect()
@@ -42,14 +41,14 @@ class DownloadTask(
             output = FileOutputStream(Downloader.getDirectoryForEpisodes() + args[1])
 
             val data = ByteArray(4096)
-            var total:Long = 0
+            var total: Long = 0
             var count: Int
 
             count = input.read(data)
 
             while (count != -1) {
                 // allow canceling with back button
-                if (isCancelled()) {
+                if (isCancelled) {
                     input.close()
                     return ""
                 }
@@ -63,14 +62,14 @@ class DownloadTask(
 
                 count = input.read(data)
             }
-        } catch (e:Exception) {
+        } catch (e: Exception) {
             return e.toString()
         } finally {
             try {
                 output?.close()
                 input?.close()
+            } catch (ignored: IOException) {
             }
-            catch (ignored: IOException) {}
             connection?.disconnect()
         }
 

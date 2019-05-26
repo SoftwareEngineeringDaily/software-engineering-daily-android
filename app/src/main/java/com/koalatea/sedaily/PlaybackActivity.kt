@@ -11,10 +11,10 @@ import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.koalatea.sedaily.feature.playbar.PodcastSessionStateManager
 import com.koalatea.sedaily.media.MusicService
 import com.koalatea.sedaily.media.library.PodcastSource
 import com.koalatea.sedaily.model.DownloadDao
-import com.koalatea.sedaily.feature.playbar.PodcastSessionStateManager
 import kotlinx.android.synthetic.main.activity_main.*
 
 @SuppressLint("Registered")
@@ -67,7 +67,7 @@ open class PlaybackActivity : AppCompatActivity() {
 
     // Local play
     fun playMedia(episode: DownloadDao.DownloadEpisode) {
-        val item: MediaMetadataCompat  = MediaMetadataCompat.Builder()
+        val item: MediaMetadataCompat = MediaMetadataCompat.Builder()
                 .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, episode.postId)
                 .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI, episode.filename)
                 .putString(MediaMetadataCompat.METADATA_KEY_TITLE, episode.title)
