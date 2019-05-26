@@ -13,13 +13,13 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.navigation.Navigation
-import androidx.navigation.ui.NavigationUI
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.koalatea.sedaily.databinding.ActivityMainBinding
 import com.koalatea.sedaily.feature.auth.UserRepository
 import com.koalatea.sedaily.feature.home.PodcastSearchRepo
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : PlaybackActivity() {
 
@@ -70,21 +70,15 @@ class MainActivity : PlaybackActivity() {
             }
             R.id.home -> {
                 PodcastSearchRepo.getInstance().setSearch("")
-                Navigation
-                        .findNavController(this, R.id.garden_nav_fragment)
-                        .navigate(R.id.home_fragment)
+                mainNavHostFragment.findNavController().navigate(R.id.home_fragment)
                 true
             }
             R.id.downloads -> {
-                Navigation
-                        .findNavController(this, R.id.garden_nav_fragment)
-                        .navigate(R.id.downloads_fragment)
+                mainNavHostFragment.findNavController().navigate(R.id.downloads_fragment)
                 true
             }
             R.id.auth -> {
-                Navigation
-                        .findNavController(this, R.id.garden_nav_fragment)
-                        .navigate(R.id.auth_fragment)
+                mainNavHostFragment.findNavController().navigate(R.id.auth_fragment)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -140,9 +134,9 @@ class MainActivity : PlaybackActivity() {
         }
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        return NavigationUI.navigateUp(Navigation.findNavController(this, R.id.garden_nav_fragment), drawerLayout)
-    }
+//    override fun onSupportNavigateUp(): Boolean {
+//        return NavigationUI.navigateUp(Navigation.findNavController(this, R.id.garden_nav_fragment), drawerLayout)
+//    }
 
     override fun onBackPressed() {
         super.onBackPressed()
