@@ -53,13 +53,13 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="garden_fragment">
+                  <entry key="home_fragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="256" />
-                            <option name="y" value="190" />
+                            <option name="x" value="12" />
+                            <option name="y" value="12" />
                           </Point>
                         </option>
                         <option name="myPositions">
