@@ -2,18 +2,17 @@
     <string name="app_name">SEDaily</string>
     <string name="navigation_drawer_header_title" translatable="false">SoftwareDaily</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="downloads_title">Downloads</string>
     <string name="auth_title">Authentication</string>
     <string name="home_title">Home</string>
     <string name="episode_details_title">Episode</string>
-    <string name="garden_empty">Your garden is empty</string>
     <string name="post_error">An error occurred while loading the posts</string>
     <string name="search_hint">Search for a podcast</string>
 
-    <!-- Accessibility -->
-    <string name="a11y_plant_item_image" translation_description="Accessibility text for each of the plant images shown in the 'My garden' and 'Plant list' screens.">Picture of plant</string>
+    <!-- Bottom navigation -->
+    <string name="bottom_navigation_latest">Latest</string>
+    <string name="bottom_navigation_saved">Saved</string>
+    <string name="bottom_navigation_profile">Profile</string>
 
     <!-- Notificaiton Channel -->
     <string name="notification_channel">Now Playing</string>

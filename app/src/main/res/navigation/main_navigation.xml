@@ -2,37 +2,37 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@+id/home_fragment">
+    app:startDestination="@+id/navigation_home">
 
     <fragment
-        android:id="@+id/home_fragment"
+        android:id="@+id/navigation_home"
         android:name="com.koalatea.sedaily.feature.home.HomeFragment"
         android:label="@string/home_title"
         tools:layout="@layout/fragment_main">
         <action
             android:id="@+id/open_episode_details_action"
-            app:destination="@id/episode_detail_fragment" />
+            app:destination="@id/navigation_episode_details" />
     </fragment>
 
     <fragment
-        android:id="@+id/downloads_fragment"
+        android:id="@+id/navigation_downloads"
         android:name="com.koalatea.sedaily.feature.downloadList.DownloadsFragment"
         android:label="@string/downloads_title"
         tools:layout="@layout/fragment_downloads">
 
         <action
             android:id="@+id/open_episode_details_action"
-            app:destination="@id/episode_detail_fragment" />
+            app:destination="@id/navigation_episode_details" />
     </fragment>
 
     <fragment
-        android:id="@+id/auth_fragment"
+        android:id="@+id/navigation_auth"
         android:name="com.koalatea.sedaily.feature.auth.AuthFragment"
         android:label="@string/auth_title"
         tools:layout="@layout/fragment_auth" />
 
     <fragment
-        android:id="@+id/episode_detail_fragment"
+        android:id="@+id/navigation_episode_details"
         android:name="com.koalatea.sedaily.feature.episodedetail.EpisodeDetailFragment"
         android:label="@string/episode_details_title"
         tools:layout="@layout/fragment_episode_detail">

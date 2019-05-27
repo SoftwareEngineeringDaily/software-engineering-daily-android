@@ -37,11 +37,10 @@ class EpisodeDetailFragment : Fragment() {
 //            errorMessage -> if(errorMessage != null) showError(errorMessage) else hideError()
 //        })
 
-        val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
-        fab?.visibility = View.VISIBLE
-        fab?.setOnClickListener {
-            detailViewModel?.playRequest()
-        }
+//        fab?.visibility = View.VISIBLE
+//        fab?.setOnClickListener {
+//            detailViewModel?.playRequest()
+//        }
 
         val binding = DataBindingUtil.inflate<FragmentEpisodeDetailBinding>(
                 inflater, R.layout.fragment_episode_detail, container, false

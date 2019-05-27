@@ -8,20 +8,18 @@
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/home"
-        android:iconTint="#fff"
-        android:title="Home"
+        android:id="@id/navigation_home"
+        android:title="@string/home_title"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/downloads"
-        android:iconTint="#fff"
-        android:title="Downloads"
+        android:id="@id/navigation_downloads"
+        android:title="@string/downloads_title"
         app:showAsAction="never" />
 
+    <!-- FIXME :: Get rid of -->
     <item
-        android:id="@+id/auth"
-        android:iconTint="#fff"
+        android:id="@id/navigation_auth"
         android:title="Login"
         app:showAsAction="never" />
 </menu>

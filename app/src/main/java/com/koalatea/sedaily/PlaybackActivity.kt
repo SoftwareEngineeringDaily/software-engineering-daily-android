@@ -128,11 +128,11 @@ open class PlaybackActivity : AppCompatActivity() {
 
     // Playbar stuffs
     private fun showPlaybackControls() {
-        playbarControls.visibility = View.VISIBLE
+        playerControls.visibility = View.VISIBLE
     }
 
     private fun hidePlaybackControls() {
-        playbarControls.visibility = View.GONE
+        playerControls.visibility = View.GONE
     }
 
     private fun shouldShowControls(): Boolean {
