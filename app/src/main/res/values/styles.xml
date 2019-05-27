@@ -7,6 +7,4 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="AppTheme.ActivityMain" />
-
 </resources>

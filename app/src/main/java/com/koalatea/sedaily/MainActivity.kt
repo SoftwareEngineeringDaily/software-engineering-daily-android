@@ -29,15 +29,12 @@ class MainActivity : PlaybackActivity() {
         setContentView(R.layout.activity_main)
 
         val navController = mainNavHostFragment.findNavController()
-//        val appBarConfiguration = AppBarConfiguration(navController.graph)
+        // Define top level screens.
         // FIXME :: Use correct top-level tabs, setOf(R.id.navigation_home, R.id.navigation_saved, R.id.navigation_profile)
         val appBarConfiguration = AppBarConfiguration(setOf(R.id.navigation_home, R.id.navigation_downloads, R.id.navigation_auth))
 
         setupActionBar(navController, appBarConfiguration)
         setupBottomNavMenu(navController)
-
-//        bottomNavigationView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
-//        bottomNavigationView.setupWithNavController(mainNavHostFragment.findNavController())
 
         // Set up media
         this.setUp()
@@ -49,7 +46,6 @@ class MainActivity : PlaybackActivity() {
                                appBarConfig: AppBarConfiguration) = setupActionBarWithNavController(navController, appBarConfig)
 
     private fun setupBottomNavMenu(navController: NavController) = bottomNavigationView?.setupWithNavController(navController)
-
 
 //    override fun onNewIntent(intent: Intent) {
 //        setIntent(intent)

@@ -8,7 +8,7 @@
             <LayoutPositions>
               <option name="myPositions">
                 <map>
-                  <entry key="auth_fragment">
+                  <entry key="navigation_auth">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
@@ -20,7 +20,7 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="downloads_fragment">
+                  <entry key="navigation_downloads">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
@@ -41,7 +41,7 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="episode_detail_fragment">
+                  <entry key="navigation_episode_details">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
@@ -53,7 +53,7 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="home_fragment">
+                  <entry key="navigation_home">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">

@@ -19,6 +19,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 @SuppressLint("Registered")
 open class PlaybackActivity : AppCompatActivity() {
+
     private var mMediaBrowser: MediaBrowserCompat? = null
     private val mConnectionCallbacks: MediaBrowserCompat.ConnectionCallback = object : MediaBrowserCompat.ConnectionCallback() {
         override fun onConnected() {
@@ -147,4 +148,5 @@ open class PlaybackActivity : AppCompatActivity() {
             else -> return true
         }
     }
+
 }
