@@ -11,11 +11,13 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 
-private const val BASE_URL: String = "https://software-enginnering-daily-api.herokuapp.com/api/"
+// FIXME :: Move to debug build type
+private const val BASE_URL: String = "https://sedaily-backend-staging.herokuapp.com/api/"
+//private const val BASE_URL: String = "https://software-enginnering-daily-api.herokuapp.com/api/"
 
 val networkModule = module {
 
-    single<OkHttpClient> { //(userRepository: UserRepository) ->
+    single<OkHttpClient> {
         val userRepository = get<UserRepository>()
 
         val clientBuilder = OkHttpClient.Builder()
@@ -41,7 +43,7 @@ val networkModule = module {
         clientBuilder.build()
     }
 
-    single<SEDailyApi> { //(okHttpClient: OkHttpClient) ->
+    single<SEDailyApi> {
         val okHttpClient = get<OkHttpClient>()
         Retrofit.Builder()
                 .baseUrl(BASE_URL)

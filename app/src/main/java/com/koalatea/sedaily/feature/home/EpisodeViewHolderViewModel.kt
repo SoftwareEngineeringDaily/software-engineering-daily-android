@@ -22,6 +22,7 @@ class EpisodeViewHolderViewModel(
         private val homeFeedViewModel: HomeFeedViewModel,
         private val downloadRepository: DownloadRepository
 ) : ViewModel() {
+
     private val postTitle = MutableLiveData<String>()
     private val postBody = MutableLiveData<String>()
     private val postMp3 = MutableLiveData<String>()
@@ -64,7 +65,7 @@ class EpisodeViewHolderViewModel(
         }
 
         return HtmlCompat.fromHtml(episode.excerpt.rendered, HtmlCompat.FROM_HTML_MODE_LEGACY)
-                .toString().subSequence(0, end).toString() + "..."
+                .toString()//.subSequence(0, end).toString() + "..."
     }
 
     fun getPostTitle(): MutableLiveData<String> {
