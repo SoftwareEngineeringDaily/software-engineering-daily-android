@@ -6,21 +6,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.koalatea.sedaily.PlaybackActivity
-import com.koalatea.sedaily.ViewModelFactory
 import com.koalatea.sedaily.databinding.FragmentDownloadsBinding
 import com.koalatea.sedaily.model.DownloadDao
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DownloadsFragment : Fragment() {
+
+    private val viewModel: DownloadsViewModel by viewModel()
+
     private lateinit var binding: FragmentDownloadsBinding
-    private lateinit var viewModel: DownloadsViewModel
     private var errorSnackbar: Snackbar? = null
 
     override fun onCreateView(
@@ -30,8 +30,7 @@ class DownloadsFragment : Fragment() {
         binding = FragmentDownloadsBinding.inflate(inflater, container, false)
 
         binding.postList.layoutManager = LinearLayoutManager(this.activity, RecyclerView.VERTICAL, false)
-//
-        viewModel = ViewModelProviders.of(this, ViewModelFactory(this.activity as AppCompatActivity)).get(DownloadsViewModel::class.java)
+
         viewModel.errorMessage.observe(this, Observer { errorMessage ->
             if (errorMessage != null) showError(errorMessage) else hideError()
         })

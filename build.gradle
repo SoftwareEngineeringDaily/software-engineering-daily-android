@@ -6,7 +6,7 @@ buildscript {
         navigationVersion = '2.0.0'
         lifecycleVersion = '2.0.0'
         retrofit_version = '2.4.0'
-        room_version = '2.0.0'
+        room_version = '2.1.0-beta01'
         supportLibraryVersion = '1.0.0'
         glideVersion = '4.4.0'
         exoplayer_version = '2.8.4'

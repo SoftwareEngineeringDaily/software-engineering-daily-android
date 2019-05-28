@@ -4,15 +4,17 @@ import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.koalatea.sedaily.model.User
-import com.koalatea.sedaily.network.NetworkHelper
 import com.koalatea.sedaily.network.SEDailyApi
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-class AuthViewModel : ViewModel() {
-    var sedailyApi: SEDailyApi = NetworkHelper.getApi()
+class AuthViewModel(
+        private val userRepository: UserRepository,
+        private val sedailyApi: SEDailyApi
+) : ViewModel() {
+
     private var screen: String = "Register"
     private val showRegister = MutableLiveData<Int>()
     private val submissionText = MutableLiveData<String>()
@@ -90,7 +92,7 @@ class AuthViewModel : ViewModel() {
     }
 
     private fun handleLoginSuccess(user: User) {
-        UserRepository.getInstance().setToken(user.token!!)
+        userRepository.token = user.token
         userToken.value = user.token
     }
 

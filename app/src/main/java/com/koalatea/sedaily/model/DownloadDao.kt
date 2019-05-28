@@ -17,10 +17,10 @@ interface DownloadDao {
     val all: List<Download>
 
     @Query("SELECT * FROM download WHERE postId = :id LIMIT 1")
-    fun findById(id: String): Download
+    suspend fun findById(id: String): Download?
 
     @Insert(onConflict = REPLACE)
-    fun inserAll(vararg downloads: Download)
+    suspend fun insertAll(vararg downloads: Download)
 
     @Delete
     fun delete(download: Download)

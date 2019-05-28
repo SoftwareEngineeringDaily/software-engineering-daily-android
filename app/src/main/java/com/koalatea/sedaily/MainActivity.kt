@@ -17,10 +17,13 @@ import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.koalatea.sedaily.feature.auth.UserRepository
-import com.koalatea.sedaily.feature.home.PodcastSearchRepo
+import com.koalatea.sedaily.feature.home.PodcastSearchRepository
 import kotlinx.android.synthetic.main.activity_main.*
+import org.koin.android.ext.android.inject
 
 class MainActivity : PlaybackActivity() {
+
+    private val userRepository: UserRepository by inject()
 
     private val SEDAILY_EXTERNAL_PERMISSION_REQUEST = 987
 
@@ -56,11 +59,12 @@ class MainActivity : PlaybackActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.menu_main, menu)
-        UserRepository.getInstance().getToken()?.apply {
-            if (UserRepository.getInstance().getToken() != "") {
+        userRepository.token?.let { token ->
+            if (token.isNotBlank()) {
                 setLogout(menu)
             }
         }
+
 
         return true
     }
@@ -72,7 +76,7 @@ class MainActivity : PlaybackActivity() {
                 true
             }
             R.id.home -> {
-                PodcastSearchRepo.getInstance().setSearch("")
+                PodcastSearchRepository.getInstance().setSearch("")
                 mainNavHostFragment.findNavController().navigate(R.id.navigation_home)
                 true
             }
@@ -89,7 +93,7 @@ class MainActivity : PlaybackActivity() {
     }
 
     private fun searchPodcasts(query: String) {
-        PodcastSearchRepo.getInstance().setSearch(query)
+        PodcastSearchRepository.getInstance().setSearch(query)
     }
 
     private fun checkForPermissions() {
@@ -137,7 +141,7 @@ class MainActivity : PlaybackActivity() {
         val authItem = menu.findItem(R.id.navigation_auth)
         authItem?.title = "Logout"
         authItem.setOnMenuItemClickListener {
-            UserRepository.getInstance().setToken("")
+            userRepository.token = ""
             val intent = Intent(this@MainActivity, MainActivity::class.java)
             startActivity(intent)
             false

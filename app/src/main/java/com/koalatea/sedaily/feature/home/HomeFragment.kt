@@ -5,21 +5,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.koalatea.sedaily.PlaybackActivity
-import com.koalatea.sedaily.ViewModelFactory
 import com.koalatea.sedaily.databinding.FragmentMainBinding
+import com.koalatea.sedaily.feature.downloader.DownloadRepository
 import io.reactivex.disposables.CompositeDisposable
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HomeFragment : Fragment() {
+
+    private val downloadRepository: DownloadRepository by inject()
+    private val viewModel: HomeFeedViewModel by viewModel()
+
     private lateinit var binding: FragmentMainBinding
-    private lateinit var viewModel: HomeFeedViewModel
     private var errorSnackbar: Snackbar? = null
     private val compositeDisposable = CompositeDisposable()
 
@@ -48,11 +51,7 @@ class HomeFragment : Fragment() {
         }
         binding.postList.addOnScrollListener(scrollListener)
 
-        viewModel = ViewModelProviders
-                .of(this, ViewModelFactory(this.activity as AppCompatActivity))
-                .get(HomeFeedViewModel::class.java)
-
-        val adapter = HomeFeedListAdapter(viewModel)
+        val adapter = HomeFeedListAdapter(viewModel, downloadRepository)
         binding.postList.adapter = adapter
 
         viewModel.episodes.observe(this, Observer { results ->
@@ -67,7 +66,7 @@ class HomeFragment : Fragment() {
             (this.activity as PlaybackActivity).playMedia(it)
         })
 
-        val disposable = PodcastSearchRepo
+        val disposable = PodcastSearchRepository
                 .getInstance().getSearchChange
                 .subscribe { query ->
                     viewModel.performSearch(query)
@@ -76,7 +75,7 @@ class HomeFragment : Fragment() {
 
         binding.viewModel = viewModel
 
-        val query = PodcastSearchRepo.getInstance().currentSearch
+        val query = PodcastSearchRepository.getInstance().currentSearch
         if (query.isEmpty()) {
             viewModel.loadHomeFeed()
         } else {

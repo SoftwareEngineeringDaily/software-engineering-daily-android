@@ -9,10 +9,12 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.koalatea.sedaily.R
 import com.koalatea.sedaily.databinding.ItemEpisodeBinding
+import com.koalatea.sedaily.feature.downloader.DownloadRepository
 import com.koalatea.sedaily.model.Episode
 
 class HomeFeedListAdapter(
-        private val homeFeedViewModel: HomeFeedViewModel
+        private val homeFeedViewModel: HomeFeedViewModel,
+        private val downloadRepository: DownloadRepository
 ) : ListAdapter<Episode, HomeFeedListAdapter.ViewHolder>(EpisodeDiffCallback()) {
     // @TODO: Currently public for HomeFeedModel,but we probably need a better way to get last element
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -20,7 +22,7 @@ class HomeFeedListAdapter(
                 LayoutInflater.from(parent.context),
                 R.layout.item_episode, parent,
                 false)
-        return ViewHolder(binding, homeFeedViewModel)
+        return ViewHolder(binding, homeFeedViewModel, downloadRepository)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -37,9 +39,10 @@ class HomeFeedListAdapter(
 
     class ViewHolder(
             private val binding: ItemEpisodeBinding,
-            private val homeFeedViewModel: HomeFeedViewModel
+            homeFeedViewModel: HomeFeedViewModel,
+            downloadRepository: DownloadRepository
     ) : RecyclerView.ViewHolder(binding.root) {
-        private val viewModel = EpisodeViewModel(homeFeedViewModel)
+        private val viewModel = EpisodeViewHolderViewModel(homeFeedViewModel, downloadRepository)
 
         fun bind(listener: View.OnClickListener, episode: Episode) {
             viewModel.bind(episode)

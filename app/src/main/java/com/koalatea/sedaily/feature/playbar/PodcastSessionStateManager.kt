@@ -7,7 +7,7 @@ import android.support.v4.media.session.PlaybackStateCompat
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import com.koalatea.sedaily.SEDApp
+import com.koalatea.sedaily.SEDApplication
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import java.util.*
@@ -15,14 +15,12 @@ import java.util.*
 /*
  * @Desc this helps share state between service and front end
  */
-
-class PodcastSessionStateManager private constructor() {
+class PodcastSessionStateManager constructor(private val sharedPreferences: SharedPreferences) {
     private val speedChangeObservable = PublishSubject.create<Int>()
     private val mediaMetaDataChange = PublishSubject.create<MediaMetadataCompat>()
     private val playBackStateChange = PublishSubject.create<PlaybackStateCompat>()
 
     private val PROGRESS_KEY = "sedaily-progress-key"
-    private val preferences: SharedPreferences
     private val gson: Gson?
 
     var currentTitle = ""
@@ -57,9 +55,8 @@ class PodcastSessionStateManager private constructor() {
 
     init {
         episodeProgress = HashMap()
-        preferences = PreferenceManager.getDefaultSharedPreferences(SEDApp.appContext)
         gson = GsonBuilder().create()
-        val progressString = preferences.getString(PROGRESS_KEY, "")
+        val progressString = sharedPreferences.getString(PROGRESS_KEY, "")
         if (!progressString!!.isEmpty()) {
             val typeOfHashMap = object : TypeToken<Map<String, Long>>() {}.type
             episodeProgress = gson.fromJson<Map<String, Long>>(progressString, typeOfHashMap) as MutableMap<String, Long>?
@@ -89,7 +86,7 @@ class PodcastSessionStateManager private constructor() {
         if (progress - previousSave == 10L && gson != null) {
             previousSave = progress
             val json = gson.toJson(this.episodeProgress)
-            val editor = preferences.edit()
+            val editor = sharedPreferences.edit()
             editor.putString(PROGRESS_KEY, json)
             editor.apply()
         }
@@ -110,9 +107,12 @@ class PodcastSessionStateManager private constructor() {
     companion object {
         private var instance: PodcastSessionStateManager? = null
 
+        @Deprecated("Use Koin instance instead")
         fun getInstance(): PodcastSessionStateManager {
             if (instance == null) {
-                instance = PodcastSessionStateManager()
+                instance = PodcastSessionStateManager(
+                        PreferenceManager.getDefaultSharedPreferences(SEDApplication.appContext)
+                )
             }
             return instance as PodcastSessionStateManager
         }

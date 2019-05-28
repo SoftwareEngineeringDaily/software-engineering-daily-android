@@ -8,7 +8,6 @@ import com.koalatea.sedaily.SingleLiveEvent
 import com.koalatea.sedaily.model.DownloadDao
 import com.koalatea.sedaily.model.Episode
 import com.koalatea.sedaily.model.EpisodeDao
-import com.koalatea.sedaily.network.NetworkHelper
 import com.koalatea.sedaily.network.SEDailyApi
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -16,9 +15,9 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
 class HomeFeedViewModel internal constructor(
-        private val episodeDao: EpisodeDao
+        private val episodeDao: EpisodeDao,
+        private val sedailyApi: SEDailyApi
 ) : ViewModel() {
-    var sedailyApi: SEDailyApi = NetworkHelper.getApi()
 
     val loadingVisibility: MutableLiveData<Int> = MutableLiveData()
     val errorMessage: MutableLiveData<Int> = MutableLiveData()
@@ -37,7 +36,7 @@ class HomeFeedViewModel internal constructor(
 
         val subscription = sedailyApi.getPosts(map)
                 .concatMap { apiPostList ->
-                    episodeDao.inserAll(*apiPostList.toTypedArray())
+                    episodeDao.insertAll(*apiPostList.toTypedArray())
                     Observable.just(apiPostList)
                 }
                 .subscribeOn(Schedulers.io())
@@ -86,7 +85,7 @@ class HomeFeedViewModel internal constructor(
 
         val subscription = sedailyApi.getPosts(map)
                 .concatMap { apiPostList ->
-                    episodeDao.inserAll(*apiPostList.toTypedArray())
+                    episodeDao.insertAll(*apiPostList.toTypedArray())
                     Observable.just(apiPostList)
                 }
                 .subscribeOn(Schedulers.io())
@@ -115,7 +114,7 @@ class HomeFeedViewModel internal constructor(
 
         val subscription = sedailyApi.getPosts(map)
                 .concatMap { apiPostList ->
-                    episodeDao.inserAll(*apiPostList.toTypedArray())
+                    episodeDao.insertAll(*apiPostList.toTypedArray())
                     Observable.just(apiPostList)
                 }
                 .subscribeOn(Schedulers.io())

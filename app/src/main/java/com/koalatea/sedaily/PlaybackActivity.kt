@@ -2,7 +2,6 @@ package com.koalatea.sedaily
 
 import android.annotation.SuppressLint
 import android.content.ComponentName
-import android.content.Context
 import android.os.RemoteException
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaMetadataCompat
@@ -16,9 +15,12 @@ import com.koalatea.sedaily.media.MusicService
 import com.koalatea.sedaily.media.library.PodcastSource
 import com.koalatea.sedaily.model.DownloadDao
 import kotlinx.android.synthetic.main.activity_main.*
+import org.koin.android.ext.android.inject
 
 @SuppressLint("Registered")
 open class PlaybackActivity : AppCompatActivity() {
+
+    private val podcastSessionStateManager: PodcastSessionStateManager by inject()
 
     private var mMediaBrowser: MediaBrowserCompat? = null
     private val mConnectionCallbacks: MediaBrowserCompat.ConnectionCallback = object : MediaBrowserCompat.ConnectionCallback() {
@@ -49,7 +51,7 @@ open class PlaybackActivity : AppCompatActivity() {
 
         override fun onPlaybackStateChanged(state: PlaybackStateCompat?) {
             if (shouldShowControls()) {
-                PodcastSessionStateManager.getInstance().lastPlaybackState = state
+                podcastSessionStateManager.lastPlaybackState = state
                 showPlaybackControls()
                 return
             }
@@ -60,8 +62,8 @@ open class PlaybackActivity : AppCompatActivity() {
 
     protected fun setUp() {
         if (mMediaBrowser == null) {
-            mMediaBrowser = MediaBrowserCompat(SEDApp.appContext,
-                    ComponentName(SEDApp.appContext as Context, MusicService::class.java),
+            mMediaBrowser = MediaBrowserCompat(applicationContext,
+                    ComponentName(applicationContext, MusicService::class.java),
                     mConnectionCallbacks, null).apply { connect() }
         }
     }
@@ -79,7 +81,6 @@ open class PlaybackActivity : AppCompatActivity() {
 
         PodcastSource.setItem(item)
 
-        val podcastSessionStateManager = PodcastSessionStateManager.getInstance()
         val currentPLayingTitle = podcastSessionStateManager.currentTitle
         val isSameMedia = currentPLayingTitle == episode.title
 
@@ -124,7 +125,7 @@ open class PlaybackActivity : AppCompatActivity() {
     }
 
     private fun updateWithMeta(metadata: MediaMetadataCompat) {
-        PodcastSessionStateManager.getInstance().setMediaMetaData(metadata)
+        podcastSessionStateManager.setMediaMetaData(metadata)
     }
 
     // Playbar stuffs

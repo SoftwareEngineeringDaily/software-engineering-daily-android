@@ -64,6 +64,7 @@ dependencies {
 
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
 
     // UI
     implementation "com.google.android.material:material:$supportLibraryVersion"
@@ -73,13 +74,13 @@ dependencies {
     // Media
     implementation 'androidx.media2:media2:1.0.0-alpha04'
 
-    // Downloads
-    implementation 'br.com.bemobi:medescope:1.1.0'
-
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1'
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.1"
+
+    // Koin
+    implementation 'org.koin:koin-androidx-viewmodel:2.0.0'
 
     // Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
@@ -89,6 +90,9 @@ dependencies {
     // Okhttp
     implementation "com.squareup.okhttp3:okhttp:$okhttp3Version"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp3Version"
+
+    // gson
+    implementation 'com.google.code.gson:gson:2.8.5'
 
     //Rx
     implementation "io.reactivex.rxjava2:rxjava:2.2.2"

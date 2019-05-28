@@ -4,7 +4,7 @@ import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
 
-class PodcastSearchRepo private constructor() {
+class PodcastSearchRepository private constructor() {
     private val searchChange = PublishSubject.create<String>()
     var currentSearch = ""
 
@@ -17,13 +17,13 @@ class PodcastSearchRepo private constructor() {
     }
 
     companion object {
-        private var instance: PodcastSearchRepo? = null
+        private var instance: PodcastSearchRepository? = null
 
-        fun getInstance(): PodcastSearchRepo {
+        fun getInstance(): PodcastSearchRepository {
             if (instance == null) {
-                instance = PodcastSearchRepo()
+                instance = PodcastSearchRepository()
             }
-            return instance as PodcastSearchRepo
+            return instance as PodcastSearchRepository
         }
     }
 }

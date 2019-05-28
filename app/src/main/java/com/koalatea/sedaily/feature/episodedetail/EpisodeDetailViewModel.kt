@@ -5,7 +5,7 @@ import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.koalatea.sedaily.SingleLiveEvent
-import com.koalatea.sedaily.downloadManager.DownloadRepository
+import com.koalatea.sedaily.feature.downloader.DownloadRepository
 import com.koalatea.sedaily.model.Download
 import com.koalatea.sedaily.model.DownloadDao
 import com.koalatea.sedaily.model.Episode
@@ -14,10 +14,14 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 class EpisodeDetailViewModel internal constructor(
-        private val episodeDao: EpisodeDao
+        private val episodeDao: EpisodeDao,
+        private val downloadRepository: DownloadRepository
 ) : ViewModel() {
     private val hasDownload = MutableLiveData<Int>()
     private val canPlay = MutableLiveData<Int>()
@@ -54,17 +58,14 @@ class EpisodeDetailViewModel internal constructor(
                 )
     }
 
-    fun checkForDownload(episodeId: String) {
-        subscription2 = DownloadRepository.getDownloadForId(episodeId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        { result -> onRetrieveDownloadSuccess(result) },
-                        {
-                            Log.v("keithtest", it.localizedMessage)
-//                        onRetrievePostListError()
-                        }
-                )
+    fun checkForDownload(episodeId: String) = GlobalScope.launch(Dispatchers.Main) {
+        val download = downloadRepository.getDownloadForId(episodeId)
+
+        download?.let {
+            onRetrieveDownloadSuccess(download)
+        } ?: run {
+            // ignore, download state unknown.
+        }
     }
 
     fun getPostTitle(): MutableLiveData<String> {
@@ -112,8 +113,11 @@ class EpisodeDetailViewModel internal constructor(
     }
 
     fun removeDownloadForId(episodeId: String) {
-        hasDownload.value = View.GONE
-        DownloadRepository.removeDownloadForId(episodeId)
+        GlobalScope.launch(Dispatchers.Main) {
+            hasDownload.value = View.GONE
+
+            downloadRepository.removeDownloadForId(episodeId)
+        }
     }
 
     fun playRequest() {

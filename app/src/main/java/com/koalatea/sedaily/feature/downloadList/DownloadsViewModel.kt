@@ -6,15 +6,19 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.koalatea.sedaily.R
 import com.koalatea.sedaily.SingleLiveEvent
-import com.koalatea.sedaily.downloadManager.DownloadRepository
+import com.koalatea.sedaily.feature.downloader.DownloadRepository
 import com.koalatea.sedaily.model.DownloadDao
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class DownloadsViewModel internal constructor(
-        private val downloadsDao: DownloadDao
+        private val downloadsDao: DownloadDao,
+        private val downloadRepository: DownloadRepository
 ) : ViewModel() {
     val downloadListAdapter: DownloadsListAdapter = DownloadsListAdapter(this)
 
@@ -77,8 +81,11 @@ class DownloadsViewModel internal constructor(
     }
 
     fun removeDownloadForId(downloadId: String) {
-        DownloadRepository.removeDownloadForId(downloadId)
-        // @TODO: Is this correct? I think we are supposed to update a local list or send an event
-        downloadListAdapter.removeItem(downloadId)
+        GlobalScope.launch(Dispatchers.Main) {
+            downloadRepository.removeDownloadForId(downloadId)
+
+            // @TODO: Is this correct? I think we are supposed to update a local list or send an event
+            downloadListAdapter.removeItem(downloadId)
+        }
     }
 }

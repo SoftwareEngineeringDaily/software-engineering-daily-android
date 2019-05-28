@@ -22,11 +22,15 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_playback_controls.view.*
+import org.koin.android.ext.android.inject
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
 
 class PlaybarFragment : Fragment() {
+    
+    private val podcastSessionStateManager: PodcastSessionStateManager by inject()
+    
     private var playbarViewModel: PlaybarViewModel? = null
     private var mLastPlaybackState: PlaybackStateCompat? = null
     private val PROGRESS_UPDATE_INTERNAL: Long = 1000
@@ -102,16 +106,15 @@ class PlaybarFragment : Fragment() {
         setUpMediaChangeSubscription()
         setupPlaybackStateSub()
 
-        val metaData = PodcastSessionStateManager
-                .getInstance().getMediaMetaData()
+        val metaData = podcastSessionStateManager.getMediaMetaData()
         if (metaData != null) {
             updateWithMeta(metaData)
         }
     }
 
     fun initListeners() {
-        val currentPlayTime = PodcastSessionStateManager.getInstance().currentProgress
-        mLastPlaybackState = PodcastSessionStateManager.getInstance().lastPlaybackState
+        val currentPlayTime = podcastSessionStateManager.currentProgress
+        mLastPlaybackState = podcastSessionStateManager.lastPlaybackState
 
         if (currentPlayTime > 0) {
             scheduleSeekbarUpdate()
@@ -150,8 +153,8 @@ class PlaybarFragment : Fragment() {
             currentPosition += (timeDelta.toInt() * mLastPlaybackState!!.playbackSpeed).toLong()
         }
 
-        PodcastSessionStateManager.getInstance().currentProgress = currentPosition
-        PodcastSessionStateManager.getInstance().lastPlaybackState = mLastPlaybackState
+        podcastSessionStateManager.currentProgress = currentPosition
+        podcastSessionStateManager.lastPlaybackState = mLastPlaybackState
         stopSeekbarUpdate()
     }
 
@@ -183,7 +186,7 @@ class PlaybarFragment : Fragment() {
         val postTile = metadata.description.title.toString()
         val controller = MediaControllerCompat.getMediaController(this.activity as Activity)
 
-        val psm = PodcastSessionStateManager.getInstance()
+        val psm = podcastSessionStateManager
         val activeTitle = psm.currentTitle
         if (controller != null && !postTile.isEmpty() && postTile != activeTitle) {
             psm.currentTitle = postTile
@@ -278,8 +281,7 @@ class PlaybarFragment : Fragment() {
 
         composeDispose.addAll(speedSubscription)
 
-        PodcastSessionStateManager
-                .getInstance()
+        podcastSessionStateManager
                 .speedChanges
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -299,8 +301,7 @@ class PlaybarFragment : Fragment() {
 
         composeDispose.addAll(playbackStateSub)
 
-        PodcastSessionStateManager
-                .getInstance()
+        podcastSessionStateManager
                 .playbackStateChanges
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -325,8 +326,7 @@ class PlaybarFragment : Fragment() {
 
         composeDispose.addAll(mediaItemSubscription)
 
-        PodcastSessionStateManager
-                .getInstance()
+        podcastSessionStateManager
                 .metadataChanges
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -335,7 +335,7 @@ class PlaybarFragment : Fragment() {
 
     private fun setSpeedTextView(): Int {
         if (!isAdded) return 1
-        val currentSpeed = PodcastSessionStateManager.getInstance().currentSpeed
+        val currentSpeed = podcastSessionStateManager.currentSpeed
         val speedArray = resources.getStringArray(R.array.speed_options)
         rootView?.speed?.text = speedArray[currentSpeed]
         return currentSpeed

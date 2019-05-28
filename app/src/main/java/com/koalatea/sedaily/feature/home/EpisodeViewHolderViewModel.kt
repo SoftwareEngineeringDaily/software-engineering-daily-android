@@ -6,18 +6,22 @@ import android.view.View
 import androidx.core.text.HtmlCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.koalatea.sedaily.SEDApp
-import com.koalatea.sedaily.downloadManager.DownloadEpisodeEvent
-import com.koalatea.sedaily.downloadManager.DownloadRepository
-import com.koalatea.sedaily.downloadManager.Downloader
-import com.koalatea.sedaily.downloadManager.DownloaderServiceManager
+import com.koalatea.sedaily.SEDApplication
+import com.koalatea.sedaily.feature.downloader.DownloadEpisodeEvent
+import com.koalatea.sedaily.feature.downloader.DownloadRepository
 import com.koalatea.sedaily.model.DownloadDao
 import com.koalatea.sedaily.model.Episode
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
-class EpisodeViewModel(private val homeFeedViewModel: HomeFeedViewModel) : ViewModel() {
+class EpisodeViewHolderViewModel(
+        private val homeFeedViewModel: HomeFeedViewModel,
+        private val downloadRepository: DownloadRepository
+) : ViewModel() {
     private val postTitle = MutableLiveData<String>()
     private val postBody = MutableLiveData<String>()
     private val postMp3 = MutableLiveData<String>()
@@ -50,6 +54,7 @@ class EpisodeViewModel(private val homeFeedViewModel: HomeFeedViewModel) : ViewM
         streamVisible.value = View.VISIBLE
     }
 
+    @Deprecated("Move formatting to the xml")
     fun getPostBodyString(episode: Episode): String {
         if (episode.excerpt?.rendered == null) return ""
 
@@ -90,20 +95,17 @@ class EpisodeViewModel(private val homeFeedViewModel: HomeFeedViewModel) : ViewM
         }
 
         postId.value?.let {
-            val subscriber = DownloadRepository
-                    .getDownloadForId(it)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({ download ->
-                        if (download != null) downloadVisible.value = View.GONE
-                        playVisible.value = View.VISIBLE
-                        streamVisible.value = View.GONE
-                        downloadFile = download.filename
-                    }, { _ ->
-                        // @TODO: Log distribute
-                    })
+            GlobalScope.launch(Dispatchers.Main) {
+                val download = downloadRepository.getDownloadForId(it)
 
-            compositeDisposable.add(subscriber)
+                download?.let {
+                    playVisible.value = View.VISIBLE
+                    streamVisible.value = View.GONE
+                    downloadFile = download.filename
+                } ?: run {
+                    downloadVisible.value = View.GONE
+                }
+            }
         }
 
         return downloadVisible
@@ -112,9 +114,10 @@ class EpisodeViewModel(private val homeFeedViewModel: HomeFeedViewModel) : ViewM
     fun getProgressVisible(): MutableLiveData<Int> {
         progressVisible.value = View.GONE
 
-        if (Downloader.downloadingFiles.contains(episodeData?._id)) {
-            subscribeToDownload()
-        }
+        // FIXME :: Check if we are currently downloading this episode.
+//        if (Downloader.downloadingFiles.contains(episodeData?._id)) {
+//            subscribeToDownload()
+//        }
 
         return progressVisible
     }
@@ -130,12 +133,11 @@ class EpisodeViewModel(private val homeFeedViewModel: HomeFeedViewModel) : ViewM
     }
 
     fun download() {
-        // @TODO: Check if downloaded from download repo
-        postMp3.apply {
-            DownloaderServiceManager.startBackgroundDownload(SEDApp.appContext!!, postId.value, postMp3.value)
-            subscribeToDownload()
-        }
-        // @TODO log null
+        // FIXME :: Start download and subscribe to it
+//        postMp3.apply {
+//            DownloaderServiceManager.startBackgroundDownload(SEDApplication.appContext!!, postId.value, postMp3.value)
+//            subscribeToDownload()
+//        }
     }
 
     private fun subscribeToDownload() {
@@ -143,12 +145,13 @@ class EpisodeViewModel(private val homeFeedViewModel: HomeFeedViewModel) : ViewM
         streamVisible.value = View.GONE
         progressVisible.value = View.VISIBLE
 
-        val subscriber = Downloader
-                .currentDownloadProgress
-                .subscribe(this@EpisodeViewModel::handleDownloadEvent) {
-                    Log.v("sedaily-debug", it.localizedMessage)
-                }
-        compositeDisposable.add(subscriber)
+        // FIXME :: Check download progress
+//        val subscriber = Downloader
+//                .currentDownloadProgress
+//                .subscribe(this@EpisodeViewHolderViewModel::handleDownloadEvent) {
+//                    Log.v("sedaily-debug", it.localizedMessage)
+//                }
+//        compositeDisposable.add(subscriber)
     }
 
     private fun handleDownloadEvent(downloadEvent: DownloadEpisodeEvent) {
@@ -157,7 +160,9 @@ class EpisodeViewModel(private val homeFeedViewModel: HomeFeedViewModel) : ViewM
             if (downloadEvent.progress == 100) {
                 progressVisible.value = View.GONE
                 playVisible.value = View.VISIBLE
-                downloadFile = Downloader.getDirectoryForEpisodes() + downloadEvent.episodeId + ".mp3"
+
+                // FIXME :: Specify download directory.
+//                downloadFile = Downloader.getDirectoryForEpisodes() + downloadEvent.episodeId + ".mp3"
             }
         }
     }

@@ -7,26 +7,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.koalatea.sedaily.MainActivity
 import com.koalatea.sedaily.R
-import com.koalatea.sedaily.ViewModelFactory
 import com.koalatea.sedaily.databinding.FragmentAuthBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import retrofit2.HttpException
 
 class AuthFragment : Fragment() {
+
+    private val authViewModel: AuthViewModel by viewModel()
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?): View? {
-        val authViewModel = ViewModelProviders
-                .of(this, ViewModelFactory(this.activity as AppCompatActivity))
-                .get(AuthViewModel::class.java)
-
         val binding = DataBindingUtil.inflate<FragmentAuthBinding>(
                 inflater, R.layout.fragment_auth, container, false
         ).apply {

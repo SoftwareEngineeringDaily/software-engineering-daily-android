@@ -7,6 +7,7 @@ import androidx.room.Query
 
 @Dao
 interface EpisodeDao {
+
     @get:Query("SELECT * FROM episode")
     val all: List<Episode>
 
@@ -14,5 +15,6 @@ interface EpisodeDao {
     fun findById(id: String): Episode
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun inserAll(vararg episodes: Episode)
+    fun insertAll(vararg episodes: Episode)
+
 }

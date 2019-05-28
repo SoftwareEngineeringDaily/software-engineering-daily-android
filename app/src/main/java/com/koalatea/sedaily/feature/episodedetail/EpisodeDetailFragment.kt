@@ -5,22 +5,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.koalatea.sedaily.PlaybackActivity
 import com.koalatea.sedaily.R
-import com.koalatea.sedaily.ViewModelFactory
 import com.koalatea.sedaily.databinding.FragmentEpisodeDetailBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class EpisodeDetailFragment : Fragment() {
 
+    private val detailViewModel: EpisodeDetailViewModel by viewModel()
+
     lateinit var episodeId: String
-    var detailViewModel: EpisodeDetailViewModel? = null
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -30,9 +28,7 @@ class EpisodeDetailFragment : Fragment() {
         val safeArgs: EpisodeDetailFragmentArgs by navArgs()
         episodeId = safeArgs.episodeId
 
-        detailViewModel = ViewModelProviders.of(this, ViewModelFactory(this.activity as AppCompatActivity))
-                .get(EpisodeDetailViewModel::class.java)
-        detailViewModel?.loadEpisode(episodeId)
+        detailViewModel.loadEpisode(episodeId)
 //        viewModel.errorMessage.observe(this, Observer {
 //            errorMessage -> if(errorMessage != null) showError(errorMessage) else hideError()
 //        })
