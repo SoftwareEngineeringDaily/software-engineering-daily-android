@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -11,9 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.koalatea.sedaily.PlaybackActivity
-import com.koalatea.sedaily.databinding.FragmentHomeBinding
+import com.koalatea.sedaily.R
 import com.koalatea.sedaily.feature.downloader.DownloadRepository
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.android.synthetic.main.fragment_home.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -24,7 +26,6 @@ class HomeFragment : Fragment() {
 
     private val viewModel: HomeFeedViewModel by viewModel()
 
-    private lateinit var binding: FragmentHomeBinding
     private var errorSnackbar: Snackbar? = null
     private val compositeDisposable = CompositeDisposable()
 
@@ -32,10 +33,13 @@ class HomeFragment : Fragment() {
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?): View? {
-        binding = FragmentHomeBinding.inflate(inflater, container, false)
-        binding.hasPlantings = false
+        return inflater.inflate(R.layout.fragment_home, container, false)
+    }
 
-        binding.postsRecyclerView.layoutManager = LinearLayoutManager(this.activity, RecyclerView.VERTICAL, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        postsRecyclerView.layoutManager = LinearLayoutManager(this.activity, RecyclerView.VERTICAL, false)
 
         val scrollListener = object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -45,16 +49,16 @@ class HomeFragment : Fragment() {
                     val layoutManager = recyclerView.layoutManager as LinearLayoutManager
                     val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
                     if (totalItemCount == lastVisibleItemPosition + 1) {
-                        binding.viewModel?.loadHomeFeedAfter()
+                        viewModel.loadHomeFeedAfter()
 //                    binding.postList.removeOnScrollListener(scrollListener)
                     }
                 }
             }
         }
-        binding.postsRecyclerView.addOnScrollListener(scrollListener)
+        postsRecyclerView.addOnScrollListener(scrollListener)
 
         val adapter = HomeFeedListAdapter(viewModel, downloadRepository)
-        binding.postsRecyclerView.adapter = adapter
+        postsRecyclerView.adapter = adapter
 
         viewModel.episodes.observe(this, Observer { results ->
             if (results != null && results.isNotEmpty())
@@ -75,16 +79,12 @@ class HomeFragment : Fragment() {
                 }
         compositeDisposable.add(disposable)
 
-        binding.viewModel = viewModel
-
         val query = podcastSearchRepository.currentSearch
         if (query.isEmpty()) {
             viewModel.loadHomeFeed()
         } else {
             viewModel.performSearch(query)
         }
-
-        return binding.root
     }
 
     override fun onDestroy() {
@@ -93,9 +93,10 @@ class HomeFragment : Fragment() {
     }
 
     private fun showError(@StringRes errorMessage: Int) {
-        errorSnackbar = Snackbar.make(binding.root, errorMessage, Snackbar.LENGTH_INDEFINITE)
-//        errorSnackbar?.setAction(R.string.retry, viewModel.errorClickListener)
-        errorSnackbar?.show()
+        view?.let {
+            errorSnackbar = Snackbar.make(it, errorMessage, Snackbar.LENGTH_INDEFINITE)
+            errorSnackbar?.show()
+        } ?: Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
     }
 
     private fun hideError() {
