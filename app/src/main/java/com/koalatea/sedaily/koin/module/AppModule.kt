@@ -7,6 +7,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.GsonBuilder
 import com.koalatea.sedaily.feature.downloader.DownloadRepository
 import com.koalatea.sedaily.feature.auth.UserRepository
+import com.koalatea.sedaily.feature.home.PodcastSearchRepository
 import com.koalatea.sedaily.feature.playbar.PodcastSessionStateManager
 import com.koalatea.sedaily.model.AppDatabase
 import org.koin.android.ext.koin.androidApplication
@@ -26,6 +27,7 @@ val appModule = module {
     single { UserRepository(get()) }
 
     single { DownloadRepository(get<AppDatabase>().downloadDao()) }
+    single { PodcastSearchRepository() }
 
     single { PodcastSessionStateManager(get()) }
 

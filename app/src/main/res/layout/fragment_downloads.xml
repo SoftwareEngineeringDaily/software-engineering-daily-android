@@ -23,7 +23,7 @@
             app:layout_constraintEnd_toEndOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/postList"
+            android:id="@+id/postsRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:adapter="@{viewModel.getDownloadListAdapter()}"

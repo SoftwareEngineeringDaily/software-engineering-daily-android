@@ -24,6 +24,7 @@ import org.koin.android.ext.android.inject
 class MainActivity : PlaybackActivity() {
 
     private val userRepository: UserRepository by inject()
+    private val podcastSearchRepository: PodcastSearchRepository by inject()
 
     private val SEDAILY_EXTERNAL_PERMISSION_REQUEST = 987
 
@@ -76,7 +77,7 @@ class MainActivity : PlaybackActivity() {
                 true
             }
             R.id.home -> {
-                PodcastSearchRepository.getInstance().setSearch("")
+                podcastSearchRepository.setSearch("")
                 mainNavHostFragment.findNavController().navigate(R.id.navigation_home)
                 true
             }
@@ -93,7 +94,7 @@ class MainActivity : PlaybackActivity() {
     }
 
     private fun searchPodcasts(query: String) {
-        PodcastSearchRepository.getInstance().setSearch(query)
+        podcastSearchRepository.setSearch(query)
     }
 
     private fun checkForPermissions() {

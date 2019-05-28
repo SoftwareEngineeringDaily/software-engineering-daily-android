@@ -16,6 +16,7 @@ class HomeFeedListAdapter(
         private val homeFeedViewModel: HomeFeedViewModel,
         private val downloadRepository: DownloadRepository
 ) : ListAdapter<Episode, HomeFeedListAdapter.ViewHolder>(EpisodeDiffCallback()) {
+
     // @TODO: Currently public for HomeFeedModel,but we probably need a better way to get last element
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding: ItemEpisodeBinding = DataBindingUtil.inflate(

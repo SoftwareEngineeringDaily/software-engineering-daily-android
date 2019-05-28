@@ -8,7 +8,7 @@
         android:id="@+id/navigation_home"
         android:name="com.koalatea.sedaily.feature.home.HomeFragment"
         android:label="@string/home_title"
-        tools:layout="@layout/fragment_main">
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/open_episode_details_action"
             app:destination="@id/navigation_episode_details" />

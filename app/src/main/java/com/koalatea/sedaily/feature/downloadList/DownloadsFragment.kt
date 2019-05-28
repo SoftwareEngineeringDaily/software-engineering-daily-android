@@ -29,7 +29,7 @@ class DownloadsFragment : Fragment() {
             savedInstanceState: Bundle?): View? {
         binding = FragmentDownloadsBinding.inflate(inflater, container, false)
 
-        binding.postList.layoutManager = LinearLayoutManager(this.activity, RecyclerView.VERTICAL, false)
+        binding.postsRecyclerView.layoutManager = LinearLayoutManager(this.activity, RecyclerView.VERTICAL, false)
 
         viewModel.errorMessage.observe(this, Observer { errorMessage ->
             if (errorMessage != null) showError(errorMessage) else hideError()

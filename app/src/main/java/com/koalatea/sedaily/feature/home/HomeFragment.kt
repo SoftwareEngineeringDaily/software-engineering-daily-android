@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.koalatea.sedaily.PlaybackActivity
-import com.koalatea.sedaily.databinding.FragmentMainBinding
+import com.koalatea.sedaily.databinding.FragmentHomeBinding
 import com.koalatea.sedaily.feature.downloader.DownloadRepository
 import io.reactivex.disposables.CompositeDisposable
 import org.koin.android.ext.android.inject
@@ -20,9 +20,11 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class HomeFragment : Fragment() {
 
     private val downloadRepository: DownloadRepository by inject()
+    private val podcastSearchRepository: PodcastSearchRepository by inject()
+
     private val viewModel: HomeFeedViewModel by viewModel()
 
-    private lateinit var binding: FragmentMainBinding
+    private lateinit var binding: FragmentHomeBinding
     private var errorSnackbar: Snackbar? = null
     private val compositeDisposable = CompositeDisposable()
 
@@ -30,10 +32,10 @@ class HomeFragment : Fragment() {
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?): View? {
-        binding = FragmentMainBinding.inflate(inflater, container, false)
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
         binding.hasPlantings = false
 
-        binding.postList.layoutManager = LinearLayoutManager(this.activity, RecyclerView.VERTICAL, false)
+        binding.postsRecyclerView.layoutManager = LinearLayoutManager(this.activity, RecyclerView.VERTICAL, false)
 
         val scrollListener = object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -49,10 +51,10 @@ class HomeFragment : Fragment() {
                 }
             }
         }
-        binding.postList.addOnScrollListener(scrollListener)
+        binding.postsRecyclerView.addOnScrollListener(scrollListener)
 
         val adapter = HomeFeedListAdapter(viewModel, downloadRepository)
-        binding.postList.adapter = adapter
+        binding.postsRecyclerView.adapter = adapter
 
         viewModel.episodes.observe(this, Observer { results ->
             if (results != null && results.isNotEmpty())
@@ -66,8 +68,8 @@ class HomeFragment : Fragment() {
             (this.activity as PlaybackActivity).playMedia(it)
         })
 
-        val disposable = PodcastSearchRepository
-                .getInstance().getSearchChange
+        val disposable = podcastSearchRepository
+                .getSearchChange
                 .subscribe { query ->
                     viewModel.performSearch(query)
                 }
@@ -75,7 +77,7 @@ class HomeFragment : Fragment() {
 
         binding.viewModel = viewModel
 
-        val query = PodcastSearchRepository.getInstance().currentSearch
+        val query = podcastSearchRepository.currentSearch
         if (query.isEmpty()) {
             viewModel.loadHomeFeed()
         } else {
