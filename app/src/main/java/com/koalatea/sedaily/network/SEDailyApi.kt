@@ -9,7 +9,7 @@ import retrofit2.http.*
 interface SEDailyApi {
 
     @GET("posts")
-    fun getPosts(@QueryMap options: Map<String, String>): Observable<List<Episode>>
+    fun getPosts(@QueryMap options: Map<String, String>): Observable<List<Episode>>// Deferred<List<Episode>>
 
     @FormUrlEncoded
     @POST("auth/login")
