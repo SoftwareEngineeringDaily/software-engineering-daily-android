@@ -12,6 +12,9 @@
         <action
             android:id="@+id/open_episoded_action"
             app:destination="@id/navigation_episodes" />
+        <action
+            android:id="@+id/open_episode_details_action"
+            app:destination="@id/navigation_episode_details" />
     </fragment>
 
     <fragment

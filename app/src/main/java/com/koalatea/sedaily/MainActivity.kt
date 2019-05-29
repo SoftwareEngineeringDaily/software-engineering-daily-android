@@ -14,11 +14,12 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.onNavDestinationSelected
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.koalatea.sedaily.feature.auth.UserRepository
 import com.koalatea.sedaily.feature.episodes.EpisodesSearchRepository
+import com.koalatea.sedaily.util.setupActionBar
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.include_default_toolbar.*
 import org.koin.android.ext.android.inject
 
 class MainActivity : PlaybackActivity() {
@@ -38,7 +39,7 @@ class MainActivity : PlaybackActivity() {
         // FIXME :: Use correct top-level tabs, setOf(R.id.navigation_home, R.id.navigation_saved, R.id.navigation_profile)
         val appBarConfiguration = AppBarConfiguration(setOf(R.id.navigation_home, R.id.navigation_downloads, R.id.navigation_auth))
 
-        setupActionBar(navController, appBarConfiguration)
+        navController.setupActionBar(this, appBarConfiguration)
         setupBottomNavMenu(navController)
 
         // Set up media
@@ -46,9 +47,6 @@ class MainActivity : PlaybackActivity() {
         checkForPermissions()
         handleIntent(intent)
     }
-
-    private fun setupActionBar(navController: NavController,
-                               appBarConfig: AppBarConfiguration) = setupActionBarWithNavController(navController, appBarConfig)
 
     private fun setupBottomNavMenu(navController: NavController) = bottomNavigationView?.setupWithNavController(navController)
 

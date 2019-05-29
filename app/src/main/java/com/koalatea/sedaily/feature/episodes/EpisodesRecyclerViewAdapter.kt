@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.koalatea.sedaily.R
 import com.koalatea.sedaily.databinding.ItemEpisodeBinding
 import com.koalatea.sedaily.feature.downloader.DownloadRepository
+import com.koalatea.sedaily.feature.home.HomeFragmentDirections
 import com.koalatea.sedaily.model.Episode
 
 class EpisodesRecyclerViewAdapter(
@@ -29,15 +30,11 @@ class EpisodesRecyclerViewAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val episode = getItem(position)
         holder.bind(createOnClickListener(episode._id), episode)
-
-//        holder.itemView.findViewById<View>(R.id.play_button).setOnClickListener {
-//            holder.itemView.findNavController().navigate(EpisodesFragmentDirections.openEpisodeDetailsAction(episode._id))
-//        }
     }
 
     private fun createOnClickListener(episodeId: String): View.OnClickListener {
         return View.OnClickListener {
-            val direction = EpisodesFragmentDirections.openEpisodeDetailsAction(episodeId)
+            val direction = HomeFragmentDirections.openEpisodeDetailsAction(episodeId)
             it.findNavController().navigate(direction)
         }
     }
