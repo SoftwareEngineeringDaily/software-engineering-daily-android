@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.koalatea.sedaily.feature.home.EpisodeViewHolderViewModel" />
+            type="com.koalatea.sedaily.feature.episodes.EpisodeViewHolderViewModel" />
 
         <variable
             name="clickListener"

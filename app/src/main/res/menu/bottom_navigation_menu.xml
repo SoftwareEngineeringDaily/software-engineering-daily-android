@@ -3,7 +3,7 @@
     <!-- You have to use the same ids in main_navigation.xml for this to work -->
 
     <item
-        android:id="@id/navigation_home"
+        android:id="@id/navigation_episodes"
         android:icon="@drawable/ic_search_white_24dp"
         android:title="@string/bottom_navigation_latest" />
 

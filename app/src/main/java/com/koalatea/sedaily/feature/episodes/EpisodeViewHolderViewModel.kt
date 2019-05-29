@@ -1,4 +1,4 @@
-package com.koalatea.sedaily.feature.home
+package com.koalatea.sedaily.feature.episodes
 
 import android.annotation.SuppressLint
 import android.view.View
@@ -15,7 +15,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class EpisodeViewHolderViewModel(
-        private val homeFeedViewModel: HomeFeedViewModel,
+        private val episodesViewModel: EpisodesViewModel,
         private val downloadRepository: DownloadRepository
 ) : ViewModel() {
 
@@ -182,6 +182,6 @@ class EpisodeViewHolderViewModel(
             )
         }
 
-        homeFeedViewModel.play(downloadEpisode)
+        episodesViewModel.play(downloadEpisode)
     }
 }

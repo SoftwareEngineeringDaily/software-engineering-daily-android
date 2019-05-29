@@ -11,7 +11,7 @@
 
     <!-- FIXME :: Get rid of -->
     <item
-        android:id="@id/navigation_home"
+        android:id="@id/navigation_episodes"
         android:title="@string/home_title"
         app:showAsAction="never" />
 

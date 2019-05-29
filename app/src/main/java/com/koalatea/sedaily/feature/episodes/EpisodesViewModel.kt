@@ -1,4 +1,4 @@
-package com.koalatea.sedaily.feature.home
+package com.koalatea.sedaily.feature.episodes
 
 import android.view.View
 import androidx.lifecycle.MutableLiveData
@@ -14,7 +14,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-class HomeFeedViewModel internal constructor(
+class EpisodesViewModel internal constructor(
         private val episodeDao: EpisodeDao,
         private val sedailyApi: SEDailyApi
 ) : ViewModel() {

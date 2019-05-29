@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@id/navigation_home">
 
     <fragment
         android:id="@+id/navigation_home"
@@ -10,8 +10,22 @@
         android:label="@string/home_title"
         tools:layout="@layout/fragment_home">
         <action
+            android:id="@+id/open_episoded_action"
+            app:destination="@id/navigation_episodes" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_episodes"
+        android:name="com.koalatea.sedaily.feature.episodes.EpisodesFragment"
+        android:label="@string/home_title"
+        tools:layout="@layout/fragment_episodes">
+        <action
             android:id="@+id/open_episode_details_action"
             app:destination="@id/navigation_episode_details" />
+        <argument
+            android:name="categoryId"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
 
     <fragment
@@ -40,4 +54,5 @@
             android:name="episodeId"
             app:argType="string" />
     </fragment>
+
 </navigation>

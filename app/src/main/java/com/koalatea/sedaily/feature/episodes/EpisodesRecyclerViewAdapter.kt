@@ -1,4 +1,4 @@
-package com.koalatea.sedaily.feature.home
+package com.koalatea.sedaily.feature.episodes
 
 import android.view.LayoutInflater
 import android.view.View
@@ -12,10 +12,10 @@ import com.koalatea.sedaily.databinding.ItemEpisodeBinding
 import com.koalatea.sedaily.feature.downloader.DownloadRepository
 import com.koalatea.sedaily.model.Episode
 
-class HomeFeedListAdapter(
-        private val homeFeedViewModel: HomeFeedViewModel,
+class EpisodesRecyclerViewAdapter(
+        private val episodesViewModel: EpisodesViewModel,
         private val downloadRepository: DownloadRepository
-) : ListAdapter<Episode, HomeFeedListAdapter.ViewHolder>(EpisodeDiffCallback()) {
+) : ListAdapter<Episode, EpisodesRecyclerViewAdapter.ViewHolder>(EpisodeDiffCallback()) {
 
     // @TODO: Currently public for HomeFeedModel,but we probably need a better way to get last element
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -23,27 +23,31 @@ class HomeFeedListAdapter(
                 LayoutInflater.from(parent.context),
                 R.layout.item_episode, parent,
                 false)
-        return ViewHolder(binding, homeFeedViewModel, downloadRepository)
+        return ViewHolder(binding, episodesViewModel, downloadRepository)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val episode = getItem(position)
         holder.bind(createOnClickListener(episode._id), episode)
+
+//        holder.itemView.findViewById<View>(R.id.play_button).setOnClickListener {
+//            holder.itemView.findNavController().navigate(EpisodesFragmentDirections.openEpisodeDetailsAction(episode._id))
+//        }
     }
 
     private fun createOnClickListener(episodeId: String): View.OnClickListener {
         return View.OnClickListener {
-            val direction = HomeFragmentDirections.openEpisodeDetailsAction(episodeId)
+            val direction = EpisodesFragmentDirections.openEpisodeDetailsAction(episodeId)
             it.findNavController().navigate(direction)
         }
     }
 
     class ViewHolder(
             private val binding: ItemEpisodeBinding,
-            homeFeedViewModel: HomeFeedViewModel,
+            episodesViewModel: EpisodesViewModel,
             downloadRepository: DownloadRepository
     ) : RecyclerView.ViewHolder(binding.root) {
-        private val viewModel = EpisodeViewHolderViewModel(homeFeedViewModel, downloadRepository)
+        private val viewModel = EpisodeViewHolderViewModel(episodesViewModel, downloadRepository)
 
         fun bind(listener: View.OnClickListener, episode: Episode) {
             viewModel.bind(episode)

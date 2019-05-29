@@ -1,4 +1,4 @@
-package com.koalatea.sedaily.feature.home
+package com.koalatea.sedaily.feature.episodes
 
 import androidx.recyclerview.widget.DiffUtil
 import com.koalatea.sedaily.model.Episode
