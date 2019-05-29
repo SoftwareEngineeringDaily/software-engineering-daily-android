@@ -3,20 +3,20 @@
     <!-- You have to use the same ids in main_navigation.xml for this to work -->
 
     <item
-        android:id="@id/navigation_episodes"
-        android:icon="@drawable/ic_search_white_24dp"
+        android:id="@id/navigation_home"
+        android:icon="@drawable/vd_home"
         android:title="@string/bottom_navigation_latest" />
 
     <!-- FIXME :: Use navigation_saved instead -->
     <item
         android:id="@id/navigation_downloads"
-        android:icon="@drawable/ic_search_white_24dp"
+        android:icon="@drawable/vd_bookmark_border"
         android:title="@string/bottom_navigation_saved" />
 
     <!-- FIXME :: use navigation_profile instead -->
     <item
         android:id="@id/navigation_auth"
-        android:icon="@drawable/ic_search_white_24dp"
+        android:icon="@drawable/vd_person_outline"
         android:title="@string/bottom_navigation_profile" />
 
 </menu>

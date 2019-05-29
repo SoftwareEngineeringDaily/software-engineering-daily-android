@@ -4,7 +4,7 @@
 
     <string name="downloads_title">Downloads</string>
     <string name="auth_title">Authentication</string>
-    <string name="home_title">Home</string>
+    <string name="home_title">Software Engineering Daily</string>
     <string name="episode_details_title">Episode</string>
     <string name="post_error">An error occurred while loading the posts</string>
     <string name="search_hint">Search for a podcast</string>

@@ -5,13 +5,13 @@
 
     <item
         android:id="@+id/search"
-        android:icon="@drawable/ic_search_white_24dp"
+        android:icon="@drawable/vd_search"
         android:title="@string/search_hint"
         app:showAsAction="always" />
 
     <!-- FIXME :: Get rid of -->
     <item
-        android:id="@id/navigation_episodes"
+        android:id="@id/navigation_home"
         android:title="@string/home_title"
         app:showAsAction="never" />
 
