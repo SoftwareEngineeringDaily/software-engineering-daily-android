@@ -46,4 +46,18 @@
     <string name="password">Password</string>
     <string name="remove_download">Remove Download</string>
     <string name="downloading_title">Downloading</string>
+
+    <!-- Home tabs -->
+    <string name="tab_all">All</string>
+    <string name="tab_businessAndPhilosophy">Business and Philosophy</string>
+    <string name="tab_blockchain">Blockchain</string>
+    <string name="tab_cloudEngineering">Cloud Engineering</string>
+    <string name="tab_data">Data</string>
+    <string name="tab_javaScript">JavaScript</string>
+    <string name="tab_machineLearning">Machine Learning</string>
+    <string name="tab_openSource">Open Source</string>
+    <string name="tab_security">Security</string>
+    <string name="tab_hackers">Hackers</string>
+    <string name="tab_greatestHits">Greatest Hits</string>
+
 </resources>

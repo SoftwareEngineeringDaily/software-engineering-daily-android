@@ -13,8 +13,8 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 // FIXME :: Move to debug build type
-private const val BASE_URL: String = "https://sedaily-backend-staging.herokuapp.com/api/"
-//private const val BASE_URL: String = "https://software-enginnering-daily-api.herokuapp.com/api/"
+//private const val BASE_URL: String = "https://sedaily-backend-staging.herokuapp.com/api/"
+private const val BASE_URL: String = "https://software-enginnering-daily-api.herokuapp.com/api/"
 
 val networkModule = module {
 

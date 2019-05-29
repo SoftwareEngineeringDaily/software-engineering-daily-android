@@ -21,6 +21,19 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class EpisodesFragment : Fragment() {
 
+    companion object {
+        private val ARG_CATEGORY_ID = "categoryId"
+
+        fun newInstance(categoryId: String?): EpisodesFragment {
+            val fragment = EpisodesFragment()
+            fragment.arguments = Bundle().apply {
+                putString(ARG_CATEGORY_ID, categoryId)
+            }
+
+            return fragment
+        }
+    }
+
     private val downloadRepository: DownloadRepository by inject()
     private val episodesSearchRepository: EpisodesSearchRepository by inject()
 
