@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.koalatea.sedaily.feature.playbar.PodcastSessionStateManager
 import com.koalatea.sedaily.media.MusicService
 import com.koalatea.sedaily.media.library.PodcastSource
-import com.koalatea.sedaily.model.DownloadDao
+import com.koalatea.sedaily.database.DownloadDao
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.ext.android.inject
 

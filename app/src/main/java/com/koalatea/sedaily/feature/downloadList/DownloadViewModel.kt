@@ -2,7 +2,7 @@ package com.koalatea.sedaily.feature.downloadList
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.koalatea.sedaily.model.DownloadDao
+import com.koalatea.sedaily.database.DownloadDao
 
 class DownloadViewModel : ViewModel() {
     private val title = MutableLiveData<String>()

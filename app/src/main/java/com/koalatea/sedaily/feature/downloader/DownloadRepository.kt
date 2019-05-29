@@ -1,7 +1,7 @@
 package com.koalatea.sedaily.feature.downloader
 
 import com.koalatea.sedaily.model.Download
-import com.koalatea.sedaily.model.DownloadDao
+import com.koalatea.sedaily.database.DownloadDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

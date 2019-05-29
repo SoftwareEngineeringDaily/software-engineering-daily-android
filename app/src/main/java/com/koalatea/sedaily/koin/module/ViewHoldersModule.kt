@@ -4,7 +4,7 @@ import com.koalatea.sedaily.feature.auth.AuthViewModel
 import com.koalatea.sedaily.feature.downloadList.DownloadsViewModel
 import com.koalatea.sedaily.feature.episodedetail.EpisodeDetailViewModel
 import com.koalatea.sedaily.feature.home.HomeFeedViewModel
-import com.koalatea.sedaily.model.AppDatabase
+import com.koalatea.sedaily.database.AppDatabase
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 

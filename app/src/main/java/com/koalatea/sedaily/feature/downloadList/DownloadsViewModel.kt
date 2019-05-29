@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.koalatea.sedaily.R
 import com.koalatea.sedaily.SingleLiveEvent
 import com.koalatea.sedaily.feature.downloader.DownloadRepository
-import com.koalatea.sedaily.model.DownloadDao
+import com.koalatea.sedaily.database.DownloadDao
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable

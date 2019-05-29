@@ -1,19 +1,15 @@
 package com.koalatea.sedaily.feature.home
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.view.View
 import androidx.core.text.HtmlCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.koalatea.sedaily.SEDApplication
 import com.koalatea.sedaily.feature.downloader.DownloadEpisodeEvent
 import com.koalatea.sedaily.feature.downloader.DownloadRepository
-import com.koalatea.sedaily.model.DownloadDao
+import com.koalatea.sedaily.database.DownloadDao
 import com.koalatea.sedaily.model.Episode
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

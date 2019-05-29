@@ -1,9 +1,10 @@
-package com.koalatea.sedaily.model
+package com.koalatea.sedaily.database
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.koalatea.sedaily.model.Episode
 
 @Dao
 interface EpisodeDao {
@@ -15,6 +16,6 @@ interface EpisodeDao {
     fun findById(id: String): Episode
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(vararg episodes: Episode)
+    fun insert(vararg episodes: Episode)
 
 }

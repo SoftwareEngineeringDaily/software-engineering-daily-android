@@ -1,5 +1,6 @@
 package com.koalatea.sedaily.koin.module
 
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.koalatea.sedaily.BuildConfig
 import com.koalatea.sedaily.feature.auth.UserRepository
 import com.koalatea.sedaily.network.SEDailyApi
@@ -43,15 +44,20 @@ val networkModule = module {
         clientBuilder.build()
     }
 
-    single<SEDailyApi> {
+    single<Retrofit> {
         val okHttpClient = get<OkHttpClient>()
         Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(MoshiConverterFactory.create())
+                .addCallAdapterFactory(CoroutineCallAdapterFactory())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
                 .client(okHttpClient)
                 .build()
-                .create(SEDailyApi::class.java)
+    }
+
+    single<SEDailyApi> {
+        val retrofit = get<Retrofit>()
+        retrofit.create(SEDailyApi::class.java)
     }
 
 }

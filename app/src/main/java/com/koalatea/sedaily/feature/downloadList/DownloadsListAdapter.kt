@@ -8,8 +8,8 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.koalatea.sedaily.R
 import com.koalatea.sedaily.databinding.ItemDownloadBinding
-import com.koalatea.sedaily.model.DownloadDao
-import com.koalatea.sedaily.model.DownloadDao.DownloadEpisode
+import com.koalatea.sedaily.database.DownloadDao
+import com.koalatea.sedaily.database.DownloadDao.DownloadEpisode
 
 class DownloadsListAdapter(
         private val downloadsViewModel: DownloadsViewModel

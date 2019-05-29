@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.koalatea.sedaily.PlaybackActivity
 import com.koalatea.sedaily.databinding.FragmentDownloadsBinding
-import com.koalatea.sedaily.model.DownloadDao
+import com.koalatea.sedaily.database.DownloadDao
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DownloadsFragment : Fragment() {

@@ -1,10 +1,11 @@
-package com.koalatea.sedaily.model
+package com.koalatea.sedaily.database
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy.REPLACE
 import androidx.room.Query
+import com.koalatea.sedaily.model.Download
 
 @Dao
 interface DownloadDao {

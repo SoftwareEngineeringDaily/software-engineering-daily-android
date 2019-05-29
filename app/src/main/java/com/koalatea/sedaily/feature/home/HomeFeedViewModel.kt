@@ -5,9 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.koalatea.sedaily.R
 import com.koalatea.sedaily.SingleLiveEvent
-import com.koalatea.sedaily.model.DownloadDao
+import com.koalatea.sedaily.database.DownloadDao
 import com.koalatea.sedaily.model.Episode
-import com.koalatea.sedaily.model.EpisodeDao
+import com.koalatea.sedaily.database.EpisodeDao
 import com.koalatea.sedaily.network.SEDailyApi
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -34,9 +34,10 @@ class HomeFeedViewModel internal constructor(
     fun loadHomeFeed() {
         val map = mutableMapOf<String, String>()
 
+
         val subscription = sedailyApi.getPosts(map)
                 .concatMap { apiPostList ->
-                    episodeDao.insertAll(*apiPostList.toTypedArray())
+                    episodeDao.insert(*apiPostList.toTypedArray())
                     Observable.just(apiPostList)
                 }
                 .subscribeOn(Schedulers.io())
@@ -85,7 +86,7 @@ class HomeFeedViewModel internal constructor(
 
         val subscription = sedailyApi.getPosts(map)
                 .concatMap { apiPostList ->
-                    episodeDao.insertAll(*apiPostList.toTypedArray())
+                    episodeDao.insert(*apiPostList.toTypedArray())
                     Observable.just(apiPostList)
                 }
                 .subscribeOn(Schedulers.io())
@@ -114,7 +115,7 @@ class HomeFeedViewModel internal constructor(
 
         val subscription = sedailyApi.getPosts(map)
                 .concatMap { apiPostList ->
-                    episodeDao.insertAll(*apiPostList.toTypedArray())
+                    episodeDao.insert(*apiPostList.toTypedArray())
                     Observable.just(apiPostList)
                 }
                 .subscribeOn(Schedulers.io())
