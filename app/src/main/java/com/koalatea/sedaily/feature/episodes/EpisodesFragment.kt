@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
@@ -22,13 +23,9 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class EpisodesFragment : Fragment() {
 
     companion object {
-        private val ARG_CATEGORY_ID = "categoryId"
-
         fun newInstance(categoryId: String?): EpisodesFragment {
             val fragment = EpisodesFragment()
-            fragment.arguments = Bundle().apply {
-                putString(ARG_CATEGORY_ID, categoryId)
-            }
+            fragment.arguments = EpisodesFragmentArgs.Builder(categoryId).build().toBundle()
 
             return fragment
         }
@@ -51,6 +48,9 @@ class EpisodesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val safeArgs: EpisodesFragmentArgs by navArgs()
+        val categoryId = safeArgs.categoryId
 
         postsRecyclerView.layoutManager = LinearLayoutManager(this.activity, RecyclerView.VERTICAL, false)
 
