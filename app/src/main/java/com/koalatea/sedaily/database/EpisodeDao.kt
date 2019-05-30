@@ -18,4 +18,7 @@ interface EpisodeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(vararg episodes: Episode)
 
+    @Query("DELETE FROM episode")
+    fun clearTable()
+
 }

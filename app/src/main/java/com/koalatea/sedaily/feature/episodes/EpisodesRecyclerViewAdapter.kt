@@ -3,53 +3,55 @@ package com.koalatea.sedaily.feature.episodes
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.koalatea.sedaily.R
-import com.koalatea.sedaily.databinding.ItemEpisodeBinding
-import com.koalatea.sedaily.feature.downloader.DownloadRepository
 import com.koalatea.sedaily.feature.home.HomeFragmentDirections
 import com.koalatea.sedaily.model.Episode
+import kotlinx.android.synthetic.main.view_holder_episode.view.*
+import java.text.SimpleDateFormat
 
-class EpisodesRecyclerViewAdapter(
-        private val episodesViewModel: EpisodesViewModel,
-        private val downloadRepository: DownloadRepository
-) : ListAdapter<Episode, EpisodesRecyclerViewAdapter.ViewHolder>(EpisodeDiffCallback()) {
+class EpisodesRecyclerViewAdapter : ListAdapter<Episode, EpisodesRecyclerViewAdapter.EpisodeViewHolder>(EpisodeDiffCallback()) {
 
-    // @TODO: Currently public for HomeFeedModel,but we probably need a better way to get last element
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding: ItemEpisodeBinding = DataBindingUtil.inflate(
-                LayoutInflater.from(parent.context),
-                R.layout.view_holder_episode, parent,
-                false)
-        return ViewHolder(binding, episodesViewModel, downloadRepository)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EpisodeViewHolder {
+        return EpisodeViewHolder.newInstance(parent)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: EpisodeViewHolder, position: Int) {
         val episode = getItem(position)
-        holder.bind(createOnClickListener(episode._id), episode)
-    }
 
-    private fun createOnClickListener(episodeId: String): View.OnClickListener {
-        return View.OnClickListener {
-            val direction = HomeFragmentDirections.openEpisodeDetailsAction(episodeId)
+        holder.bind(episode, View.OnClickListener {
+            val direction = HomeFragmentDirections.openEpisodeDetailsAction(episode._id)
             it.findNavController().navigate(direction)
-        }
+        })
     }
 
-    class ViewHolder(
-            private val binding: ItemEpisodeBinding,
-            episodesViewModel: EpisodesViewModel,
-            downloadRepository: DownloadRepository
-    ) : RecyclerView.ViewHolder(binding.root) {
-        private val viewModel = EpisodeViewHolderViewModel(episodesViewModel, downloadRepository)
+    class EpisodeViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(listener: View.OnClickListener, episode: Episode) {
-            viewModel.bind(episode)
-            binding.viewModel = viewModel
-            binding.clickListener = listener
+        companion object {
+
+            fun newInstance(parent: ViewGroup): EpisodeViewHolder {
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.view_holder_episode, parent, false)
+                return EpisodeViewHolder(view)
+            }
         }
+
+        fun bind(episode: Episode, listener: View.OnClickListener) {
+            val context = itemView.context
+
+            itemView.titleTextView.text = episode.title?.rendered
+            itemView.descriptionTextView.text = episode.excerpt?.rendered
+
+            // FIXME :: Format date
+            itemView.dateTextView.text = episode.date
+
+            // FIXME :: Add placeholder and error messages
+            Glide.with(context).load(episode.featuredImage).into(itemView.episodeImageView)
+
+            itemView.setOnClickListener(listener)
+        }
+
     }
 }

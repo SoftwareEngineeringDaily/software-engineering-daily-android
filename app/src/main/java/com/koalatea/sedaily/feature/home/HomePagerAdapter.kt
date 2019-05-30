@@ -13,8 +13,8 @@ class HomePagerAdapter(
         fragmentManager: FragmentManager
 ) : FragmentStatePagerAdapter(fragmentManager) {
 
-    private enum class Categories(val categoryId: String, @StringRes val nameStringRes: Int) {
-        All("-1", R.string.tab_all),
+    private enum class Categories(val categoryId: String?, @StringRes val nameStringRes: Int) {
+        All(null, R.string.tab_all),
         BusinessAndPhilosophy("1068", R.string.tab_businessAndPhilosophy),
         Blockchain("1082", R.string.tab_blockchain),
         CloudEngineering("1079", R.string.tab_cloudEngineering),

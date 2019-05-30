@@ -10,7 +10,7 @@ import org.koin.dsl.module
 
 val viewHoldersModule = module {
 
-    viewModel { EpisodesViewModel(get<AppDatabase>().episodeDao(), get()) }
+    viewModel { EpisodesViewModel(get()) }
 
     viewModel { DownloadsViewModel(get<AppDatabase>().downloadDao(), get()) }
 

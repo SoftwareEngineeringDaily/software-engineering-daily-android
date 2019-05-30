@@ -2,14 +2,15 @@ package com.koalatea.sedaily.network
 
 import com.koalatea.sedaily.model.Episode
 import com.koalatea.sedaily.model.User
-import io.reactivex.Observable
 import io.reactivex.Single
+import kotlinx.coroutines.Deferred
+import retrofit2.Response
 import retrofit2.http.*
 
 interface SEDailyApi {
 
     @GET("posts")
-    fun getPosts(@QueryMap options: Map<String, String>): Observable<List<Episode>>// Deferred<List<Episode>>
+    fun getPostsAsync(@Query("search") searchTerm: String? = null, @Query("categories") categoryId: String? = null, @Query("createdAtBefore") createdAtBefore: String = ""): Deferred<Response<List<Episode>>>
 
     @FormUrlEncoded
     @POST("auth/login")

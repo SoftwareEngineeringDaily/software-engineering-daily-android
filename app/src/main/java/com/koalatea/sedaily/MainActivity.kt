@@ -16,7 +16,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import com.koalatea.sedaily.feature.auth.UserRepository
-import com.koalatea.sedaily.feature.episodes.EpisodesSearchRepository
 import com.koalatea.sedaily.util.setupActionBar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.include_default_toolbar.*
@@ -25,7 +24,6 @@ import org.koin.android.ext.android.inject
 class MainActivity : PlaybackActivity() {
 
     private val userRepository: UserRepository by inject()
-    private val episodesSearchRepository: EpisodesSearchRepository by inject()
 
     private val SEDAILY_EXTERNAL_PERMISSION_REQUEST = 987
 
@@ -75,7 +73,6 @@ class MainActivity : PlaybackActivity() {
                 true
             }
             R.id.home -> {
-                episodesSearchRepository.setSearch("")
                 mainNavHostFragment.findNavController().navigate(R.id.navigation_home)
                 true
             }
@@ -92,7 +89,7 @@ class MainActivity : PlaybackActivity() {
     }
 
     private fun searchPodcasts(query: String) {
-        episodesSearchRepository.setSearch(query)
+
     }
 
     private fun checkForPermissions() {
