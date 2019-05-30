@@ -1,14 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-
-        <item name="android:windowBackground">@color/windowBackground</item>
+    <style name="ImageButton.Borderless" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:background">?selectableItemBackground</item>
+        <item name="android:paddingLeft">@dimen/default_button_padding</item>
+        <item name="android:paddingRight">@dimen/default_button_padding</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Button</item>
     </style>
-
-    <style name="AppTheme.ToolbarOverlay" parent="ThemeOverlay.MaterialComponents.ActionBar"/>
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
 </resources>

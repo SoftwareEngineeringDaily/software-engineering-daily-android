@@ -59,5 +59,8 @@
     <string name="tab_security">Security</string>
     <string name="tab_hackers">Hackers</string>
     <string name="tab_greatestHits">Greatest Hits</string>
+    <string name="download">Download</string>
+    <string name="play">Play</string>
+    <string name="content_description_podcast_episode_logo">Podcast episode logo</string>
 
 </resources>

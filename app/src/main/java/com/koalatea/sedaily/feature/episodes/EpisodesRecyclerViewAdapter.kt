@@ -22,7 +22,7 @@ class EpisodesRecyclerViewAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding: ItemEpisodeBinding = DataBindingUtil.inflate(
                 LayoutInflater.from(parent.context),
-                R.layout.item_episode, parent,
+                R.layout.view_holder_episode, parent,
                 false)
         return ViewHolder(binding, episodesViewModel, downloadRepository)
     }

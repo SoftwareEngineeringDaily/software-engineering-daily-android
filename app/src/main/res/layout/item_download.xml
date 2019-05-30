@@ -44,7 +44,7 @@
             android:onClick="@{clickListener}">
 
             <ImageView
-                android:id="@+id/mainImage"
+                android:id="@+id/episodeImageView"
                 android:scaleType="centerCrop"
                 app:imageFromUrl="@{viewModel.getPostImage()}"
                 android:src="@drawable/sedaily_logo"
@@ -58,7 +58,7 @@
                 style="@style/TextAppearance.MaterialComponents.Headline5"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/mainImage"
+                app:layout_constraintTop_toBottomOf="@+id/episodeImageView"
                 android:text="Title"
                 app:mutableText="@{viewModel.getPostTitle()}" />
 
