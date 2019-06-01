@@ -42,16 +42,15 @@ class EpisodesFragment : Fragment() {
         val safeArgs: EpisodesFragmentArgs by navArgs()
         val categoryId = safeArgs.categoryId
 
-        postsRecyclerView.layoutManager = LinearLayoutManager(this.activity, RecyclerView.VERTICAL, false)
-        postsRecyclerView.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
+        recyclerView.layoutManager = LinearLayoutManager(this.activity, RecyclerView.VERTICAL, false)
+        recyclerView.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
 
         val adapter = EpisodesRecyclerViewAdapter()
-        postsRecyclerView.adapter = adapter
+        recyclerView.adapter = adapter
 
         viewModel.fetchPosts(categoryId)
         viewModel.episodes.observe(this, Observer { results ->
-            if (results != null && results.isNotEmpty())
-                adapter.submitList(results)
+            adapter.submitList(results)
         })
 
 //        val scrollListener = object : RecyclerView.OnScrollListener() {

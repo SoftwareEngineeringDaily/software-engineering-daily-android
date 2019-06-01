@@ -48,7 +48,8 @@ class EpisodesRecyclerViewAdapter : ListAdapter<Episode, EpisodesRecyclerViewAda
             itemView.dateTextView.text = episode.date
 
             // FIXME :: Add placeholder and error messages
-            Glide.with(context).load(episode.featuredImage).into(itemView.episodeImageView)
+            val url = episode.featuredImage?.replace(Regex("^http://"), "https://")
+            Glide.with(context).load(url).into(itemView.episodeImageView)
 
             itemView.setOnClickListener(listener)
         }
