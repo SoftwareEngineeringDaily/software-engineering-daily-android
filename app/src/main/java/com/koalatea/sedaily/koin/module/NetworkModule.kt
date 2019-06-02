@@ -1,5 +1,6 @@
 package com.koalatea.sedaily.koin.module
 
+import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.koalatea.sedaily.BuildConfig
 import com.koalatea.sedaily.feature.auth.UserRepository
@@ -36,9 +37,11 @@ val networkModule = module {
                 }
 
         if (BuildConfig.DEBUG) {
-            val logging = HttpLoggingInterceptor()
-            logging.level = HttpLoggingInterceptor.Level.BODY
-            clientBuilder.addInterceptor(logging)
+            clientBuilder.addInterceptor(HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.HEADERS
+            })
+
+            clientBuilder.addNetworkInterceptor(StethoInterceptor())
         }
 
         clientBuilder.build()

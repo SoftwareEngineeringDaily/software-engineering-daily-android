@@ -1,5 +1,6 @@
 package com.koalatea.sedaily
 
+import com.facebook.stetho.Stetho
 import com.squareup.leakcanary.LeakCanary
 
 class DebugSEDApplication : SEDApplication() {
@@ -13,6 +14,8 @@ class DebugSEDApplication : SEDApplication() {
             return
         }
         LeakCanary.install(this)
+
+        Stetho.initializeWithDefaults(this)
     }
 
 }
