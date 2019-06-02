@@ -1,7 +1,9 @@
 package com.koalatea.sedaily.feature.episodes.epoxy
 
+import androidx.navigation.findNavController
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.paging.PagedListEpoxyController
+import com.koalatea.sedaily.feature.home.HomeFragmentDirections
 import com.koalatea.sedaily.model.Episode
 
 class EpisodesEpoxyController : PagedListEpoxyController<Episode>() {
@@ -20,7 +22,11 @@ class EpisodesEpoxyController : PagedListEpoxyController<Episode>() {
                     .description(item.excerpt?.rendered)
                     .date(item.date)
                     .imageUrl(imageHttpsUrl)
-                    .episodeClickListener {}// TODO :: Navigate to episode details
+                    .episodeClickListener {
+                        // TODO :: Navigate to episode details
+//                        val direction = HomeFragmentDirections.openEpisodeDetailsAction(item._id)
+//                        it.findNavController().navigate(direction)
+                    }
         }
     }
 

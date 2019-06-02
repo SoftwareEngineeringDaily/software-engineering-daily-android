@@ -47,40 +47,15 @@ class EpisodesFragment : Fragment() {
         epoxyRecyclerView.layoutManager = LinearLayoutManager(this.activity, RecyclerView.VERTICAL, false)
         epoxyRecyclerView.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
 
-//        val adapter = EpisodesRecyclerViewAdapter()
-//        postsRecyclerView.adapter = adapter
-
         val episodesEpoxyController = EpisodesEpoxyController()
         epoxyRecyclerView.setControllerAndBuildModels(episodesEpoxyController)
 
         viewModel.fetchPosts(SearchQuery(categoryId))
         viewModel.episodesPagedList.observe(this, Observer { results ->
-//            if (results != null && results.isNotEmpty())
-//                adapter.submitList(results)
-
             episodesEpoxyController.submitList(results)
             epoxyRecyclerView.requestModelBuild()
         })
 
-//        val scrollListener = object : RecyclerView.OnScrollListener() {
-//            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-//                super.onScrollStateChanged(recyclerView, newState)
-//                val totalItemCount = recyclerView.layoutManager?.itemCount
-//                recyclerView.layoutManager.apply {
-//                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-//                    val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
-//                    if (totalItemCount == lastVisibleItemPosition + 1) {
-//                        viewModel.loadHomeFeedAfter()
-////                    binding.postList.removeOnScrollListener(scrollListener)
-//                    }
-//                }
-//            }
-//        }
-//        postsRecyclerView.addOnScrollListener(scrollListener)
-//
-//        val adapter = EpisodesRecyclerViewAdapter(viewModel, downloadRepository)
-//        postsRecyclerView.adapter = adapter
-//
 //        viewModel.episodes.observe(this, Observer { results ->
 //            if (results != null && results.isNotEmpty())
 //                adapter.submitList(results)
