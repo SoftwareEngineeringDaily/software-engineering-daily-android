@@ -1,42 +1,50 @@
 package com.koalatea.sedaily.feature.episodes
 
-import android.view.View
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.koalatea.sedaily.R
-import com.koalatea.sedaily.SingleLiveEvent
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
 import com.koalatea.sedaily.database.DownloadDao
 import com.koalatea.sedaily.model.Episode
-import com.koalatea.sedaily.database.EpisodeDao
-import com.koalatea.sedaily.network.Result
-import com.koalatea.sedaily.network.SEDailyApi
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import com.koalatea.sedaily.feature.episodes.paging.EpisodesDataSourceFactory
+import com.koalatea.sedaily.model.SearchQuery
 import java.util.*
 
 class EpisodesViewModel internal constructor(
-        private val episodesRepository: EpisodesRepository
+        private val repository: EpisodesRepository
 ) : ViewModel() {
 
     private var createdAtBefore: Date? = null
 
-    val episodes: MutableLiveData<List<Episode>> = MutableLiveData()
+    private val queryLiveData = MutableLiveData<SearchQuery>()
+//    private val episodes: LiveData<Result<List<Episode>>> = Transformations.map(queryLiveData) {
+//        GlobalScope.launch(Dispatchers.Main) {
+//            return@map repository.fetchPosts(it)
+//        }
+//    }
+
+//    val episodes: MutableLiveData<List<Episode>> = MutableLiveData()
+
+    val episodesPagedList: LiveData<PagedList<Episode>> by lazy {
+        LivePagedListBuilder<String?, Episode>(
+                // FIXME ::
+                EpisodesDataSourceFactory(queryLiveData.value ?: SearchQuery(), repository), 10
+        ).build()
+    }
 
     // FIXME :: Should be a property in the ViewModel
-    fun fetchPosts(categoryId: String? = null) {
-        GlobalScope.launch(Dispatchers.Main) {
-            // TODO :: Add category id and createdAtBefore
-            when (val result = episodesRepository.fetchPosts(categoryId = categoryId)) {
-                is Result.Success -> episodes.setValue(result.data)
-                is Result.ErrorWithCache -> episodes.setValue(result.cachedData)
-                is Result.Error -> {}// Fire an event.
-            }
-        }
+    fun fetchPosts(searchQuery: SearchQuery) {
+        queryLiveData.postValue(searchQuery)
+
+//        GlobalScope.launch(Dispatchers.Main) {
+//            // TODO :: Add category id and createdAtBefore
+//            when (val result = episodesRepository.fetchPosts(categoryId = categoryId)) {
+//                is Result.Success -> episodes.setValue(result.data)
+//                is Result.ErrorWithCache -> episodes.setValue(result.cachedData)
+//                is Result.Error -> {}// Fire an event.
+//            }
+//        }
     }
 
     private fun reset() {

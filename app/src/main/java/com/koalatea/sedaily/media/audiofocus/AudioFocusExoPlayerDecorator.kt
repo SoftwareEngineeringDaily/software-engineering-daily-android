@@ -121,7 +121,7 @@ class AudioFocusExoPlayerDecorator(private val audioAttributes: AudioAttributesC
                     AudioManager.AUDIOFOCUS_GAIN)
         }
 
-        // Call the listener whenever focus is granted - even the first time!
+        // Call the episodeClickListener whenever focus is granted - even the first time!
         if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
             shouldPlayWhenReady = true
             audioFocusListener.onAudioFocusChange(AudioManager.AUDIOFOCUS_GAIN)

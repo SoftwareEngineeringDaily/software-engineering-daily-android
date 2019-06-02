@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.koalatea.sedaily.R
+import com.koalatea.sedaily.feature.episodes.epoxy.EpisodesEpoxyController
+import com.koalatea.sedaily.model.SearchQuery
 import kotlinx.android.synthetic.main.fragment_episodes.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -42,15 +44,22 @@ class EpisodesFragment : Fragment() {
         val safeArgs: EpisodesFragmentArgs by navArgs()
         val categoryId = safeArgs.categoryId
 
-        recyclerView.layoutManager = LinearLayoutManager(this.activity, RecyclerView.VERTICAL, false)
-        recyclerView.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
+        epoxyRecyclerView.layoutManager = LinearLayoutManager(this.activity, RecyclerView.VERTICAL, false)
+        epoxyRecyclerView.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
 
-        val adapter = EpisodesRecyclerViewAdapter()
-        recyclerView.adapter = adapter
+//        val adapter = EpisodesRecyclerViewAdapter()
+//        postsRecyclerView.adapter = adapter
 
-        viewModel.fetchPosts(categoryId)
-        viewModel.episodes.observe(this, Observer { results ->
-            adapter.submitList(results)
+        val episodesEpoxyController = EpisodesEpoxyController()
+        epoxyRecyclerView.setControllerAndBuildModels(episodesEpoxyController)
+
+        viewModel.fetchPosts(SearchQuery(categoryId))
+        viewModel.episodesPagedList.observe(this, Observer { results ->
+//            if (results != null && results.isNotEmpty())
+//                adapter.submitList(results)
+
+            episodesEpoxyController.submitList(results)
+            epoxyRecyclerView.requestModelBuild()
         })
 
 //        val scrollListener = object : RecyclerView.OnScrollListener() {

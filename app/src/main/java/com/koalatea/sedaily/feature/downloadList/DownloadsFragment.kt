@@ -35,7 +35,7 @@ class DownloadsFragment : Fragment() {
             if (errorMessage != null) showError(errorMessage) else hideError()
         })
 
-        // Play listener
+        // Play episodeClickListener
         viewModel.playRequested.observe(this, Observer {
             (this.activity as PlaybackActivity).playMedia(it)
         })

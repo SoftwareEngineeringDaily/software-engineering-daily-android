@@ -10,7 +10,7 @@ import retrofit2.http.*
 interface SEDailyApi {
 
     @GET("posts")
-    fun getPostsAsync(@Query("search") searchTerm: String? = null, @Query("categories") categoryId: String? = null, @Query("createdAtBefore") createdAtBefore: String = ""): Deferred<Response<List<Episode>>>
+    fun getPostsAsync(@Query("search") searchTerm: String? = null, @Query("categories") categoryId: String? = null, @Query("createdAtBefore") createdAtBefore: String? = ""): Deferred<Response<List<Episode>>>
 
     @FormUrlEncoded
     @POST("auth/login")

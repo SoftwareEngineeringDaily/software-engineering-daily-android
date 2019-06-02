@@ -42,7 +42,7 @@
                 <action android:name="android.media.browse.MediaBrowserService" />
             </intent-filter>
         </service>
-        <service android:name="com.koalatea.sedaily.downloadManager.DownloadIntentService" />
+        <!--<service android:name="com.koalatea.sedaily.downloadManager.DownloadIntentService" />-->
 
         <!--
            A receiver that will receive media buttons and send as

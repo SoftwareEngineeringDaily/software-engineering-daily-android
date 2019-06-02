@@ -1,6 +1,7 @@
 package com.koalatea.sedaily.feature.episodes
 
 import com.koalatea.sedaily.database.EpisodeDao
+import com.koalatea.sedaily.model.SearchQuery
 import com.koalatea.sedaily.network.Result
 import com.koalatea.sedaily.network.toException
 import kotlinx.coroutines.Dispatchers
@@ -10,12 +11,9 @@ class EpisodesRepository(
         private val remoteDataSource: EpisodesRemoteDataSource,
         private val localDataSource: EpisodeDao) {
 
-    suspend fun fetchPosts(searchTerm: String? = null, categoryId: String? = null, createdAtBefore: String = "") = withContext(Dispatchers.IO) {
-
-        fun isInitialRequest(searchTerm: String? = null, categoryId: String? = null, createdAtBefore: String = "") = searchTerm.isNullOrBlank() && categoryId.isNullOrBlank() && createdAtBefore.isBlank()
-
-        val response = remoteDataSource.getPosts(searchTerm, categoryId, createdAtBefore)
-        val isInitialRequest = isInitialRequest(searchTerm, categoryId, createdAtBefore)
+    suspend fun fetchPosts(searchQuery: SearchQuery, createdAtBefore: String? = null) = withContext(Dispatchers.IO) {
+        val response = remoteDataSource.getPosts(searchQuery, createdAtBefore)
+        val isInitialRequest = createdAtBefore.isNullOrBlank()
         if (response.isSuccessful) {
             val episodes = response.body()
 
