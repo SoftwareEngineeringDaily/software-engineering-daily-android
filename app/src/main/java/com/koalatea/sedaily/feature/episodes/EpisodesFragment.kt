@@ -3,6 +3,7 @@ package com.koalatea.sedaily.feature.episodes
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.StringRes
@@ -50,8 +51,10 @@ class EpisodesFragment : Fragment() {
         val episodesEpoxyController = EpisodesEpoxyController()
         epoxyRecyclerView.setControllerAndBuildModels(episodesEpoxyController)
 
-        viewModel.fetchPosts(SearchQuery(categoryId))
+        viewModel.fetchPosts(SearchQuery(categoryId=categoryId))
         viewModel.episodesPagedList.observe(this, Observer { results ->
+            progressBar.visibility = GONE
+
             episodesEpoxyController.submitList(results)
             epoxyRecyclerView.requestModelBuild()
         })

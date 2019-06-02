@@ -20,6 +20,8 @@ class EpisodesRepository(
             // Only cache the first page when searching for all podcasts.
             if (isInitialRequest) {
                 if (episodes != null) {
+                    localDataSource.clearTable()
+
                     localDataSource.insert(*episodes.toTypedArray())
                 } else {
                     localDataSource.clearTable()

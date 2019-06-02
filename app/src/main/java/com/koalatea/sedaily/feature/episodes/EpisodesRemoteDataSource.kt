@@ -8,7 +8,7 @@ import kotlinx.coroutines.withContext
 class EpisodesRemoteDataSource(private val api: SEDailyApi) {
 
     suspend fun getPosts(searchQuery: SearchQuery, createdAtBefore: String? = null) = withContext(Dispatchers.IO) {
-        api.getPostsAsync(searchQuery.searchTerm, searchQuery.categoryId, createdAtBefore).await()
+        api.getPostsAsync(searchQuery.searchTerm, searchQuery.categoryId, createdAtBefore, searchQuery.pageSize).await()
     }
 
 }
