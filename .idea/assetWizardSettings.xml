@@ -201,7 +201,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/Applications/Android%20Studio.app/Contents/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_bookmark_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/Applications/Android%20Studio.app/Contents/plugins/android/lib/android.jar!/images/material_design_icons/image/ic_broken_image_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -212,7 +212,7 @@
                         <option name="values">
                           <map>
                             <entry key="autoMirrored" value="true" />
-                            <entry key="outputName" value="vd_bookmark" />
+                            <entry key="outputName" value="vd_broken_image" />
                             <entry key="sourceFile" value="$USER_HOME$/Downloads/baseline-arrow_downward-24px.svg" />
                           </map>
                         </option>

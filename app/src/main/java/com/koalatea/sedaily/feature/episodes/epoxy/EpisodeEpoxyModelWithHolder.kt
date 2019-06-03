@@ -9,6 +9,9 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.MultiTransformation
+import com.bumptech.glide.load.resource.bitmap.FitCenter
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.koalatea.sedaily.R
 import com.koalatea.sedaily.util.KotlinEpoxyHolder
 
@@ -32,12 +35,19 @@ abstract class EpisodeEpoxyModelWithHolder : EpoxyModelWithHolder<Holder>() {
     lateinit var episodeClickListener: () -> Unit
 
     override fun bind(holder: Holder) {
+        val context = holder.episodeImageView.context
+        val imageCornerRadius = context.resources.getDimension(R.dimen.episode_image_corner_radius).toInt()
+
         holder.titleTextView.text = title
         holder.descriptionTextView.text = description
         holder.dateTextView.text = date
 
-        // FIXME :: Add placeholder and error messages + transformation
-        Glide.with(holder.episodeImageView.context).load(imageUrl).into(holder.episodeImageView)
+        Glide.with(context)
+                .load(imageUrl)
+                .transform(MultiTransformation(FitCenter(), RoundedCorners(imageCornerRadius)))
+                .placeholder(R.drawable.vd_image)
+                .error(R.drawable.vd_broken_image)
+                .into(holder.episodeImageView)
 
         holder.containerConstraintLayout.setOnClickListener { episodeClickListener }
     }

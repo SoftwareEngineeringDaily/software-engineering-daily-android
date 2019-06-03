@@ -21,10 +21,10 @@
             android:layout_marginTop="@dimen/first_keyline"
             android:layout_marginEnd="@dimen/first_keyline"
             android:contentDescription="@string/content_description_podcast_episode_logo"
-            android:scaleType="centerInside"
+            android:scaleType="fitCenter"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/sedaily_logo" />
+            tools:src="@drawable/vd_image" />
 
         <TextView
             android:id="@+id/titleTextView"

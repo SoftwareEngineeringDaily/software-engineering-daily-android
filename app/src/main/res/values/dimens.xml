@@ -6,4 +6,6 @@
 
     <dimen name="margin_small">8dp</dimen>
 
+    <dimen name="episode_image_corner_radius">8dp</dimen>
+
 </resources>
