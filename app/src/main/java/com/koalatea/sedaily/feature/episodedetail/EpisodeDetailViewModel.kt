@@ -1,21 +1,16 @@
 package com.koalatea.sedaily.feature.episodedetail
 
-import android.util.Log
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.koalatea.sedaily.SingleLiveEvent
+import com.koalatea.sedaily.database.DownloadDao
+import com.koalatea.sedaily.database.EpisodeDao
 import com.koalatea.sedaily.feature.downloader.DownloadRepository
 import com.koalatea.sedaily.model.Download
-import com.koalatea.sedaily.database.DownloadDao
 import com.koalatea.sedaily.model.Episode
-import com.koalatea.sedaily.database.EpisodeDao
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 
@@ -44,7 +39,7 @@ class EpisodeDetailViewModel internal constructor(
     }
 
     fun loadEpisode(episodeId: String) {
-        GlobalScope.launch(Dispatchers.Main) {
+        viewModelScope.launch {
             val result = episodeDao.findById(episodeId)
 
             onRetrievePostListSuccess(result)
@@ -64,7 +59,7 @@ class EpisodeDetailViewModel internal constructor(
 //                )
     }
 
-    fun checkForDownload(episodeId: String) = GlobalScope.launch(Dispatchers.Main) {
+    fun checkForDownload(episodeId: String) = viewModelScope.launch {
         val download = downloadRepository.getDownloadForId(episodeId)
 
         download?.let {
@@ -119,7 +114,7 @@ class EpisodeDetailViewModel internal constructor(
     }
 
     fun removeDownloadForId(episodeId: String) {
-        GlobalScope.launch(Dispatchers.Main) {
+        viewModelScope.launch {
             hasDownload.value = View.GONE
 
             downloadRepository.removeDownloadForId(episodeId)

@@ -1,9 +1,6 @@
 package com.koalatea.sedaily.feature.episodes
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import androidx.paging.PagedList
 import com.koalatea.sedaily.database.DownloadDao
 import com.koalatea.sedaily.model.Episode
@@ -21,6 +18,7 @@ class EpisodesViewModel internal constructor(
     val episodesPagedList: LiveData<PagedList<Episode>> = Transformations.switchMap(episodesResult) { it.pagedList }
     val networkState: LiveData<NetworkState> = Transformations.switchMap(episodesResult) { it.networkState }
     val refreshState: LiveData<NetworkState> = Transformations.switchMap(episodesResult) { it.refreshState }
+
 
     fun fetchPosts(searchQuery: SearchQuery) = searchQueryLiveData.postValue(searchQuery)
 

@@ -4,16 +4,15 @@ import android.util.Log
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.koalatea.sedaily.R
 import com.koalatea.sedaily.SingleLiveEvent
-import com.koalatea.sedaily.feature.downloader.DownloadRepository
 import com.koalatea.sedaily.database.DownloadDao
+import com.koalatea.sedaily.feature.downloader.DownloadRepository
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class DownloadsViewModel internal constructor(
@@ -81,7 +80,7 @@ class DownloadsViewModel internal constructor(
     }
 
     fun removeDownloadForId(downloadId: String) {
-        GlobalScope.launch(Dispatchers.Main) {
+        viewModelScope.launch {
             downloadRepository.removeDownloadForId(downloadId)
 
             // @TODO: Is this correct? I think we are supposed to update a local list or send an event

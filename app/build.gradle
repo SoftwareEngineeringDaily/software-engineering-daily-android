@@ -65,6 +65,9 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta1'
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
     implementation "androidx.recyclerview:recyclerview:$supportLibraryVersion"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleKtxVersion"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleKtxVersion"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleKtxVersion"
 
     // Android Arch
     implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
