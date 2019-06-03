@@ -33,9 +33,9 @@ class EpisodesPagingDataSource(
 
     private fun load(key: String?, callback: LoadCallback<Episode>, isInitial: Boolean) {
         GlobalScope.launch(Dispatchers.Main) {
-            networkState.postValue(NetworkState.LOADING)
+            networkState.postValue(NetworkState.Loading)
             if (isInitial) {
-                refreshState.postValue(NetworkState.LOADING)
+                refreshState.postValue(NetworkState.Loading)
             }
 
             val response = withContext(Dispatchers.IO) {
@@ -55,20 +55,20 @@ class EpisodesPagingDataSource(
                 }
 
                 callback.onResult(episodes ?: listOf())
-                networkState.postValue(NetworkState.LOADED)
+                networkState.postValue(NetworkState.Loaded)
                 if (isInitial) {
-                    refreshState.postValue(NetworkState.LOADED)
+                    refreshState.postValue(NetworkState.Loaded)
                 }
             } else {
                 val episodes = episodeDao.getEpisodes()
                 if (isFirstPage && !episodes.isNullOrEmpty()) {
                     callback.onResult(episodes)
-                    networkState.postValue(NetworkState.LOADED)
+                    networkState.postValue(NetworkState.Loaded)
                     if (isInitial) {
-                        refreshState.postValue(NetworkState.LOADED)
+                        refreshState.postValue(NetworkState.Loaded)
                     }
                 } else {
-                    val error = NetworkState.error(response.errorBody()?.string() ?: "Unknown error")
+                    val error = NetworkState.Error(response.errorBody()?.string() ?: "Unknown error")
 
                     networkState.postValue(error)
                     if (isInitial) {

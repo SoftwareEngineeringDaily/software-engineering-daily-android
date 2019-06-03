@@ -16,7 +16,6 @@ import com.koalatea.sedaily.R
 import com.koalatea.sedaily.feature.episodes.epoxy.EpisodesEpoxyController
 import com.koalatea.sedaily.model.SearchQuery
 import com.koalatea.sedaily.network.NetworkState
-import com.koalatea.sedaily.network.Status
 import kotlinx.android.synthetic.main.fragment_episodes.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -62,8 +61,8 @@ class EpisodesFragment : Fragment() {
         })
 
         viewModel.networkState.observe(this, Observer {
-            when (it.status) {
-                Status.FAILED -> {
+            when (it) {
+                is NetworkState.Error -> {
                     // TODO :: Handle error.
 //                    showError(it.message)
                 }
@@ -73,10 +72,10 @@ class EpisodesFragment : Fragment() {
         })
 
         viewModel.refreshState.observe(this, Observer {
-            swipeRefreshLayout.isRefreshing = it == NetworkState.LOADING
+            swipeRefreshLayout.isRefreshing = it == NetworkState.Loading
 
-            when (it.status) {
-                Status.SUCCESS -> {
+            when (it) {
+                NetworkState.Loaded -> {
                 } // TODO :: Handle empty state
                 else -> {
                 }// Ignore
