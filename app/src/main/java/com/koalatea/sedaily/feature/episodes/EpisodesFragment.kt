@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
@@ -18,7 +17,6 @@ import com.koalatea.sedaily.model.SearchQuery
 import com.koalatea.sedaily.network.NetworkState
 import kotlinx.android.synthetic.main.fragment_episodes.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-
 
 class EpisodesFragment : Fragment() {
 
@@ -54,7 +52,6 @@ class EpisodesFragment : Fragment() {
             viewModel.refresh()
         }
 
-        viewModel.fetchPosts(SearchQuery(categoryId = categoryId))
         viewModel.episodesPagedList.observe(this, Observer { results ->
             episodesEpoxyController.submitList(results)
             epoxyRecyclerView.requestModelBuild()
@@ -62,12 +59,8 @@ class EpisodesFragment : Fragment() {
 
         viewModel.networkState.observe(this, Observer {
             when (it) {
-                is NetworkState.Error -> {
-                    // TODO :: Handle error.
-//                    showError(it.message)
-                }
-                else -> {
-                }// Ignore
+                is NetworkState.Error -> { showError(it.message) }
+                else -> { }// Ignore
             }
         })
 
@@ -75,42 +68,21 @@ class EpisodesFragment : Fragment() {
             swipeRefreshLayout.isRefreshing = it == NetworkState.Loading
 
             when (it) {
-                NetworkState.Loaded -> {
-                } // TODO :: Handle empty state
-                else -> {
-                }// Ignore
+                is NetworkState.Loaded -> {
+                    if (it.itemsCount == 0) {
+                        // TODO :: Handle empty state
+                    }
+                }
+                else -> { }// Ignore
             }
         })
 
-
-//        viewModel.episodes.observe(this, Observer { results ->
-//            if (results != null && results.isNotEmpty())
-//                adapter.submitList(results)
-//        })
-//        viewModel.errorMessage.observe(this, Observer { errorMessage ->
-//            if (errorMessage != null) showError(errorMessage) else hideError()
-//        })
-//
-//        viewModel.playRequested.observe(this, Observer {
-//            (this.activity as PlaybackActivity).playMedia(it)
-//        })
-//
-//        val disposable = episodesSearchRepository
-//                .getSearchChange
-//                .subscribe { query ->
-//                    viewModel.performSearch(query)
-//                }
-//        compositeDisposable.add(disposable)
-//
-//        val query = episodesSearchRepository.currentSearch
-//        if (query.isEmpty()) {
-//            viewModel.loadHomeFeed()
-//        } else {
-//            viewModel.performSearch(query)
-//        }
+        if (savedInstanceState == null) {
+            viewModel.fetchPosts(SearchQuery(categoryId = categoryId))
+        }
     }
 
-    private fun showError(@StringRes errorMessage: Int) {
+    private fun showError(errorMessage: String) {
         view?.let {
             Snackbar.make(it, errorMessage, Snackbar.LENGTH_SHORT).show()
         }

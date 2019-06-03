@@ -44,28 +44,28 @@ class EpisodesPagingDataSource(
 
             val isFirstPage = key.isNullOrBlank()
             if (response.isSuccessful) {
-                val episodes = response.body()
+                val episodes = response.body() ?: listOf()
 
                 // Clear old cached data.
                 episodeDao.clearTable()
 
                 // Only cache the first page when searching for all podcasts.
-                if (isFirstPage && episodes != null) {
+                if (isFirstPage) {
                     episodeDao.insert(*episodes.toTypedArray())
                 }
 
-                callback.onResult(episodes ?: listOf())
-                networkState.postValue(NetworkState.Loaded)
+                callback.onResult(episodes)
+                networkState.postValue(NetworkState.Loaded(episodes.size))
                 if (isInitial) {
-                    refreshState.postValue(NetworkState.Loaded)
+                    refreshState.postValue(NetworkState.Loaded(episodes.size))
                 }
             } else {
                 val episodes = episodeDao.getEpisodes()
                 if (isFirstPage && !episodes.isNullOrEmpty()) {
                     callback.onResult(episodes)
-                    networkState.postValue(NetworkState.Loaded)
+                    networkState.postValue(NetworkState.Loaded(episodes.size))
                     if (isInitial) {
-                        refreshState.postValue(NetworkState.Loaded)
+                        refreshState.postValue(NetworkState.Loaded(episodes.size))
                     }
                 } else {
                     val error = NetworkState.Error(response.errorBody()?.string() ?: "Unknown error")
