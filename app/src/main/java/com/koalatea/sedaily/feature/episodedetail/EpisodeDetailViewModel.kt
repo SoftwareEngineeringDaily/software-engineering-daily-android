@@ -44,18 +44,24 @@ class EpisodeDetailViewModel internal constructor(
     }
 
     fun loadEpisode(episodeId: String) {
-        subscription = Observable.fromCallable { episodeDao.findById(episodeId) }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-//            .doOnSubscribe { onRetrivePostListStart() }
-//            .doOnTerminate { onRetrievePostListFinish() }
-                .subscribe(
-                        { result -> onRetrievePostListSuccess(result) },
-                        {
-                            Log.v("keithtest", it.localizedMessage)
-//                        onRetrievePostListError()
-                        }
-                )
+        GlobalScope.launch(Dispatchers.Main) {
+            val result = episodeDao.findById(episodeId)
+
+            onRetrievePostListSuccess(result)
+        }
+
+//        subscription = Observable.fromCallable { episodeDao.findById(episodeId) }
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+////            .doOnSubscribe { onRetrivePostListStart() }
+////            .doOnTerminate { onRetrievePostListFinish() }
+//                .subscribe(
+//                        { result -> onRetrievePostListSuccess(result) },
+//                        {
+//                            Log.v("keithtest", it.localizedMessage)
+////                        onRetrievePostListError()
+//                        }
+//                )
     }
 
     fun checkForDownload(episodeId: String) = GlobalScope.launch(Dispatchers.Main) {

@@ -15,16 +15,21 @@ import com.koalatea.sedaily.util.KotlinEpoxyHolder
 @EpoxyModelClass(layout = R.layout.view_holder_episode)
 abstract class EpisodeEpoxyModelWithHolder : EpoxyModelWithHolder<Holder>() {
 
-    @EpoxyAttribute var title: String? = null
-    @EpoxyAttribute var description: String? = null
-    @EpoxyAttribute var date: String? = null
-    @EpoxyAttribute var imageUrl: String? = null
+    @EpoxyAttribute
+    var title: String? = null
+    @EpoxyAttribute
+    var description: String? = null
+    @EpoxyAttribute
+    var date: String? = null
+    @EpoxyAttribute
+    var imageUrl: String? = null
 
 //    @EpoxyAttribute lateinit var likesClickListener: () -> Unit
 //    @EpoxyAttribute lateinit var commentsClickListener: () -> Unit
 //    @EpoxyAttribute lateinit var bookmarkClickListener: () -> Unit
 
-    @EpoxyAttribute lateinit var episodeClickListener: () -> Unit
+    @EpoxyAttribute
+    lateinit var episodeClickListener: () -> Unit
 
     override fun bind(holder: Holder) {
         holder.titleTextView.text = title

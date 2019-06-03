@@ -1,19 +1,29 @@
 package com.koalatea.sedaily.feature.episodes.paging
 
+import androidx.lifecycle.MutableLiveData
 import androidx.paging.ItemKeyedDataSource
-import com.koalatea.sedaily.feature.episodes.EpisodesRepository
+import com.koalatea.sedaily.database.EpisodeDao
 import com.koalatea.sedaily.model.Episode
 import com.koalatea.sedaily.model.SearchQuery
-import com.koalatea.sedaily.network.Result
+import com.koalatea.sedaily.network.NetworkState
+import com.koalatea.sedaily.network.SEDailyApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class EpisodesPagingDataSource(private val searchQuery: SearchQuery, private val repository: EpisodesRepository) : ItemKeyedDataSource<String?, Episode>() {
+class EpisodesPagingDataSource(
+        private val searchQuery: SearchQuery,
+        private val api: SEDailyApi,
+        private val episodeDao: EpisodeDao
+) : ItemKeyedDataSource<String?, Episode>() {
 
-    override fun loadInitial(params: LoadInitialParams<String?>, callback: LoadInitialCallback<Episode>) = load(params.requestedInitialKey, callback)
+    val networkState = MutableLiveData<NetworkState>()
+    val refreshState = MutableLiveData<NetworkState>()
 
-    override fun loadAfter(params: LoadParams<String?>, callback: LoadCallback<Episode>) = load(params.key, callback)
+    override fun loadInitial(params: LoadInitialParams<String?>, callback: LoadInitialCallback<Episode>) = load(params.requestedInitialKey, callback, isInitial = true)
+
+    override fun loadAfter(params: LoadParams<String?>, callback: LoadCallback<Episode>) = load(params.key, callback, isInitial = false)
 
     override fun loadBefore(params: LoadParams<String?>, callback: LoadCallback<Episode>) {
         // Ignored, since we only ever append to our initial load.
@@ -21,12 +31,50 @@ class EpisodesPagingDataSource(private val searchQuery: SearchQuery, private val
 
     override fun getKey(item: Episode) = item.date ?: ""
 
-    private fun load(key: String?, callback: LoadCallback<Episode>) {
+    private fun load(key: String?, callback: LoadCallback<Episode>, isInitial: Boolean) {
         GlobalScope.launch(Dispatchers.Main) {
-            when (val result = repository.fetchPosts(searchQuery, key)) {
-                is Result.Success -> callback.onResult(result.data)
-                is Result.ErrorWithCache -> callback.onResult(result.cachedData)
-                is Result.Error -> {}//onFailure(call, new HttpException (response))
+            networkState.postValue(NetworkState.LOADING)
+            if (isInitial) {
+                refreshState.postValue(NetworkState.LOADING)
+            }
+
+            val response = withContext(Dispatchers.IO) {
+                api.getPostsAsync(searchQuery.searchTerm, searchQuery.categoryId, key, searchQuery.pageSize).await()
+            }
+
+            val isFirstPage = key.isNullOrBlank()
+            if (response.isSuccessful) {
+                val episodes = response.body()
+
+                // Clear old cached data.
+                episodeDao.clearTable()
+
+                // Only cache the first page when searching for all podcasts.
+                if (isFirstPage && episodes != null) {
+                    episodeDao.insert(*episodes.toTypedArray())
+                }
+
+                callback.onResult(episodes ?: listOf())
+                networkState.postValue(NetworkState.LOADED)
+                if (isInitial) {
+                    refreshState.postValue(NetworkState.LOADED)
+                }
+            } else {
+                val episodes = episodeDao.getEpisodes()
+                if (isFirstPage && !episodes.isNullOrEmpty()) {
+                    callback.onResult(episodes)
+                    networkState.postValue(NetworkState.LOADED)
+                    if (isInitial) {
+                        refreshState.postValue(NetworkState.LOADED)
+                    }
+                } else {
+                    val error = NetworkState.error(response.errorBody()?.string() ?: "Unknown error")
+
+                    networkState.postValue(error)
+                    if (isInitial) {
+                        refreshState.postValue(error)
+                    }
+                }
             }
         }
     }

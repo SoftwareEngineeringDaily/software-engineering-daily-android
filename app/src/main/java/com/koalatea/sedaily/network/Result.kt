@@ -1,12 +1,16 @@
 package com.koalatea.sedaily.network
 
-import okhttp3.ResponseBody
-import java.io.IOException
+import androidx.lifecycle.LiveData
+import androidx.paging.PagedList
 
-sealed class Result<out T: Any> {
-    data class Success<out T : Any>(val data: T) : Result<T>()
-    data class ErrorWithCache<out T : Any>(val exception: Exception, val cachedData: T) : Result<T>()
-    data class Error(val exception: Exception) : Result<Nothing>()
-}
-
-fun ResponseBody?.toException() = IOException(this?.string() ?: "Error occurred")
+data class Result<T>(
+        // the LiveData of paged lists for the UI to observe
+        val pagedList: LiveData<PagedList<T>>,
+        // represents the network request status to show to the user
+        val networkState: LiveData<NetworkState>,
+        // represents the refresh status to show to the user. Separate from networkState, this
+        // value is importantly only when refresh is requested.
+        val refreshState: LiveData<NetworkState>,
+        // refreshes the whole data and fetches it from scratch.
+        val refresh: () -> Unit
+)

@@ -7,7 +7,6 @@ import com.google.gson.GsonBuilder
 import com.koalatea.sedaily.database.AppDatabase
 import com.koalatea.sedaily.feature.auth.UserRepository
 import com.koalatea.sedaily.feature.downloader.DownloadRepository
-import com.koalatea.sedaily.feature.episodes.EpisodesRemoteDataSource
 import com.koalatea.sedaily.feature.episodes.EpisodesRepository
 import com.koalatea.sedaily.feature.playbar.PodcastSessionStateManager
 import org.koin.android.ext.koin.androidApplication
@@ -28,7 +27,6 @@ val appModule = module {
 
     single { DownloadRepository(get<AppDatabase>().downloadDao()) }
 
-    single { EpisodesRemoteDataSource(get()) }
     single { EpisodesRepository(get(), get<AppDatabase>().episodeDao()) }
 
     single { PodcastSessionStateManager(get()) }

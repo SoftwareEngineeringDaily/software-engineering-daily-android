@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'io.fabric'
+//apply plugin: 'io.fabric'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
@@ -131,7 +131,7 @@ dependencies {
     // Firebase
     implementation 'com.google.firebase:firebase-core:16.0.9'
     implementation 'com.google.firebase:firebase-crash:16.2.1'
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.0'
+//    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.0'
 
     // Leaks
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.2'
