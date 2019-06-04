@@ -12,5 +12,9 @@ data class Episode(
         val content: Content?,
         val excerpt: Excerpt?,
         val featuredImage: String?,
-        val date: String?
+        val date: String?,
+        val score: Int?,
+        val upvoted: Boolean?,
+        val bookmarked: Boolean?,
+        val thread: Thread?
 )

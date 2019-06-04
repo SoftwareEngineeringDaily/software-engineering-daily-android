@@ -33,24 +33,25 @@ class EpisodesPagingDataSource(
 
     private fun load(key: String?, callback: LoadCallback<Episode>, isInitial: Boolean) {
         GlobalScope.launch(Dispatchers.Main) {
+            val createdAtBefore = if (isInitial) { null } else { key }
+
             networkState.postValue(NetworkState.Loading)
             if (isInitial) {
                 refreshState.postValue(NetworkState.Loading)
             }
 
             val response = withContext(Dispatchers.IO) {
-                api.getPostsAsync(searchQuery.searchTerm, searchQuery.categoryId, key, searchQuery.pageSize).await()
+                api.getPostsAsync(searchQuery.searchTerm, searchQuery.categoryId, createdAtBefore, searchQuery.pageSize).await()
             }
 
-            val isFirstPage = key.isNullOrBlank()
+            // Only cache the first page when searching for all podcasts.
+            val isCachable = createdAtBefore.isNullOrBlank() && searchQuery.categoryId.isNullOrBlank()
             if (response.isSuccessful) {
                 val episodes = response.body() ?: listOf()
 
                 // Clear old cached data.
                 episodeDao.clearTable()
-
-                // Only cache the first page when searching for all podcasts.
-                if (isFirstPage) {
+                if (isCachable) {
                     episodeDao.insert(*episodes.toTypedArray())
                 }
 
@@ -61,7 +62,7 @@ class EpisodesPagingDataSource(
                 }
             } else {
                 val episodes = episodeDao.getEpisodes()
-                if (isFirstPage && !episodes.isNullOrEmpty()) {
+                if (isCachable && !episodes.isNullOrEmpty()) {
                     callback.onResult(episodes)
                     networkState.postValue(NetworkState.Loaded(episodes.size))
                     if (isInitial) {

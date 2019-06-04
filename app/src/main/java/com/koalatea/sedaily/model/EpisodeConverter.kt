@@ -1,8 +1,12 @@
 package com.koalatea.sedaily.model
 
 import androidx.room.TypeConverter
+import com.google.gson.GsonBuilder
 
 class EpisodeConverter {
+
+    private val gson = GsonBuilder().create()
+
     @TypeConverter
     fun titleToString(title: Title): String {
         return title.rendered
@@ -10,8 +14,7 @@ class EpisodeConverter {
 
     @TypeConverter
     fun stringToTitle(string: String): Title {
-        val title = Title(string)
-        return title
+        return Title(string)
     }
 
     @TypeConverter
@@ -21,8 +24,7 @@ class EpisodeConverter {
 
     @TypeConverter
     fun stringToContent(string: String): Content {
-        val content = Content(string)
-        return content
+        return Content(string)
     }
 
     @TypeConverter
@@ -32,7 +34,16 @@ class EpisodeConverter {
 
     @TypeConverter
     fun stringToExcerpt(string: String): Excerpt {
-        val content = Excerpt(string)
-        return content
+        return Excerpt(string)
+    }
+
+    @TypeConverter
+    fun threadToJsonString(thread: Thread): String {
+        return gson.toJson(thread)
+    }
+
+    @TypeConverter
+    fun jsonStringToThread(string: String): Thread {
+        return gson.fromJson(string, Thread::class.java)
     }
 }

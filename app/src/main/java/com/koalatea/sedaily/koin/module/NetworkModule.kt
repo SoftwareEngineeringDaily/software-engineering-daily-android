@@ -22,6 +22,7 @@ val networkModule = module {
     single<OkHttpClient> {
         val userRepository = get<UserRepository>()
 
+        // Add security interceptor.
         val clientBuilder = OkHttpClient.Builder()
                 .addInterceptor { chain ->
                     val ongoing = chain.request().newBuilder()
@@ -36,6 +37,7 @@ val networkModule = module {
                     chain.proceed(ongoing.build())
                 }
 
+        // Add debug interceptors.
         if (BuildConfig.DEBUG) {
             clientBuilder.addInterceptor(HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.HEADERS

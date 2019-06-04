@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardBackgroundColor="@android:color/white"
-    app:contentPadding="0dp"
-    app:cardCornerRadius="0dp">
+    app:cardCornerRadius="0dp"
+    app:contentPadding="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/containerConstraintLayout"
@@ -69,7 +69,7 @@
             app:layout_constraintTop_toBottomOf="@+id/dateTextView"
             tools:text="A Description of stuff. And more stuff." />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/likesButton"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
@@ -94,7 +94,7 @@
             app:layout_constraintStart_toEndOf="@+id/likesButton"
             app:layout_constraintTop_toTopOf="@+id/likesButton" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/bookmarkButton"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
