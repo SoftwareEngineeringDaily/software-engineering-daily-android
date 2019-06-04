@@ -94,9 +94,7 @@ class EpisodesFragment : Fragment() {
             }
         })
 
-        if (savedInstanceState == null) {
-            viewModel.fetchPosts(SearchQuery(categoryId = categoryId))
-        }
+        viewModel.fetchPosts(SearchQuery(categoryId = categoryId))
     }
 
     private fun showError(errorMessage: String) {
