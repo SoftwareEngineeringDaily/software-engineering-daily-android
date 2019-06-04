@@ -14,6 +14,7 @@ import kotlinx.coroutines.withContext
 
 class EpisodesPagingDataSource(
         private val searchQuery: SearchQuery,
+        private val pageSize: Int,
         private val api: SEDailyApi,
         private val episodeDao: EpisodeDao
 ) : ItemKeyedDataSource<String?, Episode>() {
@@ -41,7 +42,7 @@ class EpisodesPagingDataSource(
             }
 
             val response = withContext(Dispatchers.IO) {
-                api.getPostsAsync(searchQuery.searchTerm, searchQuery.categoryId, createdAtBefore, searchQuery.pageSize).await()
+                api.getPostsAsync(searchQuery.searchTerm, searchQuery.categoryId, createdAtBefore, pageSize).await()
             }
 
             // Only cache the first page when searching for all podcasts.
@@ -52,7 +53,7 @@ class EpisodesPagingDataSource(
                 // Clear old cached data.
                 episodeDao.clearTable()
                 if (isCachable) {
-                    episodeDao.insert(*episodes.toTypedArray())
+                    episodeDao.insert(episodes)
                 }
 
                 callback.onResult(episodes)

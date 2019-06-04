@@ -16,7 +16,7 @@ interface EpisodeDao {
     suspend fun findById(id: String): Episode
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(vararg episodes: Episode)
+    suspend fun insert(episodes: List<Episode>)
 
     @Query("DELETE FROM episode")
     suspend fun clearTable()

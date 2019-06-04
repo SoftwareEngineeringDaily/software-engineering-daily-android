@@ -13,11 +13,11 @@ class EpisodesRepository(
         private val api: SEDailyApi,
         private val episodeDao: EpisodeDao) {
 
-    fun fetchPosts(searchQuery: SearchQuery): Result<Episode> {
-        val sourceFactory = EpisodesDataSourceFactory(searchQuery, api, episodeDao)
+    fun fetchPosts(searchQuery: SearchQuery, pageSize: Int = 20): Result<Episode> {
+        val sourceFactory = EpisodesDataSourceFactory(searchQuery, pageSize, api, episodeDao)
 
         val livePagedList = LivePagedListBuilder<String?, Episode>(
-                sourceFactory, searchQuery.pageSize
+                sourceFactory, pageSize
         ).build()
 
         return Result(

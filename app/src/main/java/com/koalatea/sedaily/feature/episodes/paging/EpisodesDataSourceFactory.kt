@@ -13,6 +13,7 @@ import com.koalatea.sedaily.network.SEDailyApi
  */
 class EpisodesDataSourceFactory(
         private val searchQuery: SearchQuery,
+        private val pageSize: Int,
         private val api: SEDailyApi,
         private val episodeDao: EpisodeDao)
     : DataSource.Factory<String?, Episode>() {
@@ -20,7 +21,7 @@ class EpisodesDataSourceFactory(
     val sourceLiveData = MutableLiveData<EpisodesPagingDataSource>()
 
     override fun create(): DataSource<String?, Episode> {
-        val source = EpisodesPagingDataSource(searchQuery, api, episodeDao)
+        val source = EpisodesPagingDataSource(searchQuery, pageSize, api, episodeDao)
         sourceLiveData.postValue(source)
 
         return source

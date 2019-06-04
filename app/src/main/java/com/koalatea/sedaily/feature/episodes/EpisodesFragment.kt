@@ -70,6 +70,7 @@ class EpisodesFragment : Fragment() {
         }
 
         viewModel.episodesPagedList.observe(this, Observer { results ->
+//            showEmptyList(it?.size == 0)
             episodesEpoxyController.submitList(results)
             epoxyRecyclerView.requestModelBuild()
         })
