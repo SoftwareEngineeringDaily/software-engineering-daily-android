@@ -19,10 +19,15 @@ class EpisodesViewModel internal constructor(
     val networkState: LiveData<NetworkState> = Transformations.switchMap(episodesResult) { it.networkState }
     val refreshState: LiveData<NetworkState> = Transformations.switchMap(episodesResult) { it.refreshState }
 
-
     fun fetchPosts(searchQuery: SearchQuery) = searchQueryLiveData.postValue(searchQuery)
 
     fun refresh() = episodesResult.value?.refresh?.invoke()
+
+    fun upvote(episodeId: String) {
+    }
+
+    fun bookmark(episodeId: String) {
+    }
 
     @Deprecated("")
     fun play(episode: DownloadDao.DownloadEpisode) {

@@ -67,25 +67,14 @@ class EpisodesEpoxyController(
         }
     }
 
-    // FIXME :: Timber log
-//    override fun onExceptionSwallowed(exception: RuntimeException) {
-//        throw exception
-//    }
+    // FIXME :: Remove
+    init {
+        isDebugLoggingEnabled = true
+    }
 
-//    override fun buildModels(photos: List<Photo>, loadingMore: Boolean) {
-//        header {
-//            id("header")
-//            title("My Photos")
-//            description("My album description!")
-//        }
-//
-//        photos.forEach {
-//            photoView {
-//                id(it.id())
-//                url(it.url())
-//            }
-//        }
-//
-//        if (loadingMore) loaderView { id("loader") }
-//    }
+    // FIXME :: Timber log
+    override fun onExceptionSwallowed(exception: RuntimeException) {
+        throw exception
+    }
+
 }

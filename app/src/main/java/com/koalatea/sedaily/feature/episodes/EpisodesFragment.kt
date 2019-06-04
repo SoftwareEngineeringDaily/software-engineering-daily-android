@@ -48,17 +48,18 @@ class EpisodesFragment : Fragment() {
         epoxyRecyclerView.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
 
         val episodesEpoxyController = EpisodesEpoxyController(
-                upvoteClickListener = { id ->
-
+                upvoteClickListener = { episodeId ->
+                    viewModel.upvote(episodeId)
                 },
-                commentClickListener = { id ->
-
+                commentClickListener = { episodeId ->
+//                    val direction = HomeFragmentDirections.openCommentsAction(episodeId)
+//                    findNavController().navigate(direction)
                 },
-                bookmarkClickListener = { id ->
-
+                bookmarkClickListener = { episodeId ->
+                    viewModel.bookmark(episodeId)
                 },
-                episodeClickListener = { id ->
-                    val direction = HomeFragmentDirections.openEpisodeDetailsAction(id)
+                episodeClickListener = { episodeId ->
+                    val direction = HomeFragmentDirections.openEpisodeDetailsAction(episodeId)
                     findNavController().navigate(direction)
                 }
         )
