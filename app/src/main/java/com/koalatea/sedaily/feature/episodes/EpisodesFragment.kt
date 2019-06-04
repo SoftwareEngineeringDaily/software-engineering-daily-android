@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.koalatea.sedaily.R
 import com.koalatea.sedaily.feature.episodes.epoxy.EpisodesEpoxyController
+import com.koalatea.sedaily.feature.home.HomeFragmentDirections
 import com.koalatea.sedaily.model.SearchQuery
 import com.koalatea.sedaily.network.NetworkState
 import kotlinx.android.synthetic.main.fragment_episodes.*
@@ -45,7 +47,21 @@ class EpisodesFragment : Fragment() {
         epoxyRecyclerView.layoutManager = LinearLayoutManager(this.activity, RecyclerView.VERTICAL, false)
         epoxyRecyclerView.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
 
-        val episodesEpoxyController = EpisodesEpoxyController()
+        val episodesEpoxyController = EpisodesEpoxyController(
+                upvoteClickListener = { id ->
+
+                },
+                commentClickListener = { id ->
+
+                },
+                bookmarkClickListener = { id ->
+
+                },
+                episodeClickListener = { id ->
+                    val direction = HomeFragmentDirections.openEpisodeDetailsAction(id)
+                    findNavController().navigate(direction)
+                }
+        )
         epoxyRecyclerView.setControllerAndBuildModels(episodesEpoxyController)
 
         swipeRefreshLayout.setOnRefreshListener {

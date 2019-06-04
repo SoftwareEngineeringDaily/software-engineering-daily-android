@@ -10,7 +10,12 @@ import java.util.*
 
 const val EPISODE_DATE_FORMAT = "yyyy-MM-dd\'T\'HH:mm:ss"
 
-class EpisodesEpoxyController : PagedListEpoxyController<Episode>() {
+class EpisodesEpoxyController(
+        private val upvoteClickListener: (id: String) -> Unit,
+        private val commentClickListener: (id: String) -> Unit,
+        private val bookmarkClickListener: (id: String) -> Unit,
+        private val episodeClickListener: (id: String) -> Unit
+) : PagedListEpoxyController<Episode>() {
 
     override fun buildItemModel(currentPosition: Int, item: Episode?): EpoxyModel<*> {
         return if (item == null) {
@@ -22,6 +27,7 @@ class EpisodesEpoxyController : PagedListEpoxyController<Episode>() {
 
             EpisodeEpoxyModelWithHolder_()
                     .id(item._id)
+                    .episode_id(item._id)
                     .title(item.title?.rendered?.htmlToText())
                     .description(item.excerpt?.rendered?.htmlToText())
                     .date(item.date?.toUTCDate(EPISODE_DATE_FORMAT))
@@ -29,19 +35,15 @@ class EpisodesEpoxyController : PagedListEpoxyController<Episode>() {
 
                     .upvoted(item.upvoted)
                     .score(item.score)
-                    .upvoteClickListener {}
+                    .upvoteClickListener { upvoteClickListener(item._id) }
 
                     .commentsCount(item.thread?.commentsCount)
-                    .commentClickListener {}
+                    .commentClickListener { commentClickListener(item._id) }
 
                     .bookmarked(item.bookmarked)
-                    .bookmarkClickListener {}
+                    .bookmarkClickListener { bookmarkClickListener(item._id) }
 
-                    .episodeClickListener {
-                        // TODO :: Navigate to episode details
-//                        val direction = HomeFragmentDirections.openEpisodeDetailsAction(item._id)
-//                        it.findNavController().navigate(direction)
-                    }
+                    .episodeClickListener { episodeClickListener(item._id) }
         }
     }
 

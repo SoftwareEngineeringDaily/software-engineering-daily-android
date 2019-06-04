@@ -13,7 +13,7 @@ import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.MultiTransformation
-import com.bumptech.glide.load.resource.bitmap.FitCenter
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.button.MaterialButton
 import com.koalatea.sedaily.R
@@ -23,6 +23,8 @@ import java.util.*
 @EpoxyModelClass(layout = R.layout.view_holder_episode)
 abstract class EpisodeEpoxyModelWithHolder : EpoxyModelWithHolder<Holder>() {
 
+    @EpoxyAttribute lateinit var episode_id: String
+
     @EpoxyAttribute var title: String? = null
     @EpoxyAttribute var description: String? = null
     @EpoxyAttribute var date: Date? = null
@@ -30,21 +32,21 @@ abstract class EpisodeEpoxyModelWithHolder : EpoxyModelWithHolder<Holder>() {
 
     @EpoxyAttribute var upvoted: Boolean? = null
     @EpoxyAttribute var score: Int? = null
-    @EpoxyAttribute lateinit var upvoteClickListener: () -> Unit
+    @EpoxyAttribute lateinit var upvoteClickListener: (id: String) -> Unit
 
     @EpoxyAttribute var commentsCount: Int? = null
-    @EpoxyAttribute lateinit var commentClickListener: () -> Unit
+    @EpoxyAttribute lateinit var commentClickListener: (id: String) -> Unit
 
     @EpoxyAttribute var bookmarked: Boolean? = null
-    @EpoxyAttribute lateinit var bookmarkClickListener: () -> Unit
+    @EpoxyAttribute lateinit var bookmarkClickListener: (id: String) -> Unit
 
-    @EpoxyAttribute lateinit var episodeClickListener: () -> Unit
+    @EpoxyAttribute lateinit var episodeClickListener: (id: String) -> Unit
 
     override fun bind(holder: Holder) {
         renderDetails(holder)
         renderActions(holder)
 
-        holder.containerConstraintLayout.setOnClickListener { episodeClickListener }
+        holder.containerConstraintLayout.setOnClickListener { episodeClickListener(episode_id) }
     }
 
     private fun renderDetails(holder: Holder) {
@@ -53,7 +55,7 @@ abstract class EpisodeEpoxyModelWithHolder : EpoxyModelWithHolder<Holder>() {
         val imageCornerRadius = context.resources.getDimension(R.dimen.episode_image_corner_radius).toInt()
         Glide.with(context)
                 .load(imageUrl)
-                .transform(MultiTransformation(FitCenter(), RoundedCorners(imageCornerRadius)))
+                .transform(MultiTransformation(CenterCrop(), RoundedCorners(imageCornerRadius)))
                 .placeholder(R.drawable.vd_image)
                 .error(R.drawable.vd_broken_image)
                 .into(holder.episodeImageView)
@@ -78,7 +80,7 @@ abstract class EpisodeEpoxyModelWithHolder : EpoxyModelWithHolder<Holder>() {
                 ""
             }
         }
-        holder.likesButton.setOnClickListener { upvoteClickListener }
+        holder.likesButton.setOnClickListener { upvoteClickListener(episode_id) }
 
         holder.commentsButton.text = commentsCount?.let {
             if (it > 0) {
@@ -87,10 +89,10 @@ abstract class EpisodeEpoxyModelWithHolder : EpoxyModelWithHolder<Holder>() {
                 ""
             }
         }
-        holder.commentsButton.setOnClickListener { commentClickListener }
+        holder.commentsButton.setOnClickListener { commentClickListener(episode_id) }
 
         holder.bookmarkButton.setIconResource(if (bookmarked == true) R.drawable.vd_bookmark else R.drawable.vd_bookmark_border)
-        holder.bookmarkButton.setOnClickListener { bookmarkClickListener }
+        holder.bookmarkButton.setOnClickListener { bookmarkClickListener(episode_id) }
     }
 
 }
