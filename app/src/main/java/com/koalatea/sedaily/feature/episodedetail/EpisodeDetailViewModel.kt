@@ -30,12 +30,12 @@ class EpisodeDetailViewModel internal constructor(
     private var downloadFile: String? = null
 
     // @TODO: Replace with composite disposable
-    private lateinit var subscription: Disposable
+    private var subscription: Disposable? = null
     private lateinit var subscription2: Disposable
 
     override fun onCleared() {
         super.onCleared()
-        subscription.dispose()
+        subscription?.dispose()
     }
 
     fun loadEpisode(episodeId: String) {

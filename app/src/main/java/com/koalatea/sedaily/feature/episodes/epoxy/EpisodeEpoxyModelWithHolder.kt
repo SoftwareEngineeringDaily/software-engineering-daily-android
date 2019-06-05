@@ -23,8 +23,6 @@ import java.util.*
 @EpoxyModelClass(layout = R.layout.view_holder_episode)
 abstract class EpisodeEpoxyModelWithHolder : EpoxyModelWithHolder<Holder>() {
 
-    @EpoxyAttribute lateinit var episode_id: String
-
     @EpoxyAttribute var title: String? = null
     @EpoxyAttribute var description: String? = null
     @EpoxyAttribute var date: Date? = null
@@ -32,21 +30,21 @@ abstract class EpisodeEpoxyModelWithHolder : EpoxyModelWithHolder<Holder>() {
 
     @EpoxyAttribute var upvoted: Boolean? = null
     @EpoxyAttribute var score: Int? = null
-    @EpoxyAttribute lateinit var upvoteClickListener: (id: String) -> Unit
+    @EpoxyAttribute lateinit var upvoteClickListener: () -> Unit
 
     @EpoxyAttribute var commentsCount: Int? = null
-    @EpoxyAttribute lateinit var commentClickListener: (id: String) -> Unit
+    @EpoxyAttribute lateinit var commentClickListener: () -> Unit
 
     @EpoxyAttribute var bookmarked: Boolean? = null
-    @EpoxyAttribute lateinit var bookmarkClickListener: (id: String) -> Unit
+    @EpoxyAttribute lateinit var bookmarkClickListener: () -> Unit
 
-    @EpoxyAttribute lateinit var episodeClickListener: (id: String) -> Unit
+    @EpoxyAttribute lateinit var episodeClickListener: () -> Unit
 
     override fun bind(holder: Holder) {
         renderDetails(holder)
         renderActions(holder)
 
-        holder.containerConstraintLayout.setOnClickListener { episodeClickListener(episode_id) }
+        holder.containerConstraintLayout.setOnClickListener { episodeClickListener() }
     }
 
     private fun renderDetails(holder: Holder) {
@@ -80,7 +78,7 @@ abstract class EpisodeEpoxyModelWithHolder : EpoxyModelWithHolder<Holder>() {
                 ""
             }
         }
-        holder.likesButton.setOnClickListener { upvoteClickListener(episode_id) }
+        holder.likesButton.setOnClickListener { upvoteClickListener() }
 
         holder.commentsButton.text = commentsCount?.let {
             if (it > 0) {
@@ -89,10 +87,10 @@ abstract class EpisodeEpoxyModelWithHolder : EpoxyModelWithHolder<Holder>() {
                 ""
             }
         }
-        holder.commentsButton.setOnClickListener { commentClickListener(episode_id) }
+        holder.commentsButton.setOnClickListener { commentClickListener() }
 
         holder.bookmarkButton.setIconResource(if (bookmarked == true) R.drawable.vd_bookmark else R.drawable.vd_bookmark_border)
-        holder.bookmarkButton.setOnClickListener { bookmarkClickListener(episode_id) }
+        holder.bookmarkButton.setOnClickListener { bookmarkClickListener() }
     }
 
 }

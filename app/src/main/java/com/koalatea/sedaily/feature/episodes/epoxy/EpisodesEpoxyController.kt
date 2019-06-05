@@ -11,10 +11,10 @@ import java.util.*
 const val EPISODE_DATE_FORMAT = "yyyy-MM-dd\'T\'HH:mm:ss"
 
 class EpisodesEpoxyController(
-        private val upvoteClickListener: (id: String) -> Unit,
-        private val commentClickListener: (id: String) -> Unit,
-        private val bookmarkClickListener: (id: String) -> Unit,
-        private val episodeClickListener: (id: String) -> Unit
+        private val upvoteClickListener: (episode: Episode) -> Unit,
+        private val commentClickListener: (episode: Episode) -> Unit,
+        private val bookmarkClickListener: (episode: Episode) -> Unit,
+        private val episodeClickListener: (episode: Episode) -> Unit
 ) : PagedListEpoxyController<Episode>() {
 
     override fun buildItemModel(currentPosition: Int, item: Episode?): EpoxyModel<*> {
@@ -27,7 +27,6 @@ class EpisodesEpoxyController(
 
             EpisodeEpoxyModelWithHolder_()
                     .id(item._id)
-                    .episode_id(item._id)
                     .title(item.title?.rendered?.htmlToText())
                     .description(item.excerpt?.rendered?.htmlToText())
                     .date(item.date?.toUTCDate(EPISODE_DATE_FORMAT))
@@ -35,15 +34,15 @@ class EpisodesEpoxyController(
 
                     .upvoted(item.upvoted)
                     .score(item.score)
-                    .upvoteClickListener { upvoteClickListener(item._id) }
+                    .upvoteClickListener { upvoteClickListener(item) }
 
                     .commentsCount(item.thread?.commentsCount)
-                    .commentClickListener { commentClickListener(item._id) }
+                    .commentClickListener { commentClickListener(item) }
 
                     .bookmarked(item.bookmarked)
-                    .bookmarkClickListener { bookmarkClickListener(item._id) }
+                    .bookmarkClickListener { bookmarkClickListener(item) }
 
-                    .episodeClickListener { episodeClickListener(item._id) }
+                    .episodeClickListener { episodeClickListener(item) }
         }
     }
 

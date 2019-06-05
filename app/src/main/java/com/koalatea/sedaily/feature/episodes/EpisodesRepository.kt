@@ -40,6 +40,44 @@ class EpisodesRepository(
     }
 
     @MainThread
+    fun upvote(episodeId: String, originalState: Boolean) {
+        GlobalScope.launch(Dispatchers.IO) {
+            // Update UI right away.
+            db.episodeDao().upvote(episodeId, !originalState)
+
+            val response = if (originalState) {
+                api.downvoteEpisodeAsync(episodeId).await()
+            } else {
+                api.upvoteEpisodeAsync(episodeId).await()
+            }
+
+            // Revert UI changes back.
+            if (!response.isSuccessful || response.body() == null) {
+                db.episodeDao().upvote(episodeId, originalState)
+            }
+        }
+    }
+
+    @MainThread
+    fun bookmark(episodeId: String, originalState: Boolean) {
+        GlobalScope.launch(Dispatchers.IO) {
+            // Update UI right away.
+            db.episodeDao().bookmark(episodeId, !originalState)
+
+            val response = if (originalState) {
+                api.unfavoriteEpisodeAsync(episodeId).await()
+            } else {
+                api.favoriteEpisodeAsync(episodeId).await()
+            }
+
+            // Revert UI changes back.
+            if (!response.isSuccessful || response.body() == null) {
+                db.episodeDao().bookmark(episodeId, originalState)
+            }
+        }
+    }
+
+    @MainThread
     private fun handleSuccessfulRefresh(searchQuery: SearchQuery, episodes: List<Episode>?) {
         GlobalScope.launch(Dispatchers.IO) {
             db.runInTransaction {

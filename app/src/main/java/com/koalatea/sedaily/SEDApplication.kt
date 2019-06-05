@@ -4,7 +4,7 @@ import android.app.Application
 import android.content.Context
 import com.koalatea.sedaily.koin.module.appModule
 import com.koalatea.sedaily.koin.module.networkModule
-import com.koalatea.sedaily.koin.module.viewHoldersModule
+import com.koalatea.sedaily.koin.module.viewModelsModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -18,7 +18,7 @@ open class SEDApplication : Application() {
         startKoin{
             androidLogger()// FIXME :: Should this be in a production build.
             androidContext(this@SEDApplication)
-            modules(listOf(appModule, networkModule, viewHoldersModule))
+            modules(listOf(appModule, networkModule, viewModelsModule))
         }
 
         appContext = applicationContext

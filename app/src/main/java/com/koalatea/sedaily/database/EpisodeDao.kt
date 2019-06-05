@@ -25,6 +25,12 @@ interface EpisodeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(episodes: List<Episode>)
 
+    @Query("UPDATE episode SET upvoted = :upvoted WHERE _id = :id")
+    suspend fun upvote(id: String, upvoted: Boolean)
+
+    @Query("UPDATE episode SET bookmarked = :bookmarked WHERE _id = :id")
+    suspend fun bookmark(id: String, bookmarked: Boolean)
+
     @Query("DELETE FROM episode WHERE searchQueryHashCode = :searchQueryHashCode")
     fun deleteBySearchQuery(searchQueryHashCode: Int)
     

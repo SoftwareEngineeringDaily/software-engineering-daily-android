@@ -15,4 +15,7 @@ class UserRepository constructor(private val preferences: SharedPreferences) {
             editor.apply()
         }
 
+    val isLoggedIn: Boolean
+        get() = !token.isNullOrBlank()
+
 }

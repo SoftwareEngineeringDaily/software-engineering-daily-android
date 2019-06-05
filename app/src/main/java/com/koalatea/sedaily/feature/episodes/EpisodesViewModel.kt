@@ -1,20 +1,26 @@
 package com.koalatea.sedaily.feature.episodes
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
+import androidx.lifecycle.ViewModel
 import androidx.paging.PagedList
 import com.koalatea.sedaily.database.DownloadDao
+import com.koalatea.sedaily.feature.auth.UserRepository
 import com.koalatea.sedaily.model.Episode
 import com.koalatea.sedaily.model.SearchQuery
 import com.koalatea.sedaily.network.NetworkState
 import com.koalatea.sedaily.network.Result
+import com.koalatea.sedaily.util.Event
 
 class EpisodesViewModel internal constructor(
-        private val repository: EpisodesRepository
+        private val episodesRepository: EpisodesRepository,
+        private val userRepository: UserRepository
 ) : ViewModel() {
 
     private val searchQueryLiveData = MutableLiveData<SearchQuery>()
     private val episodesResult: LiveData<Result<Episode>> = Transformations.map(searchQueryLiveData) { searchQuery ->
-        repository.fetchPosts(searchQuery)
+        episodesRepository.fetchPosts(searchQuery)
 
         // Load first form DB then try refreshing
 //        episodesResult.value?.refresh?.invoke()
@@ -24,16 +30,28 @@ class EpisodesViewModel internal constructor(
     val networkState: LiveData<NetworkState> = Transformations.switchMap(episodesResult) { it.networkState }
     val refreshState: LiveData<NetworkState> = Transformations.switchMap(episodesResult) { it.refreshState }
 
+    private val _navigateToLogin = MutableLiveData<Event<String>>()
+    val navigateToLogin: LiveData<Event<String>>
+        get() = _navigateToLogin
+
     fun fetchPosts(searchQuery: SearchQuery) = searchQueryLiveData.postValue(searchQuery)
 
     fun refresh() = episodesResult.value?.refresh?.invoke()
 
-    fun upvote(episodeId: String) {
-//        repository.upvote(episodeId)
+    fun toggleUpvote(episode: Episode) {
+        if (userRepository.isLoggedIn) {
+            episodesRepository.upvote(episode._id, episode.upvoted ?: false)
+        } else {
+            _navigateToLogin.value = Event(episode._id)
+        }
     }
 
-    fun bookmark(episodeId: String) {
-//        repository.bookmark(episodeId)
+    fun toggleBookmark(episode: Episode) {
+        if (userRepository.isLoggedIn) {
+            episodesRepository.bookmark(episode._id, episode.bookmarked ?: false)
+        } else {
+            _navigateToLogin.value = Event(episode._id)
+        }
     }
 
     @Deprecated("")

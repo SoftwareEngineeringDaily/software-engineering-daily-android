@@ -8,9 +8,9 @@ import com.koalatea.sedaily.database.AppDatabase
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
-val viewHoldersModule = module {
+val viewModelsModule = module {
 
-    viewModel { EpisodesViewModel(get()) }
+    viewModel { EpisodesViewModel(get(), get()) }
 
     viewModel { DownloadsViewModel(get<AppDatabase>().downloadDao(), get()) }
 

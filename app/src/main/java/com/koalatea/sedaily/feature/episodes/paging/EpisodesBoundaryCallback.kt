@@ -71,7 +71,7 @@ class EpisodesBoundaryCallback(
                 refreshState.value = NetworkState.Loading
             }
 
-            val response = api.getPostsAsync(searchQuery.searchTerm, searchQuery.categoryId, createdAtBefore, networkPageSize).await()
+            val response = api.getEpisodesAsync(searchQuery.searchTerm, searchQuery.categoryId, createdAtBefore, networkPageSize).await()
             if (response.isSuccessful) {
                 callback(searchQuery, response.body())
 

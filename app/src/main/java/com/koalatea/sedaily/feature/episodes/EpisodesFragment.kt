@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -48,18 +49,18 @@ class EpisodesFragment : Fragment() {
         epoxyRecyclerView.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
 
         val episodesEpoxyController = EpisodesEpoxyController(
-                upvoteClickListener = { episodeId ->
-                    viewModel.upvote(episodeId)
+                upvoteClickListener = { episode ->
+                    viewModel.toggleUpvote(episode)
                 },
-                commentClickListener = { episodeId ->
+                commentClickListener = { episode ->
 //                    val direction = HomeFragmentDirections.openCommentsAction(episodeId)
 //                    findNavController().navigate(direction)
                 },
-                bookmarkClickListener = { episodeId ->
-                    viewModel.bookmark(episodeId)
+                bookmarkClickListener = { episode ->
+                    viewModel.toggleBookmark(episode)
                 },
-                episodeClickListener = { episodeId ->
-                    val direction = HomeFragmentDirections.openEpisodeDetailsAction(episodeId)
+                episodeClickListener = { episode ->
+                    val direction = HomeFragmentDirections.openEpisodeDetailsAction(episode._id)
                     findNavController().navigate(direction)
                 }
         )
@@ -92,6 +93,14 @@ class EpisodesFragment : Fragment() {
                     }
                 }
                 else -> { }// Ignore
+            }
+        })
+
+        viewModel.navigateToLogin.observe(this, Observer {
+            it.getContentIfNotHandled()?.let { // Only proceed if the event has never been handled
+//                val direction = HomeFragmentDirections.openCommentsAction(episodeId)
+//                findNavController().navigate(direction)
+                Toast.makeText(context, "Debug :: Login first", Toast.LENGTH_SHORT).show()
             }
         })
 
