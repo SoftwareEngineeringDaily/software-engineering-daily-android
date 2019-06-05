@@ -17,4 +17,8 @@ data class Episode(
         val upvoted: Boolean?,
         val bookmarked: Boolean?,
         val thread: Thread?
-)
+) {
+    var searchQueryHashCode: Int? = null
+    // to be consistent w/ changing backend order, we need to keep a data like this
+    var indexInResponse: Int = -1
+}

@@ -13,7 +13,7 @@ interface SEDailyApi {
     fun getPostsAsync(
             @Query("search") searchTerm: String? = null,
             @Query("categories") categoryId: String? = null,
-            @Query("createdAtBefore") createdAtBefore: String? = "",
+            @Query("createdAtBefore") createdAtBefore: String? = null,
             @Query("limit") pageSize: Int): Deferred<Response<List<Episode>>>
 
     @FormUrlEncoded

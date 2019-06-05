@@ -13,7 +13,12 @@ class EpisodesViewModel internal constructor(
 ) : ViewModel() {
 
     private val searchQueryLiveData = MutableLiveData<SearchQuery>()
-    private val episodesResult: LiveData<Result<Episode>> = Transformations.map(searchQueryLiveData) { repository.fetchPosts(it) }
+    private val episodesResult: LiveData<Result<Episode>> = Transformations.map(searchQueryLiveData) { searchQuery ->
+        repository.fetchPosts(searchQuery)
+
+        // Load first form DB then try refreshing
+//        episodesResult.value?.refresh?.invoke()
+    }
 
     val episodesPagedList: LiveData<PagedList<Episode>> = Transformations.switchMap(episodesResult) { it.pagedList }
     val networkState: LiveData<NetworkState> = Transformations.switchMap(episodesResult) { it.networkState }
@@ -24,9 +29,11 @@ class EpisodesViewModel internal constructor(
     fun refresh() = episodesResult.value?.refresh?.invoke()
 
     fun upvote(episodeId: String) {
+//        repository.upvote(episodeId)
     }
 
     fun bookmark(episodeId: String) {
+//        repository.bookmark(episodeId)
     }
 
     @Deprecated("")

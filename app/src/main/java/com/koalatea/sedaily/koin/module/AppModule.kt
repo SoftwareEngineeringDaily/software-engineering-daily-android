@@ -27,7 +27,7 @@ val appModule = module {
 
     single { DownloadRepository(get<AppDatabase>().downloadDao()) }
 
-    single { EpisodesRepository(get(), get<AppDatabase>().episodeDao()) }
+    single { EpisodesRepository(get(), get()) }
 
     single { PodcastSessionStateManager(get()) }
 
