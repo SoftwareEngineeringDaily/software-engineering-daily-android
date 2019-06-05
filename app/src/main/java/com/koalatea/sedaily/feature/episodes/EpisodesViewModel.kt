@@ -37,7 +37,7 @@ class EpisodesViewModel internal constructor(
 
     fun toggleUpvote(episode: Episode) {
         if (userRepository.isLoggedIn) {
-            episodesRepository.vote(episode._id, episode.upvoted ?: false, episode.score ?: 0)
+            episodesRepository.vote(episode._id, episode.upvoted ?: false, Math.max(episode.score ?: 0, 0))
         } else {
             _navigateToLogin.value = Event(episode._id)
         }
