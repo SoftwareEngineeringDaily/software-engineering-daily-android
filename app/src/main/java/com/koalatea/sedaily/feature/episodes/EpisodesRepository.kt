@@ -31,6 +31,9 @@ class EpisodesRepository(
                 pageSize = pageSize,
                 boundaryCallback = boundaryCallback)
 
+        // FIXME :: Load first form DB then try refreshing
+//        boundaryCallback.refresh()
+
         return Result(
                 pagedList = livePagedList,
                 networkState = boundaryCallback.networkState,
@@ -40,20 +43,21 @@ class EpisodesRepository(
     }
 
     @MainThread
-    fun upvote(episodeId: String, originalState: Boolean) {
+    fun vote(episodeId: String, originalState: Boolean, originalScore: Int) {
         GlobalScope.launch(Dispatchers.IO) {
-            // Update UI right away.
-            db.episodeDao().upvote(episodeId, !originalState)
-
             val response = if (originalState) {
+                db.episodeDao().vote(episodeId, !originalState, originalScore - 1)
+
                 api.downvoteEpisodeAsync(episodeId).await()
             } else {
+                db.episodeDao().vote(episodeId, !originalState, originalScore + 1)
+
                 api.upvoteEpisodeAsync(episodeId).await()
             }
 
             // Revert UI changes back.
             if (!response.isSuccessful || response.body() == null) {
-                db.episodeDao().upvote(episodeId, originalState)
+                db.episodeDao().vote(episodeId, originalState, originalScore)
             }
         }
     }

@@ -21,9 +21,6 @@ class EpisodesViewModel internal constructor(
     private val searchQueryLiveData = MutableLiveData<SearchQuery>()
     private val episodesResult: LiveData<Result<Episode>> = Transformations.map(searchQueryLiveData) { searchQuery ->
         episodesRepository.fetchPosts(searchQuery)
-
-        // Load first form DB then try refreshing
-//        episodesResult.value?.refresh?.invoke()
     }
 
     val episodesPagedList: LiveData<PagedList<Episode>> = Transformations.switchMap(episodesResult) { it.pagedList }
@@ -40,7 +37,7 @@ class EpisodesViewModel internal constructor(
 
     fun toggleUpvote(episode: Episode) {
         if (userRepository.isLoggedIn) {
-            episodesRepository.upvote(episode._id, episode.upvoted ?: false)
+            episodesRepository.vote(episode._id, episode.upvoted ?: false, episode.score ?: 0)
         } else {
             _navigateToLogin.value = Event(episode._id)
         }
