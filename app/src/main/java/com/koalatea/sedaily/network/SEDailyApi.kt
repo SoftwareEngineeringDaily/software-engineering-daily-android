@@ -1,7 +1,9 @@
 package com.koalatea.sedaily.network
 
+import com.koalatea.sedaily.model.Comment
 import com.koalatea.sedaily.model.Episode
 import com.koalatea.sedaily.model.User
+import com.koalatea.sedaily.model.response.CommentsResponse
 import com.koalatea.sedaily.model.response.FavoriteResponse
 import com.koalatea.sedaily.model.response.VoteResponse
 import io.reactivex.Single
@@ -18,12 +20,6 @@ interface SEDailyApi {
             @Query("createdAtBefore") createdAtBefore: String? = null,
             @Query("limit") pageSize: Int): Deferred<Response<List<Episode>>>
 
-//    func getComments(rootEntityId: String, onSuccess: @escaping ([Comment]) -> Void,
-//        let urlString = self.rootURL + Endpoints.comments + "/forEntity/" + rootEntityId
-
-//    func createComment(rootEntityId: String, parentComment: Comment?, commentContent: String, onSuccess: @escaping () -> Void,
-//        let urlString = self.rootURL + Endpoints.comments + "/forEntity/" + rootEntityId
-
     @POST("posts/{episode_id}/favorite")
     fun favoriteEpisodeAsync(@Path("episode_id") episode_id: String): Deferred<Response<FavoriteResponse>>
 
@@ -35,6 +31,16 @@ interface SEDailyApi {
 
     @POST("posts/{episode_id}/downvote")
     fun downvoteEpisodeAsync(@Path("episode_id") episode_id: String): Deferred<Response<VoteResponse>>
+
+    @GET("comments/forEntity/{entity_id}")
+    fun getEpisodeCommentsAsync(@Path("entity_id") entityId: String): Deferred<Response<CommentsResponse>>
+
+//    var params = [String: String]()
+//    params[Params.commentContent] = commentContent
+//    params[Params.entityType] = "forumthread"
+
+//    @POST("comments/forEntity/{entity_id}")
+//    fun addEpisodeCommentAsync(@Path("entity_id") entityId: String, ): Deferred<Response<List<Comment>>>
 
     @FormUrlEncoded
     @POST("auth/login")

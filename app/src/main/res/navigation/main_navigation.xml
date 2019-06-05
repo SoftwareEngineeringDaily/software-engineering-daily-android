@@ -15,13 +15,15 @@
         <action
             android:id="@+id/open_episode_details_action"
             app:destination="@id/navigation_episode_details" />
+        <action
+            android:id="@+id/open_comments_action"
+            app:destination="@id/navigation_comments" />
     </fragment>
 
     <fragment
         android:id="@+id/navigation_episodes"
         android:name="com.koalatea.sedaily.feature.episodes.EpisodesFragment"
-        android:label="@string/home_title"
-        tools:layout="@layout/fragment_episodes">
+        android:label="@string/home_title">
         <action
             android:id="@+id/open_episode_details_action"
             app:destination="@id/navigation_episode_details" />
@@ -55,6 +57,15 @@
         tools:layout="@layout/fragment_episode_detail">
         <argument
             android:name="episodeId"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_comments"
+        android:name="com.koalatea.sedaily.feature.commentList.CommentsFragment"
+        android:label="@string/comments_title"
+        tools:layout="@layout/comments_fragment">
+        <argument
+            android:name="entityId"
             app:argType="string" />
     </fragment>
 

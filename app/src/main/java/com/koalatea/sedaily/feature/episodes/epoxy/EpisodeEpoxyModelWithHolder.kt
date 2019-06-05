@@ -50,7 +50,7 @@ abstract class EpisodeEpoxyModelWithHolder : EpoxyModelWithHolder<Holder>() {
     private fun renderDetails(holder: Holder) {
         val context = holder.episodeImageView.context
 
-        val imageCornerRadius = context.resources.getDimension(R.dimen.episode_image_corner_radius).toInt()
+        val imageCornerRadius = context.resources.getDimension(R.dimen.image_corner_radius).toInt()
         Glide.with(context)
                 .load(imageUrl)
                 .transform(MultiTransformation(CenterCrop(), RoundedCorners(imageCornerRadius)))

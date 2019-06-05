@@ -53,8 +53,10 @@ class EpisodesFragment : Fragment() {
                     viewModel.toggleUpvote(episode)
                 },
                 commentClickListener = { episode ->
-//                    val direction = HomeFragmentDirections.openCommentsAction(episodeId)
-//                    findNavController().navigate(direction)
+                    episode.thread?._id?.let { threadId ->
+                        val direction = HomeFragmentDirections.openCommentsAction(threadId)
+                        findNavController().navigate(direction)
+                    } // FIXME ?: showError()
                 },
                 bookmarkClickListener = { episode ->
                     viewModel.toggleBookmark(episode)
