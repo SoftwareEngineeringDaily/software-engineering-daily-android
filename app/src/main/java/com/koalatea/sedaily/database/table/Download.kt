@@ -1,4 +1,4 @@
-package com.koalatea.sedaily.model
+package com.koalatea.sedaily.database.table
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -7,5 +7,5 @@ import androidx.room.PrimaryKey
 data class Download(
         @field:PrimaryKey
         val postId: String,
-        val filename: String
+        val downloadId: Long
 )

@@ -1,4 +1,4 @@
-package com.koalatea.sedaily.model
+package com.koalatea.sedaily.database.table
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

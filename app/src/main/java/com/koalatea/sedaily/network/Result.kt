@@ -14,3 +14,9 @@ data class Result<T>(
         // refreshes the whole data and fetches it from scratch.
         val refresh: () -> Unit
 )
+
+sealed class NetworkState {
+    object Loading : NetworkState()
+    data class Loaded(val itemsCount: Int) : NetworkState()
+    data class Error(val message: String) : NetworkState()
+}

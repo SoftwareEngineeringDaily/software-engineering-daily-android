@@ -1,11 +1,10 @@
 package com.koalatea.sedaily.network
 
-import com.koalatea.sedaily.model.Comment
-import com.koalatea.sedaily.model.Episode
+import com.koalatea.sedaily.database.table.Episode
 import com.koalatea.sedaily.model.User
-import com.koalatea.sedaily.model.response.CommentsResponse
-import com.koalatea.sedaily.model.response.FavoriteResponse
-import com.koalatea.sedaily.model.response.VoteResponse
+import com.koalatea.sedaily.network.response.CommentsResponse
+import com.koalatea.sedaily.network.response.FavoriteResponse
+import com.koalatea.sedaily.network.response.VoteResponse
 import io.reactivex.Single
 import kotlinx.coroutines.Deferred
 import retrofit2.Response

@@ -10,10 +10,10 @@ import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.koalatea.sedaily.database.DownloadDao
 import com.koalatea.sedaily.feature.playbar.PodcastSessionStateManager
 import com.koalatea.sedaily.media.MusicService
 import com.koalatea.sedaily.media.library.PodcastSource
-import com.koalatea.sedaily.database.DownloadDao
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.ext.android.inject
 
@@ -68,24 +68,24 @@ open class PlaybackActivity : AppCompatActivity() {
         }
     }
 
-    // Local play
-    fun playMedia(episode: DownloadDao.DownloadEpisode) {
-        val item: MediaMetadataCompat = MediaMetadataCompat.Builder()
-                .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, episode.postId)
-                .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI, episode.filename)
-                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, episode.title)
-                .build()
-
-        val bItem = MediaBrowserCompat.MediaItem(item.description,
-                MediaBrowserCompat.MediaItem.FLAG_PLAYABLE)
-
-        PodcastSource.setItem(item)
-
-        val currentPLayingTitle = podcastSessionStateManager.currentTitle
-        val isSameMedia = currentPLayingTitle == episode.title
-
-        onMediaItemSelected(bItem, isSameMedia)
-    }
+//    // Local play
+//    fun playMedia(episode: DownloadDao.DownloadEpisode) {
+//        val item: MediaMetadataCompat = MediaMetadataCompat.Builder()
+//                .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, episode.postId)
+//                .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI, episode.filename)
+//                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, episode.title)
+//                .build()
+//
+//        val bItem = MediaBrowserCompat.MediaItem(item.description,
+//                MediaBrowserCompat.MediaItem.FLAG_PLAYABLE)
+//
+//        PodcastSource.setItem(item)
+//
+//        val currentPLayingTitle = podcastSessionStateManager.currentTitle
+//        val isSameMedia = currentPLayingTitle == episode.title
+//
+//        onMediaItemSelected(bItem, isSameMedia)
+//    }
 
     @Throws(RemoteException::class)
     private fun connectToSession(token: MediaSessionCompat.Token?) {

@@ -1,7 +1,11 @@
-package com.koalatea.sedaily.model
+package com.koalatea.sedaily.database.converter
 
 import androidx.room.TypeConverter
 import com.google.gson.GsonBuilder
+import com.koalatea.sedaily.database.table.Content
+import com.koalatea.sedaily.database.table.Excerpt
+import com.koalatea.sedaily.database.table.Thread
+import com.koalatea.sedaily.database.table.Title
 
 class EpisodeConverter {
 

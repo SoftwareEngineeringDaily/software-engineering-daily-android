@@ -7,4 +7,6 @@
 
     <color name="windowBackground">#eee</color>
 
+    <color name="destructive">#EE5F59</color>
+
 </resources>

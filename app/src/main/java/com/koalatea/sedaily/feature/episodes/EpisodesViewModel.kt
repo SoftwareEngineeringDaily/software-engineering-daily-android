@@ -5,9 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.paging.PagedList
-import com.koalatea.sedaily.database.DownloadDao
 import com.koalatea.sedaily.feature.auth.UserRepository
-import com.koalatea.sedaily.model.Episode
+import com.koalatea.sedaily.database.table.Episode
 import com.koalatea.sedaily.model.SearchQuery
 import com.koalatea.sedaily.network.NetworkState
 import com.koalatea.sedaily.network.Result
@@ -49,11 +48,6 @@ class EpisodesViewModel internal constructor(
         } else {
             _navigateToLogin.value = Event(episode._id)
         }
-    }
-
-    @Deprecated("")
-    fun play(episode: DownloadDao.DownloadEpisode) {
-//        playRequested.value = episode
     }
 
 }

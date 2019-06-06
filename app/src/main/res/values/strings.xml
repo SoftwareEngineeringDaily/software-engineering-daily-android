@@ -10,6 +10,11 @@
     <string name="post_error">An error occurred while loading the posts</string>
     <string name="search_hint">Search for a podcast</string>
 
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
+    <string name="error_generic">Something went wrong, please try again later</string>
+
     <!-- Bottom navigation -->
     <string name="bottom_navigation_latest">Latest</string>
     <string name="bottom_navigation_saved">Saved</string>
@@ -60,9 +65,16 @@
     <string name="tab_security">Security</string>
     <string name="tab_hackers">Hackers</string>
     <string name="tab_greatestHits">Greatest Hits</string>
-    <string name="download">Download</string>
     <string name="play">Play</string>
     <string name="content_description_podcast_episode_logo">Podcast episode logo</string>
+
+    <!-- Episode details -->
+    <string name="download">Download</string>
+    <string name="delete">Delete</string>
+    <string name="episode_download_succeeded">Episode downloaded successfully</string>
+    <string name="episode_download_failed">Episode downloaded failed, please try again later</string>
+    <string name="episode_delete_download_prompt">Do you really want to delete this download?</string>
+    <string name="rationale_storage_permission">Storage access is needed to download episodes</string>
 
     <!-- Comments -->
     <string name="content_description_comment_author_avatar">Author avatar</string>

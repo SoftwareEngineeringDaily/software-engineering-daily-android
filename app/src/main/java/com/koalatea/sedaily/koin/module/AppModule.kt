@@ -7,7 +7,8 @@ import com.google.gson.GsonBuilder
 import com.koalatea.sedaily.database.AppDatabase
 import com.koalatea.sedaily.feature.auth.UserRepository
 import com.koalatea.sedaily.feature.commentList.CommentsRepository
-import com.koalatea.sedaily.feature.downloader.DownloadRepository
+import com.koalatea.sedaily.feature.downloader.DownloadManager
+import com.koalatea.sedaily.feature.episodedetail.EpisodeDetailsRepository
 import com.koalatea.sedaily.feature.episodes.EpisodesRepository
 import com.koalatea.sedaily.feature.playbar.PodcastSessionStateManager
 import org.koin.android.ext.koin.androidApplication
@@ -24,9 +25,11 @@ val appModule = module {
                 .build()
     }
 
+    single { DownloadManager(androidApplication()) }
+
     single { UserRepository(get()) }
 
-    single { DownloadRepository(get<AppDatabase>().downloadDao()) }
+    single { EpisodeDetailsRepository(get(), get(), get()) }
 
     factory { EpisodesRepository(get(), get()) }
 

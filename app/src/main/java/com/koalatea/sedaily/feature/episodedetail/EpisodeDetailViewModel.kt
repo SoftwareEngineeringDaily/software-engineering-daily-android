@@ -1,146 +1,98 @@
 package com.koalatea.sedaily.feature.episodedetail
 
-import android.view.View
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.koalatea.sedaily.SingleLiveEvent
-import com.koalatea.sedaily.database.DownloadDao
-import com.koalatea.sedaily.database.EpisodeDao
-import com.koalatea.sedaily.feature.downloader.DownloadRepository
-import com.koalatea.sedaily.model.Download
-import com.koalatea.sedaily.model.Episode
-import io.reactivex.disposables.Disposable
+import androidx.lifecycle.*
+import com.koalatea.sedaily.database.table.Episode
+import com.koalatea.sedaily.feature.downloader.DownloadStatus
+import com.koalatea.sedaily.network.Resource
+import com.koalatea.sedaily.util.Event
 import kotlinx.coroutines.launch
-
+import java.util.*
 
 class EpisodeDetailViewModel internal constructor(
-        private val episodeDao: EpisodeDao,
-        private val downloadRepository: DownloadRepository
+        private val episodeDetailsRepository: EpisodeDetailsRepository
 ) : ViewModel() {
-    private val hasDownload = MutableLiveData<Int>()
-    private val canPlay = MutableLiveData<Int>()
-    private val postTitle = MutableLiveData<String>()
-    private val postId = MutableLiveData<String>()
-    private val postImage = MutableLiveData<String>()
-    private val postMp3 = MutableLiveData<String>()
-    private val postContent = MutableLiveData<String>()
-    val playRequested = SingleLiveEvent<DownloadDao.DownloadEpisode>()
-    private var episode: Episode? = null
-    private var downloadFile: String? = null
 
-    // @TODO: Replace with composite disposable
-    private var subscription: Disposable? = null
-    private lateinit var subscription2: Disposable
+    private val episodeIdLiveData = MutableLiveData<String>()
+    val episodeDetailsResource: LiveData<Resource<Episode>> = Transformations.switchMap(episodeIdLiveData) { episodeId ->
+        liveData {
+            emit(Resource.Loading)
 
-    override fun onCleared() {
-        super.onCleared()
-        subscription?.dispose()
+            emit(episodeDetailsRepository.fetchEpisodeDetails(episodeId))
+        }
     }
 
-    fun loadEpisode(episodeId: String) {
+    private val _downloadProgressLiveData = MutableLiveData<Float>()
+    val downloadProgressLiveData: LiveData<Float>
+        get() = _downloadProgressLiveData
+
+    private val _downloadDoneLiveData = MutableLiveData<Event<Unit>>()
+    val downloadDoneLiveData: LiveData<Event<Unit>>
+        get() = _downloadDoneLiveData
+
+    private val _downloadErrorLiveData = MutableLiveData<Event<String?>>()
+    val downloadErrorLiveData: LiveData<Event<String?>>
+        get() = _downloadErrorLiveData
+
+    private val _deleteDownloadDoneLiveData = MutableLiveData<Event<Unit>>()
+    val deleteDownloadDoneLiveData: LiveData<Event<Unit>>
+        get() = _deleteDownloadDoneLiveData
+
+    fun fetchEpisodeDetails(episodeId: String) = episodeIdLiveData.postValue(episodeId)
+
+    fun download() {
         viewModelScope.launch {
-            val result = episodeDao.findById(episodeId)
+            _downloadProgressLiveData.postValue(0f)
 
-            onRetrievePostListSuccess(result)
-        }
+            when (val resource = episodeDetailsResource.value) {
+                is Resource.Success<Episode> -> {
+                    val episode = resource.data
+                    val downloadId = episodeDetailsRepository.downloadEpisode(episode)
+                    downloadId?.let {
+                        episodeDetailsRepository.addDownload(episode._id, downloadId)
 
-//        subscription = Observable.fromCallable { episodeDao.findById(episodeId) }
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-////            .doOnSubscribe { onRetrivePostListStart() }
-////            .doOnTerminate { onRetrievePostListFinish() }
-//                .subscribe(
-//                        { result -> onRetrievePostListSuccess(result) },
-//                        {
-//                            Log.v("keithtest", it.localizedMessage)
-////                        onRetrievePostListError()
-//                        }
-//                )
-    }
-
-    fun checkForDownload(episodeId: String) = viewModelScope.launch {
-        val download = downloadRepository.getDownloadForId(episodeId)
-
-        download?.let {
-            onRetrieveDownloadSuccess(download)
-        } ?: run {
-            // ignore, download state unknown.
+                        monitorDownload(downloadId)
+                    } ?: _downloadErrorLiveData.postValue(Event(null))
+                }
+                else -> _downloadErrorLiveData.postValue(Event(null))
+            }
         }
     }
 
-    fun getPostTitle(): MutableLiveData<String> {
-        return postTitle
-    }
-
-    fun getPostImage(): MutableLiveData<String> {
-        return postImage
-    }
-
-    fun getPostContent(): MutableLiveData<String> {
-        return postContent
-    }
-
-    fun getHasDownload(): MutableLiveData<Int> {
-        return hasDownload
-    }
-
-    fun getCanPlay(): MutableLiveData<Int> {
-        return canPlay
-    }
-
-    private fun onRetrievePostListSuccess(episode: Episode) {
-        this.episode = episode
-
-        postTitle.value = episode.title?.rendered
-        postImage.value = episode.featuredImage
-        postContent.value = episode.content?.rendered ?: ""
-        hasDownload.value = View.GONE
-        postMp3.value = episode.mp3
-        postId.value = episode._id
-
-        if (postMp3.value == null) {
-            canPlay.value = View.GONE
-        } else {
-            canPlay.value = View.VISIBLE
-        }
-
-        checkForDownload(episode._id)
-    }
-
-    private fun onRetrieveDownloadSuccess(download: Download) {
-        hasDownload.value = View.VISIBLE
-        downloadFile = download.filename
-    }
-
-    fun removeDownloadForId(episodeId: String) {
+    fun delete() {
         viewModelScope.launch {
-            hasDownload.value = View.GONE
+            when (val resource = episodeDetailsResource.value) {
+                is Resource.Success<Episode> -> {
+                    val episode = resource.data
 
-            downloadRepository.removeDownloadForId(episodeId)
+                    episodeDetailsRepository.deleteDownload(episode)
+
+                    _deleteDownloadDoneLiveData.value = Event(Unit)
+                }
+            }
         }
     }
 
-    fun playRequest() {
-        if (postMp3.value == null) return
-
-        // @TODO: Create download Episode
-        val downloadEpisode: DownloadDao.DownloadEpisode
-        if (downloadFile != null) {
-            downloadEpisode = DownloadDao.DownloadEpisode(
-                    postId.value!!,
-                    downloadFile!!,
-                    postTitle.value!!,
-                    postImage.value
-            )
-        } else {
-            downloadEpisode = DownloadDao.DownloadEpisode(
-                    postId.value!!,
-                    postMp3.value!!,
-                    postTitle.value!!,
-                    postImage.value
-            )
-        }
-        playRequested.value = downloadEpisode
+    private fun monitorDownload(downloadId: Long) {
+        val timer = Timer()
+        timer.scheduleAtFixedRate(
+                object : TimerTask() {
+                    override fun run() {
+                        when (val downloadStatus = episodeDetailsRepository.getDownloadStatus(downloadId)) {
+                            is DownloadStatus.Downloading -> _downloadProgressLiveData.postValue(downloadStatus.progress)
+                            is DownloadStatus.Downloaded -> {
+                                _downloadDoneLiveData.postValue(Event(Unit))
+                                timer.cancel()
+                            }
+                            is DownloadStatus.Error -> {
+                                _downloadErrorLiveData.postValue(Event(downloadStatus.reason))
+                                timer.cancel()
+                            }
+                            else -> timer.cancel()
+                        }
+                    }
+                },
+                500L,
+                500L)
     }
+
 }

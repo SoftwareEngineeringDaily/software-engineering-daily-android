@@ -88,6 +88,9 @@ dependencies {
     implementation 'com.airbnb.android:epoxy-paging:2.18.0'
     implementation "androidx.paging:paging-runtime-ktx:$pagingKtxVersion"
 
+    // Manage permissions
+    implementation 'com.nabinbhandari.android:permissions:3.8'
+
     // Media
     implementation 'androidx.media2:media2:1.0.0-alpha04'
 

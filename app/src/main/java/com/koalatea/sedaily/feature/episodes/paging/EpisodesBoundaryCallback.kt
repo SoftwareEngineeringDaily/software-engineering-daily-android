@@ -19,7 +19,7 @@ package com.koalatea.sedaily.feature.episodes.paging
 import androidx.annotation.MainThread
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PagedList
-import com.koalatea.sedaily.model.Episode
+import com.koalatea.sedaily.database.table.Episode
 import com.koalatea.sedaily.model.SearchQuery
 import com.koalatea.sedaily.network.NetworkState
 import com.koalatea.sedaily.network.SEDailyApi

@@ -1,7 +1,7 @@
 package com.koalatea.sedaily.feature.commentList.epoxy
 
 import com.airbnb.epoxy.TypedEpoxyController
-import com.koalatea.sedaily.model.Comment
+import com.koalatea.sedaily.database.table.Comment
 
 class CommentsEpoxyController : TypedEpoxyController<List<Comment>>() {
 

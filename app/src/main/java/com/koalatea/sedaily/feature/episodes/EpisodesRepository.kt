@@ -4,7 +4,7 @@ import androidx.annotation.MainThread
 import androidx.paging.toLiveData
 import com.koalatea.sedaily.database.AppDatabase
 import com.koalatea.sedaily.feature.episodes.paging.EpisodesBoundaryCallback
-import com.koalatea.sedaily.model.Episode
+import com.koalatea.sedaily.database.table.Episode
 import com.koalatea.sedaily.model.SearchQuery
 import com.koalatea.sedaily.network.Result
 import com.koalatea.sedaily.network.SEDailyApi

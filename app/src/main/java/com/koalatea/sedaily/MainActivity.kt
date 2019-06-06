@@ -25,7 +25,7 @@ class MainActivity : PlaybackActivity() {
 
     private val userRepository: UserRepository by inject()
 
-    private val SEDAILY_EXTERNAL_PERMISSION_REQUEST = 987
+//    private val SEDAILY_EXTERNAL_PERMISSION_REQUEST = 987
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +42,7 @@ class MainActivity : PlaybackActivity() {
 
         // Set up media
         this.setUp()
-        checkForPermissions()
+//        checkForPermissions()
         handleIntent(intent)
     }
 
@@ -92,42 +92,42 @@ class MainActivity : PlaybackActivity() {
 
     }
 
-    private fun checkForPermissions() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-//            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-//                            Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-//            } else {
-            ActivityCompat.requestPermissions(this,
-                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                    SEDAILY_EXTERNAL_PERMISSION_REQUEST)
-
+//    private fun checkForPermissions() {
+//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+//                != PackageManager.PERMISSION_GRANTED) {
+////            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+////                            Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+////            } else {
+//            ActivityCompat.requestPermissions(this,
+//                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+//                    SEDAILY_EXTERNAL_PERMISSION_REQUEST)
+//
+////            }
+//        }
+//    }
+//
+//    override fun onRequestPermissionsResult(requestCode: Int,
+//                                            permissions: Array<String>, grantResults: IntArray) {
+//        when (requestCode) {
+//            SEDAILY_EXTERNAL_PERMISSION_REQUEST -> {
+//                // If request is cancelled, the result arrays are empty.
+//                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+//                    // permission was granted, yay! Do the
+//                    // contacts-related task you need to do.
+//                } else {
+//                    // permission denied, boo! Disable the
+//                    // functionality that depends on this permission.
+//                }
+//                return
 //            }
-        }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int,
-                                            permissions: Array<String>, grantResults: IntArray) {
-        when (requestCode) {
-            SEDAILY_EXTERNAL_PERMISSION_REQUEST -> {
-                // If request is cancelled, the result arrays are empty.
-                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-                } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                return
-            }
-
-            // Add other 'when' lines to check for other
-            // permissions this app might request.
-            else -> {
-                // Ignore all other requests.
-            }
-        }
-    }
+//
+//            // Add other 'when' lines to check for other
+//            // permissions this app might request.
+//            else -> {
+//                // Ignore all other requests.
+//            }
+//        }
+//    }
 
     override fun onSupportNavigateUp(): Boolean {
         return mainNavHostFragment.findNavController().navigateUp()

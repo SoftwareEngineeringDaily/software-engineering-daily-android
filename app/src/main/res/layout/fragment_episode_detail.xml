@@ -1,124 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/containerConstraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <data>
-
-        <variable
-            name="viewModel"
-            type="com.koalatea.sedaily.feature.episodedetail.EpisodeDetailViewModel" />
-
-        <variable
-            name="removeDownload"
-            type="android.view.View.OnClickListener" />
-    </data>
-
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <androidx.cardview.widget.CardView
+        android:id="@+id/headerCardView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:cardBackgroundColor="@android:color/white"
+        app:cardCornerRadius="0dp"
+        app:contentPadding="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#fff">
+            android:layout_height="wrap_content">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/header"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/episodeTitleTextView"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:paddingTop="16dp"
-                android:paddingBottom="16dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-black"
+                android:maxLines="2"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Bonjour from Paris" />
 
-                <ImageView
-                    android:id="@+id/detail_image"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:contentDescription="main image"
-                    android:scaleType="centerCrop"
-                    app:imageFromUrl="@{viewModel.getPostImage()}"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+            <ImageView
+                android:id="@+id/episodeImageView"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintStart_toStartOf="@+id/episodeTitleTextView"
+                app:layout_constraintTop_toBottomOf="@+id/episodeTitleTextView"
+                tools:src="@drawable/vd_image" />
 
-                <TextView
-                    android:id="@+id/activity_detail_title"
-                    android:layout_width="wrap_content"
-                    android:maxWidth="250dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:textColor="@color/colorPrimary"
-                    android:fontFamily="sans-serif-black"
-                    android:text="@{viewModel.getPostTitle()}"
-                    android:textSize="24sp"
-                    app:layout_constraintStart_toEndOf="@+id/detail_image"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="Bonjour from Paris" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.core.widget.NestedScrollView
-                android:id="@+id/plant_detail_scrollview"
-                android:layout_width="match_parent"
+            <Button
+                android:id="@+id/downloadButton"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:padding="8dp"
-                android:background="#fff"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/header"
-                app:layout_constraintVertical_bias="0.0">
+                android:layout_marginStart="8dp"
+                android:text="@string/download"
+                app:icon="@drawable/vd_file_download"
+                app:layout_constraintEnd_toEndOf="@+id/episodeTitleTextView"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/episodeImageView"
+                app:layout_constraintTop_toBottomOf="@+id/episodeTitleTextView" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/content"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+            <ProgressBar
+                android:id="@+id/downloadProgressBar"
+                style="@android:style/Widget.Material.Light.ProgressBar.Horizontal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/downloadButton"
+                app:layout_constraintEnd_toEndOf="@+id/downloadButton"
+                app:layout_constraintStart_toStartOf="@+id/downloadButton"
+                tools:progress="60"
+                tools:visibility="visible" />
 
-                    <RelativeLayout
-                        android:id="@+id/actionItems"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintBottom_toTopOf="@id/plantDetail">
-
-                        <!--<Button-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_marginStart="8dp"-->
-                        <!--android:layout_marginTop="4dp"-->
-                        <!--android:onClick="@{removeDownload}"-->
-                        <!--android:text="@string/remove_download"-->
-                        <!--app:mutableVisibility="@{viewModel.getHasDownload()}" />-->
-                    </RelativeLayout>
-
-                    <WebView
-                        android:id="@+id/plantDetail"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/margin_small"
-                        android:layout_marginTop="@dimen/margin_small"
-                        android:layout_marginEnd="@dimen/margin_small"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.core.widget.NestedScrollView>
+            <Button
+                android:id="@+id/deleteButton"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:text="@string/delete"
+                android:textColor="@color/destructive"
+                android:visibility="gone"
+                app:drawableTint="@color/destructive"
+                app:icon="@drawable/vd_delete"
+                app:layout_constraintBottom_toBottomOf="@+id/downloadButton"
+                app:layout_constraintEnd_toEndOf="@+id/downloadButton"
+                app:layout_constraintStart_toStartOf="@+id/downloadButton"
+                app:layout_constraintTop_toTopOf="@+id/downloadButton"
+                tools:visibility="visible" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 
-        <!--<com.google.android.material.floatingactionbutton.FloatingActionButton-->
-        <!--android:id="@+id/fab"-->
-        <!--style="@style/Widget.MaterialComponents.FloatingActionButton"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:layout_margin="@dimen/fab_margin"-->
-        <!--android:onClick="@{() -> viewModel.playRequest()}"-->
-        <!--app:mutableVisibility="@{viewModel.getCanPlay()}"-->
-        <!--android:tint="@android:color/white"-->
-        <!--app:layout_anchor="@id/actionItems"-->
-        <!--app:layout_anchorGravity="center|end"-->
-        <!--app:srcCompat="@drawable/exo_controls_play" />-->
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
-</layout>
+    <androidx.cardview.widget.CardView
+        android:id="@+id/detailsCardView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
+        app:cardBackgroundColor="@android:color/white"
+        app:cardCornerRadius="0dp"
+        app:contentPadding="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/headerCardView"
+        tools:visibility="visible">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <WebView
+                android:id="@+id/plantDetail"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -18,6 +18,7 @@ import com.koalatea.sedaily.feature.episodes.epoxy.EpisodesEpoxyController
 import com.koalatea.sedaily.feature.home.HomeFragmentDirections
 import com.koalatea.sedaily.model.SearchQuery
 import com.koalatea.sedaily.network.NetworkState
+import com.koalatea.sedaily.util.supportActionBar
 import kotlinx.android.synthetic.main.fragment_episodes.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -44,6 +45,8 @@ class EpisodesFragment : Fragment() {
 
         val safeArgs: EpisodesFragmentArgs by navArgs()
         val categoryId = safeArgs.categoryId
+
+        supportActionBar?.elevation = 0f
 
         epoxyRecyclerView.layoutManager = LinearLayoutManager(this.activity, RecyclerView.VERTICAL, false)
         epoxyRecyclerView.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
