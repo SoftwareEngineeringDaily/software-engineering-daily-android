@@ -31,8 +31,8 @@ class EpisodesRepository(
                 pageSize = pageSize,
                 boundaryCallback = boundaryCallback)
 
-        // FIXME :: Load first form DB then try refreshing
-//        boundaryCallback.refresh()
+        // Load first form DB then try refreshing
+        boundaryCallback.refresh()
 
         return Result(
                 pagedList = livePagedList,
