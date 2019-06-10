@@ -1,11 +1,14 @@
 package com.koalatea.sedaily.feature.episodedetail
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -76,7 +79,6 @@ class EpisodeDetailFragment : Fragment() {
                 is DownloadStatus.Error -> showDownloadViews()
             }
 
-            // FIXME :: Do not show unless triggered by user
             it.getContentIfNotHandled()?.let {
                 when(downloadStatus) {
                     is DownloadStatus.Initial -> showDownloadViews()
@@ -102,6 +104,7 @@ class EpisodeDetailFragment : Fragment() {
         progressBar.visibility = View.VISIBLE
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     private fun renderEpisode(episode: Episode) {
         supportActionBar?.title = episode.titleString
 
@@ -118,35 +121,27 @@ class EpisodeDetailFragment : Fragment() {
 
         dateTextView.text = DateFormat.getDateFormat(context).format(episode.utcDate)
 
-        var html = episode.content?.rendered!!
-        html = removePowerPressPlayerTags(html)
-        html = addStyling(html)
-        html = addScaleMeta(html)
-        contentWebView.loadData(html,  "text/html", null)
+        episode.content?.rendered?.let { html ->
+            contentWebView.settings.javaScriptEnabled = true
+            contentWebView.webViewClient = object : WebViewClient() {
+                override fun onPageFinished(view: WebView, url: String) {
+                    view.loadUrl("javascript:(function() { " +
+                            "var head = document.getElementsByClassName('powerpress_player')[0].style.display='none'; " +
+                            "var head = document.getElementsByClassName('powerpress_links')[0].style.display='none'; " +
+                            "var head = document.getElementsByClassName('wp-image-2475')[0].style.display='none'; " +
+                            "})()")
+                }
+            }
+
+            contentWebView.settings.defaultTextEncodingName = "utf-8"
+            contentWebView.loadDataWithBaseURL(null, html, "text/html", "utf-8", null)
+        }
 
         // Hide loading view and show content.
         progressBar.visibility = View.GONE
         headerCardView.visibility = View.VISIBLE
         detailsCardView.visibility = View.VISIBLE
     }
-
-    private fun removePowerPressPlayerTags(html: String): String {
-        var modifiedHtml = html
-
-        modifiedHtml = modifiedHtml.replaceFirst("<!--powerpress_player-->", "")
-
-        /////////////////////////
-        modifiedHtml = modifiedHtml.replaceFirst( "<div class=\"powerpress_player\".*</div>", "")
-
-        /////////////////////////
-        modifiedHtml = modifiedHtml.replaceFirst( "<p class=\"powerpress_links powerpress_links_mp3\">.*</p>", "")
-
-        return modifiedHtml
-    }
-
-    private fun addStyling(html: String) = "<style type=\"text/css\">body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; } </style>$html"
-
-    private fun addScaleMeta(html: String) = "<meta name=\"viewport\" content=\"initial-scale=1.0\" />$html"
 
     private fun showDownloadViews() {
         deleteButton.visibility = View.GONE
