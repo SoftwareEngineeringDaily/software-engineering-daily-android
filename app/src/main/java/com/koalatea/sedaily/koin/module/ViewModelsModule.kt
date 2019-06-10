@@ -13,7 +13,7 @@ val viewModelsModule = module {
 
     viewModel { CommentsViewModel(get()) }
 
-    viewModel { EpisodeDetailViewModel(get()) }
+    viewModel { EpisodeDetailViewModel(get(), get(), get()) }
 
     viewModel { AuthViewModel(get(), get()) }
 

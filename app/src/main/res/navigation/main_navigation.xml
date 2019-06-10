@@ -58,6 +58,9 @@
         <argument
             android:name="episodeId"
             app:argType="string" />
+        <action
+            android:id="@+id/open_comments_action"
+            app:destination="@id/navigation_comments" />
     </fragment>
     <fragment
         android:id="@+id/navigation_comments"

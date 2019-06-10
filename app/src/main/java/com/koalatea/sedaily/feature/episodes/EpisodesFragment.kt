@@ -19,6 +19,7 @@ import com.koalatea.sedaily.feature.home.HomeFragmentDirections
 import com.koalatea.sedaily.model.SearchQuery
 import com.koalatea.sedaily.network.NetworkState
 import com.koalatea.sedaily.util.supportActionBar
+import kotlinx.android.synthetic.main.fragment_episode_detail.*
 import kotlinx.android.synthetic.main.fragment_episodes.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -59,7 +60,7 @@ class EpisodesFragment : Fragment() {
                     episode.thread?._id?.let { threadId ->
                         val direction = HomeFragmentDirections.openCommentsAction(threadId)
                         findNavController().navigate(direction)
-                    } // FIXME ?: showError()
+                    } ?: acknowledgeGenericError()
                 },
                 bookmarkClickListener = { episode ->
                     viewModel.toggleBookmark(episode)
@@ -83,7 +84,7 @@ class EpisodesFragment : Fragment() {
 
         viewModel.networkState.observe(this, Observer {
             when (it) {
-                is NetworkState.Error -> { showError(it.message) }
+                is NetworkState.Error -> { acknowledgeError(it.message) }
                 else -> { }// Ignore
             }
         })
@@ -112,10 +113,6 @@ class EpisodesFragment : Fragment() {
         viewModel.fetchPosts(SearchQuery(categoryId = categoryId))
     }
 
-    private fun showError(errorMessage: String) {
-        view?.let {
-            Snackbar.make(it, errorMessage, Snackbar.LENGTH_SHORT).show()
-        }
-    }
-
+    private fun acknowledgeGenericError() = Snackbar.make(swipeRefreshLayout, R.string.error_generic, Snackbar.LENGTH_SHORT).show()
+    private fun acknowledgeError(message: String) = Snackbar.make(swipeRefreshLayout, message, Snackbar.LENGTH_SHORT).show()
 }

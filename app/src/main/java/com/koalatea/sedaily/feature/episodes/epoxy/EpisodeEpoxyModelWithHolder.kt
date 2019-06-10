@@ -72,20 +72,12 @@ abstract class EpisodeEpoxyModelWithHolder : EpoxyModelWithHolder<Holder>() {
     private fun renderActions(holder: Holder) {
         holder.likesButton.setIconResource(if (upvoted == true) R.drawable.vd_favorite else R.drawable.vd_favorite_border)
         holder.likesButton.text = score?.let {
-            if (it > 0) {
-                it.toString()
-            } else {
-                ""
-            }
+            if (it > 0) { it.toString() } else { "" }
         }
         holder.likesButton.setOnClickListener { upvoteClickListener() }
 
         holder.commentsButton.text = commentsCount?.let {
-            if (it > 0) {
-                it.toString()
-            } else {
-                ""
-            }
+            if (it > 0) { it.toString() } else { "" }
         }
         holder.commentsButton.setOnClickListener { commentClickListener() }
 

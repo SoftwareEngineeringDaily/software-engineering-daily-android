@@ -9,9 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.MultiTransformation
@@ -90,6 +92,14 @@ class EpisodeDetailFragment : Fragment() {
             }
         })
 
+        viewModel.navigateToLogin.observe(this, Observer {
+            it.getContentIfNotHandled()?.let { // Only proceed if the event has never been handled
+//                val direction = HomeFragmentDirections.openCommentsAction(episodeId)
+//                findNavController().navigate(direction)
+                Toast.makeText(context, "Debug :: Login first", Toast.LENGTH_SHORT).show()
+            }
+        })
+
         viewModel.fetchEpisodeDetails(episodeId)
     }
 
@@ -104,7 +114,6 @@ class EpisodeDetailFragment : Fragment() {
         progressBar.visibility = View.VISIBLE
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
     private fun renderEpisode(episode: Episode) {
         supportActionBar?.title = episode.titleString
 
@@ -121,6 +130,18 @@ class EpisodeDetailFragment : Fragment() {
 
         dateTextView.text = DateFormat.getDateFormat(context).format(episode.utcDate)
 
+        renderContent(episode)
+
+        renderActions(episode)
+
+        // Hide loading view and show content.
+        progressBar.visibility = View.GONE
+        headerCardView.visibility = View.VISIBLE
+        detailsCardView.visibility = View.VISIBLE
+    }
+
+    @SuppressLint("SetJavaScriptEnabled")
+    private fun renderContent(episode: Episode) {
         episode.content?.rendered?.let { html ->
             contentWebView.settings.javaScriptEnabled = true
             contentWebView.webViewClient = object : WebViewClient() {
@@ -136,11 +157,27 @@ class EpisodeDetailFragment : Fragment() {
             contentWebView.settings.defaultTextEncodingName = "utf-8"
             contentWebView.loadDataWithBaseURL(null, html, "text/html", "utf-8", null)
         }
+    }
 
-        // Hide loading view and show content.
-        progressBar.visibility = View.GONE
-        headerCardView.visibility = View.VISIBLE
-        detailsCardView.visibility = View.VISIBLE
+    private fun renderActions(episode: Episode) {
+        likesButton.setIconResource(if (episode.upvoted == true) R.drawable.vd_favorite else R.drawable.vd_favorite_border)
+        likesButton.text = episode.score?.let {
+            if (it > 0) { it.toString() } else { "" }
+        }
+        likesButton.setOnClickListener { viewModel.toggleUpvote(episode) }
+
+        commentsButton.text = episode.thread?.commentsCount?.let {
+            if (it > 0) { it.toString() } else { "" }
+        }
+        commentsButton.setOnClickListener {
+            episode.thread?._id?.let { threadId ->
+                val direction = EpisodeDetailFragmentDirections.openCommentsAction(threadId)
+                findNavController().navigate(direction)
+            } ?: acknowledgeGenericError()
+        }
+
+        bookmarkButton.setIconResource(if (episode.bookmarked == true) R.drawable.vd_bookmark else R.drawable.vd_bookmark_border)
+        bookmarkButton.setOnClickListener { viewModel.toggleBookmark(episode) }
     }
 
     private fun showDownloadViews() {

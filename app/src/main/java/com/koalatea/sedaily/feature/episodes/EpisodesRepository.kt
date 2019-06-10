@@ -3,21 +3,22 @@ package com.koalatea.sedaily.feature.episodes
 import androidx.annotation.MainThread
 import androidx.paging.toLiveData
 import com.koalatea.sedaily.database.AppDatabase
-import com.koalatea.sedaily.feature.episodes.paging.EpisodesBoundaryCallback
 import com.koalatea.sedaily.database.table.Episode
+import com.koalatea.sedaily.feature.episodes.paging.EpisodesBoundaryCallback
 import com.koalatea.sedaily.model.SearchQuery
 import com.koalatea.sedaily.network.Result
 import com.koalatea.sedaily.network.SEDailyApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class EpisodesRepository(
         private val api: SEDailyApi,
         private val db: AppDatabase) {
 
     @MainThread
-    fun fetchPosts(searchQuery: SearchQuery, pageSize: Int = 20): Result<Episode> {
+    fun fetchEpisodes(searchQuery: SearchQuery, pageSize: Int = 20): Result<Episode> {
         val networkPageSize = pageSize * 2
 
         val boundaryCallback = EpisodesBoundaryCallback(
@@ -42,9 +43,8 @@ class EpisodesRepository(
         )
     }
 
-    @MainThread
-    fun vote(episodeId: String, originalState: Boolean, originalScore: Int) {
-        GlobalScope.launch(Dispatchers.IO) {
+    suspend fun vote(episodeId: String, originalState: Boolean, originalScore: Int) {
+        withContext(Dispatchers.IO) {
             val response = if (originalState) {
                 db.episodeDao().vote(episodeId, !originalState, originalScore - 1)
 
@@ -62,9 +62,8 @@ class EpisodesRepository(
         }
     }
 
-    @MainThread
-    fun bookmark(episodeId: String, originalState: Boolean) {
-        GlobalScope.launch(Dispatchers.IO) {
+    suspend fun bookmark(episodeId: String, originalState: Boolean) {
+        withContext(Dispatchers.IO) {
             // Update UI right away.
             db.episodeDao().bookmark(episodeId, !originalState)
 

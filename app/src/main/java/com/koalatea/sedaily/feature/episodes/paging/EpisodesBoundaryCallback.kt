@@ -60,7 +60,6 @@ class EpisodesBoundaryCallback(
         load(callback = handleSuccessfulRefresh)
     }
 
-    // FIXME :: Mark it as suspend
     @MainThread
     private fun load(createdAtBefore: String? = null, callback: (SearchQuery, List<Episode>?) -> Unit) {
         if (isRequestInProgress) return
@@ -92,6 +91,5 @@ class EpisodesBoundaryCallback(
             isRequestInProgress  = false
         }
     }
-
 
 }
