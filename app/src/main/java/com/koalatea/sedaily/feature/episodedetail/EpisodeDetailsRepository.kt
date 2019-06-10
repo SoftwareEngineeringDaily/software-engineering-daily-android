@@ -1,5 +1,6 @@
 package com.koalatea.sedaily.feature.episodedetail
 
+import androidx.annotation.MainThread
 import com.koalatea.sedaily.database.AppDatabase
 import com.koalatea.sedaily.database.table.Download
 import com.koalatea.sedaily.database.table.Episode
@@ -16,10 +17,8 @@ class EpisodeDetailsRepository constructor(
 ) {
 
     suspend fun fetchEpisodeDetails(episodeId: String) = withContext(Dispatchers.IO) {
-        val episode = db.episodeDao().findById(episodeId)
-        val download = db.downloadDao().findById(episodeId)
-        download?.let {
-            episode.isDownloaded = downloadManager.isDownloaded(download.downloadId)
+        val episode = db.episodeDao().findById(episodeId).apply {
+            downloadedId = db.downloadDao().findById(episodeId)?.downloadId
         }
 
         Resource.Success(episode)
@@ -45,10 +44,12 @@ class EpisodeDetailsRepository constructor(
         }
     }
 
+    @MainThread
     fun downloadEpisode(episode: Episode) = episode.mp3?.let { url ->
         downloadManager.downloadEpisode(episode._id, url, episode.titleString ?: episode._id)
     }
 
+    @MainThread
     fun getDownloadStatus(downloadId: Long) = downloadManager.getDownloadStatus(downloadId)
 
 }

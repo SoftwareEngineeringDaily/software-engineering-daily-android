@@ -15,7 +15,7 @@
         android:background="?selectableItemBackground">
 
         <ImageView
-            android:id="@+id/episodeImageView"
+            android:id="@+id/guestImageView"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_marginTop="@dimen/first_keyline"
@@ -36,7 +36,7 @@
             android:ellipsize="end"
             android:maxLines="2"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-            app:layout_constraintEnd_toStartOf="@+id/episodeImageView"
+            app:layout_constraintEnd_toStartOf="@+id/guestImageView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Long Episdoe Title " />
@@ -48,7 +48,7 @@
             android:layout_marginStart="@dimen/first_keyline"
             android:layout_marginTop="4dp"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-            app:layout_constraintBottom_toBottomOf="@+id/episodeImageView"
+            app:layout_constraintBottom_toBottomOf="@+id/guestImageView"
             app:layout_constraintEnd_toEndOf="@+id/titleTextView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/titleTextView"
@@ -63,7 +63,7 @@
             android:ellipsize="end"
             android:maxLines="3"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-            app:layout_constraintEnd_toEndOf="@+id/episodeImageView"
+            app:layout_constraintEnd_toEndOf="@+id/guestImageView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/dateTextView"
             tools:text="A Description of stuff. And more stuff. And more stuff." />

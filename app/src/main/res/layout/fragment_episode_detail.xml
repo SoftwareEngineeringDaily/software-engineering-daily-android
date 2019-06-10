@@ -27,66 +27,133 @@
                 android:id="@+id/episodeTitleTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginStart="@dimen/first_keyline"
+                android:layout_marginTop="@dimen/first_keyline"
+                android:layout_marginEnd="@dimen/first_keyline"
                 android:ellipsize="end"
-                android:fontFamily="sans-serif-black"
                 android:maxLines="2"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Bonjour from Paris" />
 
             <ImageView
-                android:id="@+id/episodeImageView"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:id="@+id/guestImageView"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="16dp"
                 android:scaleType="centerCrop"
                 app:layout_constraintStart_toStartOf="@+id/episodeTitleTextView"
                 app:layout_constraintTop_toBottomOf="@+id/episodeTitleTextView"
                 tools:src="@drawable/vd_image" />
 
-            <Button
-                android:id="@+id/downloadButton"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/playButton"
+                style="@style/Widget.MaterialComponents.Button.Icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="@string/download"
+                android:layout_marginEnd="16dp"
+                android:text="@string/play"
+                app:cornerRadius="48dp"
+                app:icon="@drawable/vd_play_arrow"
+                app:layout_constraintEnd_toStartOf="@+id/downloadButton"
+                app:layout_constraintTop_toTopOf="@+id/guestImageView" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/downloadButton"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                android:layout_width="48dp"
+                android:layout_height="wrap_content"
+                app:cornerRadius="48dp"
                 app:icon="@drawable/vd_file_download"
                 app:layout_constraintEnd_toEndOf="@+id/episodeTitleTextView"
                 app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toEndOf="@+id/episodeImageView"
-                app:layout_constraintTop_toBottomOf="@+id/episodeTitleTextView" />
-
-            <ProgressBar
-                android:id="@+id/downloadProgressBar"
-                style="@android:style/Widget.Material.Light.ProgressBar.Horizontal"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@+id/downloadButton"
-                app:layout_constraintEnd_toEndOf="@+id/downloadButton"
-                app:layout_constraintStart_toStartOf="@+id/downloadButton"
-                tools:progress="60"
-                tools:visibility="visible" />
+                app:layout_constraintStart_toEndOf="@+id/guestImageView"
+                app:layout_constraintTop_toTopOf="@+id/guestImageView" />
 
             <Button
                 android:id="@+id/deleteButton"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:text="@string/delete"
-                android:textColor="@color/destructive"
                 android:visibility="gone"
+                app:cornerRadius="48dp"
                 app:drawableTint="@color/destructive"
                 app:icon="@drawable/vd_delete"
                 app:layout_constraintBottom_toBottomOf="@+id/downloadButton"
                 app:layout_constraintEnd_toEndOf="@+id/downloadButton"
                 app:layout_constraintStart_toStartOf="@+id/downloadButton"
                 app:layout_constraintTop_toTopOf="@+id/downloadButton"
+                tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/dateTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/guestImageView"
+                app:layout_constraintEnd_toStartOf="@+id/playButton"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/guestImageView"
+                app:layout_constraintTop_toTopOf="@+id/guestImageView"
+                tools:text="2 days" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/likesButton"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/first_keyline"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="@dimen/first_keyline"
+                android:ellipsize="end"
+                android:maxWidth="64dp"
+                android:maxLines="1"
+                app:icon="@drawable/vd_favorite_border"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/guestImageView"
+                tools:text="1" />
+
+            <Button
+                android:id="@+id/commentsButton"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:ellipsize="end"
+                android:maxWidth="64dp"
+                android:maxLines="1"
+                app:icon="@drawable/vd_chat_bubble_outline"
+                app:layout_constraintStart_toEndOf="@+id/likesButton"
+                app:layout_constraintTop_toTopOf="@+id/likesButton"
+                tools:text="6" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/bookmarkButton"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="@dimen/first_keyline"
+                app:icon="@drawable/vd_bookmark_border"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/commentsButton"
+                app:layout_constraintTop_toTopOf="@+id/likesButton" />
+
+            <ProgressBar
+                android:id="@+id/downloadProgressBar"
+                style="@android:style/Widget.Material.Light.ProgressBar.Horizontal"
+                android:layout_width="0dp"
+                android:layout_height="4dp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:progress="60"
                 tools:visibility="visible" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
@@ -112,7 +179,7 @@
             android:layout_height="match_parent">
 
             <WebView
-                android:id="@+id/plantDetail"
+                android:id="@+id/contentWebView"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"

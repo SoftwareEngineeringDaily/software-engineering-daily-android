@@ -6,7 +6,7 @@
     <string name="auth_title">Authentication</string>
     <string name="home_title">Software Engineering Daily</string>
     <string name="comments_title">Comments</string>
-    <string name="episode_details_title">Episode</string>
+    <string name="episode_details_title"/>
     <string name="post_error">An error occurred while loading the posts</string>
     <string name="search_hint">Search for a podcast</string>
 
@@ -65,7 +65,6 @@
     <string name="tab_security">Security</string>
     <string name="tab_hackers">Hackers</string>
     <string name="tab_greatestHits">Greatest Hits</string>
-    <string name="play">Play</string>
     <string name="content_description_podcast_episode_logo">Podcast episode logo</string>
 
     <!-- Episode details -->
@@ -75,6 +74,8 @@
     <string name="episode_download_failed">Episode downloaded failed, please try again later</string>
     <string name="episode_delete_download_prompt">Do you really want to delete this download?</string>
     <string name="rationale_storage_permission">Storage access is needed to download episodes</string>
+    <string name="play">Play</string>
+    <string name="pause">Pause</string>
 
     <!-- Comments -->
     <string name="content_description_comment_author_avatar">Author avatar</string>

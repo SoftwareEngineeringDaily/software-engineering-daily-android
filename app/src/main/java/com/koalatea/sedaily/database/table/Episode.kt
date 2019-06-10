@@ -5,6 +5,7 @@ import android.text.Html
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import com.koalatea.sedaily.feature.downloader.DownloadStatus
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -19,6 +20,7 @@ data class Episode(
         val content: Content?,
         val excerpt: Excerpt?,
         val featuredImage: String?,
+        val guestImage: String?,
         val date: String?,
         val score: Int?,
         val upvoted: Boolean?,
@@ -31,7 +33,7 @@ data class Episode(
     // to be consistent w/ changing backend order, we need to keep a data like this
     var indexInResponse: Int = -1
 
-    var isDownloaded: Boolean = false
+    var downloadedId: Long? = null
 
     val titleString: String?
         get() = title?.rendered?.htmlToText()
@@ -41,6 +43,9 @@ data class Episode(
 
     val httpsFeaturedImageUrl: String?
         get() = featuredImage?.replace(Regex("^http://"), "https://")
+
+    val httpsGuestImageUrl: String?
+        get() = guestImage?.replace(Regex("^http://"), "https://")
 
     val utcDate: Date?
         get() = date?.toUTCDate(EPISODE_DATE_FORMAT)

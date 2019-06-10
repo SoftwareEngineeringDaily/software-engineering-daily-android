@@ -2,6 +2,7 @@ package com.koalatea.sedaily.feature.episodedetail
 
 import android.Manifest
 import android.os.Bundle
+import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,10 +13,11 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.google.android.material.snackbar.Snackbar
 import com.koalatea.sedaily.R
 import com.koalatea.sedaily.database.table.Episode
+import com.koalatea.sedaily.feature.downloader.DownloadStatus
 import com.koalatea.sedaily.network.Resource
 import com.koalatea.sedaily.util.supportActionBar
 import com.nabinbhandari.android.permissions.PermissionHandler
@@ -64,34 +66,34 @@ class EpisodeDetailFragment : Fragment() {
             }
         })
 
-        viewModel.downloadProgressLiveData.observe(this, Observer { progress ->
-            downloadProgressBar.progress = progress.toInt()
-            downloadProgressBar.visibility = View.VISIBLE
-        })
-
-        viewModel.downloadDoneLiveData.observe(this, Observer {
-            it.getContentIfNotHandled()?.let {
-                showDeleteViews()
-
-                acknowledgeDownloadSucceeded()
+        viewModel.downloadStatusLiveData.observe(this, Observer {
+            val downloadStatus = it.peekContent()
+            when(downloadStatus) {
+                is DownloadStatus.Initial -> showDownloadViews()
+                is DownloadStatus.Unknown -> showDownloadViews()
+                is DownloadStatus.Downloading -> showDownloadProgress(downloadStatus.progress)
+                is DownloadStatus.Downloaded -> showDeleteViews()
+                is DownloadStatus.Error -> showDownloadViews()
             }
-        })
 
-        viewModel.downloadErrorLiveData.observe(this, Observer {
+            // FIXME :: Do not show unless triggered by user
             it.getContentIfNotHandled()?.let {
-                showDownloadViews()
-
-                acknowledgeDownloadFailed()
-            }
-        })
-
-        viewModel.deleteDownloadDoneLiveData.observe(this, Observer {
-            it.getContentIfNotHandled()?.let {
-                showDownloadViews()
+                when(downloadStatus) {
+                    is DownloadStatus.Initial -> showDownloadViews()
+                    is DownloadStatus.Unknown -> acknowledgeDownloadFailed()
+                    is DownloadStatus.Downloading -> showDownloadProgress(downloadStatus.progress)
+                    is DownloadStatus.Downloaded -> acknowledgeDownloadSucceeded()
+                    is DownloadStatus.Error -> acknowledgeDownloadFailed()
+                }
             }
         })
 
         viewModel.fetchEpisodeDetails(episodeId)
+    }
+
+    private fun showDownloadProgress(progress: Float) {
+        downloadProgressBar.progress = progress.toInt()
+        downloadProgressBar.visibility = View.VISIBLE
     }
 
     private fun showLoading() {
@@ -106,20 +108,21 @@ class EpisodeDetailFragment : Fragment() {
         episodeTitleTextView.text = episode.titleString
 
         context?.let { context ->
-            val imageCornerRadius = context.resources.getDimension(R.dimen.image_corner_radius).toInt()
             Glide.with(context)
-                    .load(episode.httpsFeaturedImageUrl)
-                    .transform(MultiTransformation(CenterCrop(), RoundedCorners(imageCornerRadius)))
+                    .load(episode.httpsGuestImageUrl)
+                    .transform(MultiTransformation(CenterCrop(), CircleCrop()))
                     .placeholder(R.drawable.vd_image)
                     .error(R.drawable.vd_broken_image)
-                    .into(episodeImageView)
+                    .into(guestImageView)
         }
 
-        if (episode.isDownloaded) {
-            showDeleteViews()
-        } else {
-            showDownloadViews()
-        }
+        dateTextView.text = DateFormat.getDateFormat(context).format(episode.utcDate)
+
+        var html = episode.content?.rendered!!
+        html = removePowerPressPlayerTags(html)
+        html = addStyling(html)
+        html = addScaleMeta(html)
+        contentWebView.loadData(html,  "text/html", null)
 
         // Hide loading view and show content.
         progressBar.visibility = View.GONE
@@ -127,17 +130,35 @@ class EpisodeDetailFragment : Fragment() {
         detailsCardView.visibility = View.VISIBLE
     }
 
+    private fun removePowerPressPlayerTags(html: String): String {
+        var modifiedHtml = html
+
+        modifiedHtml = modifiedHtml.replaceFirst("<!--powerpress_player-->", "")
+
+        /////////////////////////
+        modifiedHtml = modifiedHtml.replaceFirst( "<div class=\"powerpress_player\".*</div>", "")
+
+        /////////////////////////
+        modifiedHtml = modifiedHtml.replaceFirst( "<p class=\"powerpress_links powerpress_links_mp3\">.*</p>", "")
+
+        return modifiedHtml
+    }
+
+    private fun addStyling(html: String) = "<style type=\"text/css\">body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; } </style>$html"
+
+    private fun addScaleMeta(html: String) = "<meta name=\"viewport\" content=\"initial-scale=1.0\" />$html"
+
     private fun showDownloadViews() {
         deleteButton.visibility = View.GONE
         downloadButton.isEnabled = true
         downloadButton.visibility = View.VISIBLE
-        downloadProgressBar.visibility = View.GONE
+        downloadProgressBar.visibility = View.INVISIBLE
     }
 
     private fun showDeleteViews() {
         deleteButton.visibility = View.VISIBLE
         downloadButton.visibility = View.INVISIBLE
-        downloadProgressBar.visibility = View.GONE
+        downloadProgressBar.visibility = View.INVISIBLE
     }
 
     private fun acknowledgeGenericError() = Snackbar.make(containerConstraintLayout, R.string.error_generic, Snackbar.LENGTH_SHORT).show()

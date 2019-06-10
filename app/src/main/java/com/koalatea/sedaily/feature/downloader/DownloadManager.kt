@@ -60,9 +60,6 @@ class DownloadManager(private val context: Context) {
     }
 
     @MainThread
-    fun isDownloaded(downloadId: Long) = getDownloadStatus(downloadId) == DownloadStatus.Downloaded
-
-    @MainThread
     fun deleteDownload(fileName: String): Boolean? {
         val downloadDirectory = context.getExternalFilesDir(DIRECTORY_EPISODES) ?: throw IOException("External storage not available")
         val file: File? = File(downloadDirectory, fileName)

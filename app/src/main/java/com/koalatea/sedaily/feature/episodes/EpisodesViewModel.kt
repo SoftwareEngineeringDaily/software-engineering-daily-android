@@ -30,7 +30,11 @@ class EpisodesViewModel internal constructor(
     val navigateToLogin: LiveData<Event<String>>
         get() = _navigateToLogin
 
-    fun fetchPosts(searchQuery: SearchQuery) = searchQueryLiveData.postValue(searchQuery)
+    fun fetchPosts(searchQuery: SearchQuery) {
+        if (searchQueryLiveData.value != searchQuery) {
+            searchQueryLiveData.value = searchQuery
+        }
+    }
 
     fun refresh() = episodesResult.value?.refresh?.invoke()
 

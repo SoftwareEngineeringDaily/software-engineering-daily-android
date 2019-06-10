@@ -17,43 +17,46 @@ class EpisodeDetailViewModel internal constructor(
         liveData {
             emit(Resource.Loading)
 
-            emit(episodeDetailsRepository.fetchEpisodeDetails(episodeId))
+            val resource = episodeDetailsRepository.fetchEpisodeDetails(episodeId)
+            resource.data.downloadedId?.let{ downloadedId ->
+                val downloadStatusEvent = Event(episodeDetailsRepository.getDownloadStatus(downloadedId)).apply {
+                    getContentIfNotHandled()
+                }
+
+                _downloadStatusLiveData.postValue(downloadStatusEvent)
+            }
+
+            emit(resource)
         }
     }
 
-    private val _downloadProgressLiveData = MutableLiveData<Float>()
-    val downloadProgressLiveData: LiveData<Float>
-        get() = _downloadProgressLiveData
+    private val _downloadStatusLiveData = MutableLiveData<Event<DownloadStatus>>()
+    val downloadStatusLiveData: LiveData<Event<DownloadStatus>>
+        get() = _downloadStatusLiveData
 
-    private val _downloadDoneLiveData = MutableLiveData<Event<Unit>>()
-    val downloadDoneLiveData: LiveData<Event<Unit>>
-        get() = _downloadDoneLiveData
-
-    private val _downloadErrorLiveData = MutableLiveData<Event<String?>>()
-    val downloadErrorLiveData: LiveData<Event<String?>>
-        get() = _downloadErrorLiveData
-
-    private val _deleteDownloadDoneLiveData = MutableLiveData<Event<Unit>>()
-    val deleteDownloadDoneLiveData: LiveData<Event<Unit>>
-        get() = _deleteDownloadDoneLiveData
-
-    fun fetchEpisodeDetails(episodeId: String) = episodeIdLiveData.postValue(episodeId)
+    fun fetchEpisodeDetails(episodeId: String) {
+        if (episodeIdLiveData.value != episodeId) {
+            episodeIdLiveData.value = episodeId
+        }
+    }
 
     fun download() {
         viewModelScope.launch {
-            _downloadProgressLiveData.postValue(0f)
+            _downloadStatusLiveData.postValue(Event(DownloadStatus.Downloading(0f)))
 
             when (val resource = episodeDetailsResource.value) {
                 is Resource.Success<Episode> -> {
                     val episode = resource.data
                     val downloadId = episodeDetailsRepository.downloadEpisode(episode)
+                    episode.downloadedId = downloadId
+
                     downloadId?.let {
                         episodeDetailsRepository.addDownload(episode._id, downloadId)
 
                         monitorDownload(downloadId)
-                    } ?: _downloadErrorLiveData.postValue(Event(null))
+                    } ?: _downloadStatusLiveData.postValue(Event(DownloadStatus.Error()))
                 }
-                else -> _downloadErrorLiveData.postValue(Event(null))
+                else -> _downloadStatusLiveData.postValue(Event(DownloadStatus.Error()))
             }
         }
     }
@@ -63,10 +66,10 @@ class EpisodeDetailViewModel internal constructor(
             when (val resource = episodeDetailsResource.value) {
                 is Resource.Success<Episode> -> {
                     val episode = resource.data
-
                     episodeDetailsRepository.deleteDownload(episode)
+                    episode.downloadedId = null
 
-                    _deleteDownloadDoneLiveData.value = Event(Unit)
+                    _downloadStatusLiveData.postValue(Event(DownloadStatus.Initial))
                 }
             }
         }
@@ -77,18 +80,12 @@ class EpisodeDetailViewModel internal constructor(
         timer.scheduleAtFixedRate(
                 object : TimerTask() {
                     override fun run() {
-                        when (val downloadStatus = episodeDetailsRepository.getDownloadStatus(downloadId)) {
-                            is DownloadStatus.Downloading -> _downloadProgressLiveData.postValue(downloadStatus.progress)
-                            is DownloadStatus.Downloaded -> {
-                                _downloadDoneLiveData.postValue(Event(Unit))
-                                timer.cancel()
-                            }
-                            is DownloadStatus.Error -> {
-                                _downloadErrorLiveData.postValue(Event(downloadStatus.reason))
-                                timer.cancel()
-                            }
-                            else -> timer.cancel()
+                        val downloadStatus = episodeDetailsRepository.getDownloadStatus(downloadId)
+                        if (downloadStatus !is DownloadStatus.Downloading) {
+                            timer.cancel()
                         }
+
+                        _downloadStatusLiveData.postValue(Event(downloadStatus))
                     }
                 },
                 500L,

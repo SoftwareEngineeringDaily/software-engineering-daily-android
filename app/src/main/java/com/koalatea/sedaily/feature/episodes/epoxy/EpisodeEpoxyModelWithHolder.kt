@@ -97,7 +97,7 @@ abstract class EpisodeEpoxyModelWithHolder : EpoxyModelWithHolder<Holder>() {
 
 class Holder : KotlinEpoxyHolder() {
     val containerConstraintLayout by bind<ConstraintLayout>(R.id.containerConstraintLayout)
-    val episodeImageView by bind<ImageView>(R.id.episodeImageView)
+    val episodeImageView by bind<ImageView>(R.id.guestImageView)
     val titleTextView by bind<TextView>(R.id.titleTextView)
     val dateTextView by bind<TextView>(R.id.dateTextView)
     val descriptionTextView by bind<TextView>(R.id.descriptionTextView)
