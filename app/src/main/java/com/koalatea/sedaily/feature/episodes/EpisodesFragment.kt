@@ -19,7 +19,6 @@ import com.koalatea.sedaily.feature.home.HomeFragmentDirections
 import com.koalatea.sedaily.model.SearchQuery
 import com.koalatea.sedaily.network.NetworkState
 import com.koalatea.sedaily.util.supportActionBar
-import kotlinx.android.synthetic.main.fragment_episode_detail.*
 import kotlinx.android.synthetic.main.fragment_episodes.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -28,7 +27,7 @@ class EpisodesFragment : Fragment() {
     companion object {
         fun newInstance(categoryId: String?): EpisodesFragment {
             val fragment = EpisodesFragment()
-            fragment.arguments = EpisodesFragmentArgs.Builder(categoryId).build().toBundle()
+            fragment.arguments = EpisodesFragmentArgs.Builder(SearchQuery(categoryId = categoryId)).build().toBundle()
 
             return fragment
         }
@@ -45,7 +44,7 @@ class EpisodesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val safeArgs: EpisodesFragmentArgs by navArgs()
-        val categoryId = safeArgs.categoryId
+        val searchQuery = safeArgs.searchQuery ?: SearchQuery()
 
         supportActionBar?.elevation = 0f
 
@@ -110,7 +109,7 @@ class EpisodesFragment : Fragment() {
             }
         })
 
-        viewModel.fetchPosts(SearchQuery(categoryId = categoryId))
+        viewModel.fetchPosts(searchQuery)
     }
 
     private fun acknowledgeGenericError() = Snackbar.make(swipeRefreshLayout, R.string.error_generic, Snackbar.LENGTH_SHORT).show()

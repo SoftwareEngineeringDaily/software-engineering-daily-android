@@ -25,30 +25,9 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="947" />
-                            <option name="y" value="762" />
+                            <option name="x" value="867" />
+                            <option name="y" value="14" />
                           </Point>
-                        </option>
-                      </LayoutPositions>
-                    </value>
-                  </entry>
-                  <entry key="navigation_downloads">
-                    <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="670" />
-                            <option name="y" value="-133" />
-                          </Point>
-                        </option>
-                        <option name="myPositions">
-                          <map>
-                            <entry key="open_episode_details_action">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                          </map>
                         </option>
                       </LayoutPositions>
                     </value>
@@ -58,13 +37,18 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="744" />
-                            <option name="y" value="368" />
+                            <option name="x" value="693" />
+                            <option name="y" value="492" />
                           </Point>
                         </option>
                         <option name="myPositions">
                           <map>
                             <entry key="open_comments_action">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="open_episodes_action">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -79,18 +63,9 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="506" />
-                            <option name="y" value="187" />
+                            <option name="x" value="1295" />
+                            <option name="y" value="454" />
                           </Point>
-                        </option>
-                        <option name="myPositions">
-                          <map>
-                            <entry key="open_episode_details_action">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                          </map>
                         </option>
                       </LayoutPositions>
                     </value>
@@ -101,7 +76,7 @@
                         <option name="myPosition">
                           <Point>
                             <option name="x" value="256" />
-                            <option name="y" value="432" />
+                            <option name="y" value="33" />
                           </Point>
                         </option>
                         <option name="myPositions">

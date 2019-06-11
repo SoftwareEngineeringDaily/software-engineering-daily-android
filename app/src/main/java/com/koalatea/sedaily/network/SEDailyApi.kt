@@ -16,8 +16,12 @@ interface SEDailyApi {
     fun getEpisodesAsync(
             @Query("search") searchTerm: String? = null,
             @Query("categories") categoryId: String? = null,
+            @Query("tags") tagId: String? = null,
             @Query("createdAtBefore") createdAtBefore: String? = null,
             @Query("limit") pageSize: Int): Deferred<Response<List<Episode>>>
+
+    @GET("posts/{episode_id}")
+    fun getEpisodeAsync(@Path("episode_id") episode_id: String): Deferred<Response<Episode>>
 
     @POST("posts/{episode_id}/favorite")
     fun favoriteEpisodeAsync(@Path("episode_id") episode_id: String): Deferred<Response<FavoriteResponse>>

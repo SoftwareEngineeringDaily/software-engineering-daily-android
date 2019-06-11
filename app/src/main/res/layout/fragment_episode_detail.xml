@@ -23,19 +23,40 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <HorizontalScrollView
+                android:id="@+id/tagsHorizontalScrollView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/first_keyline"
+                android:layout_marginTop="@dimen/first_keyline"
+                android:layout_marginEnd="@dimen/first_keyline"
+                android:visibility="gone"
+                android:scrollbars="none"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible">
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/tagsChipGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:singleLine="true"/>
+            </HorizontalScrollView>
+
             <TextView
                 android:id="@+id/episodeTitleTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/first_keyline"
-                android:layout_marginTop="@dimen/first_keyline"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="@dimen/first_keyline"
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tagsHorizontalScrollView"
                 tools:text="Bonjour from Paris" />
 
             <ImageView

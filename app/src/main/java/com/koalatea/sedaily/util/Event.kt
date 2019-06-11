@@ -21,6 +21,18 @@ open class Event<out T>(private val content: T, val userAction: Boolean = true) 
     }
 
     /**
+     * Manually mark this event as handled
+     *
+     * Returns the original state
+     */
+    fun handleIfNotHandled() : Boolean {
+        val originalState = hasBeenHandled
+        hasBeenHandled = true
+
+        return originalState
+    }
+
+    /**
      * Returns the content, even if it's already been handled.
      */
     fun peekContent(): T = content

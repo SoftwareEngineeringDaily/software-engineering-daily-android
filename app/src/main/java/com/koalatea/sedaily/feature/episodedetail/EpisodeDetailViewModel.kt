@@ -24,21 +24,23 @@ class EpisodeDetailViewModel internal constructor(
         liveData {
             emit(Resource.Loading)
 
-            try {
-                val resource = episodeDetailsRepository.fetchEpisodeDetails(episodeId)
-                val episode = resource.data
-                episode.downloadedId?.let { downloadedId ->
-                    _downloadStatusLiveData.postValue(Event(episodeDetailsRepository.getDownloadStatus(downloadedId), userAction = false))
+            when (val resource = episodeDetailsRepository.fetchEpisodeDetails(episodeId)) {
+                is Resource.Success<Episode> -> {
+                    val episode = resource.data
+                    episode.downloadedId?.let { downloadedId ->
+                        _downloadStatusLiveData.postValue(Event(episodeDetailsRepository.getDownloadStatus(downloadedId), userAction = false))
+                    }
+
+                    _upvoteLiveData.postValue(Event(UpvoteStatus(episode.upvoted
+                            ?: false, Math.max(episode.score ?: 0, 0)), userAction = false))
+                    _bookmarkLiveData.postValue(Event(BookmarkStatus(episode.bookmarked
+                            ?: false), userAction = false))
+
+                    emit(resource)
                 }
-
-                _upvoteLiveData.postValue(Event(UpvoteStatus(episode.upvoted
-                        ?: false, Math.max(episode.score ?: 0, 0)), userAction = false))
-                _bookmarkLiveData.postValue(Event(BookmarkStatus(episode.bookmarked
-                        ?: false), userAction = false))
-
-                emit(resource)
-            } catch(exception: Exception) {
-                emit(Resource.Error(exception))
+                is Resource.Error -> {
+                    emit(resource)
+                }
             }
         }
     }

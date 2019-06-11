@@ -5,7 +5,6 @@ import android.text.Html
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import com.koalatea.sedaily.feature.downloader.DownloadStatus
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -25,7 +24,8 @@ data class Episode(
         val score: Int?,
         val upvoted: Boolean?,
         val bookmarked: Boolean?,
-        val thread: Thread?
+        val thread: Thread?,
+        val filterTags: List<Tag>?
 ) {
 
     var searchQueryHashCode: Int? = null
@@ -33,6 +33,7 @@ data class Episode(
     // to be consistent w/ changing backend order, we need to keep a data like this
     var indexInResponse: Int = -1
 
+    @Ignore
     var downloadedId: Long? = null
 
     val titleString: String?

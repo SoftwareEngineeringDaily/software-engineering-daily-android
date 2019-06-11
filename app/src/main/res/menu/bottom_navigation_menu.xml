@@ -9,7 +9,7 @@
 
     <!-- FIXME :: Use navigation_saved instead -->
     <item
-        android:id="@id/navigation_downloads"
+        android:id="@id/navigation_auth"
         android:icon="@drawable/vd_bookmark_border"
         android:title="@string/bottom_navigation_saved" />
 

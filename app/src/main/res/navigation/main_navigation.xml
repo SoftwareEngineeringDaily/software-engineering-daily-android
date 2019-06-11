@@ -23,25 +23,11 @@
     <fragment
         android:id="@+id/navigation_episodes"
         android:name="com.koalatea.sedaily.feature.episodes.EpisodesFragment"
-        android:label="@string/home_title">
-        <action
-            android:id="@+id/open_episode_details_action"
-            app:destination="@id/navigation_episode_details" />
+        android:label="">
         <argument
-            android:name="categoryId"
-            app:argType="string"
+            android:name="searchQuery"
+            app:argType="com.koalatea.sedaily.model.SearchQuery"
             app:nullable="true" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/navigation_downloads"
-        android:name="com.koalatea.sedaily.feature.downloadList.DownloadsFragment"
-        android:label="@string/downloads_title"
-        tools:layout="@layout/fragment_downloads">
-
-        <action
-            android:id="@+id/open_episode_details_action"
-            app:destination="@id/navigation_episode_details" />
     </fragment>
 
     <fragment
@@ -61,6 +47,9 @@
         <action
             android:id="@+id/open_comments_action"
             app:destination="@id/navigation_comments" />
+        <action
+            android:id="@+id/open_episodes_action"
+            app:destination="@id/navigation_episodes" />
     </fragment>
     <fragment
         android:id="@+id/navigation_comments"

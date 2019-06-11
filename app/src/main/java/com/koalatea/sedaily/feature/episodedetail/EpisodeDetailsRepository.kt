@@ -7,6 +7,7 @@ import com.koalatea.sedaily.database.table.Episode
 import com.koalatea.sedaily.feature.downloader.DownloadManager
 import com.koalatea.sedaily.network.Resource
 import com.koalatea.sedaily.network.SEDailyApi
+import com.koalatea.sedaily.network.toException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -17,11 +18,17 @@ class EpisodeDetailsRepository constructor(
 ) {
 
     suspend fun fetchEpisodeDetails(episodeId: String) = withContext(Dispatchers.IO) {
-        val episode = db.episodeDao().findById(episodeId).apply {
-            downloadedId = db.downloadDao().findById(episodeId)?.downloadId
-        }
+        val response = api.getEpisodeAsync(episodeId).await()
+        val episode = response.body()
+        if (response.isSuccessful && episode != null) {
+            val cachedEpisode = db.episodeDao().findById(episodeId)
 
-        Resource.Success(episode)
+            Resource.Success(episode.copy(upvoted = cachedEpisode.upvoted, bookmarked = cachedEpisode.bookmarked).apply {
+                downloadedId = db.downloadDao().findById(episodeId)?.downloadId
+            })
+        } else {
+            Resource.Error(response.errorBody().toException())
+        }
     }
 
     suspend fun addDownload(episodeId: String, downloadId: Long) {

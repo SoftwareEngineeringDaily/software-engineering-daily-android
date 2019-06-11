@@ -15,6 +15,7 @@ class HomePagerAdapter(
 
     private enum class Categories(val categoryId: String?, @StringRes val nameStringRes: Int) {
         All(null, R.string.tab_all),
+        GreatestHits("1069", R.string.tab_greatestHits),
         BusinessAndPhilosophy("1068", R.string.tab_businessAndPhilosophy),
         Blockchain("1082", R.string.tab_blockchain),
         CloudEngineering("1079", R.string.tab_cloudEngineering),
@@ -23,8 +24,7 @@ class HomePagerAdapter(
         MachineLearning("1080", R.string.tab_machineLearning),
         OpenSource("1078", R.string.tab_openSource),
         Security("1083", R.string.tab_security),
-        Hackers("1085", R.string.tab_hackers),
-        GreatestHits("1069", R.string.tab_greatestHits);
+        Hackers("1085", R.string.tab_hackers);
     }
 
     override fun getItem(position: Int): Fragment {

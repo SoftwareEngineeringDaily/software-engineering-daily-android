@@ -35,7 +35,7 @@ class MainActivity : PlaybackActivity() {
         val navController = mainNavHostFragment.findNavController()
         // Define top level screens.
         // FIXME :: Use correct top-level tabs, setOf(R.id.navigation_home, R.id.navigation_saved, R.id.navigation_profile)
-        val appBarConfiguration = AppBarConfiguration(setOf(R.id.navigation_home, R.id.navigation_downloads, R.id.navigation_auth))
+        val appBarConfiguration = AppBarConfiguration(setOf(R.id.navigation_home, R.id.navigation_auth, R.id.navigation_auth))
 
         navController.setupActionBar(this, appBarConfiguration)
         setupBottomNavMenu(navController)

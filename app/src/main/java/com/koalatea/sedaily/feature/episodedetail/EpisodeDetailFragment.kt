@@ -19,10 +19,12 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
 import com.koalatea.sedaily.R
 import com.koalatea.sedaily.database.table.Episode
 import com.koalatea.sedaily.feature.downloader.DownloadStatus
+import com.koalatea.sedaily.model.SearchQuery
 import com.koalatea.sedaily.network.Resource
 import com.koalatea.sedaily.util.supportActionBar
 import com.nabinbhandari.android.permissions.PermissionHandler
@@ -84,7 +86,7 @@ class EpisodeDetailFragment : Fragment() {
                 is DownloadStatus.Error -> showDownloadViews()
             }
 
-            if (it.userAction && !it.hasBeenHandled) {
+            if (it.userAction && !it.handleIfNotHandled()) {
                 when (downloadStatus) {
                     is DownloadStatus.Initial -> showDownloadViews()
                     is DownloadStatus.Unknown -> acknowledgeDownloadFailed()
@@ -108,7 +110,7 @@ class EpisodeDetailFragment : Fragment() {
             likesButton.setIconResource(if (upvoteEvent.upvoted) R.drawable.vd_favorite else R.drawable.vd_favorite_border)
             likesButton.text = if (upvoteEvent.score > 0) upvoteEvent.score.toString() else ""
 
-            if (it.userAction && !it.hasBeenHandled) {
+            if (it.userAction && !it.handleIfNotHandled()) {
                 if (upvoteEvent.failed) {
                     acknowledgeGenericError()
                 }
@@ -119,7 +121,7 @@ class EpisodeDetailFragment : Fragment() {
             val bookmarkEvent = it.peekContent()
             bookmarkButton.setIconResource(if (bookmarkEvent.bookmarked == true) R.drawable.vd_bookmark else R.drawable.vd_bookmark_border)
 
-            if (it.userAction && !it.hasBeenHandled) {
+            if (it.userAction && !it.handleIfNotHandled()) {
                 if (bookmarkEvent.failed) {
                     acknowledgeGenericError()
                 }
@@ -141,8 +143,9 @@ class EpisodeDetailFragment : Fragment() {
     }
 
     private fun renderEpisode(episode: Episode) {
-        supportActionBar?.title = episode.titleString
+        renderTags(episode)
 
+        supportActionBar?.title = episode.titleString
         episodeTitleTextView.text = episode.titleString
 
         context?.let { context ->
@@ -170,6 +173,27 @@ class EpisodeDetailFragment : Fragment() {
         progressBar.visibility = View.GONE
         headerCardView.visibility = View.VISIBLE
         detailsCardView.visibility = View.VISIBLE
+    }
+
+    private fun renderTags(episode: Episode) {
+        if (episode.filterTags.isNullOrEmpty()) {
+            tagsHorizontalScrollView.visibility = View.GONE
+        } else {
+            tagsChipGroup.removeAllViews()
+
+            episode.filterTags.forEach { tag ->
+                tagsChipGroup.addView(Chip(context).apply {
+                    text = tag.name
+
+                    setOnClickListener {
+                        val direction = EpisodeDetailFragmentDirections.openEpisodesAction(SearchQuery(tagId = tag.id.toString()))
+                        findNavController().navigate(direction)
+                    }
+                })
+            }
+
+            tagsHorizontalScrollView.visibility = View.VISIBLE
+        }
     }
 
     @SuppressLint("SetJavaScriptEnabled")

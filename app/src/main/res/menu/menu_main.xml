@@ -15,11 +15,6 @@
         android:title="@string/home_title"
         app:showAsAction="never" />
 
-    <item
-        android:id="@id/navigation_downloads"
-        android:title="@string/downloads_title"
-        app:showAsAction="never" />
-
     <!-- FIXME :: Get rid of -->
     <item
         android:id="@id/navigation_auth"
