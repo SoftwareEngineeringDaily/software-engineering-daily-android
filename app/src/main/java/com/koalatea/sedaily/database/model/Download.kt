@@ -1,4 +1,4 @@
-package com.koalatea.sedaily.database.table
+package com.koalatea.sedaily.database.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

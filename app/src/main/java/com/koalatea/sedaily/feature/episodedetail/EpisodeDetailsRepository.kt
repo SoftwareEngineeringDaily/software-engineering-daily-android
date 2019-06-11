@@ -2,8 +2,8 @@ package com.koalatea.sedaily.feature.episodedetail
 
 import androidx.annotation.MainThread
 import com.koalatea.sedaily.database.AppDatabase
-import com.koalatea.sedaily.database.table.Download
-import com.koalatea.sedaily.database.table.Episode
+import com.koalatea.sedaily.database.model.Download
+import com.koalatea.sedaily.database.model.Episode
 import com.koalatea.sedaily.feature.downloader.DownloadManager
 import com.koalatea.sedaily.network.Resource
 import com.koalatea.sedaily.network.SEDailyApi
@@ -52,7 +52,7 @@ class EpisodeDetailsRepository constructor(
     }
 
     @MainThread
-    fun downloadEpisode(episode: Episode) = episode.mp3?.let { url ->
+    fun downloadEpisode(episode: Episode) = episode.httpsMp3Url?.let { url ->
         downloadManager.downloadEpisode(episode._id, url, episode.titleString ?: episode._id)
     }
 

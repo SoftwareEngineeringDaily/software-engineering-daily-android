@@ -1,4 +1,4 @@
-package com.koalatea.sedaily.database.table
+package com.koalatea.sedaily.database.model
 
 import android.os.Build
 import android.text.Html
@@ -41,6 +41,9 @@ data class Episode(
 
     val excerptString: String?
         get() = excerpt?.rendered?.htmlToText()
+
+    val httpsMp3Url: String?
+        get() = mp3?.replace(Regex("^http://"), "https://")
 
     val httpsFeaturedImageUrl: String?
         get() = featuredImage?.replace(Regex("^http://"), "https://")

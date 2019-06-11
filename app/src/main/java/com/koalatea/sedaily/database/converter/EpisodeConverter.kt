@@ -2,7 +2,7 @@ package com.koalatea.sedaily.database.converter
 
 import androidx.room.TypeConverter
 import com.google.gson.GsonBuilder
-import com.koalatea.sedaily.database.table.*
+import com.koalatea.sedaily.database.model.*
 import com.google.gson.reflect.TypeToken
 
 

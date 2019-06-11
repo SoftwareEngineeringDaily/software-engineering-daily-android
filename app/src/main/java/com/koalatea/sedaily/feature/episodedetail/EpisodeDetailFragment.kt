@@ -22,7 +22,7 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
 import com.koalatea.sedaily.R
-import com.koalatea.sedaily.database.table.Episode
+import com.koalatea.sedaily.database.model.Episode
 import com.koalatea.sedaily.feature.downloader.DownloadStatus
 import com.koalatea.sedaily.model.SearchQuery
 import com.koalatea.sedaily.network.Resource

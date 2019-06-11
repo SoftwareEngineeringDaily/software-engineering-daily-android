@@ -1,6 +1,6 @@
 package com.koalatea.sedaily.network
 
-import com.koalatea.sedaily.database.table.Episode
+import com.koalatea.sedaily.database.model.Episode
 import com.koalatea.sedaily.model.User
 import com.koalatea.sedaily.network.response.CommentsResponse
 import com.koalatea.sedaily.network.response.FavoriteResponse

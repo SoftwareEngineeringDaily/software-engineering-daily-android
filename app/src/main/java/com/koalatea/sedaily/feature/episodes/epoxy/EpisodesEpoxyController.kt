@@ -2,7 +2,7 @@ package com.koalatea.sedaily.feature.episodes.epoxy
 
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.paging.PagedListEpoxyController
-import com.koalatea.sedaily.database.table.Episode
+import com.koalatea.sedaily.database.model.Episode
 
 class EpisodesEpoxyController(
         private val upvoteClickListener: (episode: Episode) -> Unit,

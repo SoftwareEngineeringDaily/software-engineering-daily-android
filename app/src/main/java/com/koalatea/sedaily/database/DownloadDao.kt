@@ -5,7 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy.REPLACE
 import androidx.room.Query
-import com.koalatea.sedaily.database.table.Download
+import com.koalatea.sedaily.database.model.Download
 
 @Dao
 interface DownloadDao {

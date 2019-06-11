@@ -1,6 +1,6 @@
 package com.koalatea.sedaily.feature.commentList
 
-import com.koalatea.sedaily.database.table.Comment
+import com.koalatea.sedaily.database.model.Comment
 import com.koalatea.sedaily.network.SEDailyApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

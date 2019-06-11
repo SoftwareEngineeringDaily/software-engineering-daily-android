@@ -5,7 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.koalatea.sedaily.database.table.Episode
+import com.koalatea.sedaily.database.model.Episode
 
 @Dao
 interface EpisodeDao {

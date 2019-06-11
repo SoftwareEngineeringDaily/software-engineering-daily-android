@@ -3,7 +3,7 @@ package com.koalatea.sedaily.feature.commentList
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.koalatea.sedaily.database.table.Comment
+import com.koalatea.sedaily.database.model.Comment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
