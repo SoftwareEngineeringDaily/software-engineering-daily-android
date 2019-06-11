@@ -5,6 +5,8 @@ import androidx.lifecycle.*
 import com.koalatea.sedaily.database.table.Episode
 import com.koalatea.sedaily.feature.auth.UserRepository
 import com.koalatea.sedaily.feature.downloader.DownloadStatus
+import com.koalatea.sedaily.feature.episodedetail.event.BookmarkStatus
+import com.koalatea.sedaily.feature.episodedetail.event.UpvoteStatus
 import com.koalatea.sedaily.feature.episodes.EpisodesRepository
 import com.koalatea.sedaily.network.Resource
 import com.koalatea.sedaily.util.Event
@@ -22,16 +24,22 @@ class EpisodeDetailViewModel internal constructor(
         liveData {
             emit(Resource.Loading)
 
-            val resource = episodeDetailsRepository.fetchEpisodeDetails(episodeId)
-            resource.data.downloadedId?.let{ downloadedId ->
-                val downloadStatusEvent = Event(episodeDetailsRepository.getDownloadStatus(downloadedId)).apply {
-                    getContentIfNotHandled()
+            try {
+                val resource = episodeDetailsRepository.fetchEpisodeDetails(episodeId)
+                val episode = resource.data
+                episode.downloadedId?.let { downloadedId ->
+                    _downloadStatusLiveData.postValue(Event(episodeDetailsRepository.getDownloadStatus(downloadedId), userAction = false))
                 }
 
-                _downloadStatusLiveData.postValue(downloadStatusEvent)
-            }
+                _upvoteLiveData.postValue(Event(UpvoteStatus(episode.upvoted
+                        ?: false, Math.max(episode.score ?: 0, 0)), userAction = false))
+                _bookmarkLiveData.postValue(Event(BookmarkStatus(episode.bookmarked
+                        ?: false), userAction = false))
 
-            emit(resource)
+                emit(resource)
+            } catch(exception: Exception) {
+                emit(Resource.Error(exception))
+            }
         }
     }
 
@@ -42,6 +50,17 @@ class EpisodeDetailViewModel internal constructor(
     private val _navigateToLogin = MutableLiveData<Event<String>>()
     val navigateToLogin: LiveData<Event<String>>
         get() = _navigateToLogin
+
+    private val _upvoteLiveData = MutableLiveData<Event<UpvoteStatus>>()
+    val upvoteLiveData: LiveData<Event<UpvoteStatus>>
+        get() = _upvoteLiveData
+
+    private val _bookmarkLiveData = MutableLiveData<Event<BookmarkStatus>>()
+    val bookmarkLiveData: LiveData<Event<BookmarkStatus>>
+        get() = _bookmarkLiveData
+
+    private val episode: Episode?
+        get() = (episodeDetailsResource.value as? Resource.Success<Episode>)?.data
 
     @MainThread
     fun fetchEpisodeDetails(episodeId: String) {
@@ -55,57 +74,69 @@ class EpisodeDetailViewModel internal constructor(
         viewModelScope.launch {
             _downloadStatusLiveData.postValue(Event(DownloadStatus.Downloading(0f)))
 
-            when (val resource = episodeDetailsResource.value) {
-                is Resource.Success<Episode> -> {
-                    val episode = resource.data
-                    val downloadId = episodeDetailsRepository.downloadEpisode(episode)
-                    episode.downloadedId = downloadId
+            episode?.let { episode ->
+                val downloadId = episodeDetailsRepository.downloadEpisode(episode)
+                episode.downloadedId = downloadId
 
-                    downloadId?.let {
-                        episodeDetailsRepository.addDownload(episode._id, downloadId)
+                downloadId?.let {
+                    episodeDetailsRepository.addDownload(episode._id, downloadId)
 
-                        monitorDownload(downloadId)
-                    } ?: _downloadStatusLiveData.postValue(Event(DownloadStatus.Error()))
-                }
-                else -> _downloadStatusLiveData.postValue(Event(DownloadStatus.Error()))
-            }
+                    monitorDownload(downloadId)
+                } ?: _downloadStatusLiveData.postValue(Event(DownloadStatus.Error()))
+            } ?: _downloadStatusLiveData.postValue(Event(DownloadStatus.Error()))
         }
     }
 
     @MainThread
     fun delete() {
         viewModelScope.launch {
-            when (val resource = episodeDetailsResource.value) {
-                is Resource.Success<Episode> -> {
-                    val episode = resource.data
-                    episodeDetailsRepository.deleteDownload(episode)
-                    episode.downloadedId = null
+            episode?.let { episode ->
+                episodeDetailsRepository.deleteDownload(episode)
+                episode.downloadedId = null
 
-                    _downloadStatusLiveData.postValue(Event(DownloadStatus.Initial))
+                _downloadStatusLiveData.postValue(Event(DownloadStatus.Initial))
+            } ?: _downloadStatusLiveData.postValue(Event(DownloadStatus.Error()))
+        }
+    }
+
+    @MainThread
+    fun toggleUpvote() {
+        viewModelScope.launch {
+            episode?.let { episode ->
+                if (userRepository.isLoggedIn) {
+                    val currentUpvoteStatus = _upvoteLiveData.value?.peekContent()
+                    val originalState = currentUpvoteStatus?.upvoted ?: false
+                    val originalScore = Math.max(currentUpvoteStatus?.score ?: 0, 0)
+                    val newScore = if (originalState) originalScore - 1 else originalScore + 1
+                    _upvoteLiveData.postValue(Event(UpvoteStatus(!originalState, newScore)))
+
+                    val success = episodesRepository.vote(episode._id, originalState, originalScore)
+                    if (!success) {
+                        _upvoteLiveData.postValue(Event(UpvoteStatus(originalState, originalScore, failed = true)))
+                    }
+                } else {
+                    _navigateToLogin.value = Event(episode._id)
                 }
             }
         }
     }
 
     @MainThread
-    fun toggleUpvote(episode: Episode) {
+    fun toggleBookmark() {
         viewModelScope.launch {
-            if (userRepository.isLoggedIn) {
-                episodesRepository.vote(episode._id, episode.upvoted
-                        ?: false, Math.max(episode.score ?: 0, 0))
-            } else {
-                _navigateToLogin.value = Event(episode._id)
-            }
-        }
-    }
+            episode?.let { episode ->
+                if (userRepository.isLoggedIn) {
+                    val currentBookmarkStatus = _bookmarkLiveData.value?.peekContent()
+                    val originalState = currentBookmarkStatus?.bookmarked ?: false
+                    _bookmarkLiveData.postValue(Event(BookmarkStatus(!originalState), userAction = false))
 
-    @MainThread
-    fun toggleBookmark(episode: Episode) {
-        viewModelScope.launch {
-            if (userRepository.isLoggedIn) {
-                episodesRepository.bookmark(episode._id, episode.bookmarked ?: false)
-            } else {
-                _navigateToLogin.value = Event(episode._id)
+                    val success = episodesRepository.bookmark(episode._id, originalState)
+                    if (!success) {
+                        _bookmarkLiveData.postValue(Event(BookmarkStatus(originalState, failed = true), userAction = false))
+                    }
+                } else {
+                    _navigateToLogin.value = Event(episode._id)
+                }
             }
         }
     }

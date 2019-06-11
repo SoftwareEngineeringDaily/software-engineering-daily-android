@@ -63,6 +63,9 @@ class EpisodeDetailFragment : Fragment() {
             promptDeleteDownload { viewModel.delete() }
         }
 
+        likesButton.setOnClickListener { viewModel.toggleUpvote() }
+        bookmarkButton.setOnClickListener { viewModel.toggleBookmark() }
+
         viewModel.episodeDetailsResource.observe(this, Observer { resource ->
             when (resource) {
                 is Resource.Loading -> showLoading()
@@ -81,8 +84,8 @@ class EpisodeDetailFragment : Fragment() {
                 is DownloadStatus.Error -> showDownloadViews()
             }
 
-            it.getContentIfNotHandled()?.let {
-                when(downloadStatus) {
+            if (it.userAction && !it.hasBeenHandled) {
+                when (downloadStatus) {
                     is DownloadStatus.Initial -> showDownloadViews()
                     is DownloadStatus.Unknown -> acknowledgeDownloadFailed()
                     is DownloadStatus.Downloading -> showDownloadProgress(downloadStatus.progress)
@@ -94,9 +97,32 @@ class EpisodeDetailFragment : Fragment() {
 
         viewModel.navigateToLogin.observe(this, Observer {
             it.getContentIfNotHandled()?.let { // Only proceed if the event has never been handled
-//                val direction = HomeFragmentDirections.openCommentsAction(episodeId)
+//                val direction = EpisodeDetailFragmentDirections.openCommentsAction(episodeId)
 //                findNavController().navigate(direction)
                 Toast.makeText(context, "Debug :: Login first", Toast.LENGTH_SHORT).show()
+            }
+        })
+
+        viewModel.upvoteLiveData.observe(this, Observer {
+            val upvoteEvent = it.peekContent()
+            likesButton.setIconResource(if (upvoteEvent.upvoted) R.drawable.vd_favorite else R.drawable.vd_favorite_border)
+            likesButton.text = if (upvoteEvent.score > 0) upvoteEvent.score.toString() else ""
+
+            if (it.userAction && !it.hasBeenHandled) {
+                if (upvoteEvent.failed) {
+                    acknowledgeGenericError()
+                }
+            }
+        })
+
+        viewModel.bookmarkLiveData.observe(this, Observer {
+            val bookmarkEvent = it.peekContent()
+            bookmarkButton.setIconResource(if (bookmarkEvent.bookmarked == true) R.drawable.vd_bookmark else R.drawable.vd_bookmark_border)
+
+            if (it.userAction && !it.hasBeenHandled) {
+                if (bookmarkEvent.failed) {
+                    acknowledgeGenericError()
+                }
             }
         })
 
@@ -132,7 +158,13 @@ class EpisodeDetailFragment : Fragment() {
 
         renderContent(episode)
 
-        renderActions(episode)
+        commentsButton.text = episode.thread?.commentsCount?.let { if (it > 0) it.toString() else "" }
+        commentsButton.setOnClickListener {
+            episode.thread?._id?.let { threadId ->
+                val direction = EpisodeDetailFragmentDirections.openCommentsAction(threadId)
+                findNavController().navigate(direction)
+            } ?: acknowledgeGenericError()
+        }
 
         // Hide loading view and show content.
         progressBar.visibility = View.GONE
@@ -157,27 +189,6 @@ class EpisodeDetailFragment : Fragment() {
             contentWebView.settings.defaultTextEncodingName = "utf-8"
             contentWebView.loadDataWithBaseURL(null, html, "text/html", "utf-8", null)
         }
-    }
-
-    private fun renderActions(episode: Episode) {
-        likesButton.setIconResource(if (episode.upvoted == true) R.drawable.vd_favorite else R.drawable.vd_favorite_border)
-        likesButton.text = episode.score?.let {
-            if (it > 0) { it.toString() } else { "" }
-        }
-        likesButton.setOnClickListener { viewModel.toggleUpvote(episode) }
-
-        commentsButton.text = episode.thread?.commentsCount?.let {
-            if (it > 0) { it.toString() } else { "" }
-        }
-        commentsButton.setOnClickListener {
-            episode.thread?._id?.let { threadId ->
-                val direction = EpisodeDetailFragmentDirections.openCommentsAction(threadId)
-                findNavController().navigate(direction)
-            } ?: acknowledgeGenericError()
-        }
-
-        bookmarkButton.setIconResource(if (episode.bookmarked == true) R.drawable.vd_bookmark else R.drawable.vd_bookmark_border)
-        bookmarkButton.setOnClickListener { viewModel.toggleBookmark(episode) }
     }
 
     private fun showDownloadViews() {

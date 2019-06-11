@@ -43,41 +43,44 @@ class EpisodesRepository(
         )
     }
 
-    suspend fun vote(episodeId: String, originalState: Boolean, originalScore: Int) {
-        withContext(Dispatchers.IO) {
-            val response = if (originalState) {
-                db.episodeDao().vote(episodeId, !originalState, originalScore - 1)
+    suspend fun vote(episodeId: String, originalState: Boolean, originalScore: Int) = withContext(Dispatchers.IO) {
+        val response = if (originalState) {
+            db.episodeDao().vote(episodeId, !originalState, originalScore - 1)
 
-                api.downvoteEpisodeAsync(episodeId).await()
-            } else {
-                db.episodeDao().vote(episodeId, !originalState, originalScore + 1)
+            api.downvoteEpisodeAsync(episodeId).await()
+        } else {
+            db.episodeDao().vote(episodeId, !originalState, originalScore + 1)
 
-                api.upvoteEpisodeAsync(episodeId).await()
-            }
-
-            // Revert UI changes back.
-            if (!response.isSuccessful || response.body() == null) {
-                db.episodeDao().vote(episodeId, originalState, originalScore)
-            }
+            api.upvoteEpisodeAsync(episodeId).await()
         }
+
+        // Revert UI changes back.
+        if (!response.isSuccessful || response.body() == null) {
+            db.episodeDao().vote(episodeId, originalState, originalScore)
+
+            return@withContext false
+        }
+
+        return@withContext true
     }
 
-    suspend fun bookmark(episodeId: String, originalState: Boolean) {
-        withContext(Dispatchers.IO) {
-            // Update UI right away.
-            db.episodeDao().bookmark(episodeId, !originalState)
+    suspend fun bookmark(episodeId: String, originalState: Boolean) = withContext(Dispatchers.IO) {
+        // Update UI right away.
+        db.episodeDao().bookmark(episodeId, !originalState)
 
-            val response = if (originalState) {
-                api.unfavoriteEpisodeAsync(episodeId).await()
-            } else {
-                api.favoriteEpisodeAsync(episodeId).await()
-            }
-
-            // Revert UI changes back.
-            if (!response.isSuccessful || response.body() == null) {
-                db.episodeDao().bookmark(episodeId, originalState)
-            }
+        val response = if (originalState) {
+            api.unfavoriteEpisodeAsync(episodeId).await()
+        } else {
+            api.favoriteEpisodeAsync(episodeId).await()
         }
+
+        // Revert UI changes back.
+        if (!response.isSuccessful || response.body() == null) {
+            db.episodeDao().bookmark(episodeId, originalState)
+            return@withContext false
+        }
+
+        return@withContext true
     }
 
     @MainThread
