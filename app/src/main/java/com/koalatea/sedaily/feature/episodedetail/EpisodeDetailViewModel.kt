@@ -27,8 +27,13 @@ class EpisodeDetailViewModel internal constructor(
             when (val resource = episodeDetailsRepository.fetchEpisodeDetails(episodeId)) {
                 is Resource.Success<Episode> -> {
                     val episode = resource.data
-                    episode.downloadedId?.let { downloadedId ->
-                        _downloadStatusLiveData.postValue(Event(episodeDetailsRepository.getDownloadStatus(downloadedId), userAction = false))
+                    episode.downloadedId?.let { downloadId ->
+                        val downloadStatus = episodeDetailsRepository.getDownloadStatus(downloadId)
+                        if (downloadStatus is DownloadStatus.Downloading) {
+                            monitorDownload(downloadId)
+                        }
+
+                        _downloadStatusLiveData.postValue(Event(downloadStatus, userAction = false))
                     }
 
                     _upvoteLiveData.postValue(Event(UpvoteStatus(episode.upvoted

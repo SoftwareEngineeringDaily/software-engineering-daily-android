@@ -90,7 +90,6 @@ class EpisodeDetailFragment : Fragment() {
                 when (downloadStatus) {
                     is DownloadStatus.Initial -> showDownloadViews()
                     is DownloadStatus.Unknown -> acknowledgeDownloadFailed()
-                    is DownloadStatus.Downloading -> showDownloadProgress(downloadStatus.progress)
                     is DownloadStatus.Downloaded -> acknowledgeDownloadSucceeded()
                     is DownloadStatus.Error -> acknowledgeDownloadFailed()
                 }
@@ -132,6 +131,8 @@ class EpisodeDetailFragment : Fragment() {
     }
 
     private fun showDownloadProgress(progress: Float) {
+        downloadButton.isEnabled = false
+
         downloadProgressBar.progress = progress.toInt()
         downloadProgressBar.visibility = View.VISIBLE
     }
