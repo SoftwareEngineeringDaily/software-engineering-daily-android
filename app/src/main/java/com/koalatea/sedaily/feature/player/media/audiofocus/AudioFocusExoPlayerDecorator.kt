@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.koalatea.sedaily.media.audiofocus
+package com.koalatea.sedaily.feature.player.media.audiofocus
 
 import android.annotation.TargetApi
 import android.media.AudioAttributes

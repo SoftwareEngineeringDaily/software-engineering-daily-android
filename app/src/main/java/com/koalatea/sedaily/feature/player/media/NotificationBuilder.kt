@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.koalatea.sedaily.media
+package com.koalatea.sedaily.feature.player.media
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -28,10 +28,10 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.media.session.MediaButtonReceiver
 import com.koalatea.sedaily.R
-import com.koalatea.sedaily.media.extensions.isPlayEnabled
-import com.koalatea.sedaily.media.extensions.isPlaying
-import com.koalatea.sedaily.media.extensions.isSkipToNextEnabled
-import com.koalatea.sedaily.media.extensions.isSkipToPreviousEnabled
+import com.koalatea.sedaily.feature.player.media.extensions.isPlayEnabled
+import com.koalatea.sedaily.feature.player.media.extensions.isPlaying
+import com.koalatea.sedaily.feature.player.media.extensions.isSkipToNextEnabled
+import com.koalatea.sedaily.feature.player.media.extensions.isSkipToPreviousEnabled
 
 const val NOW_PLAYING_CHANNEL: String = "com.example.android.uamp.media.NOW_PLAYING"
 const val NOW_PLAYING_NOTIFICATION: Int = 0xb339

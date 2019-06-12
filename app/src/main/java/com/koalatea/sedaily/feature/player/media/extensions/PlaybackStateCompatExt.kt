@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.koalatea.sedaily.media.extensions
+package com.koalatea.sedaily.feature.player.media.extensions
 
 import android.support.v4.media.session.PlaybackStateCompat
 

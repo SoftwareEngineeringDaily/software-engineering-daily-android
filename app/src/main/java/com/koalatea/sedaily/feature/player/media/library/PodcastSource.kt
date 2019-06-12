@@ -1,7 +1,7 @@
-package com.koalatea.sedaily.media.library
+package com.koalatea.sedaily.feature.player.media.library
 
 import android.support.v4.media.MediaMetadataCompat
-import com.koalatea.sedaily.media.extensions.id
+import com.koalatea.sedaily.feature.player.media.extensions.id
 
 class PodcastSource : AbstractMusicSource() {
     init {

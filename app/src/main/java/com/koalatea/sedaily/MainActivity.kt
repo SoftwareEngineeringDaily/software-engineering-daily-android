@@ -1,21 +1,18 @@
 package com.koalatea.sedaily
 
-import android.Manifest
 import android.app.SearchManager
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import com.koalatea.sedaily.feature.auth.UserRepository
+import com.koalatea.sedaily.feature.player.PlaybackActivity
 import com.koalatea.sedaily.util.setupActionBar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.include_default_toolbar.*

@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package com.koalatea.sedaily.media.library
+package com.koalatea.sedaily.feature.player.media.library
 
 import android.support.v4.media.MediaBrowserCompat.MediaItem
 import android.support.v4.media.MediaMetadataCompat
-import com.koalatea.sedaily.media.extensions.*
+import com.koalatea.sedaily.feature.player.media.extensions.*
 
 /**
  * Represents a tree of media that's used by [MusicService.onLoadChildren].

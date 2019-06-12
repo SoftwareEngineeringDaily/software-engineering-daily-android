@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.koalatea.sedaily.media
+package com.koalatea.sedaily.feature.player.media
 
 import android.net.Uri
 import android.os.Bundle
@@ -30,12 +30,12 @@ import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
 import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.upstream.DataSource
-import com.koalatea.sedaily.feature.playbar.PodcastSessionStateManager
-import com.koalatea.sedaily.media.extensions.album
-import com.koalatea.sedaily.media.extensions.id
-import com.koalatea.sedaily.media.extensions.toMediaSource
-import com.koalatea.sedaily.media.extensions.trackNumber
-import com.koalatea.sedaily.media.library.MusicSource
+import com.koalatea.sedaily.feature.player.PodcastSessionStateManager
+import com.koalatea.sedaily.feature.player.media.extensions.album
+import com.koalatea.sedaily.feature.player.media.extensions.id
+import com.koalatea.sedaily.feature.player.media.extensions.toMediaSource
+import com.koalatea.sedaily.feature.player.media.extensions.trackNumber
+import com.koalatea.sedaily.feature.player.media.library.MusicSource
 
 /**
  * Class to bridge UAMP to the ExoPlayer MediaSession extension.

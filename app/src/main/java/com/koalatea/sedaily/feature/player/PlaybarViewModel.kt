@@ -1,4 +1,4 @@
-package com.koalatea.sedaily.feature.playbar
+package com.koalatea.sedaily.feature.player
 
 import android.app.Activity
 import android.os.Bundle

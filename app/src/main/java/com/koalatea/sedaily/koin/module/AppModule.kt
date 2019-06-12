@@ -10,7 +10,7 @@ import com.koalatea.sedaily.feature.commentList.CommentsRepository
 import com.koalatea.sedaily.feature.downloader.DownloadManager
 import com.koalatea.sedaily.feature.episodedetail.EpisodeDetailsRepository
 import com.koalatea.sedaily.feature.episodes.EpisodesRepository
-import com.koalatea.sedaily.feature.playbar.PodcastSessionStateManager
+import com.koalatea.sedaily.feature.player.PodcastSessionStateManager
 import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
 

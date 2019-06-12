@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.koalatea.sedaily.media
+package com.koalatea.sedaily.feature.player.media
 
 import android.app.PendingIntent
 import android.app.Service
@@ -41,12 +41,12 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import com.koalatea.sedaily.R
-import com.koalatea.sedaily.media.audiofocus.AudioFocusExoPlayerDecorator
-import com.koalatea.sedaily.media.extensions.flag
-import com.koalatea.sedaily.media.library.BrowseTree
-import com.koalatea.sedaily.media.library.MusicSource
-import com.koalatea.sedaily.media.library.PodcastSource
-import com.koalatea.sedaily.media.library.UAMP_BROWSABLE_ROOT
+import com.koalatea.sedaily.feature.player.media.audiofocus.AudioFocusExoPlayerDecorator
+import com.koalatea.sedaily.feature.player.media.extensions.flag
+import com.koalatea.sedaily.feature.player.media.library.BrowseTree
+import com.koalatea.sedaily.feature.player.media.library.MusicSource
+import com.koalatea.sedaily.feature.player.media.library.PodcastSource
+import com.koalatea.sedaily.feature.player.media.library.UAMP_BROWSABLE_ROOT
 
 /**
  * This class is the entry point for browsing and playback commands from the APP's UI

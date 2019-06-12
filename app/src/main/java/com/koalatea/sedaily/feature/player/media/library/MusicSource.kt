@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.koalatea.sedaily.media.library
+package com.koalatea.sedaily.feature.player.media.library
 
 import android.os.Build
 import android.os.Bundle
@@ -22,7 +22,7 @@ import android.provider.MediaStore
 import android.support.v4.media.MediaMetadataCompat
 import android.util.Log
 import androidx.annotation.IntDef
-import com.koalatea.sedaily.media.extensions.*
+import com.koalatea.sedaily.feature.player.media.extensions.*
 
 /**
  * Interface used by [MusicService] for looking up [MediaMetadataCompat] objects.

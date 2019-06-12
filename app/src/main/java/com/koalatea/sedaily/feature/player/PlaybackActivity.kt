@@ -1,4 +1,4 @@
-package com.koalatea.sedaily
+package com.koalatea.sedaily.feature.player
 
 import android.annotation.SuppressLint
 import android.content.ComponentName
@@ -10,10 +10,7 @@ import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.koalatea.sedaily.database.DownloadDao
-import com.koalatea.sedaily.feature.playbar.PodcastSessionStateManager
-import com.koalatea.sedaily.media.MusicService
-import com.koalatea.sedaily.media.library.PodcastSource
+import com.koalatea.sedaily.feature.player.media.MusicService
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.ext.android.inject
 
@@ -30,7 +27,6 @@ open class PlaybackActivity : AppCompatActivity() {
             } catch (e: RemoteException) {
                 hidePlaybackControls()
             }
-
         }
 
         override fun onConnectionSuspended() {

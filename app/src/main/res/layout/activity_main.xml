@@ -37,7 +37,7 @@
 
         <fragment
             android:id="@+id/fragment_playback_controls"
-            android:name="com.koalatea.sedaily.feature.playbar.PlaybarFragment"
+            android:name="com.koalatea.sedaily.feature.player.PlaybarFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"

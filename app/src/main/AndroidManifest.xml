@@ -32,7 +32,7 @@
         </activity>
 
         <service
-            android:name=".media.MusicService"
+            android:name="com.koalatea.sedaily.feature.player.media.MusicService"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.media.browse.MediaBrowserService" />
