@@ -12,7 +12,6 @@ const val EPISODE_DATE_FORMAT = "yyyy-MM-dd\'T\'HH:mm:ss"
 
 @Entity
 data class Episode(
-        @field:PrimaryKey
         val _id: String,
         val mp3: String?,
         val title: Title?,
@@ -27,6 +26,10 @@ data class Episode(
         val thread: Thread?,
         val filterTags: List<Tag>?
 ) {
+
+    @field:PrimaryKey
+    var uniqueId: String = _id
+        get() = searchQueryHashCode?.toString() + _id
 
     var searchQueryHashCode: Int? = null
 

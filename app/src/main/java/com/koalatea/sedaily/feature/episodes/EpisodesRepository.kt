@@ -88,6 +88,7 @@ class EpisodesRepository(
         GlobalScope.launch(Dispatchers.IO) {
             db.runInTransaction {
                 db.episodeDao().deleteBySearchQuery(searchQuery.hashCode())
+
                 insertResultIntoDb(searchQuery, episodes)
             }
         }
@@ -97,16 +98,15 @@ class EpisodesRepository(
     private fun insertResultIntoDb(searchQuery: SearchQuery, episodes: List<Episode>?) {
         GlobalScope.launch(Dispatchers.IO) {
             episodes?.let { episodes ->
-                db.runInTransaction {
-                    val searchQueryHashCode = searchQuery.hashCode()
-                    val start = db.episodeDao().getNextIndexBySearchQuery(searchQueryHashCode)
-                    val items = episodes.mapIndexed { index, child ->
-                        child.searchQueryHashCode = searchQueryHashCode
-                        child.indexInResponse = start + index
-                        child
-                    }
-                    db.episodeDao().insert(items)
+                val searchQueryHashCode = searchQuery.hashCode()
+                val start = db.episodeDao().getNextIndexBySearchQuery(searchQueryHashCode)
+                val items = episodes.mapIndexed { index, child ->
+                    child.searchQueryHashCode = searchQueryHashCode
+                    child.indexInResponse = start + index
+                    child
                 }
+
+                db.episodeDao().insert(items)
             }
         }
     }
