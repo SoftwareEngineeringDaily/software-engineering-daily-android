@@ -28,6 +28,9 @@
             android:name="searchQuery"
             app:argType="com.koalatea.sedaily.model.SearchQuery"
             app:nullable="true" />
+        <argument
+            android:name="doNotCache"
+            app:argType="boolean" />
     </fragment>
 
     <fragment

@@ -27,7 +27,7 @@ class EpisodesFragment : Fragment() {
     companion object {
         fun newInstance(categoryId: String?): EpisodesFragment {
             val fragment = EpisodesFragment()
-            fragment.arguments = EpisodesFragmentArgs.Builder(SearchQuery(categoryId = categoryId)).build().toBundle()
+            fragment.arguments = EpisodesFragmentArgs.Builder(SearchQuery(categoryId = categoryId), false).build().toBundle()
 
             return fragment
         }
@@ -45,6 +45,7 @@ class EpisodesFragment : Fragment() {
 
         val safeArgs: EpisodesFragmentArgs by navArgs()
         val searchQuery = safeArgs.searchQuery ?: SearchQuery()
+        viewModel.doNotCache = safeArgs.doNotCache
 
         supportActionBar?.elevation = 0f
 

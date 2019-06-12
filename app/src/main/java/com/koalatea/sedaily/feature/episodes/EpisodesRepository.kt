@@ -43,6 +43,11 @@ class EpisodesRepository(
         )
     }
 
+    @MainThread
+    suspend fun clearLocalCache(searchQuery: SearchQuery)  = withContext(Dispatchers.IO) {
+        db.episodeDao().deleteBySearchQuery(searchQuery.hashCode())
+    }
+
     suspend fun vote(episodeId: String, originalState: Boolean, originalScore: Int) = withContext(Dispatchers.IO) {
         val response = if (originalState) {
             db.episodeDao().vote(episodeId, !originalState, originalScore - 1)

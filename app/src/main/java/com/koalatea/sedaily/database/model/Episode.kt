@@ -29,7 +29,7 @@ data class Episode(
 
     @field:PrimaryKey
     var uniqueId: String = _id
-        get() = searchQueryHashCode?.toString() + _id
+        get() = _id + searchQueryHashCode?.toString()
 
     var searchQueryHashCode: Int? = null
 

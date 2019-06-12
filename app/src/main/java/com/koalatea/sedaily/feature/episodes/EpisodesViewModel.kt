@@ -16,6 +16,8 @@ class EpisodesViewModel internal constructor(
         private val userRepository: UserRepository
 ) : ViewModel() {
 
+    var doNotCache: Boolean = false
+
     private val searchQueryLiveData = MutableLiveData<SearchQuery>()
     private val episodesResult: LiveData<Result<Episode>> = Transformations.map(searchQueryLiveData) { searchQuery ->
         episodesRepository.fetchEpisodes(searchQuery)
@@ -28,6 +30,16 @@ class EpisodesViewModel internal constructor(
     private val _navigateToLogin = MutableLiveData<Event<String>>()
     val navigateToLogin: LiveData<Event<String>>
         get() = _navigateToLogin
+
+    override fun onCleared() {
+        super.onCleared()
+
+        if (doNotCache) {
+            searchQueryLiveData.value?.let { searchQuery ->
+                viewModelScope.launch { episodesRepository.clearLocalCache(searchQuery) }
+            }
+        }
+    }
 
     @MainThread
     fun fetchPosts(searchQuery: SearchQuery) {
