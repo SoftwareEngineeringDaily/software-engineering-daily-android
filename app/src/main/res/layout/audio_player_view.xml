@@ -1,49 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <com.google.android.exoplayer2.ui.AspectRatioFrameLayout android:id="@id/exo_content_frame"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:layout_gravity="center">
-
-    <!-- Video surface will be inserted as the first child of the content frame. -->
-
-    <View android:id="@id/exo_shutter"
+    <com.google.android.exoplayer2.ui.AspectRatioFrameLayout
+        android:id="@id/exo_content_frame"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/black"/>
+        android:layout_height="wrap_content">
 
-    <ImageView android:id="@id/exo_artwork"
+        <View
+            android:id="@id/exo_shutter"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white" />
+
+        <ProgressBar
+            android:id="@id/exo_buffering"
+            style="@android:style/Widget.Material.Light.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_gravity="bottom"
+            android:indeterminate="true" />
+
+    </com.google.android.exoplayer2.ui.AspectRatioFrameLayout>
+
+    <View
+        android:id="@id/exo_controller_placeholder"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="fitXY"/>
+        android:layout_height="match_parent" />
 
-    <com.google.android.exoplayer2.ui.SubtitleView android:id="@id/exo_subtitles"
+    <FrameLayout
+        android:id="@id/exo_overlay"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
-    <ProgressBar android:id="@id/exo_buffering"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:indeterminate="true"
-        android:layout_gravity="center"/>
-
-    <TextView android:id="@id/exo_error_message"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:background="@color/exo_error_message_background_color"
-        android:padding="16dp"/>
-
-  </com.google.android.exoplayer2.ui.AspectRatioFrameLayout>
-
-  <FrameLayout android:id="@id/exo_overlay"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"/>
-
-  <View android:id="@id/exo_controller_placeholder"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"/>
+        android:layout_height="wrap_content" />
 
 </merge>

@@ -9,4 +9,9 @@
 
     <color name="destructive">#EE5F59</color>
 
+    <!-- Player -->
+    <color name="played_color">#FF5F46F4</color>
+    <color name="buffered_color">#1F5F46F4</color>
+    <color name="unplayed_color">#FFBEBEBE</color>
+
 </resources>

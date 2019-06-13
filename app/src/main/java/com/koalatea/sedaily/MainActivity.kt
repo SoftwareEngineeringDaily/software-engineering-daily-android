@@ -2,26 +2,33 @@ package com.koalatea.sedaily
 
 import android.app.SearchManager
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
+import com.koalatea.sedaily.database.model.Episode
 import com.koalatea.sedaily.feature.auth.UserRepository
+import com.koalatea.sedaily.feature.player.AudioService
+import com.koalatea.sedaily.feature.player.PlayerCallback
+import com.koalatea.sedaily.feature.player.PlayerFragment
 import com.koalatea.sedaily.util.setupActionBar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.include_default_toolbar.*
 import org.koin.android.ext.android.inject
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), PlayerCallback {
 
     private val userRepository: UserRepository by inject()
 
+    private var playerFragment: PlayerFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,6 +71,23 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             else -> item.onNavDestinationSelected(mainNavHostFragment.findNavController()) || super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun play(episode: Episode) {
+        playerFragment?.play(episode) ?: run {
+            playerFragment = PlayerFragment.newInstance(episode).also {
+                supportFragmentManager.beginTransaction().replace(R.id.fragmentContainer, it).commit()
+            }
+        }
+    }
+
+    override fun stop() {
+        playerFragment?.let {
+            playerFragment?.stop()
+
+            supportFragmentManager.beginTransaction().remove(it)
+            playerFragment = null
         }
     }
 

@@ -11,7 +11,7 @@ buildscript {
         room_version = '2.1.0-rc01'
         supportLibraryVersion = '1.0.0'
         glideVersion = '4.9.0'
-        exoplayer_version = '2.8.4'
+        exoplayer_version = '2.10.1'
         okhttp3Version = '3.9.0'
     }
 

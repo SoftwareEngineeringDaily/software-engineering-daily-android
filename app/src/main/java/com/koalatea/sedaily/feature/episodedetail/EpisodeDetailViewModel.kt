@@ -41,6 +41,8 @@ class EpisodeDetailViewModel internal constructor(
                     _bookmarkLiveData.postValue(Event(BookmarkStatus(episode.bookmarked
                             ?: false), userAction = false))
 
+                    // FIXME :: Update update play/pause livedata
+
                     emit(resource)
                 }
                 is Resource.Error -> {
@@ -65,6 +67,8 @@ class EpisodeDetailViewModel internal constructor(
     private val _bookmarkLiveData = MutableLiveData<Event<BookmarkStatus>>()
     val bookmarkLiveData: LiveData<Event<BookmarkStatus>>
         get() = _bookmarkLiveData
+
+    // FIXME :: Add livedata to update play/pause state
 
     private val episode: Episode?
         get() = (episodeDetailsResource.value as? Resource.Success<Episode>)?.data

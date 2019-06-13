@@ -1,49 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/player_height"
+    android:layout_gravity="bottom"
+    android:layoutDirection="ltr"
+    android:orientation="vertical"
+    android:padding="@dimen/first_keyline">
 
-  <com.google.android.exoplayer2.ui.AspectRatioFrameLayout android:id="@id/exo_content_frame"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:layout_gravity="center">
-
-    <!-- Video surface will be inserted as the first child of the content frame. -->
-
-    <View android:id="@id/exo_shutter"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/black"/>
-
-    <ImageView android:id="@id/exo_artwork"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="fitXY"/>
-
-    <com.google.android.exoplayer2.ui.SubtitleView android:id="@id/exo_subtitles"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
-    <ProgressBar android:id="@id/exo_buffering"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:indeterminate="true"
-        android:layout_gravity="center"/>
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
-    <TextView android:id="@id/exo_error_message"
+        <TextView
+            android:id="@id/exo_position"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:includeFontPadding="false"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+            tools:text="12:00" />
+
+        <com.google.android.exoplayer2.ui.DefaultTimeBar
+            android:id="@id/exo_progress"
+            android:layout_width="0dp"
+            android:layout_height="26dp"
+            android:layout_weight="1"
+            app:buffered_color="@color/buffered_color"
+            app:played_color="@color/played_color"
+            app:unplayed_color="@color/unplayed_color" />
+
+        <TextView
+            android:id="@id/exo_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:includeFontPadding="false"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+            tools:text="24:00" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/titleTextView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
+        android:ellipsize="end"
         android:gravity="center"
-        android:background="@color/exo_error_message_background_color"
-        android:padding="16dp"/>
+        android:lines="2"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+        tools:text="Episode Title" />
 
-  </com.google.android.exoplayer2.ui.AspectRatioFrameLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
 
-  <FrameLayout android:id="@id/exo_overlay"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"/>
+        <ImageButton
+            android:id="@id/exo_rew"
+            style="@style/ExoMediaButton.Rewind"
+            android:tint="@color/colorAccent" />
 
-  <View android:id="@id/exo_controller_placeholder"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"/>
+        <ImageButton
+            android:id="@id/exo_play"
+            style="@style/ExoMediaButton.Play"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:tint="@color/colorAccent" />
 
-</merge>
+        <ImageButton
+            android:id="@id/exo_pause"
+            style="@style/ExoMediaButton.Pause"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:tint="@color/colorAccent" />
+
+        <ImageButton
+            android:id="@id/exo_ffwd"
+            style="@style/ExoMediaButton.FastForward"
+            android:tint="@color/colorAccent" />
+
+    </LinearLayout>
+
+</LinearLayout>

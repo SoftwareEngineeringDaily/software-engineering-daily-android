@@ -9,17 +9,17 @@ import org.koin.android.ext.android.inject
 
 class SpeedDialog : DialogFragment() {
 
-    private val podcastSessionStateManager: PodcastSessionStateManager by inject()
+//    private val podcastSessionStateManager: PodcastSessionStateManager by inject()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(activity!!)
 
-        builder.setTitle(R.string.speed)
-                .setItems(R.array.speed_options) { _, which ->
-                    run {
-                        podcastSessionStateManager.currentSpeed = which
-                    }
-                }
+//        builder.setTitle(R.string.speed)
+//                .setItems(R.array.speed_options) { _, which ->
+//                    run {
+//                        podcastSessionStateManager.currentSpeed = which
+//                    }
+//                }
 
         return builder.create()
     }

@@ -9,4 +9,6 @@
 
     <dimen name="image_corner_radius">8dp</dimen>
 
+    <dimen name="player_height">192dp</dimen>
+
 </resources>

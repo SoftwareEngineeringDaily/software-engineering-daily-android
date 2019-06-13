@@ -2,6 +2,7 @@ package com.koalatea.sedaily.feature.episodedetail
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.text.format.DateFormat
 import android.view.LayoutInflater
@@ -24,6 +25,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.koalatea.sedaily.R
 import com.koalatea.sedaily.database.model.Episode
 import com.koalatea.sedaily.feature.downloader.DownloadStatus
+import com.koalatea.sedaily.feature.player.PlayerCallback
 import com.koalatea.sedaily.model.SearchQuery
 import com.koalatea.sedaily.network.Resource
 import com.koalatea.sedaily.util.supportActionBar
@@ -36,7 +38,7 @@ class EpisodeDetailFragment : Fragment() {
 
     private val viewModel: EpisodeDetailViewModel by viewModel()
 
-    lateinit var episodeId: String
+    private var playerCallback: PlayerCallback? = null
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -47,7 +49,7 @@ class EpisodeDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val safeArgs: EpisodeDetailFragmentArgs by navArgs()
-        episodeId = safeArgs.episodeId
+        val episodeId = safeArgs.episodeId
 
         supportActionBar?.elevation = resources.getDimension(R.dimen.toolbar_elevation)
 
@@ -130,6 +132,18 @@ class EpisodeDetailFragment : Fragment() {
         viewModel.fetchEpisodeDetails(episodeId)
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        playerCallback = context as? PlayerCallback
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+
+        playerCallback = null
+    }
+
     private fun showDownloadProgress(progress: Float) {
         downloadButton.isEnabled = false
 
@@ -168,6 +182,11 @@ class EpisodeDetailFragment : Fragment() {
                 val direction = EpisodeDetailFragmentDirections.openCommentsAction(threadId)
                 findNavController().navigate(direction)
             } ?: acknowledgeGenericError()
+        }
+
+        playButton.setOnClickListener {
+            // FIXME :: Play/pause
+            playerCallback?.play(episode)
         }
 
         // Hide loading view and show content.

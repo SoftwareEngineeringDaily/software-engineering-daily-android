@@ -52,7 +52,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="@dimen/first_keyline"
                 android:ellipsize="end"
-                android:maxLines="2"
+                android:maxLines="3"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
