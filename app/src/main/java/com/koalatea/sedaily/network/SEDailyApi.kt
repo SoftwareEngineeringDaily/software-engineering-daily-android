@@ -5,7 +5,6 @@ import com.koalatea.sedaily.model.User
 import com.koalatea.sedaily.network.response.CommentsResponse
 import com.koalatea.sedaily.network.response.FavoriteResponse
 import com.koalatea.sedaily.network.response.VoteResponse
-import io.reactivex.Single
 import kotlinx.coroutines.Deferred
 import retrofit2.Response
 import retrofit2.http.*
@@ -47,10 +46,10 @@ interface SEDailyApi {
 
     @FormUrlEncoded
     @POST("auth/login")
-    fun login(@Field("username") username: String, @Field("email") email: String, @Field("password") password: String): Single<User>
+    fun loginAsync(@Field("username") username: String, @Field("email") email: String, @Field("password") password: String): Deferred<Response<User>>
 
     @FormUrlEncoded
     @POST("auth/register")
-    fun register(@Field("username") username: String, @Field("email") email: String, @Field("password") password: String): Single<User>
+    fun registerAsync(@Field("username") username: String, @Field("email") email: String, @Field("password") password: String): Deferred<Response<User>>
 
 }

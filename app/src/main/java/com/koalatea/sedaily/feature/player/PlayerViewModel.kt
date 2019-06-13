@@ -7,7 +7,8 @@ import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import androidx.lifecycle.ViewModel
 
-class PlaybarViewModel : ViewModel() {
+class PlayerViewModel : ViewModel() {
+
     fun sendSpeedChangeIntent(currentSpeed: Int, activity: Activity) {
         val controller = MediaControllerCompat.getMediaController(activity)
         if (controller != null) {
@@ -70,6 +71,6 @@ class PlaybarViewModel : ViewModel() {
         args.putInt("DISTANCE", 15000)
         // @TODO: Make constant
         controller.transportControls.sendCustomAction(action, args)
-
     }
+
 }

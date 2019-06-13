@@ -3,12 +3,11 @@ package com.koalatea.sedaily.feature.auth
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.koalatea.sedaily.model.User
 import com.koalatea.sedaily.network.SEDailyApi
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import com.koalatea.sedaily.network.toException
+import kotlinx.coroutines.launch
 
 class AuthViewModel(
         private val userRepository: UserRepository,
@@ -20,18 +19,12 @@ class AuthViewModel(
     private val submissionText = MutableLiveData<String>()
     private val toggleText = MutableLiveData<String>()
     private val usernameText = MutableLiveData<String>()
-    private val compositeDisposable = CompositeDisposable()
 
     val userToken = MutableLiveData<String>()
     val authError = MutableLiveData<Throwable>()
 
     init {
         setUpRegister()
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        compositeDisposable.dispose()
     }
 
     private fun setUpRegister() {
@@ -84,11 +77,20 @@ class AuthViewModel(
             emailToSubmit = username
         }
 
-        val disposable = getQuery(username, password, emailToSubmit)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ this.handleLoginSuccess(it) }, { this.handleLoginError(it) })
-        compositeDisposable.add(disposable)
+        viewModelScope.launch {
+            val response = if (screen === "Register") {
+                sedailyApi.registerAsync(username, email, password)
+            } else {
+                sedailyApi.loginAsync(username, email, password)
+            }.await()
+
+            val user = response.body()
+            if (response.isSuccessful && user != null) {
+                handleLoginSuccess(user)
+            } else {
+                handleLoginError(response.errorBody().toException())
+            }
+        }
     }
 
     private fun handleLoginSuccess(user: User) {
@@ -100,11 +102,4 @@ class AuthViewModel(
         authError.value = error
     }
 
-    private fun getQuery(username: String, password: String, email: String): Single<User> {
-        val mService = sedailyApi
-        return if (screen === "Register") {
-            mService.register(username, email, password)
-        } else mService.login(username, email, password)
-
-    }
 }

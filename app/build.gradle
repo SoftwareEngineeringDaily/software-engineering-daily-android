@@ -106,7 +106,6 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-moshi:$retrofit_version"
     implementation 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2'
-    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
 
     // Okhttp
     implementation "com.squareup.okhttp3:okhttp:$okhttp3Version"
@@ -119,21 +118,10 @@ dependencies {
     // Gson
     implementation 'com.google.code.gson:gson:2.8.5'
 
-    // FIXME :: Remove
-    // Rx
-    implementation "io.reactivex.rxjava2:rxjava:2.2.2"
-    implementation "io.reactivex.rxjava2:rxandroid:2.1.0"
-
     // Audio
-    if (findProject(':exoplayer-library-core') != null) {
-        api project(':exoplayer-library-core')
-        api project(':exoplayer-library-ui')
-        api project(':exoplayer-extension-mediasession')
-    } else {
-        api "com.google.android.exoplayer:exoplayer-core:$exoplayer_version"
-        api "com.google.android.exoplayer:exoplayer-ui:$exoplayer_version"
-        api "com.google.android.exoplayer:extension-mediasession:$exoplayer_version"
-    }
+    implementation "com.google.android.exoplayer:exoplayer-core:$exoplayer_version"
+    implementation "com.google.android.exoplayer:exoplayer-ui:$exoplayer_version"
+    implementation "com.google.android.exoplayer:extension-mediasession:$exoplayer_version"
 
     // Firebase
     implementation 'com.google.firebase:firebase-core:16.0.9'

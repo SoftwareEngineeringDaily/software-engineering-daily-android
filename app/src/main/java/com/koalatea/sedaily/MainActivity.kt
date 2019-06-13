@@ -6,23 +6,22 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import com.koalatea.sedaily.feature.auth.UserRepository
-import com.koalatea.sedaily.feature.player.PlaybackActivity
 import com.koalatea.sedaily.util.setupActionBar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.include_default_toolbar.*
 import org.koin.android.ext.android.inject
 
-class MainActivity : PlaybackActivity() {
+class MainActivity : AppCompatActivity() {
 
     private val userRepository: UserRepository by inject()
 
-//    private val SEDAILY_EXTERNAL_PERMISSION_REQUEST = 987
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,18 +36,10 @@ class MainActivity : PlaybackActivity() {
         navController.setupActionBar(this, appBarConfiguration)
         setupBottomNavMenu(navController)
 
-        // Set up media
-        this.setUp()
-//        checkForPermissions()
         handleIntent(intent)
     }
 
     private fun setupBottomNavMenu(navController: NavController) = bottomNavigationView?.setupWithNavController(navController)
-
-//    override fun onNewIntent(intent: Intent) {
-//        setIntent(intent)
-//        handleIntent(intent)
-//    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater: MenuInflater = menuInflater
@@ -58,7 +49,6 @@ class MainActivity : PlaybackActivity() {
                 setLogout(menu)
             }
         }
-
 
         return true
     }
@@ -89,48 +79,11 @@ class MainActivity : PlaybackActivity() {
 
     }
 
-//    private fun checkForPermissions() {
-//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-//                != PackageManager.PERMISSION_GRANTED) {
-////            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-////                            Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-////            } else {
-//            ActivityCompat.requestPermissions(this,
-//                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-//                    SEDAILY_EXTERNAL_PERMISSION_REQUEST)
-//
-////            }
-//        }
-//    }
-//
-//    override fun onRequestPermissionsResult(requestCode: Int,
-//                                            permissions: Array<String>, grantResults: IntArray) {
-//        when (requestCode) {
-//            SEDAILY_EXTERNAL_PERMISSION_REQUEST -> {
-//                // If request is cancelled, the result arrays are empty.
-//                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-//                    // permission was granted, yay! Do the
-//                    // contacts-related task you need to do.
-//                } else {
-//                    // permission denied, boo! Disable the
-//                    // functionality that depends on this permission.
-//                }
-//                return
-//            }
-//
-//            // Add other 'when' lines to check for other
-//            // permissions this app might request.
-//            else -> {
-//                // Ignore all other requests.
-//            }
-//        }
-//    }
-
     override fun onSupportNavigateUp(): Boolean {
         return mainNavHostFragment.findNavController().navigateUp()
     }
 
-    fun setLogout(menu: Menu) {
+    private fun setLogout(menu: Menu) {
         val authItem = menu.findItem(R.id.navigation_auth)
         authItem?.title = "Logout"
         authItem.setOnMenuItemClickListener {
