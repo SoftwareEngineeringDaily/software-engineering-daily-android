@@ -10,7 +10,9 @@ import android.os.IBinder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.google.android.exoplayer2.DefaultRenderersFactory
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
@@ -20,32 +22,30 @@ import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
+import com.google.android.material.snackbar.Snackbar
 import com.koalatea.sedaily.R
 import com.koalatea.sedaily.database.model.Episode
+import com.koalatea.sedaily.network.Resource
+import kotlinx.android.synthetic.main.fragment_episode_detail.*
+import kotlinx.android.synthetic.main.fragment_player.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-private const val ARG_URI = "uri"
-private const val ARG_START_POSITION = "start_position"
+private const val ARG_EPISODE_ID = "episode_id"
 
 class PlayerFragment : Fragment(), PlayerCallback {
 
     companion object {
-        fun newInstance(episode: Episode): PlayerFragment {
+        fun newInstance(episodeId: String): PlayerFragment {
             val fragment = PlayerFragment()
             fragment.arguments = Bundle().apply {
-                // FIXME :: Use episode local ot remote uri
-                // FIXME :: what if the url was null or empty
-                putParcelable(ARG_URI, Uri.parse(episode.httpsMp3Url))
-//                putLong(ARG_START_POSITION, startPosition)
+                putString(ARG_EPISODE_ID, episodeId)
             }
 
             return fragment
         }
     }
     
-//    private val podcastSessionStateManager: PodcastSessionStateManager by inject()
-
-    private val playerViewModel: PlayerViewModel by viewModel()
+    private val viewModel: PlayerViewModel by viewModel()
 
     private var audioService: AudioService? = null
 
@@ -54,15 +54,8 @@ class PlayerFragment : Fragment(), PlayerCallback {
             val binder = service as AudioService.AudioServiceBinder
             audioService = binder.service
 
-            // FIXME ::
-//            ((view as? ViewGroup)?.getChildAt(0) as? PlayerView)?.player = audioService?.exoPlayer
-            val playerView = view as? PlayerView
-//            playerView?.controllerShowTimeoutMs = 0
-//            playerView?.controllerHideOnTouch = false
-            playerView?.player = audioService?.exoPlayer
-//            view?.findViewById<PlayerView>(R.id.playerView)?.player = audioService?.exoPlayer
-//            playerView.player = audioService?.exoPlayer
-
+            // Attach the ExoPlayer to the PlayerView.
+            (view as? PlayerView)?.apply { player = audioService?.exoPlayer }
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
@@ -80,23 +73,35 @@ class PlayerFragment : Fragment(), PlayerCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        stop_player_btn.setOnClickListener {
-//            startService(Intent(this, AudioService::class.java).apply {
-//                putExtra(AudioService.PLAY_PAUSE_ACTION, 0)
-//            })
-//        }
+        viewModel.episodeDetailsResource.observe(this, Observer { resource ->
+            when (resource) {
+                is Resource.Loading -> {} // Do nothing.
+                is Resource.Success<Episode> -> renderContent(resource.data)
+                is Resource.Error -> acknowledgeGenericError()
+            }
+        })
+
+        viewModel.playMediaLiveData.observe(this, Observer {
+            it.getContentIfNotHandled()?.let { episode ->
+                context?.let { context ->
+                    AudioService.newIntent(context, episode.uri, episode.startPosition).also { intent ->
+                        activity?.startService(intent)
+                    }
+                } ?: acknowledgeGenericError()
+            }
+        })
+
+        arguments?.getString(ARG_EPISODE_ID)?.also {
+            viewModel.play(it)
+        }
     }
 
     override fun onStart() {
         super.onStart()
 
-        val intent = Intent(context, AudioService::class.java).apply {
-            putExtra(ARG_URI, arguments?.getParcelable<Uri>(ARG_URI))
-
-            // FIXME :: RESET after first use
-//            arguments?.remove(ARG_URI)
+        AudioService.newIntent(requireContext()).also { intent ->
+            activity?.bindService(intent, connection, Context.BIND_AUTO_CREATE)
         }
-        activity?.bindService(intent, connection, Context.BIND_AUTO_CREATE)
     }
 
     override fun onStop() {
@@ -106,16 +111,16 @@ class PlayerFragment : Fragment(), PlayerCallback {
         audioService = null
     }
 
-    override fun play(episode: Episode) {
-        // FIXME :: Use episode local ot remote uri
-        val uri = Uri.parse("https://traffic.libsyn.com/sedaily/2019_06_10_KubernetesStoragewithSaadAli.mp3")
-        val startPosition = 0L
-
-        audioService?.playMedia(uri, startPosition) // TODO :: ?: showError()
-    }
+    override fun play(episode: Episode) = viewModel.play(episode._id)
 
     override fun stop() {
         activity?.stopService(Intent(context, AudioService::class.java))
     }
+
+    private fun renderContent(episode: Episode) {
+        playerView.findViewById<TextView>(R.id.titleTextView).text = episode.titleString
+    }
+
+    private fun acknowledgeGenericError() = Snackbar.make(containerConstraintLayout, R.string.error_generic, Snackbar.LENGTH_SHORT).show()
 
 }

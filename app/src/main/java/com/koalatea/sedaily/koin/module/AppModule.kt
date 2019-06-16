@@ -8,8 +8,8 @@ import com.koalatea.sedaily.database.AppDatabase
 import com.koalatea.sedaily.feature.auth.UserRepository
 import com.koalatea.sedaily.feature.commentList.CommentsRepository
 import com.koalatea.sedaily.feature.downloader.DownloadManager
-import com.koalatea.sedaily.feature.episodedetail.EpisodeDetailsRepository
-import com.koalatea.sedaily.feature.episodes.EpisodesRepository
+import com.koalatea.sedaily.repository.EpisodeDetailsRepository
+import com.koalatea.sedaily.repository.EpisodesRepository
 import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
 

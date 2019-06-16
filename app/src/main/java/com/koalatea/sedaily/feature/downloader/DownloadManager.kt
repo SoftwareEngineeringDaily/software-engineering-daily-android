@@ -39,6 +39,7 @@ class DownloadManager(private val context: Context) {
             }
 
             val status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
+            val uri = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI))
             val reason = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_REASON))
             val bytesDownloaded = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR))
             val bytesTotal = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES))
@@ -47,7 +48,7 @@ class DownloadManager(private val context: Context) {
             cursor.close()
 
             return when(status) {
-                DownloadManager.STATUS_SUCCESSFUL -> DownloadStatus.Downloaded
+                DownloadManager.STATUS_SUCCESSFUL -> DownloadStatus.Downloaded(uri)
                 DownloadManager.STATUS_FAILED -> DownloadStatus.Error(reason)
                 DownloadManager.STATUS_RUNNING -> DownloadStatus.Downloading(progress)
                 DownloadManager.STATUS_PAUSED -> DownloadStatus.Downloading(progress)

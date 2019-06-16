@@ -1,11 +1,10 @@
 package com.koalatea.sedaily.database.converter
 
+import android.net.Uri
 import androidx.room.TypeConverter
 import com.google.gson.GsonBuilder
-import com.koalatea.sedaily.database.model.*
 import com.google.gson.reflect.TypeToken
-
-
+import com.koalatea.sedaily.database.model.*
 
 class EpisodeConverter {
 
@@ -47,8 +46,8 @@ class EpisodeConverter {
     }
 
     @TypeConverter
-    fun jsonStringToThread(string: String?): Thread? {
-        return string?.let { gson.fromJson(string, Thread::class.java) }
+    fun jsonStringToThread(json: String?): Thread? {
+        return json?.let { gson.fromJson(json, Thread::class.java) }
     }
 
     @TypeConverter
@@ -57,8 +56,18 @@ class EpisodeConverter {
     }
 
     @TypeConverter
-    fun jsonStringToFilteredTags(string: String?): List<Tag>? {
-        return string?.let { gson.fromJson(string, object : TypeToken<ArrayList<Tag>>() {}.type) }
+    fun jsonStringToFilteredTags(json: String?): List<Tag>? {
+        return json?.let { gson.fromJson(json, object : TypeToken<ArrayList<Tag>>() {}.type) }
+    }
+
+    @TypeConverter
+    fun uriFromString(value: String?): Uri? {
+        return value?.let { Uri.parse(value) }
+    }
+
+    @TypeConverter
+    fun uriToString(uri: Uri?): String? {
+        return uri.toString()
     }
 
 }

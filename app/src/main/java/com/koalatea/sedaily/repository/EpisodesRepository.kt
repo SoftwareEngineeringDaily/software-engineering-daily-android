@@ -1,4 +1,4 @@
-package com.koalatea.sedaily.feature.episodes
+package com.koalatea.sedaily.repository
 
 import androidx.annotation.MainThread
 import androidx.paging.toLiveData
@@ -43,7 +43,6 @@ class EpisodesRepository(
         )
     }
 
-    @MainThread
     suspend fun clearLocalCache(searchQuery: SearchQuery)  = withContext(Dispatchers.IO) {
         db.episodeDao().deleteBySearchQuery(searchQuery.hashCode())
     }

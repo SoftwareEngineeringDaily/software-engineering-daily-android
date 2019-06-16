@@ -8,6 +8,7 @@ import com.koalatea.sedaily.database.model.Episode
 import com.koalatea.sedaily.model.SearchQuery
 import com.koalatea.sedaily.network.NetworkState
 import com.koalatea.sedaily.network.Result
+import com.koalatea.sedaily.repository.EpisodesRepository
 import com.koalatea.sedaily.util.Event
 import kotlinx.coroutines.launch
 

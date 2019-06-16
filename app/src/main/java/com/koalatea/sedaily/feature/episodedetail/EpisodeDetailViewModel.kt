@@ -7,8 +7,9 @@ import com.koalatea.sedaily.feature.auth.UserRepository
 import com.koalatea.sedaily.feature.downloader.DownloadStatus
 import com.koalatea.sedaily.feature.episodedetail.event.BookmarkStatus
 import com.koalatea.sedaily.feature.episodedetail.event.UpvoteStatus
-import com.koalatea.sedaily.feature.episodes.EpisodesRepository
+import com.koalatea.sedaily.repository.EpisodesRepository
 import com.koalatea.sedaily.network.Resource
+import com.koalatea.sedaily.repository.EpisodeDetailsRepository
 import com.koalatea.sedaily.util.Event
 import kotlinx.coroutines.launch
 import java.util.*

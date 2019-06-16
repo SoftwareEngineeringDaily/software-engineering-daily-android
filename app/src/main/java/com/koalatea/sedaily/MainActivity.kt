@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity(), PlayerCallback {
 
     override fun play(episode: Episode) {
         playerFragment?.play(episode) ?: run {
-            playerFragment = PlayerFragment.newInstance(episode).also {
+            playerFragment = PlayerFragment.newInstance(episode._id).also {
                 supportFragmentManager.beginTransaction().replace(R.id.fragmentContainer, it).commit()
             }
         }

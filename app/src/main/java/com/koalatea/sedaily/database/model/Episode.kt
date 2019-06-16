@@ -1,5 +1,6 @@
 package com.koalatea.sedaily.database.model
 
+import android.net.Uri
 import android.os.Build
 import android.text.Html
 import androidx.room.Entity
@@ -38,6 +39,15 @@ data class Episode(
 
     @Ignore
     var downloadedId: Long? = null
+
+    @Ignore
+    var uri: String? = null
+
+    @Ignore
+    var startPosition: Long = 0L
+
+    @Ignore
+    var total: Long? = null
 
     val titleString: String?
         get() = title?.rendered?.htmlToText()

@@ -1,10 +1,11 @@
-package com.koalatea.sedaily.feature.episodedetail
+package com.koalatea.sedaily.repository
 
 import androidx.annotation.MainThread
 import com.koalatea.sedaily.database.AppDatabase
 import com.koalatea.sedaily.database.model.Download
 import com.koalatea.sedaily.database.model.Episode
 import com.koalatea.sedaily.feature.downloader.DownloadManager
+import com.koalatea.sedaily.feature.downloader.DownloadStatus
 import com.koalatea.sedaily.network.Resource
 import com.koalatea.sedaily.network.SEDailyApi
 import com.koalatea.sedaily.network.toException
@@ -23,8 +24,27 @@ class EpisodeDetailsRepository constructor(
         if (response.isSuccessful && episode != null) {
             val cachedEpisode = db.episodeDao().findById(episodeId)
 
+            // In case that was requested before upvote or bookmark calls are done.
             Resource.Success(episode.copy(upvoted = cachedEpisode.upvoted, bookmarked = cachedEpisode.bookmarked).apply {
                 downloadedId = db.downloadDao().findById(episodeId)?.downloadId
+
+                // Get local uriString if file was already download downloaded otherwise use remote url.
+                downloadedId?.let {
+                    val downloadStatus = getDownloadStatus(it)
+                    uri = if (downloadStatus is DownloadStatus.Downloaded) {
+                        downloadStatus.uriString
+                    } else {
+                        episode.httpsMp3Url
+                    }
+                } ?: run {
+                    uri = episode.httpsMp3Url
+                }
+
+                // Continue from where the user left off.
+                db.listenedDao().findById(episodeId)?.let {
+                    startPosition = it.startPosition
+                    total = it.total
+                }
             })
         } else {
             Resource.Error(response.errorBody().toException())

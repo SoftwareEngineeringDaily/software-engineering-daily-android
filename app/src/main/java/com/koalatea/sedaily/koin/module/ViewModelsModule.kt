@@ -16,7 +16,7 @@ val viewModelsModule = module {
 
     viewModel { EpisodeDetailViewModel(get(), get(), get()) }
 
-    viewModel { PlayerViewModel() }
+    viewModel { PlayerViewModel(get()) }
 
     viewModel { AuthViewModel(get(), get()) }
 

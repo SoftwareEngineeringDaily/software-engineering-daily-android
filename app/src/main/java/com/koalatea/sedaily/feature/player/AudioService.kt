@@ -1,6 +1,7 @@
 package com.koalatea.sedaily.feature.player
 
 import android.app.Service
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Binder
@@ -14,7 +15,7 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import com.koalatea.sedaily.BuildConfig
 
-private const val ARG_URI = "uri"
+private const val ARG_URI = "uriString"
 private const val ARG_START_POSITION = "start_position"
 
 class AudioService : Service() {
@@ -24,19 +25,24 @@ class AudioService : Service() {
             get() = this@AudioService
     }
 
+    companion object {
+
+        fun newIntent(context: Context, uriString: String? = null, startPosition: Long = 0) = Intent(context, AudioService::class.java).apply {
+            uriString?.let {
+                putExtra(ARG_URI, Uri.parse(uriString))
+                putExtra(ARG_START_POSITION, startPosition)
+            }
+        }
+
+    }
+
     lateinit var exoPlayer: SimpleExoPlayer
         private set
 
     private var autoPlayStateSet = false
 
     override fun onBind(intent: Intent?): IBinder {
-        intent?.let {
-            intent.getParcelableExtra<Uri>(ARG_URI).also { uri ->
-                val startPosition = intent.getLongExtra(ARG_START_POSITION, C.POSITION_UNSET.toLong())
-
-                playMedia(uri, startPosition)
-            }
-        }
+        handleIntent(intent)
 
         return AudioServiceBinder()
     }
@@ -48,17 +54,11 @@ class AudioService : Service() {
         exoPlayer.addListener(PlayerEventListener())
     }
 
-//    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-//        intent?.let {
-//            intent.getParcelableExtra<Uri>(ARG_URI).also { uri ->
-//                val startPosition = intent.getLongExtra(ARG_START_POSITION, C.POSITION_UNSET.toLong())
-//
-//                playMedia(uri, startPosition)
-//            }
-//        }
-//
-//        return super.onStartCommand(intent, flags, startId)
-//    }
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        handleIntent(intent)
+
+        return super.onStartCommand(intent, flags, startId)
+    }
 
     override fun onDestroy() {
         super.onDestroy()
@@ -67,7 +67,7 @@ class AudioService : Service() {
 //        playerNotificationManager.setPlayer(null)
     }
 
-    fun playMedia(uri: Uri, startPosition: Long) {
+    fun play(uri: Uri, startPosition: Long) {
         val userAgent = Util.getUserAgent(applicationContext, BuildConfig.APPLICATION_ID)
         val mediaSource = ExtractorMediaSource(
                 uri,
@@ -85,6 +85,16 @@ class AudioService : Service() {
 
 //        // Variable speed playback https://medium.com/google-exoplayer/variable-speed-playback-with-exoplayer-e6e6a71e0343
 ////        exoPlayer.setPlaybackParameters
+    }
+
+    private fun handleIntent(intent: Intent?) {
+        intent?.let {
+            intent.getParcelableExtra<Uri>(ARG_URI)?.also { uri ->
+                val startPosition = intent.getLongExtra(ARG_START_POSITION, C.POSITION_UNSET.toLong())
+
+                play(uri, startPosition)
+            }
+        }
     }
 
     private fun showNotification() {
