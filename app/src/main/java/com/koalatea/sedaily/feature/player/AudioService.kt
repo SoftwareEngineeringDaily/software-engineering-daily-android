@@ -19,6 +19,8 @@ import androidx.annotation.Nullable
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.lifecycle.LifecycleService
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
@@ -35,6 +37,8 @@ import com.koalatea.sedaily.R
 import com.koalatea.sedaily.database.AppDatabase
 import com.koalatea.sedaily.database.model.Episode
 import com.koalatea.sedaily.database.model.Listened
+import com.koalatea.sedaily.feature.episodedetail.event.BookmarkStatus
+import com.koalatea.sedaily.util.Event
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
@@ -86,6 +90,10 @@ class AudioService : LifecycleService() {
     private var playerNotificationManager: PlayerNotificationManager? = null
     private var mediaSession: MediaSessionCompat? = null
     private var mediaSessionConnector: MediaSessionConnector? = null
+
+    private val _playerStatusLiveData = MutableLiveData<PlayerStatus>()
+    val playerStatusLiveData: LiveData<PlayerStatus>
+        get() = _playerStatusLiveData
 
     override fun onBind(intent: Intent?): IBinder {
         super.onBind(intent)
@@ -253,15 +261,20 @@ class AudioService : LifecycleService() {
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
             Log.e("ZZZ", "Playback state :: $playbackState, contentPosition :: ${exoPlayer.contentPosition}, isPlaying :: $isPlaying")
             if (playbackState == Player.STATE_READY) {
-                // Paused
-                if (!exoPlayer.playWhenReady) {
+                if (exoPlayer.playWhenReady) {
+                    episodeId?.let { _playerStatusLiveData.value = PlayerStatus.Playing(it) }
+                } else {// Paused
+                    episodeId?.let { _playerStatusLiveData.value = PlayerStatus.Paused(it) }
+
                     saveLastListeningPosition()
                 }
+            } else {
+                _playerStatusLiveData.value = PlayerStatus.Other
             }
         }
 
         override fun onPlayerError(e: ExoPlaybackException?) {
-            Log.e("ZZZ", "Error :: $e")
+            episodeId?.let { _playerStatusLiveData.value = PlayerStatus.Error(it, e) }
         }
 
     }

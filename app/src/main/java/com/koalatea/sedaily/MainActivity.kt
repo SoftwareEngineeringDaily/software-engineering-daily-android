@@ -11,6 +11,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.LiveData
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -21,12 +22,13 @@ import com.koalatea.sedaily.feature.auth.UserRepository
 import com.koalatea.sedaily.feature.player.AudioService
 import com.koalatea.sedaily.feature.player.PlayerCallback
 import com.koalatea.sedaily.feature.player.PlayerFragment
+import com.koalatea.sedaily.feature.player.PlayerStatus
+import com.koalatea.sedaily.util.AbsentLiveData
 import com.koalatea.sedaily.util.isServiceRunning
 import com.koalatea.sedaily.util.setupActionBar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.include_default_toolbar.*
 import org.koin.android.ext.android.inject
-
 
 class MainActivity : AppCompatActivity(), PlayerCallback {
 
@@ -48,6 +50,9 @@ class MainActivity : AppCompatActivity(), PlayerCallback {
 
     private var playerFragment: PlayerFragment? = null
     private var isAudioServiceBound: Boolean = false
+
+    override val playerStatusLiveData: LiveData<PlayerStatus>
+        get() = playerFragment?.playerStatusLiveData ?: AbsentLiveData.create()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

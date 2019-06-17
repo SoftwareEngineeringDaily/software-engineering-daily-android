@@ -11,6 +11,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.material.snackbar.Snackbar
@@ -20,6 +22,7 @@ import com.koalatea.sedaily.network.Resource
 import kotlinx.android.synthetic.main.fragment_episode_detail.*
 import kotlinx.android.synthetic.main.fragment_player.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+
 
 private const val ARG_EPISODE_ID = "episode_id"
 private const val ARG_AUTO_PLAY = "auto_play"
@@ -48,6 +51,10 @@ class PlayerFragment : Fragment(), PlayerCallback {
 
             // Attach the ExoPlayer to the PlayerView.
             (view as? PlayerView)?.apply { player = audioService?.exoPlayer }
+
+            audioService?.playerStatusLiveData?.observe(this@PlayerFragment, Observer {
+                _playerStatusLiveData.value = it
+            })
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
@@ -55,11 +62,14 @@ class PlayerFragment : Fragment(), PlayerCallback {
         }
     }
 
+    private val _playerStatusLiveData: MutableLiveData<PlayerStatus> = MutableLiveData()
+    override val playerStatusLiveData: LiveData<PlayerStatus>
+        get() = _playerStatusLiveData
+
     override fun isPLaying(episodeId: String): Boolean? = audioService?.isPlaying == true && audioService?.episodeId == episodeId
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? = inflater.inflate(R.layout.fragment_player, container, false)
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

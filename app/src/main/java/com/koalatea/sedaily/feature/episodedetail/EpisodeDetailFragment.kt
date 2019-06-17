@@ -26,6 +26,7 @@ import com.koalatea.sedaily.R
 import com.koalatea.sedaily.database.model.Episode
 import com.koalatea.sedaily.feature.downloader.DownloadStatus
 import com.koalatea.sedaily.feature.player.PlayerCallback
+import com.koalatea.sedaily.feature.player.PlayerStatus
 import com.koalatea.sedaily.model.SearchQuery
 import com.koalatea.sedaily.network.Resource
 import com.koalatea.sedaily.util.supportActionBar
@@ -237,12 +238,43 @@ class EpisodeDetailFragment : Fragment() {
     }
 
     private fun renderPlay(episode: Episode) {
-        val isPlaying = playerCallback?.isPLaying(episode._id) ?: false
-        playButton.visibility = if (isPlaying) View.INVISIBLE else View.VISIBLE
-        playButton.setOnClickListener { playerCallback?.play(episode) }
+        // Playback is not supported
+        if (playerCallback == null) {
+            hidePlayerViews()
+        } else {
+            val isPlaying = playerCallback?.isPLaying(episode._id) ?: false
+            if (isPlaying) {
+                showStopViews()
+            } else {
+                showPlayViews()
+            }
 
-        stopButton.visibility = if (isPlaying) View.VISIBLE else View.INVISIBLE
-        stopButton.setOnClickListener { playerCallback?.stop() }
+            playButton.setOnClickListener {
+                playerCallback?.play(episode)
+
+                monitorPlayback(episode)
+            }
+            stopButton.setOnClickListener {
+                playerCallback?.stop()
+
+                playerCallback?.playerStatusLiveData?.removeObservers(this)
+            }
+        }
+    }
+
+    private fun monitorPlayback(episode: Episode) {
+        playerCallback?.playerStatusLiveData?.observe(this, Observer { playerStatus ->
+            if (playerStatus is PlayerStatus.Playing ||
+                    playerStatus is PlayerStatus.Paused ||
+                    playerStatus is PlayerStatus.Error &&
+                    episode._id == playerStatus.episodeId) {
+                when (playerStatus) {
+                    is PlayerStatus.Playing -> showStopViews()
+                    is PlayerStatus.Paused -> showPlayViews()
+                    is PlayerStatus.Error -> acknowledgeGenericError()
+                }
+            }
+        })
     }
 
     private fun showDownloadViews() {
@@ -256,6 +288,21 @@ class EpisodeDetailFragment : Fragment() {
         deleteButton.visibility = View.VISIBLE
         downloadButton.visibility = View.INVISIBLE
         downloadProgressBar.visibility = View.INVISIBLE
+    }
+
+    private fun hidePlayerViews() {
+        playButton.visibility = View.INVISIBLE
+        stopButton.visibility = View.INVISIBLE
+    }
+
+    private fun showPlayViews() {
+        playButton.visibility = View.VISIBLE
+        stopButton.visibility = View.INVISIBLE
+    }
+
+    private fun showStopViews() {
+        playButton.visibility = View.INVISIBLE
+        stopButton.visibility = View.VISIBLE
     }
 
     private fun acknowledgeGenericError() = Snackbar.make(containerConstraintLayout, R.string.error_generic, Snackbar.LENGTH_SHORT).show()
