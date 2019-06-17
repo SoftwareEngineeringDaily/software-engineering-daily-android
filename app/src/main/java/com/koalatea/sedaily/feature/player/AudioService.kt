@@ -53,9 +53,6 @@ private const val DEFAILT_AUTO_PLAY = true
 class AudioService : LifecycleService() {
 
     inner class AudioServiceBinder : Binder() {
-        val episodeId
-            get() = this@AudioService.episodeId
-
         val service
             get() = this@AudioService
     }
@@ -77,7 +74,8 @@ class AudioService : LifecycleService() {
 
     private val appDatabase: AppDatabase by inject()
 
-    private var episodeId: String? = null
+    var episodeId: String? = null
+        private set
 
     val isPlaying
         get() = exoPlayer.playbackState == Player.STATE_READY && exoPlayer.playWhenReady
@@ -101,7 +99,6 @@ class AudioService : LifecycleService() {
         super.onCreate()
 
         exoPlayer = ExoPlayerFactory.newSimpleInstance(this, DefaultTrackSelector())
-        exoPlayer.playWhenReady = true
         exoPlayer.addListener(PlayerEventListener())
     }
 
@@ -138,6 +135,7 @@ class AudioService : LifecycleService() {
         }
 
         exoPlayer.prepare(mediaSource, !haveStartPosition, false)
+        exoPlayer.playWhenReady = true
 
 //        // Variable speed playback https://medium.com/google-exoplayer/variable-speed-playback-with-exoplayer-e6e6a71e0343
 ////        exoPlayer.setPlaybackParameters
@@ -153,7 +151,7 @@ class AudioService : LifecycleService() {
                 PLAYBACK_NOTIFICATION_ID,
                 object : PlayerNotificationManager.MediaDescriptionAdapter {
                     override fun getCurrentContentTitle(player: Player): String {
-                        return intent?.getStringExtra(ARG_TITLE) ?: ""
+                        return intent?.getStringExtra(ARG_TITLE) ?: getString(R.string.loading_dots)
                     }
 
                     @Nullable
@@ -208,7 +206,7 @@ class AudioService : LifecycleService() {
                         putParcelable(MediaMetadataCompat.METADATA_KEY_DISPLAY_ICON, bitmap)
                     }
 
-                    val title = intent?.getStringExtra(ARG_TITLE) ?: ""
+                    val title = intent?.getStringExtra(ARG_TITLE) ?: getString(R.string.loading_dots)
 
                     return MediaDescriptionCompat.Builder()
                             .setIconBitmap(bitmap)

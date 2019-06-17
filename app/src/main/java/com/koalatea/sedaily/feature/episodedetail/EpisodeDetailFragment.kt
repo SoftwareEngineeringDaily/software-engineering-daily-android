@@ -120,7 +120,7 @@ class EpisodeDetailFragment : Fragment() {
 
         viewModel.bookmarkLiveData.observe(this, Observer {
             val bookmarkEvent = it.peekContent()
-            bookmarkButton.setIconResource(if (bookmarkEvent.bookmarked == true) R.drawable.vd_bookmark else R.drawable.vd_bookmark_border)
+            bookmarkButton.setIconResource(if (bookmarkEvent.bookmarked) R.drawable.vd_bookmark else R.drawable.vd_bookmark_border)
 
             if (it.userAction && !it.handleIfNotHandled()) {
                 if (bookmarkEvent.failed) {
@@ -176,18 +176,9 @@ class EpisodeDetailFragment : Fragment() {
 
         renderContent(episode)
 
-        commentsButton.text = episode.thread?.commentsCount?.let { if (it > 0) it.toString() else "" }
-        commentsButton.setOnClickListener {
-            episode.thread?._id?.let { threadId ->
-                val direction = EpisodeDetailFragmentDirections.openCommentsAction(threadId)
-                findNavController().navigate(direction)
-            } ?: acknowledgeGenericError()
-        }
+        renderComments(episode)
 
-        playButton.setOnClickListener {
-            // FIXME :: Play/pause
-            playerCallback?.play(episode)
-        }
+        renderPlay(episode)
 
         // Hide loading view and show content.
         progressBar.visibility = View.GONE
@@ -233,6 +224,25 @@ class EpisodeDetailFragment : Fragment() {
             contentWebView.settings.defaultTextEncodingName = "utf-8"
             contentWebView.loadDataWithBaseURL(null, html, "text/html", "utf-8", null)
         }
+    }
+
+    private fun renderComments(episode: Episode) {
+        commentsButton.text = episode.thread?.commentsCount?.let { if (it > 0) it.toString() else "" }
+        commentsButton.setOnClickListener {
+            episode.thread?._id?.let { threadId ->
+                val direction = EpisodeDetailFragmentDirections.openCommentsAction(threadId)
+                findNavController().navigate(direction)
+            } ?: acknowledgeGenericError()
+        }
+    }
+
+    private fun renderPlay(episode: Episode) {
+        val isPlaying = playerCallback?.isPLaying(episode._id) ?: false
+        playButton.visibility = if (isPlaying) View.INVISIBLE else View.VISIBLE
+        playButton.setOnClickListener { playerCallback?.play(episode) }
+
+        stopButton.visibility = if (isPlaying) View.VISIBLE else View.INVISIBLE
+        stopButton.setOnClickListener { playerCallback?.stop() }
     }
 
     private fun showDownloadViews() {

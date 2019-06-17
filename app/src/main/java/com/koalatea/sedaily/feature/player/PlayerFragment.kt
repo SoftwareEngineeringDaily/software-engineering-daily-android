@@ -41,7 +41,6 @@ class PlayerFragment : Fragment(), PlayerCallback {
     private val viewModel: PlayerViewModel by viewModel()
 
     private var audioService: AudioService? = null
-
     private val connection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             val binder = service as AudioService.AudioServiceBinder
@@ -55,6 +54,8 @@ class PlayerFragment : Fragment(), PlayerCallback {
             audioService = null
         }
     }
+
+    override fun isPLaying(episodeId: String): Boolean? = audioService?.isPlaying == true && audioService?.episodeId == episodeId
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? = inflater.inflate(R.layout.fragment_player, container, false)
@@ -73,12 +74,11 @@ class PlayerFragment : Fragment(), PlayerCallback {
 
         viewModel.playMediaLiveData.observe(this, Observer {
             it.getContentIfNotHandled()?.let { episode ->
-                context?.let { context ->
-                    AudioService.newIntent(context, episode, arguments?.getBoolean(ARG_AUTO_PLAY) ?: true).also { intent ->
-                        // This service will get converted to foreground service using the PlayerNotificationManager notification Id.
-                        activity?.startService(intent)
-                    }
-                } ?: acknowledgeGenericError()
+                val autoPlay = arguments?.getBoolean(ARG_AUTO_PLAY) ?: true
+                AudioService.newIntent(requireContext(), episode, autoPlay).also { intent ->
+                    // This service will get converted to foreground service using the PlayerNotificationManager notification Id.
+                    activity?.startService(intent)
+                }
             }
         })
 
@@ -111,7 +111,7 @@ class PlayerFragment : Fragment(), PlayerCallback {
     }
 
     private fun renderContent(episode: Episode) {
-        playerView.findViewById<TextView>(R.id.titleTextView).text = episode.titleString
+        playerView.findViewById<TextView>(R.id.titleTextView).text = episode.titleString ?: getString(R.string.loading_dots)
     }
 
     private fun acknowledgeGenericError() = Snackbar.make(containerConstraintLayout, R.string.error_generic, Snackbar.LENGTH_SHORT).show()

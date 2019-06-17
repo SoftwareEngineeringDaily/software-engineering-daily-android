@@ -10,6 +10,8 @@
     <string name="post_error">An error occurred while loading the posts</string>
     <string name="search_hint">Search for a podcast</string>
 
+    <string name="loading_dots">…</string>
+
     <string name="yes">Yes</string>
     <string name="no">No</string>
 
@@ -74,7 +76,7 @@
     <string name="episode_delete_download_prompt">Do you really want to delete this download?</string>
     <string name="rationale_storage_permission">Storage access is needed to download episodes</string>
     <string name="play">Play</string>
-    <string name="pause">Pause</string>
+    <string name="stop">Stop</string>
 
     <!-- Comments -->
     <string name="content_description_comment_author_avatar">Author avatar</string>

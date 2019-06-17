@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity(), PlayerCallback {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             val binder = service as AudioService.AudioServiceBinder
 
-            binder.episodeId?.let { episodeId ->
+            binder.service.episodeId?.let { episodeId ->
                 addPlayerFragment(episodeId, false)
             }
         }
@@ -43,10 +43,11 @@ class MainActivity : AppCompatActivity(), PlayerCallback {
         }
     }
 
+    // FIXME :: Remove
     private val userRepository: UserRepository by inject()
 
     private var playerFragment: PlayerFragment? = null
-    private var unbindService: Boolean = false
+    private var isAudioServiceBound: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,7 +73,7 @@ class MainActivity : AppCompatActivity(), PlayerCallback {
             AudioService.newIntent(this).also { intent ->
                 bindService(intent, connection, Context.BIND_AUTO_CREATE)
 
-                unbindService = true
+                isAudioServiceBound = true
             }
         }
     }
@@ -80,10 +81,10 @@ class MainActivity : AppCompatActivity(), PlayerCallback {
     override fun onStop() {
         super.onStop()
 
-        if (unbindService) {
+        if (isAudioServiceBound) {
             unbindService(connection)
 
-            unbindService = false
+            isAudioServiceBound = false
         }
     }
 
@@ -114,6 +115,8 @@ class MainActivity : AppCompatActivity(), PlayerCallback {
             else -> item.onNavDestinationSelected(mainNavHostFragment.findNavController()) || super.onOptionsItemSelected(item)
         }
     }
+
+    override fun isPLaying(episodeId: String): Boolean? = playerFragment?.isPLaying(episodeId)
 
     override fun play(episode: Episode) {
         playerFragment?.play(episode) ?: addPlayerFragment(episode._id, true)

@@ -82,6 +82,21 @@
                 app:layout_constraintTop_toTopOf="@+id/guestImageView" />
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/stopButton"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:text="@string/stop"
+                app:cornerRadius="48dp"
+                android:visibility="invisible"
+                app:icon="@drawable/vd_stop"
+                app:layout_constraintEnd_toEndOf="@+id/playButton"
+                app:layout_constraintTop_toTopOf="@+id/playButton"
+                app:layout_constraintBottom_toBottomOf="@+id/playButton"
+                app:layout_constraintStart_toStartOf="@+id/playButton"
+                tools:visibility="visible"/>
+
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/downloadButton"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
                 android:layout_width="48dp"
