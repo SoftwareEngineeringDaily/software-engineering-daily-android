@@ -46,23 +46,31 @@ private const val ARG_EPISODE_ID = "episode_id"
 private const val ARG_URI = "uri_string"
 private const val ARG_TITLE = "title"
 private const val ARG_START_POSITION = "start_position"
+private const val ARG_AUTO_PLAY = "auto_play"
+
+private const val DEFAILT_AUTO_PLAY = true
 
 class AudioService : LifecycleService() {
 
     inner class AudioServiceBinder : Binder() {
+        val episodeId
+            get() = this@AudioService.episodeId
+
         val service
             get() = this@AudioService
     }
 
     companion object {
 
-        fun newIntent(context: Context, episode: Episode? = null) = Intent(context, AudioService::class.java).apply {
+        fun newIntent(context: Context, episode: Episode? = null, autoPlay: Boolean = DEFAILT_AUTO_PLAY) = Intent(context, AudioService::class.java).apply {
             episode?.let {
                 putExtra(ARG_EPISODE_ID, episode._id)
                 episode.titleString?.let { title -> putExtra(ARG_TITLE, title) }
                 episode.uriString?.let{ uriString -> putExtra(ARG_URI, Uri.parse(uriString)) }
                 putExtra(ARG_START_POSITION, episode.startPosition)
             }
+
+            putExtra(ARG_AUTO_PLAY, autoPlay)
         }
 
     }
@@ -77,11 +85,9 @@ class AudioService : LifecycleService() {
     lateinit var exoPlayer: SimpleExoPlayer
         private set
 
-    private lateinit var playerNotificationManager: PlayerNotificationManager
-    private lateinit var mediaSession: MediaSessionCompat
-    private lateinit var mediaSessionConnector: MediaSessionConnector
-
-    private var autoPlayStateSet = false
+    private var playerNotificationManager: PlayerNotificationManager? = null
+    private var mediaSession: MediaSessionCompat? = null
+    private var mediaSessionConnector: MediaSessionConnector? = null
 
     override fun onBind(intent: Intent?): IBinder {
         super.onBind(intent)
@@ -95,6 +101,7 @@ class AudioService : LifecycleService() {
         super.onCreate()
 
         exoPlayer = ExoPlayerFactory.newSimpleInstance(this, DefaultTrackSelector())
+        exoPlayer.playWhenReady = true
         exoPlayer.addListener(PlayerEventListener())
     }
 
@@ -105,9 +112,11 @@ class AudioService : LifecycleService() {
     }
 
     override fun onDestroy() {
-        mediaSession.release()
-        mediaSessionConnector.setPlayer(null)
-        playerNotificationManager.setPlayer(null)
+        saveLastListeningPosition()
+
+        mediaSession?.release()
+        mediaSessionConnector?.setPlayer(null)
+        playerNotificationManager?.setPlayer(null)
 
         exoPlayer.release()
 
@@ -115,8 +124,6 @@ class AudioService : LifecycleService() {
     }
 
     fun play(uri: Uri, startPosition: Long) {
-        autoPlayStateSet = false
-
         val userAgent = Util.getUserAgent(applicationContext, BuildConfig.APPLICATION_ID)
         val mediaSource = ExtractorMediaSource(
                 uri,
@@ -190,7 +197,7 @@ class AudioService : LifecycleService() {
         mediaSession = MediaSessionCompat(applicationContext, MEDIA_SESSION_TAG).apply {
             isActive = true
         }
-        playerNotificationManager.setMediaSessionToken(mediaSession.sessionToken)
+        playerNotificationManager?.setMediaSessionToken(mediaSession?.sessionToken)
 
         mediaSessionConnector = MediaSessionConnector(mediaSession).apply {
             setQueueNavigator(object : TimelineQueueNavigator(mediaSession) {
@@ -216,13 +223,19 @@ class AudioService : LifecycleService() {
 
         // Play
         intent?.let {
-            intent.getParcelableExtra<Uri>(ARG_URI)?.also { uri ->
-                val startPosition = intent.getLongExtra(ARG_START_POSITION, C.POSITION_UNSET.toLong())
+            if (intent.getBooleanExtra(ARG_AUTO_PLAY, DEFAILT_AUTO_PLAY)) {
+                intent.getParcelableExtra<Uri>(ARG_URI)?.also { uri ->
+                    val startPosition = intent.getLongExtra(ARG_START_POSITION, C.POSITION_UNSET.toLong())
 
-                play(uri, startPosition)
+                    play(uri, startPosition)
+                }
             }
         }
     }
+
+    private fun saveLastListeningPosition() = lifecycleScope.launch {
+            episodeId?.let { appDatabase.listenedDao().insert(Listened(it, exoPlayer.contentPosition, exoPlayer.duration)) }
+        }
 
     private fun getBitmapFromVectorDrawable(context: Context, @DrawableRes drawableId: Int): Bitmap? {
         return ContextCompat.getDrawable(context, drawableId)?.let {
@@ -242,16 +255,9 @@ class AudioService : LifecycleService() {
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
             Log.e("ZZZ", "Playback state :: $playbackState, contentPosition :: ${exoPlayer.contentPosition}, isPlaying :: $isPlaying")
             if (playbackState == Player.STATE_READY) {
-                if (!autoPlayStateSet) {
-                    exoPlayer.playWhenReady = true
-                    autoPlayStateSet = true
-                }
-
                 // Paused
                 if (!exoPlayer.playWhenReady) {
-                    lifecycleScope.launch {
-                        episodeId?.let { appDatabase.listenedDao().insert(Listened(it, exoPlayer.contentPosition, exoPlayer.duration)) }
-                    }
+                    saveLastListeningPosition()
                 }
             }
         }

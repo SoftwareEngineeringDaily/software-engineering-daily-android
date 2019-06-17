@@ -1,13 +1,15 @@
 package com.koalatea.sedaily
 
 import android.app.SearchManager
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
-import android.net.Uri
+import android.content.ServiceConnection
 import android.os.Bundle
+import android.os.IBinder
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -19,16 +21,32 @@ import com.koalatea.sedaily.feature.auth.UserRepository
 import com.koalatea.sedaily.feature.player.AudioService
 import com.koalatea.sedaily.feature.player.PlayerCallback
 import com.koalatea.sedaily.feature.player.PlayerFragment
+import com.koalatea.sedaily.util.isServiceRunning
 import com.koalatea.sedaily.util.setupActionBar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.include_default_toolbar.*
 import org.koin.android.ext.android.inject
 
+
 class MainActivity : AppCompatActivity(), PlayerCallback {
+
+    private val connection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            val binder = service as AudioService.AudioServiceBinder
+
+            binder.episodeId?.let { episodeId ->
+                addPlayerFragment(episodeId, false)
+            }
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+        }
+    }
 
     private val userRepository: UserRepository by inject()
 
     private var playerFragment: PlayerFragment? = null
+    private var unbindService: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,9 +62,29 @@ class MainActivity : AppCompatActivity(), PlayerCallback {
         setupBottomNavMenu(navController)
 
         handleIntent(intent)
+    }
 
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+        super.onPostCreate(savedInstanceState)
 
-        // FIXME :: check if play service is running or start/stop
+        // If audio service is running, add the player fragment
+        if (applicationContext.isServiceRunning(AudioService::class.java.name)) {
+            AudioService.newIntent(this).also { intent ->
+                bindService(intent, connection, Context.BIND_AUTO_CREATE)
+
+                unbindService = true
+            }
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        if (unbindService) {
+            unbindService(connection)
+
+            unbindService = false
+        }
     }
 
     private fun setupBottomNavMenu(navController: NavController) = bottomNavigationView?.setupWithNavController(navController)
@@ -78,11 +116,7 @@ class MainActivity : AppCompatActivity(), PlayerCallback {
     }
 
     override fun play(episode: Episode) {
-        playerFragment?.play(episode) ?: run {
-            playerFragment = PlayerFragment.newInstance(episode._id).also {
-                supportFragmentManager.beginTransaction().replace(R.id.fragmentContainer, it).commit()
-            }
-        }
+        playerFragment?.play(episode) ?: addPlayerFragment(episode._id, true)
     }
 
     override fun stop() {
@@ -99,6 +133,12 @@ class MainActivity : AppCompatActivity(), PlayerCallback {
             intent.getStringExtra(SearchManager.QUERY)?.also { query ->
                 searchPodcasts(query)
             }
+        }
+    }
+
+    private fun addPlayerFragment(episodeId: String, autoPLay: Boolean) {
+        playerFragment = PlayerFragment.newInstance(episodeId, autoPLay).also {
+            supportFragmentManager.beginTransaction().replace(R.id.fragmentContainer, it).commit()
         }
     }
 

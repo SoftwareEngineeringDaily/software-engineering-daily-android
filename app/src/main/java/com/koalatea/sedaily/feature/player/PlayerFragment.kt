@@ -22,14 +22,16 @@ import kotlinx.android.synthetic.main.fragment_player.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 private const val ARG_EPISODE_ID = "episode_id"
+private const val ARG_AUTO_PLAY = "auto_play"
 
 class PlayerFragment : Fragment(), PlayerCallback {
 
     companion object {
-        fun newInstance(episodeId: String): PlayerFragment {
+        fun newInstance(episodeId: String, autoPlay: Boolean): PlayerFragment {
             val fragment = PlayerFragment()
             fragment.arguments = Bundle().apply {
                 putString(ARG_EPISODE_ID, episodeId)
+                putBoolean(ARG_AUTO_PLAY, autoPlay)
             }
 
             return fragment
@@ -50,9 +52,6 @@ class PlayerFragment : Fragment(), PlayerCallback {
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
-            // FIXME :: Release the notification
-            // playerNotificationManager.setPlayer(null)
-
             audioService = null
         }
     }
@@ -75,7 +74,7 @@ class PlayerFragment : Fragment(), PlayerCallback {
         viewModel.playMediaLiveData.observe(this, Observer {
             it.getContentIfNotHandled()?.let { episode ->
                 context?.let { context ->
-                    AudioService.newIntent(context, episode).also { intent ->
+                    AudioService.newIntent(context, episode, arguments?.getBoolean(ARG_AUTO_PLAY) ?: true).also { intent ->
                         // This service will get converted to foreground service using the PlayerNotificationManager notification Id.
                         activity?.startService(intent)
                     }
@@ -83,9 +82,11 @@ class PlayerFragment : Fragment(), PlayerCallback {
             }
         })
 
-        arguments?.getString(ARG_EPISODE_ID)?.also {
-            viewModel.play(it)
+        arguments?.getString(ARG_EPISODE_ID)?.also { episodeId ->
+            viewModel.play(episodeId)
         }
+
+        playerView.showController()
     }
 
     override fun onStart() {
