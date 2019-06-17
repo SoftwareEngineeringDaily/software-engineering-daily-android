@@ -9,13 +9,19 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.net.Uri
 import android.os.Binder
+import android.os.Bundle
 import android.os.IBinder
+import android.support.v4.media.MediaDescriptionCompat
+import android.support.v4.media.MediaMetadataCompat
+import android.support.v4.media.session.MediaSessionCompat
 import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.annotation.Nullable
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import com.google.android.exoplayer2.*
+import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
+import com.google.android.exoplayer2.ext.mediasession.TimelineQueueNavigator
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
 import com.google.android.exoplayer2.source.ExtractorMediaSource
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
@@ -28,6 +34,7 @@ import com.koalatea.sedaily.R
 
 private const val PLAYBACK_CHANNEL_ID = "playback_channel"
 private const val PLAYBACK_NOTIFICATION_ID = 1
+private const val MEDIA_SESSION_TAG = "sed_audio"
 
 private const val ARG_URI = "uriString"
 private const val ARG_TITLE = "title"
@@ -56,6 +63,8 @@ class AudioService : Service() {
         private set
 
     private lateinit var playerNotificationManager: PlayerNotificationManager
+    private lateinit var mediaSession: MediaSessionCompat
+    private lateinit var mediaSessionConnector: MediaSessionConnector
 
     private var autoPlayStateSet = false
 
@@ -79,10 +88,13 @@ class AudioService : Service() {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
+        mediaSession.release()
+        mediaSessionConnector.setPlayer(null)
+        playerNotificationManager.setPlayer(null)
 
         exoPlayer.release()
-        playerNotificationManager?.setPlayer(null)
+
+        super.onDestroy()
     }
 
     fun play(uri: Uri, startPosition: Long) {
@@ -119,7 +131,7 @@ class AudioService : Service() {
                     @Nullable
                     override fun createCurrentContentIntent(player: Player): PendingIntent? = PendingIntent.getActivity(
                             applicationContext,
-                            -1,
+                            0,
                             Intent(applicationContext, MainActivity::class.java),
                             PendingIntent.FLAG_UPDATE_CURRENT)
 
@@ -153,6 +165,35 @@ class AudioService : Service() {
             setPlayer(exoPlayer)
         }
 
+        // Show lock screen controls and let apps like Google assistant manager playback.
+        mediaSession = MediaSessionCompat(applicationContext, MEDIA_SESSION_TAG).apply {
+            isActive = true
+        }
+        playerNotificationManager.setMediaSessionToken(mediaSession.sessionToken)
+
+        mediaSessionConnector = MediaSessionConnector(mediaSession).apply {
+            setQueueNavigator(object : TimelineQueueNavigator(mediaSession) {
+                override fun getMediaDescription(player: Player, windowIndex: Int): MediaDescriptionCompat {
+                    val bitmap = getBitmapFromVectorDrawable(applicationContext, R.drawable.vd_notification_icon)
+                    val extras = Bundle().apply {
+                        putParcelable(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, bitmap)
+                        putParcelable(MediaMetadataCompat.METADATA_KEY_DISPLAY_ICON, bitmap)
+                    }
+
+                    val title = intent?.getStringExtra(ARG_TITLE) ?: ""
+
+                    return MediaDescriptionCompat.Builder()
+                            .setIconBitmap(bitmap)
+                            .setTitle(title)
+                            .setExtras(extras)
+                            .build()
+                }
+            })
+
+            setPlayer(exoPlayer)
+        }
+
+        // Play
         intent?.let {
             intent.getParcelableExtra<Uri>(ARG_URI)?.also { uri ->
                 val startPosition = intent.getLongExtra(ARG_START_POSITION, C.POSITION_UNSET.toLong())
