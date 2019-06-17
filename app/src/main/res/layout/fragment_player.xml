@@ -1,23 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <!--app:auto_show="true"-->
-    <!--app:hide_on_touch="false"-->
-
-    <!--app:show_timeout="-1"-->
-    <com.google.android.exoplayer2.ui.PlayerView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/playerView"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/player_height"
-        app:resize_mode="fixed_height"
-
-    app:show_timeout="0"
-    app:hide_on_touch="false"
+<com.google.android.exoplayer2.ui.PlayerView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/playerView"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/player_height"
     app:auto_show="true"
+    app:controller_layout_id="@layout/audio_controller_view"
+    app:fastforward_increment="@integer/increment_ms"
+    app:hide_on_touch="false"
+    app:player_layout_id="@layout/audio_player_view"
+    app:resize_mode="fixed_height"
+    app:rewind_increment="@integer/increment_ms"
     app:show_buffering="always"
-    app:use_controller="true"
-
-        app:fastforward_increment="30000"
-        app:rewind_increment="30000"
-        app:controller_layout_id="@layout/audio_controller_view"
-        app:player_layout_id="@layout/audio_player_view" />
+    app:show_timeout="0"
+    app:use_controller="true" />

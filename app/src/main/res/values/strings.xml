@@ -21,8 +21,7 @@
     <string name="bottom_navigation_profile">Profile</string>
 
     <!-- Notificaiton Channel -->
-    <string name="notification_channel">Now Playing</string>
-    <string name="notification_channel_description">Shows what music is currently playing in UAMP</string>
+    <string name="playback_channel_name">Now Playing</string>
 
     <!-- Notification actions -->
     <string name="notification_skip_to_previous">Skip to previous track</string>

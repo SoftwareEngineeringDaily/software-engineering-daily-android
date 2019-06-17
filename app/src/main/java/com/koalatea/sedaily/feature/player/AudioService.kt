@@ -1,21 +1,36 @@
 package com.koalatea.sedaily.feature.player
 
+import android.app.Notification
+import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.net.Uri
 import android.os.Binder
 import android.os.IBinder
 import android.util.Log
+import androidx.annotation.DrawableRes
+import androidx.annotation.Nullable
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
 import com.google.android.exoplayer2.source.ExtractorMediaSource
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
+import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import com.koalatea.sedaily.BuildConfig
+import com.koalatea.sedaily.MainActivity
+import com.koalatea.sedaily.R
+
+private const val PLAYBACK_CHANNEL_ID = "playback_channel"
+private const val PLAYBACK_NOTIFICATION_ID = 1
 
 private const val ARG_URI = "uriString"
+private const val ARG_TITLE = "title"
 private const val ARG_START_POSITION = "start_position"
 
 class AudioService : Service() {
@@ -27,7 +42,8 @@ class AudioService : Service() {
 
     companion object {
 
-        fun newIntent(context: Context, uriString: String? = null, startPosition: Long = 0) = Intent(context, AudioService::class.java).apply {
+        fun newIntent(context: Context, title: String? = null, uriString: String? = null, startPosition: Long = 0) = Intent(context, AudioService::class.java).apply {
+            title?.let { putExtra(ARG_TITLE, title) }
             uriString?.let {
                 putExtra(ARG_URI, Uri.parse(uriString))
                 putExtra(ARG_START_POSITION, startPosition)
@@ -38,6 +54,8 @@ class AudioService : Service() {
 
     lateinit var exoPlayer: SimpleExoPlayer
         private set
+
+    private lateinit var playerNotificationManager: PlayerNotificationManager
 
     private var autoPlayStateSet = false
 
@@ -64,7 +82,7 @@ class AudioService : Service() {
         super.onDestroy()
 
         exoPlayer.release()
-//        playerNotificationManager.setPlayer(null)
+        playerNotificationManager?.setPlayer(null)
     }
 
     fun play(uri: Uri, startPosition: Long) {
@@ -88,6 +106,53 @@ class AudioService : Service() {
     }
 
     private fun handleIntent(intent: Intent?) {
+        playerNotificationManager = PlayerNotificationManager.createWithNotificationChannel(
+                applicationContext,
+                PLAYBACK_CHANNEL_ID,
+                R.string.playback_channel_name,
+                PLAYBACK_NOTIFICATION_ID,
+                object : PlayerNotificationManager.MediaDescriptionAdapter {
+                    override fun getCurrentContentTitle(player: Player): String {
+                        return intent?.getStringExtra(ARG_TITLE) ?: ""
+                    }
+
+                    @Nullable
+                    override fun createCurrentContentIntent(player: Player): PendingIntent? = PendingIntent.getActivity(
+                            applicationContext,
+                            -1,
+                            Intent(applicationContext, MainActivity::class.java),
+                            PendingIntent.FLAG_UPDATE_CURRENT)
+
+                    @Nullable
+                    override fun getCurrentContentText(player: Player): String? {
+                        return null
+                    }
+
+                    @Nullable
+                    override fun getCurrentLargeIcon(player: Player, callback: PlayerNotificationManager.BitmapCallback): Bitmap? {
+                        return getBitmapFromVectorDrawable(applicationContext, R.drawable.vd_notification_icon)
+                    }
+                },
+                object : PlayerNotificationManager.NotificationListener {
+                    override fun onNotificationStarted(notificationId: Int, notification: Notification?) {
+                        startForeground(notificationId, notification)
+                    }
+
+                    override fun onNotificationCancelled(notificationId: Int) {
+                        stopSelf()
+                    }
+                }
+        ).apply {
+            // omit skip previous and next actions
+            setUseNavigationActions(false)
+
+            val incrementMs = resources.getInteger(R.integer.increment_ms).toLong()
+            setFastForwardIncrementMs(incrementMs)
+            setRewindIncrementMs(incrementMs)
+
+            setPlayer(exoPlayer)
+        }
+
         intent?.let {
             intent.getParcelableExtra<Uri>(ARG_URI)?.also { uri ->
                 val startPosition = intent.getLongExtra(ARG_START_POSITION, C.POSITION_UNSET.toLong())
@@ -97,22 +162,17 @@ class AudioService : Service() {
         }
     }
 
-    private fun showNotification() {
-//        val CHANNEL_ID = "Channel"
-//        val NOTIFICATION_ID = 200098
-//        // https://medium.com/google-exoplayer/playback-notifications-with-exoplayer-a2f1a18cf93b
-////        NotificationCompat.Builder
-//        playerNotificationManager = PlayerNotificationManager(context, CHANNEL_ID, NOTIFICATION_ID, DescriptionAdapter())
-//        // omit skip previous and next actions
-//        playerNotificationManager.setUseNavigationActions(false)
-////        // omit fast forward action by setting the increment to zero
-////        playerNotificationManager.setFastForwardIncrementMs(0)
-////        // omit rewind action by setting the increment to zero
-////        playerNotificationManager.setRewindIncrementMs(0)
-////        // omit the stop action
-////        playerNotificationManager.setStopAction(null)
+    private fun getBitmapFromVectorDrawable(context: Context, @DrawableRes drawableId: Int): Bitmap? {
+        return ContextCompat.getDrawable(context, drawableId)?.let {
+            val drawable = DrawableCompat.wrap(it).mutate()
 
-//        playerNotificationManager.setPlayer(exoPlayer)
+            val bitmap = Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(bitmap)
+            drawable.setBounds(0, 0, canvas.width, canvas.height)
+            drawable.draw(canvas)
+
+            bitmap
+        }
     }
 
     private inner class PlayerEventListener : Player.EventListener {

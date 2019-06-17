@@ -4,7 +4,6 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
-import android.net.Uri
 import android.os.Bundle
 import android.os.IBinder
 import android.view.LayoutInflater
@@ -13,15 +12,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import com.google.android.exoplayer2.DefaultRenderersFactory
-import com.google.android.exoplayer2.ExoPlayerFactory
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
-import com.google.android.exoplayer2.source.ExtractorMediaSource
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.ui.PlayerView
-import com.google.android.exoplayer2.ui.SimpleExoPlayerView
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
-import com.google.android.exoplayer2.util.Util
 import com.google.android.material.snackbar.Snackbar
 import com.koalatea.sedaily.R
 import com.koalatea.sedaily.database.model.Episode
@@ -84,7 +75,8 @@ class PlayerFragment : Fragment(), PlayerCallback {
         viewModel.playMediaLiveData.observe(this, Observer {
             it.getContentIfNotHandled()?.let { episode ->
                 context?.let { context ->
-                    AudioService.newIntent(context, episode.uri, episode.startPosition).also { intent ->
+                    AudioService.newIntent(context, episode.titleString, episode.uri, episode.startPosition).also { intent ->
+                        // This service will get converted to foreground service using the PlayerNotificationManager notification Id.
                         activity?.startService(intent)
                     }
                 } ?: acknowledgeGenericError()
