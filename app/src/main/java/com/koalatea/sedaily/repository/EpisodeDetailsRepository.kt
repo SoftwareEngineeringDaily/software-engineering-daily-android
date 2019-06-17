@@ -31,13 +31,13 @@ class EpisodeDetailsRepository constructor(
                 // Get local uriString if file was already download downloaded otherwise use remote url.
                 downloadedId?.let {
                     val downloadStatus = getDownloadStatus(it)
-                    uri = if (downloadStatus is DownloadStatus.Downloaded) {
+                    uriString = if (downloadStatus is DownloadStatus.Downloaded) {
                         downloadStatus.uriString
                     } else {
                         episode.httpsMp3Url
                     }
                 } ?: run {
-                    uri = episode.httpsMp3Url
+                    uriString = episode.httpsMp3Url
                 }
 
                 // Continue from where the user left off.

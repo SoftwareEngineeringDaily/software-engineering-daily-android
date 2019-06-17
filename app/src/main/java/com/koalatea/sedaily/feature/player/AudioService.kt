@@ -2,7 +2,6 @@ package com.koalatea.sedaily.feature.player
 
 import android.app.Notification
 import android.app.PendingIntent
-import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -19,6 +18,8 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.Nullable
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.lifecycle.LifecycleService
+import androidx.lifecycle.lifecycleScope
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
 import com.google.android.exoplayer2.ext.mediasession.TimelineQueueNavigator
@@ -31,16 +32,22 @@ import com.google.android.exoplayer2.util.Util
 import com.koalatea.sedaily.BuildConfig
 import com.koalatea.sedaily.MainActivity
 import com.koalatea.sedaily.R
+import com.koalatea.sedaily.database.AppDatabase
+import com.koalatea.sedaily.database.model.Episode
+import com.koalatea.sedaily.database.model.Listened
+import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 
 private const val PLAYBACK_CHANNEL_ID = "playback_channel"
 private const val PLAYBACK_NOTIFICATION_ID = 1
 private const val MEDIA_SESSION_TAG = "sed_audio"
 
-private const val ARG_URI = "uriString"
+private const val ARG_EPISODE_ID = "episode_id"
+private const val ARG_URI = "uri_string"
 private const val ARG_TITLE = "title"
 private const val ARG_START_POSITION = "start_position"
 
-class AudioService : Service() {
+class AudioService : LifecycleService() {
 
     inner class AudioServiceBinder : Binder() {
         val service
@@ -49,15 +56,23 @@ class AudioService : Service() {
 
     companion object {
 
-        fun newIntent(context: Context, title: String? = null, uriString: String? = null, startPosition: Long = 0) = Intent(context, AudioService::class.java).apply {
-            title?.let { putExtra(ARG_TITLE, title) }
-            uriString?.let {
-                putExtra(ARG_URI, Uri.parse(uriString))
-                putExtra(ARG_START_POSITION, startPosition)
+        fun newIntent(context: Context, episode: Episode? = null) = Intent(context, AudioService::class.java).apply {
+            episode?.let {
+                putExtra(ARG_EPISODE_ID, episode._id)
+                episode.titleString?.let { title -> putExtra(ARG_TITLE, title) }
+                episode.uriString?.let{ uriString -> putExtra(ARG_URI, Uri.parse(uriString)) }
+                putExtra(ARG_START_POSITION, episode.startPosition)
             }
         }
 
     }
+
+    private val appDatabase: AppDatabase by inject()
+
+    private var episodeId: String? = null
+
+    val isPlaying
+        get() = exoPlayer.playbackState == Player.STATE_READY && exoPlayer.playWhenReady
 
     lateinit var exoPlayer: SimpleExoPlayer
         private set
@@ -69,6 +84,8 @@ class AudioService : Service() {
     private var autoPlayStateSet = false
 
     override fun onBind(intent: Intent?): IBinder {
+        super.onBind(intent)
+
         handleIntent(intent)
 
         return AudioServiceBinder()
@@ -98,6 +115,8 @@ class AudioService : Service() {
     }
 
     fun play(uri: Uri, startPosition: Long) {
+        autoPlayStateSet = false
+
         val userAgent = Util.getUserAgent(applicationContext, BuildConfig.APPLICATION_ID)
         val mediaSource = ExtractorMediaSource(
                 uri,
@@ -118,6 +137,8 @@ class AudioService : Service() {
     }
 
     private fun handleIntent(intent: Intent?) {
+        episodeId = intent?.getStringExtra(ARG_EPISODE_ID)
+
         playerNotificationManager = PlayerNotificationManager.createWithNotificationChannel(
                 applicationContext,
                 PLAYBACK_CHANNEL_ID,
@@ -219,11 +240,18 @@ class AudioService : Service() {
     private inner class PlayerEventListener : Player.EventListener {
 
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
-            Log.e("ZZZ", "Playback state :: $playbackState")
+            Log.e("ZZZ", "Playback state :: $playbackState, contentPosition :: ${exoPlayer.contentPosition}, isPlaying :: $isPlaying")
             if (playbackState == Player.STATE_READY) {
                 if (!autoPlayStateSet) {
                     exoPlayer.playWhenReady = true
                     autoPlayStateSet = true
+                }
+
+                // Paused
+                if (!exoPlayer.playWhenReady) {
+                    lifecycleScope.launch {
+                        episodeId?.let { appDatabase.listenedDao().insert(Listened(it, exoPlayer.contentPosition, exoPlayer.duration)) }
+                    }
                 }
             }
         }
@@ -231,6 +259,7 @@ class AudioService : Service() {
         override fun onPlayerError(e: ExoPlaybackException?) {
             Log.e("ZZZ", "Error :: $e")
         }
+
     }
 
 }

@@ -75,7 +75,7 @@ class PlayerFragment : Fragment(), PlayerCallback {
         viewModel.playMediaLiveData.observe(this, Observer {
             it.getContentIfNotHandled()?.let { episode ->
                 context?.let { context ->
-                    AudioService.newIntent(context, episode.titleString, episode.uri, episode.startPosition).also { intent ->
+                    AudioService.newIntent(context, episode).also { intent ->
                         // This service will get converted to foreground service using the PlayerNotificationManager notification Id.
                         activity?.startService(intent)
                     }

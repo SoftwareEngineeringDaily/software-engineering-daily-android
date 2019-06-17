@@ -44,6 +44,9 @@ class MainActivity : AppCompatActivity(), PlayerCallback {
         setupBottomNavMenu(navController)
 
         handleIntent(intent)
+
+
+        // FIXME :: check if play service is running or start/stop
     }
 
     private fun setupBottomNavMenu(navController: NavController) = bottomNavigationView?.setupWithNavController(navController)

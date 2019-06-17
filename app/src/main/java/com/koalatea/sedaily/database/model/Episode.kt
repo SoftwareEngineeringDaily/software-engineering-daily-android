@@ -41,7 +41,7 @@ data class Episode(
     var downloadedId: Long? = null
 
     @Ignore
-    var uri: String? = null
+    var uriString: String? = null
 
     @Ignore
     var startPosition: Long = 0L
