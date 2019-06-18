@@ -35,9 +35,7 @@ class PlayerViewModel(
 
     @MainThread
     fun play(episodeId: String) {
-        if (episodeIdLiveData.value != episodeId) {
-            episodeIdLiveData.value = episodeId
-        }
+        episodeIdLiveData.value = episodeId
     }
 
 }
