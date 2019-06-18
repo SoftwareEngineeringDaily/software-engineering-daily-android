@@ -8,6 +8,7 @@ import com.koalatea.sedaily.feature.episodes.paging.EpisodesBoundaryCallback
 import com.koalatea.sedaily.model.SearchQuery
 import com.koalatea.sedaily.network.Result
 import com.koalatea.sedaily.network.SEDailyApi
+import com.koalatea.sedaily.util.safeApiCall
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -51,15 +52,15 @@ class EpisodesRepository(
         val response = if (originalState) {
             db.episodeDao().vote(episodeId, !originalState, originalScore - 1)
 
-            api.downvoteEpisodeAsync(episodeId).await()
+            safeApiCall { api.downvoteEpisodeAsync(episodeId).await() }
         } else {
             db.episodeDao().vote(episodeId, !originalState, originalScore + 1)
 
-            api.upvoteEpisodeAsync(episodeId).await()
+            safeApiCall { api.upvoteEpisodeAsync(episodeId).await() }
         }
 
         // Revert UI changes back.
-        if (!response.isSuccessful || response.body() == null) {
+        if (response?.isSuccessful == false || response?.body() == null) {
             db.episodeDao().vote(episodeId, originalState, originalScore)
 
             return@withContext false
@@ -73,13 +74,13 @@ class EpisodesRepository(
         db.episodeDao().bookmark(episodeId, !originalState)
 
         val response = if (originalState) {
-            api.unfavoriteEpisodeAsync(episodeId).await()
+            safeApiCall { api.unfavoriteEpisodeAsync(episodeId).await() }
         } else {
-            api.favoriteEpisodeAsync(episodeId).await()
+            safeApiCall { api.favoriteEpisodeAsync(episodeId).await() }
         }
 
         // Revert UI changes back.
-        if (!response.isSuccessful || response.body() == null) {
+        if (response?.isSuccessful == false || response?.body() == null) {
             db.episodeDao().bookmark(episodeId, originalState)
             return@withContext false
         }

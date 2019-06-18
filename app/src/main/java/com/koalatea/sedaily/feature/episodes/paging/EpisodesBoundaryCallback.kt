@@ -23,6 +23,7 @@ import com.koalatea.sedaily.database.model.Episode
 import com.koalatea.sedaily.model.SearchQuery
 import com.koalatea.sedaily.network.NetworkState
 import com.koalatea.sedaily.network.SEDailyApi
+import com.koalatea.sedaily.util.safeApiCall
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -71,13 +72,16 @@ class EpisodesBoundaryCallback(
                 refreshState.value = NetworkState.Loading
             }
 
-            val response = api.getEpisodesAsync(
-                    searchQuery.searchTerm,
-                    searchQuery.categoryId,
-                    searchQuery.tagId,
-                    createdAtBefore,
-                    networkPageSize).await()
-            if (response.isSuccessful) {
+            val response = safeApiCall {
+                api.getEpisodesAsync(
+                        searchQuery.searchTerm,
+                        searchQuery.categoryId,
+                        searchQuery.tagId,
+                        createdAtBefore,
+                        networkPageSize).await()
+            }
+
+            if (response?.isSuccessful == true) {
                 callback(searchQuery, response.body())
 
                 networkState.value = NetworkState.Loaded(response.body()?.size ?: 0)
@@ -85,7 +89,7 @@ class EpisodesBoundaryCallback(
                     refreshState.value = NetworkState.Loaded(response.body()?.size ?: 0)
                 }
             } else {
-                val error = NetworkState.Error(response.errorBody()?.string() ?: "Unknown error")
+                val error = NetworkState.Error(response?.errorBody()?.string() ?: "Unknown error")
 
                 networkState.value = error
                 if (createdAtBefore == null) {
@@ -93,7 +97,7 @@ class EpisodesBoundaryCallback(
                 }
             }
 
-            isRequestInProgress  = false
+            isRequestInProgress = false
         }
     }
 

@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.koalatea.sedaily.model.User
 import com.koalatea.sedaily.network.SEDailyApi
 import com.koalatea.sedaily.network.toException
+import com.koalatea.sedaily.util.safeApiCall
 import kotlinx.coroutines.launch
 
 class AuthViewModel(
@@ -78,17 +79,19 @@ class AuthViewModel(
         }
 
         viewModelScope.launch {
-            val response = if (screen === "Register") {
-                sedailyApi.registerAsync(username, email, password)
-            } else {
-                sedailyApi.loginAsync(username, email, password)
-            }.await()
+            val response = safeApiCall {
+                if (screen === "Register") {
+                    sedailyApi.registerAsync(username, email, password)
+                } else {
+                    sedailyApi.loginAsync(username, email, password)
+                }.await()
+            }
 
-            val user = response.body()
-            if (response.isSuccessful && user != null) {
+            val user = response?.body()
+            if (response?.isSuccessful == true && user != null) {
                 handleLoginSuccess(user)
             } else {
-                handleLoginError(response.errorBody().toException())
+                handleLoginError(response?.errorBody().toException())
             }
         }
     }

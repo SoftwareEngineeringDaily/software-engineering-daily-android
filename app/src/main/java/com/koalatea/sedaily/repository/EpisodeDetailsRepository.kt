@@ -9,6 +9,7 @@ import com.koalatea.sedaily.feature.downloader.DownloadStatus
 import com.koalatea.sedaily.network.Resource
 import com.koalatea.sedaily.network.SEDailyApi
 import com.koalatea.sedaily.network.toException
+import com.koalatea.sedaily.util.safeApiCall
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -19,9 +20,9 @@ class EpisodeDetailsRepository constructor(
 ) {
 
     suspend fun fetchEpisodeDetails(episodeId: String) = withContext(Dispatchers.IO) {
-        val response = api.getEpisodeAsync(episodeId).await()
-        val episode = response.body()
-        if (response.isSuccessful && episode != null) {
+        val response = safeApiCall { api.getEpisodeAsync(episodeId).await() }
+        val episode = response?.body()
+        if (response?.isSuccessful == true && episode != null) {
             val cachedEpisode = db.episodeDao().findById(episodeId)
 
             // In case that was requested before upvote or bookmark calls are done.
@@ -49,7 +50,7 @@ class EpisodeDetailsRepository constructor(
                 }
             })
         } else {
-            Resource.Error(response.errorBody().toException())
+            Resource.Error(response?.errorBody().toException())
         }
     }
 

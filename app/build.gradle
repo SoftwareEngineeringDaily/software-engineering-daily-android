@@ -1,10 +1,9 @@
 apply plugin: 'com.android.application'
-//apply plugin: 'io.fabric'
+apply plugin: 'io.fabric'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'androidx.navigation.safeargs'
-apply plugin: 'com.google.gms.google-services'
 
 androidExtensions {
     experimental = true
@@ -96,7 +95,7 @@ dependencies {
 
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.1'
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.1"
 
     // Koin
@@ -124,8 +123,7 @@ dependencies {
     implementation "com.google.android.exoplayer:extension-mediasession:$exoplayer_version"
 
     // Firebase
-    implementation 'com.google.firebase:firebase-core:16.0.9'
-    implementation 'com.google.firebase:firebase-crash:16.2.1'
+    implementation 'com.google.firebase:firebase-core:17.0.0'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
 
     // Leaks
@@ -140,3 +138,5 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.2.0-beta01'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0-beta01'
 }
+
+apply plugin: 'com.google.gms.google-services'

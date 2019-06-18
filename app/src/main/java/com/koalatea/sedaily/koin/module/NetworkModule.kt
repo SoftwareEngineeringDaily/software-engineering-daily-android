@@ -10,6 +10,9 @@ import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import timber.log.Timber
+import java.net.SocketTimeoutException
+
 
 // FIXME :: Move to debug build type
 //private const val BASE_URL: String = "https://sedaily-backend-staging.herokuapp.com/api/"
@@ -23,22 +26,28 @@ val networkModule = module {
         // Add security interceptor.
         val clientBuilder = OkHttpClient.Builder()
                 .addInterceptor { chain ->
-                    val ongoing = chain.request().newBuilder()
-                    ongoing.addHeader("Accept", "application/json;versions=1")
+                    try {
+                        val ongoing = chain.request().newBuilder()
+                        ongoing.addHeader("Accept", "application/json;versions=1")
 
-                    userRepository.token?.let { token ->
-                        if (token.isNotBlank()) {
-                            ongoing.addHeader("Authorization", "Bearer $token")
+                        userRepository.token?.let { token ->
+                            if (token.isNotBlank()) {
+                                ongoing.addHeader("Authorization", "Bearer $token")
+                            }
                         }
+
+                        return@addInterceptor chain.proceed(ongoing.build())
+                    } catch (e: Throwable) {
+                        Timber.w(e)
                     }
 
-                    chain.proceed(ongoing.build())
+                    return@addInterceptor chain.proceed(chain.request())
                 }
 
         // Add debug interceptors.
         if (BuildConfig.DEBUG) {
             clientBuilder.addInterceptor(HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.HEADERS
+                level = HttpLoggingInterceptor.Level.BASIC
             })
 
             clientBuilder.addNetworkInterceptor(StethoInterceptor())
