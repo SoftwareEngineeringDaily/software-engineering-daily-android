@@ -2,6 +2,7 @@ package com.koalatea.sedaily
 
 import com.facebook.stetho.Stetho
 import com.squareup.leakcanary.LeakCanary
+import timber.log.Timber
 
 class DebugSEDApplication : SEDApplication() {
 
@@ -16,6 +17,8 @@ class DebugSEDApplication : SEDApplication() {
 //        LeakCanary.install(this)
 
         Stetho.initializeWithDefaults(this)
+
+        Timber.plant(Timber.DebugTree())
     }
 
 }
