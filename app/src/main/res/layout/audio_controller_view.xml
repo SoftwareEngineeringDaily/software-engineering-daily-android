@@ -50,7 +50,7 @@
         android:layout_marginBottom="16dp"
         android:ellipsize="end"
         android:gravity="center"
-        android:lines="2"
+        android:lines="@integer/player_title_lines"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
         tools:text="Episode Title" />
 

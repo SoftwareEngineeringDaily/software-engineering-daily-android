@@ -20,7 +20,7 @@ interface EpisodeDao {
     fun getNextIndexBySearchQuery(searchQueryHashCode: Int) : Int
 
     @Query("SELECT * FROM episode WHERE _id = :id LIMIT 1")
-    suspend fun findById(id: String): Episode
+    suspend fun findById(id: String): Episode?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(episodes: List<Episode>)

@@ -25,7 +25,9 @@ class EpisodeDetailsRepository constructor(
             val cachedEpisode = db.episodeDao().findById(episodeId)
 
             // In case that was requested before upvote or bookmark calls are done.
-            Resource.Success(episode.copy(upvoted = cachedEpisode.upvoted, bookmarked = cachedEpisode.bookmarked).apply {
+            Resource.Success(episode.copy(
+                    upvoted = cachedEpisode?.upvoted ?: episode.upvoted,
+                    bookmarked = cachedEpisode?.bookmarked ?: episode.bookmarked).apply {
                 downloadedId = db.downloadDao().findById(episodeId)?.downloadId
 
                 // Get local uriString if file was already download downloaded otherwise use remote url.
