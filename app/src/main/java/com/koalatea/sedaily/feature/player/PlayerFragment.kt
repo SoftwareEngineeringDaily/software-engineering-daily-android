@@ -11,8 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.material.snackbar.Snackbar
@@ -27,7 +25,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 private const val ARG_EPISODE_ID = "episode_id"
 private const val ARG_AUTO_PLAY = "auto_play"
 
-class PlayerFragment : Fragment(), PlayerCallback {
+class PlayerFragment : Fragment() {
 
     companion object {
         fun newInstance(episodeId: String, autoPlay: Boolean): PlayerFragment {
@@ -51,10 +49,6 @@ class PlayerFragment : Fragment(), PlayerCallback {
 
             // Attach the ExoPlayer to the PlayerView.
             (view as? PlayerView)?.apply { player = audioService?.exoPlayer }
-
-            audioService?.playerStatusLiveData?.observe(this@PlayerFragment, Observer {
-                _playerStatusLiveData.value = it
-            })
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
@@ -62,11 +56,7 @@ class PlayerFragment : Fragment(), PlayerCallback {
         }
     }
 
-    private val _playerStatusLiveData: MutableLiveData<PlayerStatus> = MutableLiveData()
-    override val playerStatusLiveData: LiveData<PlayerStatus>
-        get() = _playerStatusLiveData
-
-    override fun isPLaying(episodeId: String): Boolean? = audioService?.isPlaying == true && audioService?.episodeId == episodeId
+    fun isPLaying(episodeId: String): Boolean? = audioService?.isPlaying == true && audioService?.episodeId == episodeId
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? = inflater.inflate(R.layout.fragment_player, container, false)
@@ -108,15 +98,15 @@ class PlayerFragment : Fragment(), PlayerCallback {
     }
 
     override fun onStop() {
-        super.onStop()
-
         activity?.unbindService(connection)
         audioService = null
+
+        super.onStop()
     }
 
-    override fun play(episode: Episode) = viewModel.play(episode._id)
+    fun play(episode: Episode) = viewModel.play(episode._id)
 
-    override fun stop() {
+    fun stop() {
         activity?.stopService(Intent(context, AudioService::class.java))
     }
 

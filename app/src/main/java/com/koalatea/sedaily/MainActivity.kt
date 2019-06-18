@@ -12,6 +12,8 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -23,20 +25,26 @@ import com.koalatea.sedaily.feature.player.AudioService
 import com.koalatea.sedaily.feature.player.PlayerCallback
 import com.koalatea.sedaily.feature.player.PlayerFragment
 import com.koalatea.sedaily.feature.player.PlayerStatus
-import com.koalatea.sedaily.util.AbsentLiveData
 import com.koalatea.sedaily.util.isServiceRunning
 import com.koalatea.sedaily.util.setupActionBar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.include_default_toolbar.*
 import org.koin.android.ext.android.inject
 
+private const val TAG_FRAGMENT_PLAYER = "player_fragment"
+
 class MainActivity : AppCompatActivity(), PlayerCallback {
 
     private val connection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             val binder = service as AudioService.AudioServiceBinder
+            val audioService = binder.service
 
-            binder.service.episodeId?.let { episodeId ->
+            audioService.playerStatusLiveData.observe(this@MainActivity, Observer {
+                _playerStatusLiveData.value = it
+            })
+
+            audioService.episodeId?.let { episodeId ->
                 addPlayerFragment(episodeId, false)
             }
         }
@@ -51,8 +59,9 @@ class MainActivity : AppCompatActivity(), PlayerCallback {
     private var playerFragment: PlayerFragment? = null
     private var isAudioServiceBound: Boolean = false
 
+    private val _playerStatusLiveData: MutableLiveData<PlayerStatus> = MutableLiveData()
     override val playerStatusLiveData: LiveData<PlayerStatus>
-        get() = playerFragment?.playerStatusLiveData ?: AbsentLiveData.create()
+        get() = _playerStatusLiveData
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,13 +93,9 @@ class MainActivity : AppCompatActivity(), PlayerCallback {
     }
 
     override fun onStop() {
+        unbindAudioService()
+
         super.onStop()
-
-        if (isAudioServiceBound) {
-            unbindService(connection)
-
-            isAudioServiceBound = false
-        }
     }
 
     private fun setupBottomNavMenu(navController: NavController) = bottomNavigationView?.setupWithNavController(navController)
@@ -128,10 +133,12 @@ class MainActivity : AppCompatActivity(), PlayerCallback {
     }
 
     override fun stop() {
+        unbindAudioService()
+
         playerFragment?.let {
             playerFragment?.stop()
 
-            supportFragmentManager.beginTransaction().remove(it)
+            supportFragmentManager.beginTransaction().remove(it).commit()
             playerFragment = null
         }
     }
@@ -146,7 +153,7 @@ class MainActivity : AppCompatActivity(), PlayerCallback {
 
     private fun addPlayerFragment(episodeId: String, autoPLay: Boolean) {
         playerFragment = PlayerFragment.newInstance(episodeId, autoPLay).also {
-            supportFragmentManager.beginTransaction().replace(R.id.fragmentContainer, it).commit()
+            supportFragmentManager.beginTransaction().replace(R.id.fragmentContainer, it, TAG_FRAGMENT_PLAYER).commit()
         }
     }
 
@@ -168,4 +175,13 @@ class MainActivity : AppCompatActivity(), PlayerCallback {
             false
         }
     }
+
+    private fun unbindAudioService() {
+        if (isAudioServiceBound) {
+            unbindService(connection)
+
+            isAudioServiceBound = false
+        }
+    }
+
 }

@@ -242,19 +242,23 @@ class EpisodeDetailFragment : Fragment() {
         if (playerCallback == null) {
             hidePlayerViews()
         } else {
-            val isPlaying = playerCallback?.isPLaying(episode._id) ?: false
-            if (isPlaying) {
-                showStopViews()
-            } else {
-                showPlayViews()
-            }
+//            val isPlaying = playerCallback?.isPLaying(episode._id) ?: false
+//            if (isPlaying) {
+//                showStopViews()
+//            } else {
+//                showPlayViews()
+//            }
+
+            monitorPlayback(episode)
 
             playButton.setOnClickListener {
+                showStopViews()
                 playerCallback?.play(episode)
 
                 monitorPlayback(episode)
             }
             stopButton.setOnClickListener {
+                showPlayViews()
                 playerCallback?.stop()
 
                 playerCallback?.playerStatusLiveData?.removeObservers(this)
@@ -264,10 +268,7 @@ class EpisodeDetailFragment : Fragment() {
 
     private fun monitorPlayback(episode: Episode) {
         playerCallback?.playerStatusLiveData?.observe(this, Observer { playerStatus ->
-            if (playerStatus is PlayerStatus.Playing ||
-                    playerStatus is PlayerStatus.Paused ||
-                    playerStatus is PlayerStatus.Error &&
-                    episode._id == playerStatus.episodeId) {
+            if (episode._id == playerStatus.episodeId) {
                 when (playerStatus) {
                     is PlayerStatus.Playing -> showStopViews()
                     is PlayerStatus.Paused -> showPlayViews()

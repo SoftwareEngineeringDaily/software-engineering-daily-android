@@ -37,8 +37,6 @@ import com.koalatea.sedaily.R
 import com.koalatea.sedaily.database.AppDatabase
 import com.koalatea.sedaily.database.model.Episode
 import com.koalatea.sedaily.database.model.Listened
-import com.koalatea.sedaily.feature.episodedetail.event.BookmarkStatus
-import com.koalatea.sedaily.util.Event
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
@@ -269,7 +267,7 @@ class AudioService : LifecycleService() {
                     saveLastListeningPosition()
                 }
             } else {
-                _playerStatusLiveData.value = PlayerStatus.Other
+                episodeId?.let { _playerStatusLiveData.value = PlayerStatus.Other(it) }
             }
         }
 
