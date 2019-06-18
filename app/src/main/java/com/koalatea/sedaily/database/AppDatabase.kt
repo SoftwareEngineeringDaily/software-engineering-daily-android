@@ -8,7 +8,7 @@ import com.koalatea.sedaily.database.model.Episode
 import com.koalatea.sedaily.database.converter.EpisodeConverter
 import com.koalatea.sedaily.database.model.Listened
 
-@Database(entities = [Episode::class, Download::class, Listened::class], version = 8, exportSchema = false)
+@Database(entities = [Episode::class, Download::class, Listened::class], version = 9, exportSchema = false)
 @TypeConverters(EpisodeConverter::class)
 abstract class AppDatabase : RoomDatabase() {
 
