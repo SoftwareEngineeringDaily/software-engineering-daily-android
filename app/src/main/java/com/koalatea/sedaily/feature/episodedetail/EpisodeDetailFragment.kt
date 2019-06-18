@@ -242,13 +242,6 @@ class EpisodeDetailFragment : Fragment() {
         if (playerCallback == null) {
             hidePlayerViews()
         } else {
-//            val isPlaying = playerCallback?.isPLaying(episode._id) ?: false
-//            if (isPlaying) {
-//                showStopViews()
-//            } else {
-//                showPlayViews()
-//            }
-
             monitorPlayback(episode)
 
             playButton.setOnClickListener {

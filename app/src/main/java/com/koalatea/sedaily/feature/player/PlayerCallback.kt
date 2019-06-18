@@ -7,7 +7,6 @@ interface PlayerCallback {
 
     val playerStatusLiveData: LiveData<PlayerStatus>
 
-    fun isPLaying(episodeId: String): Boolean?
     fun play(episode: Episode)
     fun stop()
 

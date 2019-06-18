@@ -21,18 +21,17 @@ import kotlinx.android.synthetic.main.fragment_episode_detail.*
 import kotlinx.android.synthetic.main.fragment_player.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-
 private const val ARG_EPISODE_ID = "episode_id"
-private const val ARG_AUTO_PLAY = "auto_play"
+private const val ARG_ONLY_SHOW_PLAYER = "auto_play"
 
 class PlayerFragment : Fragment() {
 
     companion object {
-        fun newInstance(episodeId: String, autoPlay: Boolean): PlayerFragment {
+        fun newInstance(episodeId: String, isOnlyShowPlayer: Boolean): PlayerFragment {
             val fragment = PlayerFragment()
             fragment.arguments = Bundle().apply {
                 putString(ARG_EPISODE_ID, episodeId)
-                putBoolean(ARG_AUTO_PLAY, autoPlay)
+                putBoolean(ARG_ONLY_SHOW_PLAYER, isOnlyShowPlayer)
             }
 
             return fragment
@@ -56,13 +55,15 @@ class PlayerFragment : Fragment() {
         }
     }
 
-    fun isPLaying(episodeId: String): Boolean? = audioService?.isPlaying == true && audioService?.episodeId == episodeId
+    private var isOnlyShowPlayer: Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? = inflater.inflate(R.layout.fragment_player, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        isOnlyShowPlayer = arguments?.getBoolean(ARG_ONLY_SHOW_PLAYER) ?: false
 
         viewModel.episodeDetailsResource.observe(this, Observer { resource ->
             when (resource) {
@@ -74,10 +75,13 @@ class PlayerFragment : Fragment() {
 
         viewModel.playMediaLiveData.observe(this, Observer {
             it.getContentIfNotHandled()?.let { episode ->
-                val autoPlay = arguments?.getBoolean(ARG_AUTO_PLAY) ?: true
-                AudioService.newIntent(requireContext(), episode, autoPlay).also { intent ->
-                    // This service will get converted to foreground service using the PlayerNotificationManager notification Id.
-                    activity?.startService(intent)
+                if (isOnlyShowPlayer) {
+                    isOnlyShowPlayer = false
+                } else {
+                    AudioService.newIntent(requireContext(), episode).also { intent ->
+                        // This service will get converted to foreground service using the PlayerNotificationManager notification Id.
+                        activity?.startService(intent)
+                    }
                 }
             }
         })

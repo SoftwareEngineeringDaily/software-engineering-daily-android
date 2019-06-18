@@ -3,7 +3,6 @@ package com.koalatea.sedaily.feature.player
 import androidx.annotation.MainThread
 import androidx.lifecycle.*
 import com.koalatea.sedaily.database.model.Episode
-import com.koalatea.sedaily.feature.downloader.DownloadStatus
 import com.koalatea.sedaily.network.Resource
 import com.koalatea.sedaily.repository.EpisodeDetailsRepository
 import com.koalatea.sedaily.util.Event
@@ -33,9 +32,6 @@ class PlayerViewModel(
     private val _playMediaLiveData = MutableLiveData<Event<Episode>>()
     val playMediaLiveData: LiveData<Event<Episode>>
         get() = _playMediaLiveData
-
-    private val episode: Episode?
-        get() = (episodeDetailsResource.value as? Resource.Success<Episode>)?.data
 
     @MainThread
     fun play(episodeId: String) {

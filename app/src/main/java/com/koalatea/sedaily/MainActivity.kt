@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity(), PlayerCallback {
             })
 
             audioService.episodeId?.let { episodeId ->
-                addPlayerFragment(episodeId, false)
+                addPlayerFragment(episodeId, true)
             }
         }
 
@@ -126,14 +126,13 @@ class MainActivity : AppCompatActivity(), PlayerCallback {
         }
     }
 
-    override fun isPLaying(episodeId: String): Boolean? = playerFragment?.isPLaying(episodeId)
-
     override fun play(episode: Episode) {
-        playerFragment?.play(episode) ?: addPlayerFragment(episode._id, true)
+        playerFragment?.play(episode) ?: addPlayerFragment(episode._id, false)
     }
 
     override fun stop() {
         unbindAudioService()
+        _playerStatusLiveData.value = PlayerStatus.Other()
 
         playerFragment?.let {
             playerFragment?.stop()
@@ -151,8 +150,8 @@ class MainActivity : AppCompatActivity(), PlayerCallback {
         }
     }
 
-    private fun addPlayerFragment(episodeId: String, autoPLay: Boolean) {
-        playerFragment = PlayerFragment.newInstance(episodeId, autoPLay).also {
+    private fun addPlayerFragment(episodeId: String, isOnlyShowPlayer: Boolean) {
+        playerFragment = PlayerFragment.newInstance(episodeId, isOnlyShowPlayer).also {
             supportFragmentManager.beginTransaction().replace(R.id.fragmentContainer, it, TAG_FRAGMENT_PLAYER).commit()
         }
     }

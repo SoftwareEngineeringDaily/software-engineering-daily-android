@@ -13,7 +13,6 @@ import android.os.IBinder
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
-import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.annotation.Nullable
 import androidx.core.content.ContextCompat
@@ -48,9 +47,6 @@ private const val ARG_EPISODE_ID = "episode_id"
 private const val ARG_URI = "uri_string"
 private const val ARG_TITLE = "title"
 private const val ARG_START_POSITION = "start_position"
-private const val ARG_AUTO_PLAY = "auto_play"
-
-private const val DEFAILT_AUTO_PLAY = true
 
 class AudioService : LifecycleService() {
 
@@ -61,15 +57,13 @@ class AudioService : LifecycleService() {
 
     companion object {
 
-        fun newIntent(context: Context, episode: Episode? = null, autoPlay: Boolean = DEFAILT_AUTO_PLAY) = Intent(context, AudioService::class.java).apply {
+        fun newIntent(context: Context, episode: Episode? = null) = Intent(context, AudioService::class.java).apply {
             episode?.let {
                 putExtra(ARG_EPISODE_ID, episode._id)
                 episode.titleString?.let { title -> putExtra(ARG_TITLE, title) }
                 episode.uriString?.let{ uriString -> putExtra(ARG_URI, Uri.parse(uriString)) }
                 putExtra(ARG_START_POSITION, episode.startPosition)
             }
-
-            putExtra(ARG_AUTO_PLAY, autoPlay)
         }
 
     }
@@ -78,9 +72,6 @@ class AudioService : LifecycleService() {
 
     var episodeId: String? = null
         private set
-
-    val isPlaying
-        get() = exoPlayer.playbackState == Player.STATE_READY && exoPlayer.playWhenReady
 
     lateinit var exoPlayer: SimpleExoPlayer
         private set
@@ -227,12 +218,10 @@ class AudioService : LifecycleService() {
 
         // Play
         intent?.let {
-            if (intent.getBooleanExtra(ARG_AUTO_PLAY, DEFAILT_AUTO_PLAY)) {
-                intent.getParcelableExtra<Uri>(ARG_URI)?.also { uri ->
-                    val startPosition = intent.getLongExtra(ARG_START_POSITION, C.POSITION_UNSET.toLong())
+            intent.getParcelableExtra<Uri>(ARG_URI)?.also { uri ->
+                val startPosition = intent.getLongExtra(ARG_START_POSITION, C.POSITION_UNSET.toLong())
 
-                    play(uri, startPosition)
-                }
+                play(uri, startPosition)
             }
         }
     }
@@ -257,7 +246,6 @@ class AudioService : LifecycleService() {
     private inner class PlayerEventListener : Player.EventListener {
 
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
-            Log.e("ZZZ", "Playback state :: $playbackState, contentPosition :: ${exoPlayer.contentPosition}, isPlaying :: $isPlaying")
             if (playbackState == Player.STATE_READY) {
                 if (exoPlayer.playWhenReady) {
                     episodeId?.let { _playerStatusLiveData.value = PlayerStatus.Playing(it) }
