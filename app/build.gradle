@@ -16,10 +16,6 @@ kapt {
 android {
     compileSdkVersion 28
 
-    dataBinding {
-        enabled = true
-    }
-
     defaultConfig {
         applicationId "com.koalatea.sedaily"
         minSdkVersion 21

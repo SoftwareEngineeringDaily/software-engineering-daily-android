@@ -20,7 +20,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import com.koalatea.sedaily.database.model.Episode
-import com.koalatea.sedaily.feature.auth.UserRepository
+import com.koalatea.sedaily.repository.UserRepository
 import com.koalatea.sedaily.feature.player.AudioService
 import com.koalatea.sedaily.feature.player.PlayerCallback
 import com.koalatea.sedaily.feature.player.PlayerFragment

@@ -3,7 +3,7 @@ package com.koalatea.sedaily.feature.episodedetail
 import androidx.annotation.MainThread
 import androidx.lifecycle.*
 import com.koalatea.sedaily.database.model.Episode
-import com.koalatea.sedaily.feature.auth.UserRepository
+import com.koalatea.sedaily.repository.UserRepository
 import com.koalatea.sedaily.feature.downloader.DownloadStatus
 import com.koalatea.sedaily.feature.episodedetail.event.BookmarkStatus
 import com.koalatea.sedaily.feature.episodedetail.event.UpvoteStatus

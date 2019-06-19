@@ -5,7 +5,7 @@ import androidx.room.Room
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.GsonBuilder
 import com.koalatea.sedaily.database.AppDatabase
-import com.koalatea.sedaily.feature.auth.UserRepository
+import com.koalatea.sedaily.repository.UserRepository
 import com.koalatea.sedaily.feature.commentList.CommentsRepository
 import com.koalatea.sedaily.feature.downloader.DownloadManager
 import com.koalatea.sedaily.repository.EpisodeDetailsRepository
@@ -26,7 +26,7 @@ val appModule = module {
 
     single { DownloadManager(androidApplication()) }
 
-    single { UserRepository(get()) }
+    single { UserRepository(get(), get()) }
 
     single { EpisodeDetailsRepository(get(), get(), get()) }
 

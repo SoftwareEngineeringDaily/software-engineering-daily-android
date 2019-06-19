@@ -3,7 +3,7 @@ package com.koalatea.sedaily.koin.module
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.koalatea.sedaily.BuildConfig
-import com.koalatea.sedaily.feature.auth.UserRepository
+import com.koalatea.sedaily.repository.UserRepository
 import com.koalatea.sedaily.network.SEDailyApi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -11,7 +11,6 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import timber.log.Timber
-import java.net.SocketTimeoutException
 
 
 // FIXME :: Move to debug build type

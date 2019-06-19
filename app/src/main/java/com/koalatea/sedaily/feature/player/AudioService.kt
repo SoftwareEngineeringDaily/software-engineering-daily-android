@@ -165,7 +165,7 @@ class AudioService : LifecycleService() {
 
                     @Nullable
                     override fun getCurrentLargeIcon(player: Player, callback: PlayerNotificationManager.BitmapCallback): Bitmap? {
-                        return getBitmapFromVectorDrawable(applicationContext, R.drawable.vd_notification_icon)
+                        return getBitmapFromVectorDrawable(applicationContext, R.drawable.vd_sed_icon)
                     }
                 },
                 object : PlayerNotificationManager.NotificationListener {
@@ -197,7 +197,7 @@ class AudioService : LifecycleService() {
         mediaSessionConnector = MediaSessionConnector(mediaSession).apply {
             setQueueNavigator(object : TimelineQueueNavigator(mediaSession) {
                 override fun getMediaDescription(player: Player, windowIndex: Int): MediaDescriptionCompat {
-                    val bitmap = getBitmapFromVectorDrawable(applicationContext, R.drawable.vd_notification_icon)
+                    val bitmap = getBitmapFromVectorDrawable(applicationContext, R.drawable.vd_sed_icon)
                     val extras = Bundle().apply {
                         putParcelable(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, bitmap)
                         putParcelable(MediaMetadataCompat.METADATA_KEY_DISPLAY_ICON, bitmap)

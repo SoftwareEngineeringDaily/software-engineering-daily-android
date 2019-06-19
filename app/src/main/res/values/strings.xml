@@ -48,11 +48,10 @@
     <string name="register">Register</string>
     <string name="email">Email</string>
     <string name="username">Username</string>
-    <string name="usernameOrEmail">Username or Email</string>
-    <string name="forgotPassword">Forgot Password</string>
+    <string name="username_or_email">Username or Email</string>
     <string name="password">Password</string>
-    <string name="remove_download">Remove Download</string>
-    <string name="downloading_title">Downloading</string>
+    <string name="back_to_login_in">Already a member? Login</string>
+    <string name="back_to_create_account">No account yet? Create one</string>
 
     <!-- Home tabs -->
     <string name="tab_all">All</string>
