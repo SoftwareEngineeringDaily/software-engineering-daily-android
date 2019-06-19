@@ -3,7 +3,7 @@ package com.koalatea.sedaily.feature.episodes
 import androidx.annotation.MainThread
 import androidx.lifecycle.*
 import androidx.paging.PagedList
-import com.koalatea.sedaily.repository.UserRepository
+import com.koalatea.sedaily.repository.SessionRepository
 import com.koalatea.sedaily.database.model.Episode
 import com.koalatea.sedaily.model.SearchQuery
 import com.koalatea.sedaily.network.NetworkState
@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 
 class EpisodesViewModel internal constructor(
         private val episodesRepository: EpisodesRepository,
-        private val userRepository: UserRepository
+        private val sessionRepository: SessionRepository
 ) : ViewModel() {
 
     var doNotCache: Boolean = false
@@ -56,7 +56,7 @@ class EpisodesViewModel internal constructor(
     @MainThread
     fun toggleUpvote(episode: Episode) {
         viewModelScope.launch {
-            if (userRepository.isLoggedIn) {
+            if (sessionRepository.isLoggedIn) {
                 episodesRepository.vote(episode._id, episode.upvoted
                         ?: false, Math.max(episode.score ?: 0, 0))
             } else {
@@ -68,7 +68,7 @@ class EpisodesViewModel internal constructor(
     @MainThread
     fun toggleBookmark(episode: Episode) {
         viewModelScope.launch {
-            if (userRepository.isLoggedIn) {
+            if (sessionRepository.isLoggedIn) {
                 episodesRepository.bookmark(episode._id, episode.bookmarked ?: false)
             } else {
                 _navigateToLogin.value = Event(episode._id)

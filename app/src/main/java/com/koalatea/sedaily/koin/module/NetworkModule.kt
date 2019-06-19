@@ -3,7 +3,7 @@ package com.koalatea.sedaily.koin.module
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.koalatea.sedaily.BuildConfig
-import com.koalatea.sedaily.repository.UserRepository
+import com.koalatea.sedaily.repository.SessionRepository
 import com.koalatea.sedaily.network.SEDailyApi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -20,7 +20,7 @@ private const val BASE_URL: String = "https://software-enginnering-daily-api.her
 val networkModule = module {
 
     single<OkHttpClient> {
-        val userRepository = get<UserRepository>()
+        val userRepository = get<SessionRepository>()
 
         // Add security interceptor.
         val clientBuilder = OkHttpClient.Builder()

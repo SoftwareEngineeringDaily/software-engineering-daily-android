@@ -20,11 +20,11 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import com.koalatea.sedaily.database.model.Episode
-import com.koalatea.sedaily.repository.UserRepository
 import com.koalatea.sedaily.feature.player.AudioService
 import com.koalatea.sedaily.feature.player.PlayerCallback
 import com.koalatea.sedaily.feature.player.PlayerFragment
 import com.koalatea.sedaily.feature.player.PlayerStatus
+import com.koalatea.sedaily.repository.SessionRepository
 import com.koalatea.sedaily.util.isServiceRunning
 import com.koalatea.sedaily.util.setupActionBar
 import kotlinx.android.synthetic.main.activity_main.*
@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity(), PlayerCallback {
     }
 
     // FIXME :: Remove
-    private val userRepository: UserRepository by inject()
+    private val sessionRepository: SessionRepository by inject()
 
     private var playerFragment: PlayerFragment? = null
     private var isAudioServiceBound: Boolean = false
@@ -103,7 +103,7 @@ class MainActivity : AppCompatActivity(), PlayerCallback {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.menu_main, menu)
-        userRepository.token?.let { token ->
+        sessionRepository.token?.let { token ->
             if (token.isNotBlank()) {
                 setLogout(menu)
             }
@@ -168,7 +168,7 @@ class MainActivity : AppCompatActivity(), PlayerCallback {
         val authItem = menu.findItem(R.id.navigation_auth)
         authItem?.title = "Logout"
         authItem.setOnMenuItemClickListener {
-            userRepository.token = ""
+            sessionRepository.token = ""
             val intent = Intent(this@MainActivity, MainActivity::class.java)
             startActivity(intent)
             false

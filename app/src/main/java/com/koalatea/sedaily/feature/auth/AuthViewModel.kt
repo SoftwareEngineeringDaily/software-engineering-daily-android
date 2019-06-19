@@ -1,18 +1,10 @@
 package com.koalatea.sedaily.feature.auth
 
-import android.view.View
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.koalatea.sedaily.model.User
-import com.koalatea.sedaily.network.SEDailyApi
-import com.koalatea.sedaily.network.toException
-import com.koalatea.sedaily.repository.UserRepository
-import com.koalatea.sedaily.util.safeApiCall
-import kotlinx.coroutines.launch
+import com.koalatea.sedaily.repository.SessionRepository
 
 class AuthViewModel(
-        private val userRepository: UserRepository
+        private val sessionRepository: SessionRepository
 ) : ViewModel() {
 
 //    private var screen: String = "Register"
@@ -97,7 +89,7 @@ class AuthViewModel(
 //    }
 //
 //    private fun handleLoginSuccess(user: User) {
-//        userRepository.token = user.token
+//        sessionRepository.token = user.token
 //        userToken.value = user.token
 //    }
 //

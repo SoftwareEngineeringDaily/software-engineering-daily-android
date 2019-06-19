@@ -3,13 +3,13 @@ package com.koalatea.sedaily.feature.episodedetail
 import androidx.annotation.MainThread
 import androidx.lifecycle.*
 import com.koalatea.sedaily.database.model.Episode
-import com.koalatea.sedaily.repository.UserRepository
 import com.koalatea.sedaily.feature.downloader.DownloadStatus
 import com.koalatea.sedaily.feature.episodedetail.event.BookmarkStatus
 import com.koalatea.sedaily.feature.episodedetail.event.UpvoteStatus
-import com.koalatea.sedaily.repository.EpisodesRepository
 import com.koalatea.sedaily.network.Resource
 import com.koalatea.sedaily.repository.EpisodeDetailsRepository
+import com.koalatea.sedaily.repository.EpisodesRepository
+import com.koalatea.sedaily.repository.SessionRepository
 import com.koalatea.sedaily.util.Event
 import kotlinx.coroutines.launch
 import java.util.*
@@ -17,7 +17,7 @@ import java.util.*
 class EpisodeDetailViewModel internal constructor(
         private val episodeDetailsRepository: EpisodeDetailsRepository,
         private val episodesRepository: EpisodesRepository,
-        private val userRepository: UserRepository
+        private val sessionRepository: SessionRepository
 ) : ViewModel() {
 
     private val episodeIdLiveData = MutableLiveData<String>()
@@ -115,7 +115,7 @@ class EpisodeDetailViewModel internal constructor(
     fun toggleUpvote() {
         viewModelScope.launch {
             episode?.let { episode ->
-                if (userRepository.isLoggedIn) {
+                if (sessionRepository.isLoggedIn) {
                     val currentUpvoteStatus = _upvoteLiveData.value?.peekContent()
                     val originalState = currentUpvoteStatus?.upvoted ?: false
                     val originalScore = Math.max(currentUpvoteStatus?.score ?: 0, 0)
@@ -137,7 +137,7 @@ class EpisodeDetailViewModel internal constructor(
     fun toggleBookmark() {
         viewModelScope.launch {
             episode?.let { episode ->
-                if (userRepository.isLoggedIn) {
+                if (sessionRepository.isLoggedIn) {
                     val currentBookmarkStatus = _bookmarkLiveData.value?.peekContent()
                     val originalState = currentBookmarkStatus?.bookmarked ?: false
                     _bookmarkLiveData.postValue(Event(BookmarkStatus(!originalState), userAction = false))
