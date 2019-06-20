@@ -1,17 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="colorPrimary">#ffffff</color>
-    <color name="colorPrimaryDark">#c7c7c7</color>
-    <color name="colorAccent">#5F46F4</color>
+    <!-- Global colors -->
+    <color name="color_primary">#5f46f4</color>
+    <color name="color_primary_variant">#6200ee</color>
+    <color name="color_on_primary">#FFFFFF</color>
 
-    <color name="windowBackground">#eee</color>
+    <color name="color_secondary">#03dac6</color>
+    <color name="color_secondary_variant">#018786</color>
+    <color name="color_on_secondary">#000000</color>
+
+    <color name="color_error">#F44336</color>
+    <color name="color_on_error">#FFFFFF</color>
+
+    <color name="color_surface">#FFFFFF</color>
+    <color name="color_on_surface">#000000</color>
+
+    <color name="color_background">#FAFAFA</color>
+    <color name="color_on_background">#000000</color>
+
+    <color name="color_status_bar">#000000</color>
+    <color name="color_toolbar">#FFFFFF</color>
 
     <color name="destructive">#EE5F59</color>
 
     <!-- Player -->
-    <color name="played_color">#FF5F46F4</color>
-    <color name="buffered_color">#1F5F46F4</color>
-    <color name="unplayed_color">#FFBEBEBE</color>
+    <color name="color_played">#FF5F46F4</color>
+    <color name="color_buffered">#1F5F46F4</color>
+    <color name="color_unplayed">#FFBEBEBE</color>
 
 </resources>

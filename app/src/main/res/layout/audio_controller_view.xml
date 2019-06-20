@@ -28,9 +28,9 @@
             android:layout_width="0dp"
             android:layout_height="26dp"
             android:layout_weight="1"
-            app:buffered_color="@color/buffered_color"
-            app:played_color="@color/played_color"
-            app:unplayed_color="@color/unplayed_color" />
+            app:buffered_color="@color/color_buffered"
+            app:played_color="@color/color_played"
+            app:unplayed_color="@color/color_unplayed" />
 
         <TextView
             android:id="@id/exo_duration"
@@ -63,26 +63,26 @@
         <ImageButton
             android:id="@id/exo_rew"
             style="@style/ExoMediaButton.Rewind"
-            android:tint="@color/colorAccent" />
+            android:tint="@color/color_primary" />
 
         <ImageButton
             android:id="@id/exo_play"
             style="@style/ExoMediaButton.Play"
             android:layout_width="128dp"
             android:layout_height="128dp"
-            android:tint="@color/colorAccent" />
+            android:tint="@color/color_primary" />
 
         <ImageButton
             android:id="@id/exo_pause"
             style="@style/ExoMediaButton.Pause"
             android:layout_width="128dp"
             android:layout_height="128dp"
-            android:tint="@color/colorAccent" />
+            android:tint="@color/color_primary" />
 
         <ImageButton
             android:id="@id/exo_ffwd"
             style="@style/ExoMediaButton.FastForward"
-            android:tint="@color/colorAccent" />
+            android:tint="@color/color_primary" />
 
     </LinearLayout>
 
