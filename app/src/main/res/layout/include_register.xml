@@ -48,6 +48,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        app:endIconMode="password_toggle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/emailTextInputLayout">
@@ -59,14 +60,13 @@
             android:hint="@string/password"
             android:inputType="textPassword"
             app:errorEnabled="true" />
-        <!--app:endIconMode="@da"-->
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/registerButton"
+        style="@style/Widget.MaterialComponents.Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.Button"
         android:layout_marginTop="32dp"
         android:text="@string/register"
         app:layout_constraintEnd_toEndOf="parent"

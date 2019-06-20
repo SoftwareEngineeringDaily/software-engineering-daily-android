@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.koalatea.sedaily.R
+import com.koalatea.sedaily.util.supportActionBar
+import kotlinx.android.synthetic.main.fragment_auth.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import retrofit2.HttpException
 
@@ -23,6 +25,12 @@ class AuthFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        supportActionBar?.elevation = resources.getDimension(R.dimen.toolbar_elevation)
+
+        authToggleButton.setOnCheckedChangeListener { _, isChecked ->
+            viewFlipper.displayedChild = if (isChecked) 1 else 0
+        }
 
 //        loginRegButton.setOnClickListener {
 //            loginRegButton.isEnabled = false
@@ -62,11 +70,6 @@ class AuthFragment : Fragment() {
 
     private fun displayMessage(message: String) {
         AlertUtil.displayMessage(this.context as Context, message)
-    }
-
-    private fun forgotPasswordClick() {
-        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.softwaredaily.com/forgot-password"))
-        startActivity(browserIntent)
     }
 
 }

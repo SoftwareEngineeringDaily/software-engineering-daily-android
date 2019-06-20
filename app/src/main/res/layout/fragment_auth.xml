@@ -1,52 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="64dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/vd_sed_icon" />
-
-    <ViewFlipper
-        android:id="@+id/viewFlipper"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginStart="@dimen/first_keyline"
-        android:layout_marginEnd="@dimen/first_keyline"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView">
+        android:layout_height="wrap_content">
 
-        <!-- Signup view-->
-        <include layout="@layout/include_register" />
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/first_keyline"
+            android:layout_marginTop="64dp"
+            android:layout_marginEnd="@dimen/first_keyline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_min="112dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/vd_sed_icon" />
 
-        <!-- Login view -->
-        <include layout="@layout/include_login" />
+        <ViewFlipper
+            android:id="@+id/viewFlipper"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/first_keyline"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="@dimen/first_keyline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView">
 
-    </ViewFlipper>
+            <!-- Signup view-->
+            <include layout="@layout/include_register" />
 
-    <ToggleButton
-        android:id="@+id/authToggleButton"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/first_keyline"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="@dimen/first_keyline"
-        android:textOff="@string/back_to_create_account"
-        android:textOn="@string/back_to_login_in"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/viewFlipper" />
+            <!-- Login view -->
+            <include layout="@layout/include_login" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        </ViewFlipper>
+
+        <ToggleButton
+            android:id="@+id/authToggleButton"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/first_keyline"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="@dimen/first_keyline"
+            android:layout_marginBottom="@dimen/first_keyline"
+            android:textOff="@string/back_to_login_in"
+            android:textOn="@string/back_to_create_account"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/viewFlipper" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
