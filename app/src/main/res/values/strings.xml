@@ -17,7 +17,7 @@
 
     <string name="close">Close</string>
 
-    <string name="error_generic">Something went wrong, please try again later</string>
+    <string name="please_wait">Please wait…</string>
 
     <!-- Bottom navigation -->
     <string name="bottom_navigation_latest">Latest</string>
@@ -34,7 +34,12 @@
     <string name="notification_pause">Pause</string>
 
     <!-- Error messages -->
+    <string name="error_generic">Something went wrong, please try again later</string>
+    <string name="error_not_connected">Connection error, please check your internet connection</string>
+
     <string name="error_media_not_found">Could not locate requested media.</string>
+
+    <string name="error_log_in">Failed to log in, please check that your username and password are correct</string>
 
     <!-- Playbar -->
     <string name="speed">Speed</string>

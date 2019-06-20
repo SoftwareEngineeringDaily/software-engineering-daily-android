@@ -1,18 +1,23 @@
 package com.koalatea.sedaily.feature.auth
 
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import com.google.android.material.snackbar.Snackbar
 import com.koalatea.sedaily.R
+import com.koalatea.sedaily.network.Resource
+import com.koalatea.sedaily.ui.dialog.BlockingProgressDialogFragment
 import com.koalatea.sedaily.util.supportActionBar
 import kotlinx.android.synthetic.main.fragment_auth.*
+import kotlinx.android.synthetic.main.include_login.*
+import kotlinx.android.synthetic.main.include_register.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import retrofit2.HttpException
+
+private const val TAG_DIALOG_PROGRESS = "auth_progress_dialog"
 
 class AuthFragment : Fragment() {
 
@@ -32,44 +37,58 @@ class AuthFragment : Fragment() {
             viewFlipper.displayedChild = if (isChecked) 1 else 0
         }
 
-//        loginRegButton.setOnClickListener {
-//            loginRegButton.isEnabled = false
-//            val usernameString = username.text.toString()
-//            val passwordString = password.text.toString()
-//            val emailString = email.text.toString()
-//            loginRegButton.isEnabled = false
-//
-//            viewModel?.authenticate(usernameString, passwordString, emailString)
-//        }
-//
-//        authViewModel.userToken.observe(this, Observer {
-//            // @TODO: Nav back?
-//            val intent = Intent(this.activity, MainActivity::class.java)
-//            startActivity(intent)
-//        })
-//
-//        authViewModel.authError.observe(this, Observer { error ->
-//            binding.loginRegButton.isEnabled = true
-//            handleLoginError(kotlin.error)
-//        })
-    }
+        loginButton.setOnClickListener {
+            val username = usernameLoginTextInputEditText.text?.trim()?.toString() ?: ""
+            val password = passwordLoginTextInputEditText.text?.trim()?.toString() ?: ""
 
-    private fun handleLoginError(error: Throwable) {
-        try {
-            // We had non-200 http error
-            if (error is HttpException) {
-                val response = error.response()
-                displayMessage(response.errorBody()?.string() as String)
-            } else {
-                displayMessage(error.message as String)
-            }
-        } catch (e: Exception) {
-            displayMessage(e.message as String)
+            viewModel.login(username, password)
         }
+
+        registerButton.setOnClickListener {
+            val username = usernameRegisterTextInputEditText.text?.trim()?.toString() ?: ""
+            val email = emailRegisterTextInputEditText.text?.trim()?.toString() ?: ""
+            val password = passwordRegisterTextInputEditText.text?.trim()?.toString() ?: ""
+
+            viewModel.register(username, email, password)
+        }
+
+        // FIXME :: Handle keyboard login and register
+
+        viewModel.userLiveData.observe(this, Observer {
+            it.getContentIfNotHandled()?.let { resource ->
+                when(resource) {
+                    is Resource.Loading -> showBlockingProgressDialog()
+                    is Resource.Success -> {
+                        hideProgressDialog()
+
+                        // TODO :: Finish activity with result or check how to deliver message back to navigation lib
+                    }
+                    is Resource.Error -> {
+                        hideProgressDialog()
+
+                        if (!resource.isConnected) {
+                            acknowledgeConnectionError()
+                        } else {
+                            // TODO :: How to diff between login and register
+                        }
+                    }
+                }
+            }
+        })
     }
 
-    private fun displayMessage(message: String) {
-        AlertUtil.displayMessage(this.context as Context, message)
-    }
+    private fun showBlockingProgressDialog(message: String = getString(R.string.please_wait), tag: String = TAG_DIALOG_PROGRESS)
+            = BlockingProgressDialogFragment.show(requireFragmentManager(), message, tag)
+
+    private fun hideProgressDialog(tag: String = TAG_DIALOG_PROGRESS)
+            = (fragmentManager?.findFragmentByTag(tag) as? DialogFragment)?.dismiss()
+
+    private fun acknowledgeConnectionError()
+            = Snackbar.make(containerConstraintLayout, R.string.error_not_connected, Snackbar.LENGTH_SHORT).show()
+
+    private fun acknowledgeLoginFailed()
+            = Snackbar.make(containerConstraintLayout, R.string.error_log_in, Snackbar.LENGTH_SHORT).show()
+    private fun acknowledgeRegisterationFailed()
+            = Snackbar.make(containerConstraintLayout, R.string.error_generic, Snackbar.LENGTH_SHORT).show()
 
 }

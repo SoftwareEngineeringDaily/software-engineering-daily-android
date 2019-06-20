@@ -6,7 +6,8 @@ import com.koalatea.sedaily.database.AppDatabase
 import com.koalatea.sedaily.database.model.Episode
 import com.koalatea.sedaily.feature.episodes.paging.EpisodesBoundaryCallback
 import com.koalatea.sedaily.model.SearchQuery
-import com.koalatea.sedaily.network.Result
+import com.koalatea.sedaily.network.NetworkManager
+import com.koalatea.sedaily.network.PagedResult
 import com.koalatea.sedaily.network.SEDailyApi
 import com.koalatea.sedaily.util.safeApiCall
 import kotlinx.coroutines.Dispatchers
@@ -16,15 +17,18 @@ import kotlinx.coroutines.withContext
 
 class EpisodesRepository(
         private val api: SEDailyApi,
-        private val db: AppDatabase) {
+        private val db: AppDatabase,
+        private val networkManager: NetworkManager
+) {
 
     @MainThread
-    fun fetchEpisodes(searchQuery: SearchQuery, pageSize: Int = 20): Result<Episode> {
+    fun fetchEpisodes(searchQuery: SearchQuery, pageSize: Int = 20): PagedResult<Episode> {
         val networkPageSize = pageSize * 2
 
         val boundaryCallback = EpisodesBoundaryCallback(
                 searchQuery = searchQuery,
                 api = api,
+                networkManager = networkManager,
                 insertResultIntoDb = this::insertResultIntoDb,
                 handleSuccessfulRefresh = this::handleSuccessfulRefresh,
                 networkPageSize = networkPageSize)
@@ -36,7 +40,7 @@ class EpisodesRepository(
         // Load first form DB then try refreshing
         boundaryCallback.refresh()
 
-        return Result(
+        return PagedResult(
                 pagedList = livePagedList,
                 networkState = boundaryCallback.networkState,
                 refresh = { boundaryCallback.refresh() },
@@ -48,6 +52,7 @@ class EpisodesRepository(
         db.episodeDao().deleteBySearchQuery(searchQuery.hashCode())
     }
 
+    // FIXME :: Return Resource instead
     suspend fun vote(episodeId: String, originalState: Boolean, originalScore: Int) = withContext(Dispatchers.IO) {
         val response = if (originalState) {
             db.episodeDao().vote(episodeId, !originalState, originalScore - 1)
@@ -69,6 +74,7 @@ class EpisodesRepository(
         return@withContext true
     }
 
+    // FIXME :: Return Resource instead
     suspend fun bookmark(episodeId: String, originalState: Boolean) = withContext(Dispatchers.IO) {
         // Update UI right away.
         db.episodeDao().bookmark(episodeId, !originalState)

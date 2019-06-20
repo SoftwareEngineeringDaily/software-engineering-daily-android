@@ -8,7 +8,7 @@ import kotlinx.coroutines.withContext
 
 class CommentsRepository(private val api: SEDailyApi) {
 
-//    fun fetchComments(episodeId: String): Result<Comment> {
+//    fun fetchComments(episodeId: String): PagedResult<Comment> {
 //        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
 //    }
 

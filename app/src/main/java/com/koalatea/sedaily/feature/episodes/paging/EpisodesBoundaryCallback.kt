@@ -21,6 +21,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.paging.PagedList
 import com.koalatea.sedaily.database.model.Episode
 import com.koalatea.sedaily.model.SearchQuery
+import com.koalatea.sedaily.network.NetworkManager
 import com.koalatea.sedaily.network.NetworkState
 import com.koalatea.sedaily.network.SEDailyApi
 import com.koalatea.sedaily.util.safeApiCall
@@ -31,6 +32,7 @@ import kotlinx.coroutines.launch
 class EpisodesBoundaryCallback(
         private val searchQuery: SearchQuery,
         private val api: SEDailyApi,
+        private val networkManager: NetworkManager,
         private val insertResultIntoDb: (SearchQuery, List<Episode>?) -> Unit,
         private val handleSuccessfulRefresh: (SearchQuery, List<Episode>?) -> Unit,
         private val networkPageSize: Int)
@@ -89,7 +91,7 @@ class EpisodesBoundaryCallback(
                     refreshState.value = NetworkState.Loaded(response.body()?.size ?: 0)
                 }
             } else {
-                val error = NetworkState.Error(response?.errorBody()?.string() ?: "Unknown error")
+                val error = NetworkState.Error(response?.errorBody()?.string(), networkManager.isConnected)
 
                 networkState.value = error
                 if (createdAtBefore == null) {

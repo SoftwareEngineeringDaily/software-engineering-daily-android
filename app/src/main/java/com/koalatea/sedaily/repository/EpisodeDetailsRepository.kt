@@ -6,6 +6,7 @@ import com.koalatea.sedaily.database.model.Download
 import com.koalatea.sedaily.database.model.Episode
 import com.koalatea.sedaily.feature.downloader.DownloadManager
 import com.koalatea.sedaily.feature.downloader.DownloadStatus
+import com.koalatea.sedaily.network.NetworkManager
 import com.koalatea.sedaily.network.Resource
 import com.koalatea.sedaily.network.SEDailyApi
 import com.koalatea.sedaily.network.toException
@@ -16,7 +17,8 @@ import kotlinx.coroutines.withContext
 class EpisodeDetailsRepository constructor(
         private val api: SEDailyApi,
         private val db: AppDatabase,
-        private val downloadManager: DownloadManager
+        private val downloadManager: DownloadManager,
+        private val networkManager: NetworkManager
 ) {
 
     suspend fun fetchEpisodeDetails(episodeId: String) = withContext(Dispatchers.IO) {
@@ -50,7 +52,7 @@ class EpisodeDetailsRepository constructor(
                 }
             })
         } else {
-            Resource.Error(response?.errorBody().toException())
+            Resource.Error(response?.errorBody().toException(), networkManager.isConnected)
         }
     }
 

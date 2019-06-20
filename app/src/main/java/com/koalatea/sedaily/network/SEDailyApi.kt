@@ -46,7 +46,7 @@ interface SEDailyApi {
 
     @FormUrlEncoded
     @POST("auth/login")
-    fun loginAsync(@Field("username") username: String, @Field("email") email: String, @Field("password") password: String): Deferred<Response<User>>
+    fun loginAsync(@Field("username") usernameOrEmail: String, @Field("password") password: String): Deferred<Response<User>>
 
     @FormUrlEncoded
     @POST("auth/register")

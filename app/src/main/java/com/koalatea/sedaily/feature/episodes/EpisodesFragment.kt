@@ -20,6 +20,7 @@ import com.koalatea.sedaily.feature.home.HomeFragmentDirections
 import com.koalatea.sedaily.model.SearchQuery
 import com.koalatea.sedaily.network.NetworkState
 import com.koalatea.sedaily.util.supportActionBar
+import kotlinx.android.synthetic.main.fragment_auth.*
 import kotlinx.android.synthetic.main.fragment_episodes.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -83,9 +84,15 @@ class EpisodesFragment : Fragment() {
             epoxyRecyclerView.requestModelBuild()
         })
 
-        viewModel.networkState.observe(this, Observer {
-            when (it) {
-                is NetworkState.Error -> { acknowledgeError(it.message) }
+        viewModel.networkState.observe(this, Observer { networkState ->
+            when (networkState) {
+                is NetworkState.Error -> {
+                    if (!networkState.isConnected) {
+                        acknowledgeConnectionError()
+                    } else {
+                        networkState.message?.let { acknowledgeError(it) } ?: acknowledgeGenericError()
+                    }
+                }
                 else -> { }// Ignore
             }
         })
@@ -114,6 +121,11 @@ class EpisodesFragment : Fragment() {
         viewModel.fetchPosts(searchQuery)
     }
 
-    private fun acknowledgeGenericError() = Snackbar.make(swipeRefreshLayout, R.string.error_generic, Snackbar.LENGTH_SHORT).show()
-    private fun acknowledgeError(message: String) = Snackbar.make(swipeRefreshLayout, message, Snackbar.LENGTH_SHORT).show()
+    private fun acknowledgeGenericError()
+            = Snackbar.make(swipeRefreshLayout, R.string.error_generic, Snackbar.LENGTH_SHORT).show()
+    private fun acknowledgeConnectionError()
+            = Snackbar.make(containerConstraintLayout, R.string.error_not_connected, Snackbar.LENGTH_SHORT).show()
+
+    private fun acknowledgeError(message: String)
+            = Snackbar.make(swipeRefreshLayout, message, Snackbar.LENGTH_SHORT).show()
 }

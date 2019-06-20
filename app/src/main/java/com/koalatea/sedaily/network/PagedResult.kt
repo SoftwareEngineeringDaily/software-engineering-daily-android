@@ -3,7 +3,7 @@ package com.koalatea.sedaily.network
 import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
 
-data class Result<T>(
+data class PagedResult<T>(
         // the LiveData of paged lists for the UI to observe
         val pagedList: LiveData<PagedList<T>>,
         // represents the network request status to show to the user
@@ -18,5 +18,5 @@ data class Result<T>(
 sealed class NetworkState {
     object Loading : NetworkState()
     data class Loaded(val itemsCount: Int) : NetworkState()
-    data class Error(val message: String) : NetworkState()
+    data class Error(val message: String?, val isConnected: Boolean) : NetworkState()
 }

@@ -18,6 +18,6 @@ val viewModelsModule = module {
 
     viewModel { PlayerViewModel(get()) }
 
-    viewModel { AuthViewModel(get()) }
+    viewModel { AuthViewModel(get(), get()) }
 
 }

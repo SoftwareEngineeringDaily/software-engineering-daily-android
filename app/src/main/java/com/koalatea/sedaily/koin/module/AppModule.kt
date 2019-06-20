@@ -28,11 +28,11 @@ val appModule = module {
     single { DownloadManager(androidApplication()) }
 
     single { SessionRepository(get()) }
-    single { UserRepository(get()) }
+    single { UserRepository(get(), get()) }
 
-    single { EpisodeDetailsRepository(get(), get(), get()) }
+    single { EpisodeDetailsRepository(get(), get(), get(), get()) }
 
-    factory { EpisodesRepository(get(), get()) }
+    factory { EpisodesRepository(get(), get(), get()) }
 
     single { CommentsRepository(get()) }
 
