@@ -6,9 +6,16 @@
         <item name="colorAccent">@color/colorAccent</item>
 
         <item name="android:windowBackground">@color/windowBackground</item>
+
+        <item name="windowActionModeOverlay">true</item>
     </style>
 
-    <style name="AppTheme.ToolbarOverlay" parent="ThemeOverlay.MaterialComponents.ActionBar"/>
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+    <style name="Widget.SED.Toolbar" parent="ThemeOverlay.MaterialComponents.ActionBar"/>
+    <style name="Widget.SED.Toolbar.WithCloseButton" parent="Widget.SED.Toolbar">
+        <item name="navigationContentDescription">@string/close</item>
+        <item name="navigationIcon">@drawable/vd_close</item>
+    </style>
+
+    <style name="Widget.SED.AppBarLayout" parent="ThemeOverlay.AppCompat.Light"/>
 
 </resources>

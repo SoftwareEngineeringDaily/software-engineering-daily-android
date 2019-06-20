@@ -23,13 +23,14 @@
             app:errorEnabled="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!--app:endIconMode="password_toggle"-->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/passwordTextInputLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        app:endIconMode="password_toggle"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/usernameTextInputLayout">
