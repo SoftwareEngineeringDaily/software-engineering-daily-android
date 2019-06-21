@@ -8,6 +8,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputLayout
 import com.koalatea.sedaily.R
 import com.koalatea.sedaily.network.Resource
 import com.koalatea.sedaily.ui.dialog.BlockingProgressDialogFragment
@@ -18,6 +19,8 @@ import kotlinx.android.synthetic.main.include_register.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 private const val TAG_DIALOG_PROGRESS = "auth_progress_dialog"
+
+private const val VIEW_FLIPPER_CHILD_REGISTERATION = 0
 
 class AuthFragment : Fragment() {
 
@@ -69,9 +72,30 @@ class AuthFragment : Fragment() {
                         if (!resource.isConnected) {
                             acknowledgeConnectionError()
                         } else {
-                            // TODO :: How to diff between login and register
+                            if (viewFlipper.displayedChild == VIEW_FLIPPER_CHILD_REGISTERATION) {
+                                acknowledgeRegisterationFailed()
+                            } else {
+                                acknowledgeLoginFailed()
+                            }
                         }
                     }
+                }
+            }
+        })
+
+        viewModel.validationLiveData.observe(this, Observer {
+            it.getContentIfNotHandled()?.let { validationStatus ->
+                if (viewFlipper.displayedChild == VIEW_FLIPPER_CHILD_REGISTERATION) {
+                    usernameRegisterTextInputEditText.error = if (validationStatus.isUsernameValid) null else getString(R.string.invalid_username)
+                    emailRegisterTextInputEditText.error = if (validationStatus.isEmailValid) null else getString(R.string.invalid_email)
+
+                    passwordRegisterTextInputLayout.endIconMode = if (validationStatus.isPasswordValid) TextInputLayout.END_ICON_PASSWORD_TOGGLE else TextInputLayout.END_ICON_NONE
+                    passwordRegisterTextInputEditText.error = if (validationStatus.isPasswordValid) null else getString(R.string.invalid_password)
+                } else {
+                    usernameLoginTextInputEditText.error = if (validationStatus.isUsernameValid) null else getString(R.string.invalid_username)
+
+                    passwordLoginTextInputLayout.endIconMode = if (validationStatus.isPasswordValid) TextInputLayout.END_ICON_PASSWORD_TOGGLE else TextInputLayout.END_ICON_NONE
+                    passwordLoginTextInputEditText.error = if (validationStatus.isPasswordValid) null else getString(R.string.invalid_password)
                 }
             }
         })

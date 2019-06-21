@@ -60,6 +60,10 @@
     <string name="back_to_login_in">Already a member? Login</string>
     <string name="back_to_create_account">No account yet? Create one</string>
 
+    <string name="invalid_username">Invalid username</string>
+    <string name="invalid_email">Invalid email</string>
+    <string name="invalid_password">Invalid password</string>
+
     <!-- Home tabs -->
     <string name="tab_all">All</string>
     <string name="tab_businessAndPhilosophy">Business and Philosophy</string>
