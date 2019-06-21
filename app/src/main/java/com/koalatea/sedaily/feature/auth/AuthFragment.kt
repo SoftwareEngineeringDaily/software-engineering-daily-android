@@ -4,11 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.TextInputLayout
 import com.koalatea.sedaily.R
 import com.koalatea.sedaily.network.Resource
 import com.koalatea.sedaily.ui.dialog.BlockingProgressDialogFragment
@@ -20,7 +20,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 private const val TAG_DIALOG_PROGRESS = "auth_progress_dialog"
 
-private const val VIEW_FLIPPER_CHILD_REGISTERATION = 0
+private const val VIEW_FLIPPER_CHILD_REGISTRATION = 0
 
 class AuthFragment : Fragment() {
 
@@ -46,7 +46,6 @@ class AuthFragment : Fragment() {
 
             viewModel.login(username, password)
         }
-
         registerButton.setOnClickListener {
             val username = usernameRegisterTextInputEditText.text?.trim()?.toString() ?: ""
             val email = emailRegisterTextInputEditText.text?.trim()?.toString() ?: ""
@@ -55,16 +54,32 @@ class AuthFragment : Fragment() {
             viewModel.register(username, email, password)
         }
 
-        // FIXME :: Handle keyboard login and register
+        // Handle keyboard done action.
+        passwordRegisterTextInputEditText.setOnEditorActionListener { _, actionId, _ ->
+            return@setOnEditorActionListener if (actionId == EditorInfo.IME_ACTION_DONE) {
+                registerButton.performClick()
+                true
+            } else {
+                false
+            }
+        }
+        passwordLoginTextInputEditText.setOnEditorActionListener { _, actionId, _ ->
+            return@setOnEditorActionListener if (actionId == EditorInfo.IME_ACTION_DONE) {
+                loginButton.performClick()
+                true
+            } else {
+                false
+            }
+        }
 
-        viewModel.userLiveData.observe(this, Observer {
+        viewModel.authResponseLiveData.observe(this, Observer {
             it.getContentIfNotHandled()?.let { resource ->
                 when(resource) {
                     is Resource.Loading -> showBlockingProgressDialog()
                     is Resource.Success -> {
                         hideProgressDialog()
 
-                        // TODO :: Finish activity with result or check how to deliver message back to navigation lib
+                        // TODO :: Finish and switch to profile fragment
                     }
                     is Resource.Error -> {
                         hideProgressDialog()
@@ -72,10 +87,10 @@ class AuthFragment : Fragment() {
                         if (!resource.isConnected) {
                             acknowledgeConnectionError()
                         } else {
-                            if (viewFlipper.displayedChild == VIEW_FLIPPER_CHILD_REGISTERATION) {
-                                acknowledgeRegisterationFailed()
+                            if (viewFlipper.displayedChild == VIEW_FLIPPER_CHILD_REGISTRATION) {
+                                acknowledgeRegistrationFailed(resource.exception.message)
                             } else {
-                                acknowledgeLoginFailed()
+                                acknowledgeLoginFailed(resource.exception.message)
                             }
                         }
                     }
@@ -85,17 +100,13 @@ class AuthFragment : Fragment() {
 
         viewModel.validationLiveData.observe(this, Observer {
             it.getContentIfNotHandled()?.let { validationStatus ->
-                if (viewFlipper.displayedChild == VIEW_FLIPPER_CHILD_REGISTERATION) {
-                    usernameRegisterTextInputEditText.error = if (validationStatus.isUsernameValid) null else getString(R.string.invalid_username)
-                    emailRegisterTextInputEditText.error = if (validationStatus.isEmailValid) null else getString(R.string.invalid_email)
-
-                    passwordRegisterTextInputLayout.endIconMode = if (validationStatus.isPasswordValid) TextInputLayout.END_ICON_PASSWORD_TOGGLE else TextInputLayout.END_ICON_NONE
-                    passwordRegisterTextInputEditText.error = if (validationStatus.isPasswordValid) null else getString(R.string.invalid_password)
+                if (viewFlipper.displayedChild == VIEW_FLIPPER_CHILD_REGISTRATION) {
+                    usernameRegisterTextInputLayout.error = if (validationStatus.isUsernameValid) null else getString(R.string.invalid_username)
+                    emailRegisterTextInputLayout.error = if (validationStatus.isEmailValid) null else getString(R.string.invalid_email)
+                    passwordRegisterTextInputLayout.error = if (validationStatus.isPasswordValid) null else getString(R.string.invalid_password)
                 } else {
-                    usernameLoginTextInputEditText.error = if (validationStatus.isUsernameValid) null else getString(R.string.invalid_username)
-
-                    passwordLoginTextInputLayout.endIconMode = if (validationStatus.isPasswordValid) TextInputLayout.END_ICON_PASSWORD_TOGGLE else TextInputLayout.END_ICON_NONE
-                    passwordLoginTextInputEditText.error = if (validationStatus.isPasswordValid) null else getString(R.string.invalid_password)
+                    usernameLoginTextInputLayout.error = if (validationStatus.isUsernameValid) null else getString(R.string.invalid_username)
+                    passwordLoginTextInputLayout.error = if (validationStatus.isPasswordValid) null else getString(R.string.invalid_password)
                 }
             }
         })
@@ -110,9 +121,9 @@ class AuthFragment : Fragment() {
     private fun acknowledgeConnectionError()
             = Snackbar.make(containerConstraintLayout, R.string.error_not_connected, Snackbar.LENGTH_SHORT).show()
 
-    private fun acknowledgeLoginFailed()
-            = Snackbar.make(containerConstraintLayout, R.string.error_log_in, Snackbar.LENGTH_SHORT).show()
-    private fun acknowledgeRegisterationFailed()
-            = Snackbar.make(containerConstraintLayout, R.string.error_generic, Snackbar.LENGTH_SHORT).show()
+    private fun acknowledgeLoginFailed(message: String?)
+            = Snackbar.make(containerConstraintLayout, message ?: getString(R.string.error_log_in), Snackbar.LENGTH_SHORT).show()
+    private fun acknowledgeRegistrationFailed(message: String?)
+            = Snackbar.make(containerConstraintLayout, message ?: getString(R.string.error_generic), Snackbar.LENGTH_SHORT).show()
 
 }

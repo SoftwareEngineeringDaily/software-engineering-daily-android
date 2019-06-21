@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.koalatea.sedaily.feature.auth.event.ValidationStatus
-import com.koalatea.sedaily.model.User
+import com.koalatea.sedaily.network.response.AuthResponse
 import com.koalatea.sedaily.network.Resource
 import com.koalatea.sedaily.repository.SessionRepository
 import com.koalatea.sedaily.repository.UserRepository
@@ -17,8 +17,8 @@ class AuthViewModel(
         private val sessionRepository: SessionRepository
 ) : ViewModel() {
 
-    private val _userLiveData = MutableLiveData<Event<Resource<User>>>()
-    val userLiveData: LiveData<Event<Resource<User>>>
+    private val _userLiveData = MutableLiveData<Event<Resource<AuthResponse>>>()
+    val authResponseLiveData: LiveData<Event<Resource<AuthResponse>>>
         get() = _userLiveData
 
     private val _validationLiveData = MutableLiveData<Event<ValidationStatus>>()
@@ -59,7 +59,7 @@ class AuthViewModel(
         return isUsernameValid && isEmailValid && isPasswordValid
     }
 
-    private fun handleUserResource(resource: Resource<User>) {
+    private fun handleUserResource(resource: Resource<AuthResponse>) {
         if (resource is Resource.Success) {
             sessionRepository.token = resource.data.token
         }
