@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -18,10 +17,13 @@ import com.koalatea.sedaily.feature.episodes.epoxy.EpisodesEpoxyController
 import com.koalatea.sedaily.feature.home.HomeFragmentDirections
 import com.koalatea.sedaily.model.SearchQuery
 import com.koalatea.sedaily.network.NetworkState
+import com.koalatea.sedaily.ui.dialog.AlertDialogFragment
 import com.koalatea.sedaily.util.supportActionBar
 import kotlinx.android.synthetic.main.fragment_auth.*
 import kotlinx.android.synthetic.main.fragment_episodes.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+
+private const val TAG_DIALOG_PROMPT_LOGIN = "prompt_login_dialog"
 
 class EpisodesFragment : Fragment() {
 
@@ -111,9 +113,11 @@ class EpisodesFragment : Fragment() {
 
         viewModel.navigateToLogin.observe(this, Observer {
             it.getContentIfNotHandled()?.let { // Only proceed if the event has never been handled
-//                val direction = HomeFragmentDirections.openCommentsAction(episodeId)
-//                findNavController().navigate(direction)
-                Toast.makeText(context, "Debug :: Login first", Toast.LENGTH_SHORT).show()
+                AlertDialogFragment.show(
+                        requireFragmentManager(),
+                        message = getString(R.string.prompt_login),
+                        positiveButton = getString(R.string.ok),
+                        tag = TAG_DIALOG_PROMPT_LOGIN)
             }
         })
 

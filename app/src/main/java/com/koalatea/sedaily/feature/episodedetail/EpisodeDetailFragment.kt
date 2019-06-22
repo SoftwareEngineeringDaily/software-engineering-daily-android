@@ -29,11 +29,14 @@ import com.koalatea.sedaily.feature.player.PlayerCallback
 import com.koalatea.sedaily.feature.player.PlayerStatus
 import com.koalatea.sedaily.model.SearchQuery
 import com.koalatea.sedaily.network.Resource
+import com.koalatea.sedaily.ui.dialog.AlertDialogFragment
 import com.koalatea.sedaily.util.supportActionBar
 import com.nabinbhandari.android.permissions.PermissionHandler
 import com.nabinbhandari.android.permissions.Permissions
 import kotlinx.android.synthetic.main.fragment_episode_detail.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+
+private const val TAG_DIALOG_PROMPT_LOGIN = "prompt_login_dialog"
 
 class EpisodeDetailFragment : Fragment() {
 
@@ -101,9 +104,11 @@ class EpisodeDetailFragment : Fragment() {
 
         viewModel.navigateToLogin.observe(this, Observer {
             it.getContentIfNotHandled()?.let { // Only proceed if the event has never been handled
-//                val direction = EpisodeDetailFragmentDirections.openCommentsAction(episodeId)
-//                findNavController().navigate(direction)
-                Toast.makeText(context, "Debug :: Login first", Toast.LENGTH_SHORT).show()
+                AlertDialogFragment.show(
+                        requireFragmentManager(),
+                        message = getString(R.string.prompt_login),
+                        positiveButton = getString(R.string.ok),
+                        tag = TAG_DIALOG_PROMPT_LOGIN)
             }
         })
 

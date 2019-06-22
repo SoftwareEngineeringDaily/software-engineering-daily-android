@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.koalatea.sedaily.ui.dialog
 
 import android.app.Dialog
