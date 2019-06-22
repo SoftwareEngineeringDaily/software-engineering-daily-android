@@ -69,9 +69,8 @@ class MainActivity : AppCompatActivity(), PlayerCallback {
         setSupportActionBar(toolbar)
 
         val navController = mainNavHostFragment.findNavController()
-        // Define top level screens.
-        // FIXME :: Use correct top-level tabs, setOf(R.id.navigation_home, R.id.navigation_saved, R.id.navigation_profile)
-        val appBarConfiguration = AppBarConfiguration(setOf(R.id.navigation_home, R.id.navigation_bookmarks, R.id.navigation_auth))
+        // Define top level screens, these will not have a back action.
+        val appBarConfiguration = AppBarConfiguration(setOf(R.id.navigation_home, R.id.navigation_bookmarks, R.id.navigation_profile))
 
         navController.setupActionBar(this, appBarConfiguration)
         setupBottomNavMenu(navController)

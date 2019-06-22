@@ -14,7 +14,7 @@
 
     <!-- FIXME :: use navigation_profile instead -->
     <item
-        android:id="@id/navigation_auth"
+        android:id="@id/navigation_profile"
         android:icon="@drawable/vd_person_outline"
         android:title="@string/bottom_navigation_profile" />
 
