@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -18,6 +17,7 @@ import com.koalatea.sedaily.feature.home.HomeFragmentDirections
 import com.koalatea.sedaily.model.SearchQuery
 import com.koalatea.sedaily.network.NetworkState
 import com.koalatea.sedaily.ui.dialog.AlertDialogFragment
+import com.koalatea.sedaily.ui.fragment.BaseFragment
 import com.koalatea.sedaily.util.supportActionBar
 import kotlinx.android.synthetic.main.fragment_auth.*
 import kotlinx.android.synthetic.main.fragment_episodes.*
@@ -25,7 +25,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 private const val TAG_DIALOG_PROMPT_LOGIN = "prompt_login_dialog"
 
-class EpisodesFragment : Fragment() {
+class EpisodesFragment : BaseFragment() {
 
     companion object {
         fun newInstance(categoryId: String?): EpisodesFragment {
@@ -124,11 +124,4 @@ class EpisodesFragment : Fragment() {
         viewModel.fetchPosts(searchQuery)
     }
 
-    private fun acknowledgeGenericError()
-            = Snackbar.make(swipeRefreshLayout, R.string.error_generic, Snackbar.LENGTH_SHORT).show()
-    private fun acknowledgeConnectionError()
-            = Snackbar.make(containerConstraintLayout, R.string.error_not_connected, Snackbar.LENGTH_SHORT).show()
-
-    private fun acknowledgeError(message: String)
-            = Snackbar.make(swipeRefreshLayout, message, Snackbar.LENGTH_SHORT).show()
 }

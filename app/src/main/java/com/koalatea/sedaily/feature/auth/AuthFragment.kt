@@ -6,12 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import com.koalatea.sedaily.R
 import com.koalatea.sedaily.network.Resource
 import com.koalatea.sedaily.ui.dialog.BlockingProgressDialogFragment
+import com.koalatea.sedaily.ui.fragment.BaseFragment
 import com.koalatea.sedaily.util.supportActionBar
 import kotlinx.android.synthetic.main.fragment_auth.*
 import kotlinx.android.synthetic.main.include_login.*
@@ -22,7 +22,7 @@ private const val TAG_DIALOG_PROGRESS = "auth_progress_dialog"
 
 private const val VIEW_FLIPPER_CHILD_REGISTRATION = 0
 
-class AuthFragment : Fragment() {
+class AuthFragment : BaseFragment() {
 
     private val viewModel: AuthViewModel by viewModel()
 
@@ -117,9 +117,6 @@ class AuthFragment : Fragment() {
 
     private fun hideProgressDialog(tag: String = TAG_DIALOG_PROGRESS)
             = (fragmentManager?.findFragmentByTag(tag) as? DialogFragment)?.dismiss()
-
-    private fun acknowledgeConnectionError()
-            = Snackbar.make(containerConstraintLayout, R.string.error_not_connected, Snackbar.LENGTH_SHORT).show()
 
     private fun acknowledgeLoginFailed(message: String?)
             = Snackbar.make(containerConstraintLayout, message ?: getString(R.string.error_log_in), Snackbar.LENGTH_SHORT).show()

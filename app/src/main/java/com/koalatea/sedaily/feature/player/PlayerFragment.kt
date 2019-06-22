@@ -10,13 +10,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.material.snackbar.Snackbar
 import com.koalatea.sedaily.R
 import com.koalatea.sedaily.database.model.Episode
 import com.koalatea.sedaily.network.Resource
+import com.koalatea.sedaily.ui.fragment.BaseFragment
 import kotlinx.android.synthetic.main.fragment_episode_detail.*
 import kotlinx.android.synthetic.main.fragment_player.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -24,7 +24,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 private const val ARG_EPISODE_ID = "episode_id"
 private const val ARG_ONLY_SHOW_PLAYER = "auto_play"
 
-class PlayerFragment : Fragment() {
+class PlayerFragment : BaseFragment() {
 
     companion object {
         fun newInstance(episodeId: String, isOnlyShowPlayer: Boolean): PlayerFragment {
@@ -117,7 +117,5 @@ class PlayerFragment : Fragment() {
     private fun renderContent(episode: Episode) {
         playerView.findViewById<TextView>(R.id.titleTextView).text = episode.titleString ?: getString(R.string.loading_dots)
     }
-
-    private fun acknowledgeGenericError() = Snackbar.make(containerConstraintLayout, R.string.error_generic, Snackbar.LENGTH_SHORT).show()
 
 }

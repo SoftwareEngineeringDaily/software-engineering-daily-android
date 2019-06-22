@@ -10,9 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -30,6 +28,7 @@ import com.koalatea.sedaily.feature.player.PlayerStatus
 import com.koalatea.sedaily.model.SearchQuery
 import com.koalatea.sedaily.network.Resource
 import com.koalatea.sedaily.ui.dialog.AlertDialogFragment
+import com.koalatea.sedaily.ui.fragment.BaseFragment
 import com.koalatea.sedaily.util.supportActionBar
 import com.nabinbhandari.android.permissions.PermissionHandler
 import com.nabinbhandari.android.permissions.Permissions
@@ -38,7 +37,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 private const val TAG_DIALOG_PROMPT_LOGIN = "prompt_login_dialog"
 
-class EpisodeDetailFragment : Fragment() {
+class EpisodeDetailFragment : BaseFragment() {
 
     private val viewModel: EpisodeDetailViewModel by viewModel()
 
@@ -303,8 +302,6 @@ class EpisodeDetailFragment : Fragment() {
         playButton.visibility = View.INVISIBLE
         stopButton.visibility = View.VISIBLE
     }
-
-    private fun acknowledgeGenericError() = Snackbar.make(containerConstraintLayout, R.string.error_generic, Snackbar.LENGTH_SHORT).show()
 
     private fun acknowledgeDownloadSucceeded() = Snackbar.make(containerConstraintLayout, R.string.episode_download_succeeded, Snackbar.LENGTH_SHORT).show()
     private fun acknowledgeDownloadFailed() = Snackbar.make(containerConstraintLayout, R.string.episode_download_failed, Snackbar.LENGTH_SHORT).show()

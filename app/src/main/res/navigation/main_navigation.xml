@@ -63,5 +63,9 @@
             android:name="entityId"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/navigation_bookmarks"
+        android:name="com.koalatea.sedaily.feature.bookmarks.BookmarksFragment"
+        android:label="@string/bookmarks_title" />
 
 </navigation>

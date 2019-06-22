@@ -7,6 +7,7 @@
     <string name="home_title">Software Engineering Daily</string>
     <string name="comments_title">Comments</string>
     <string name="episode_details_title"/>
+    <string name="bookmarks_title">Bookmarks</string>
     <string name="post_error">An error occurred while loading the posts</string>
     <string name="search_hint">Search for a podcast</string>
 
