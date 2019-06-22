@@ -28,7 +28,7 @@ val appModule = module {
     single { DownloadManager(androidApplication()) }
 
     single { SessionRepository(get()) }
-    single { UserRepository(get(), get()) }
+    single { UserRepository(get(), get(), get()) }
 
     single { EpisodeDetailsRepository(get(), get(), get(), get()) }
 

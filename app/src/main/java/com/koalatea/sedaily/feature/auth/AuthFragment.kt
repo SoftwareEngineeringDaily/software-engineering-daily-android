@@ -72,7 +72,7 @@ class AuthFragment : Fragment() {
             }
         }
 
-        viewModel.authResponseLiveData.observe(this, Observer {
+        viewModel.userLiveData.observe(this, Observer {
             it.getContentIfNotHandled()?.let { resource ->
                 when(resource) {
                     is Resource.Loading -> showBlockingProgressDialog()

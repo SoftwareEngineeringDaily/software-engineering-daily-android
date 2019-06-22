@@ -18,7 +18,7 @@ class AuthViewModel(
 ) : ViewModel() {
 
     private val _userLiveData = MutableLiveData<Event<Resource<AuthResponse>>>()
-    val authResponseLiveData: LiveData<Event<Resource<AuthResponse>>>
+    val userLiveData: LiveData<Event<Resource<AuthResponse>>>
         get() = _userLiveData
 
     private val _validationLiveData = MutableLiveData<Event<ValidationStatus>>()
