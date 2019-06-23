@@ -1,6 +1,7 @@
 package com.koalatea.sedaily.network
 
 import com.koalatea.sedaily.database.model.Episode
+import com.koalatea.sedaily.model.Profile
 import com.koalatea.sedaily.network.response.AuthResponse
 import com.koalatea.sedaily.network.response.CommentsResponse
 import com.koalatea.sedaily.network.response.FavoriteResponse
@@ -51,5 +52,8 @@ interface SEDailyApi {
     @FormUrlEncoded
     @POST("auth/register")
     fun registerAsync(@Field("username") username: String, @Field("email") email: String, @Field("password") password: String): Deferred<Response<AuthResponse>>
+
+    @GET("users/me")
+    fun getProfileAsync(): Deferred<Response<Profile>>
 
 }

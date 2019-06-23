@@ -77,7 +77,7 @@ class EpisodeDetailFragment : BaseFragment() {
             when (resource) {
                 is Resource.Loading -> showLoading()
                 is Resource.Success<Episode> -> renderEpisode(resource.data)
-                is Resource.Error -> acknowledgeGenericError()
+                is Resource.Error -> if (resource.isConnected) acknowledgeGenericError() else acknowledgeConnectionError()
             }
         })
 

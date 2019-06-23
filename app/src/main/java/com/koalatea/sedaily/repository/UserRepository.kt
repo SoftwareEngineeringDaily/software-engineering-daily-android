@@ -14,6 +14,18 @@ class UserRepository(
         private val gson: Gson
 ) {
 
+    suspend fun fetchProfile() = withContext(Dispatchers.IO) {
+        val response = safeApiCall { api.getProfileAsync().await() }
+        val profile = response?.body()
+        if (response?.isSuccessful == true && profile != null) {
+            Resource.Success(profile)
+        } else {
+            Resource.Error(
+                    IOException(response?.errorBody().toObject<ErrorResponse>(gson)?.message),
+                    networkManager.isConnected)
+        }
+    }
+
     suspend fun login(usernameOrEmail: String, password: String) = withContext(Dispatchers.IO) {
         val response = safeApiCall { api.loginAsync(usernameOrEmail, password).await() }
         val user = response?.body()

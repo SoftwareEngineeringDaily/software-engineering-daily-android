@@ -69,7 +69,7 @@
         android:label="@string/bookmarks_title" />
     <fragment
         android:id="@+id/navigation_profile"
-        android:name="com.koalatea.sedaily.feature.bookmarks.ProfileFragment"
+        android:name="com.koalatea.sedaily.feature.profile.ProfileFragment"
         android:label="@string/profile_title" />
 
 </navigation>
