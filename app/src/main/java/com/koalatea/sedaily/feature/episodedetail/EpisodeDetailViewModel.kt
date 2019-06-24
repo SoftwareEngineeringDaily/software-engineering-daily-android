@@ -4,8 +4,8 @@ import androidx.annotation.MainThread
 import androidx.lifecycle.*
 import com.koalatea.sedaily.database.model.Episode
 import com.koalatea.sedaily.feature.downloader.DownloadStatus
-import com.koalatea.sedaily.feature.episodedetail.event.BookmarkStatus
-import com.koalatea.sedaily.feature.episodedetail.event.UpvoteStatus
+import com.koalatea.sedaily.feature.episodedetail.event.BookmarkEvent
+import com.koalatea.sedaily.feature.episodedetail.event.UpvoteEvent
 import com.koalatea.sedaily.network.Resource
 import com.koalatea.sedaily.repository.EpisodeDetailsRepository
 import com.koalatea.sedaily.repository.EpisodesRepository
@@ -37,9 +37,9 @@ class EpisodeDetailViewModel internal constructor(
                         _downloadStatusLiveData.postValue(Event(downloadStatus, userAction = false))
                     }
 
-                    _upvoteLiveData.postValue(Event(UpvoteStatus(episode.upvoted
+                    _upvoteLiveData.postValue(Event(UpvoteEvent(episode.upvoted
                             ?: false, Math.max(episode.score ?: 0, 0)), userAction = false))
-                    _bookmarkLiveData.postValue(Event(BookmarkStatus(episode.bookmarked
+                    _bookmarkLiveData.postValue(Event(BookmarkEvent(episode.bookmarked
                             ?: false), userAction = false))
 
                     // FIXME :: Update update play/pause livedata
@@ -61,12 +61,12 @@ class EpisodeDetailViewModel internal constructor(
     val navigateToLogin: LiveData<Event<String>>
         get() = _navigateToLogin
 
-    private val _upvoteLiveData = MutableLiveData<Event<UpvoteStatus>>()
-    val upvoteLiveData: LiveData<Event<UpvoteStatus>>
+    private val _upvoteLiveData = MutableLiveData<Event<UpvoteEvent>>()
+    val upvoteLiveData: LiveData<Event<UpvoteEvent>>
         get() = _upvoteLiveData
 
-    private val _bookmarkLiveData = MutableLiveData<Event<BookmarkStatus>>()
-    val bookmarkLiveData: LiveData<Event<BookmarkStatus>>
+    private val _bookmarkLiveData = MutableLiveData<Event<BookmarkEvent>>()
+    val bookmarkLiveData: LiveData<Event<BookmarkEvent>>
         get() = _bookmarkLiveData
 
     // FIXME :: Add livedata to update play/pause state
@@ -120,11 +120,11 @@ class EpisodeDetailViewModel internal constructor(
                     val originalState = currentUpvoteStatus?.upvoted ?: false
                     val originalScore = Math.max(currentUpvoteStatus?.score ?: 0, 0)
                     val newScore = if (originalState) originalScore - 1 else originalScore + 1
-                    _upvoteLiveData.postValue(Event(UpvoteStatus(!originalState, newScore)))
+                    _upvoteLiveData.postValue(Event(UpvoteEvent(!originalState, newScore)))
 
                     val success = episodesRepository.vote(episode._id, originalState, originalScore)
                     if (!success) {
-                        _upvoteLiveData.postValue(Event(UpvoteStatus(originalState, originalScore, failed = true)))
+                        _upvoteLiveData.postValue(Event(UpvoteEvent(originalState, originalScore, failed = true)))
                     }
                 } else {
                     _navigateToLogin.value = Event(episode._id)
@@ -140,11 +140,11 @@ class EpisodeDetailViewModel internal constructor(
                 if (sessionRepository.isLoggedIn) {
                     val currentBookmarkStatus = _bookmarkLiveData.value?.peekContent()
                     val originalState = currentBookmarkStatus?.bookmarked ?: false
-                    _bookmarkLiveData.postValue(Event(BookmarkStatus(!originalState), userAction = false))
+                    _bookmarkLiveData.postValue(Event(BookmarkEvent(!originalState), userAction = false))
 
                     val success = episodesRepository.bookmark(episode._id, originalState)
                     if (!success) {
-                        _bookmarkLiveData.postValue(Event(BookmarkStatus(originalState, failed = true), userAction = false))
+                        _bookmarkLiveData.postValue(Event(BookmarkEvent(originalState, failed = true), userAction = false))
                     }
                 } else {
                     _navigateToLogin.value = Event(episode._id)

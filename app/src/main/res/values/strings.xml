@@ -70,6 +70,12 @@
 
     <string name="prompt_login">You must login to use this feature</string>
 
+    <!-- Profile -->
+    <string name="logout">Logout</string>
+
+    <string name="edit_profile_hint">Please visit the website to edit your profile</string>
+    <string name="login_reason">Login to see your profile here</string>
+
     <!-- Home tabs -->
     <string name="tab_all">All</string>
     <string name="tab_businessAndPhilosophy">Business and Philosophy</string>

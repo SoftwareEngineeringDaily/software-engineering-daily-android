@@ -9,7 +9,9 @@ import java.io.IOException
 
 private const val DIRECTORY_EPISODES = "Episodes"
 
-class DownloadManager(private val context: Context) {
+class DownloadManager(
+        private val context: Context
+) {
 
     @MainThread
     fun downloadEpisode(fileName: String, url: String, notificationTitle: String): Long? {

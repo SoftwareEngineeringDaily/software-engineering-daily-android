@@ -10,6 +10,9 @@ import com.koalatea.sedaily.database.model.Download
 @Dao
 interface DownloadDao {
 
+    @Query("SELECT * FROM download")
+    suspend fun getAll(): List<Download>
+
     @Query("SELECT * FROM download WHERE postId = :id LIMIT 1")
     suspend fun findById(id: String): Download?
 
@@ -18,5 +21,8 @@ interface DownloadDao {
 
     @Delete
     suspend fun delete(download: Download)
+
+    @Query("DELETE FROM download")
+    fun clearTable()
 
 }

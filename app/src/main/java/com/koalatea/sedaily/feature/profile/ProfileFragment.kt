@@ -2,18 +2,16 @@ package com.koalatea.sedaily.feature.profile
 
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.koalatea.sedaily.R
-import com.koalatea.sedaily.model.Profile
+import com.koalatea.sedaily.network.ProfileResult
 import com.koalatea.sedaily.network.Resource
-import com.koalatea.sedaily.ui.dialog.AlertDialogFragment
 import com.koalatea.sedaily.ui.fragment.BaseFragment
 import com.koalatea.sedaily.util.supportActionBar
+import kotlinx.android.synthetic.main.fragment_profile.*
+import kotlinx.android.synthetic.main.include_empty_state.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-
-private const val TAG_DIALOG_PROMPT_LOGIN = "prompt_login_dialog"
 
 class ProfileFragment : BaseFragment() {
 
@@ -35,21 +33,15 @@ class ProfileFragment : BaseFragment() {
 
         supportActionBar?.elevation = resources.getDimension(R.dimen.toolbar_elevation)
 
-        viewModel.profileResource.observe(this, Observer { resource ->
-                when (resource) {
-                    is Resource.Loading -> showLoading()
-                    is Resource.Success<Profile> -> renderProfile(resource.data)
-                    is Resource.Error -> if (resource.isConnected) acknowledgeGenericError() else acknowledgeConnectionError()
-                }
-        })
+        logoutButton.setOnClickListener {
+            viewModel.logout()
+        }
 
-        viewModel.navigateToLogin.observe(this, Observer {
-            it.getContentIfNotHandled()?.let {
-                AlertDialogFragment.show(
-                        requireFragmentManager(),
-                        message = getString(R.string.prompt_login),
-                        positiveButton = getString(R.string.ok),
-                        tag = TAG_DIALOG_PROMPT_LOGIN)
+        viewModel.profileResource.observe(this, Observer { resource ->
+            when (resource) {
+                is Resource.Loading -> showLoading()
+                is Resource.Success<ProfileResult> -> renderProfile(resource.data)
+                is Resource.Error -> if (resource.isConnected) acknowledgeGenericError() else acknowledgeConnectionError()
             }
         })
 
@@ -75,12 +67,49 @@ class ProfileFragment : BaseFragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun showLoading() {
-        Toast.makeText(requireContext(), "Profile loading...", Toast.LENGTH_SHORT).show()
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+
+        menu.findItem(R.id.login).isVisible = !viewModel.isUserLoggedIn
     }
 
-    private fun renderProfile(profile: Profile) {
-        Toast.makeText(requireContext(), "Profile loaded", Toast.LENGTH_SHORT).show()
+    private fun showLoading() {
+        emptyStateContainer.visibility = View.GONE
+        profileDetailsContainer.visibility = View.GONE
+
+        progressBar.visibility = View.VISIBLE
+    }
+
+    private fun showLoginEmptyState() {
+        profileDetailsContainer.visibility = View.GONE
+        progressBar.visibility = View.GONE
+
+        // Update menu.
+        activity?.invalidateOptionsMenu()
+
+        emptyStateContainer.textView.text = getString(R.string.login_reason)
+        emptyStateContainer.visibility = View.VISIBLE
+    }
+
+    private fun renderProfile(profileResult: ProfileResult) {
+        when(profileResult) {
+            is ProfileResult.LoggedIn -> {
+                val profile = profileResult.profile
+                usernameTextView.text = profile.username
+
+                // Update menu.
+                activity?.invalidateOptionsMenu()
+
+                emptyStateContainer.visibility = View.GONE
+                progressBar.visibility = View.GONE
+
+                profileDetailsContainer.visibility = View.VISIBLE
+            }
+            is ProfileResult.LoggedOut -> {
+                showLoginEmptyState()
+            }
+        }
+
     }
 
 }

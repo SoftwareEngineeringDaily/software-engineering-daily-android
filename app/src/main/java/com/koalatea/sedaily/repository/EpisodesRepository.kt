@@ -4,6 +4,7 @@ import androidx.annotation.MainThread
 import androidx.paging.toLiveData
 import com.koalatea.sedaily.database.AppDatabase
 import com.koalatea.sedaily.database.model.Episode
+import com.koalatea.sedaily.feature.downloader.DownloadManager
 import com.koalatea.sedaily.feature.episodes.paging.EpisodesBoundaryCallback
 import com.koalatea.sedaily.model.SearchQuery
 import com.koalatea.sedaily.network.NetworkManager
@@ -14,11 +15,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 class EpisodesRepository(
         private val api: SEDailyApi,
         private val db: AppDatabase,
-        private val networkManager: NetworkManager
+        private val networkManager: NetworkManager,
+        private val downloadManager: DownloadManager
 ) {
 
     @MainThread
@@ -48,8 +51,24 @@ class EpisodesRepository(
         )
     }
 
-    suspend fun clearLocalCache(searchQuery: SearchQuery)  = withContext(Dispatchers.IO) {
+    suspend fun clearLocalCache(searchQuery: SearchQuery) = withContext(Dispatchers.IO) {
         db.episodeDao().deleteBySearchQuery(searchQuery.hashCode())
+    }
+
+    suspend fun clear() = withContext(Dispatchers.IO) {
+        db.episodeDao().clearTable()
+        db.listenedDao().clearTable()
+
+        db.downloadDao().getAll().forEach {
+            try {
+                downloadManager.deleteDownload(it.postId)
+            } catch (e: Exception) {
+                // Ignore delete errors and log it to Crashlytics.
+
+                Timber.e(e)
+            }
+        }
+        db.downloadDao().clearTable()
     }
 
     // FIXME :: Return Resource instead

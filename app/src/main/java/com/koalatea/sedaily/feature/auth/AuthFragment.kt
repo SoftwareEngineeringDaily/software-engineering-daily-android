@@ -20,7 +20,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 private const val TAG_DIALOG_PROGRESS = "auth_progress_dialog"
 
-private const val VIEW_FLIPPER_CHILD_REGISTRATION = 0
+private const val VIEW_FLIPPER_CHILD_REGISTRATION = 1
 
 class AuthFragment : BaseFragment() {
 
@@ -37,7 +37,7 @@ class AuthFragment : BaseFragment() {
         supportActionBar?.elevation = resources.getDimension(R.dimen.toolbar_elevation)
 
         authToggleButton.setOnCheckedChangeListener { _, isChecked ->
-            viewFlipper.displayedChild = if (isChecked) 1 else 0
+            viewFlipper.displayedChild = if (isChecked) 0 else 1
         }
 
         loginButton.setOnClickListener {

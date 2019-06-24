@@ -13,6 +13,8 @@ import com.koalatea.sedaily.network.toException
 import com.koalatea.sedaily.util.safeApiCall
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import timber.log.Timber
+import java.lang.Exception
 
 class EpisodeDetailsRepository constructor(
         private val api: SEDailyApi,
@@ -71,7 +73,13 @@ class EpisodeDetailsRepository constructor(
                 db.downloadDao().delete(download)
 
                 // Delete local file
-                downloadManager.deleteDownload(episode._id)
+                try {
+                    downloadManager.deleteDownload(episode._id)
+                } catch (e: Exception) {
+                    // Ignore delete errors and log it to Crashlytics.
+
+                    Timber.e(e)
+                }
             }
         }
     }

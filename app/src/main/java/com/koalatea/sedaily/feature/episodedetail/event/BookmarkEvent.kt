@@ -1,5 +1,5 @@
 package com.koalatea.sedaily.feature.episodedetail.event
 
-data class BookmarkStatus(
+data class BookmarkEvent(
         val bookmarked: Boolean,
         val failed: Boolean = false)

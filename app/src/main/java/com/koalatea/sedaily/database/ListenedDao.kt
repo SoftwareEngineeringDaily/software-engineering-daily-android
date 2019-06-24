@@ -19,4 +19,7 @@ interface ListenedDao {
     @Delete
     suspend fun delete(listened: Listened)
 
+    @Query("DELETE FROM listened")
+    fun clearTable()
+
 }

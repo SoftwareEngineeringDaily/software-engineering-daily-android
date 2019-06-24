@@ -35,6 +35,6 @@ interface EpisodeDao {
     fun deleteBySearchQuery(searchQueryHashCode: Int)
     
     @Query("DELETE FROM episode")
-    suspend fun clearTable()
+    fun clearTable()
 
 }
