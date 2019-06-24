@@ -6,9 +6,9 @@
     <color name="color_primary_variant">#6200ee</color>
     <color name="color_on_primary">#FFFFFF</color>
 
-    <color name="color_secondary">#03dac6</color>
-    <color name="color_secondary_variant">#018786</color>
-    <color name="color_on_secondary">#000000</color>
+    <color name="color_secondary">#000000</color>
+    <color name="color_secondary_variant">#111111</color>
+    <color name="color_on_secondary">#FFFFFF</color>
 
     <color name="color_error">#F44336</color>
     <color name="color_on_error">#FFFFFF</color>

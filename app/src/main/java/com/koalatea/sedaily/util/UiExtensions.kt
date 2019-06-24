@@ -7,12 +7,21 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
+import android.app.Activity
+import android.view.inputmethod.InputMethodManager
 
 @Suppress("DEPRECATION")
 fun Context.isServiceRunning(serviceClassName: String): Boolean {
     val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as? ActivityManager
 
     return activityManager?.getRunningServices(Integer.MAX_VALUE)?.any { it.service.className == serviceClassName } ?: false
+}
+
+fun Activity.hideKeyboard() {
+    val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+    currentFocus?.let {
+        inputMethodManager?.hideSoftInputFromWindow(it.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+    }
 }
 
 val Fragment.supportActionBar

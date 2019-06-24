@@ -12,6 +12,7 @@ import com.koalatea.sedaily.R
 import com.koalatea.sedaily.network.Resource
 import com.koalatea.sedaily.ui.dialog.BlockingProgressDialogFragment
 import com.koalatea.sedaily.ui.fragment.BaseFragment
+import com.koalatea.sedaily.util.hideKeyboard
 import com.koalatea.sedaily.util.supportActionBar
 import kotlinx.android.synthetic.main.fragment_auth.*
 import kotlinx.android.synthetic.main.include_login.*
@@ -37,7 +38,7 @@ class AuthFragment : BaseFragment() {
         supportActionBar?.elevation = resources.getDimension(R.dimen.toolbar_elevation)
 
         authToggleButton.setOnCheckedChangeListener { _, isChecked ->
-            viewFlipper.displayedChild = if (isChecked) 0 else 1
+            viewFlipper.displayedChild = if (isChecked) 1 else 0
         }
 
         loginButton.setOnClickListener {
@@ -45,6 +46,8 @@ class AuthFragment : BaseFragment() {
             val password = passwordLoginTextInputEditText.text?.trim()?.toString() ?: ""
 
             viewModel.login(username, password)
+
+            activity?.hideKeyboard()
         }
         registerButton.setOnClickListener {
             val username = usernameRegisterTextInputEditText.text?.trim()?.toString() ?: ""
@@ -52,6 +55,8 @@ class AuthFragment : BaseFragment() {
             val password = passwordRegisterTextInputEditText.text?.trim()?.toString() ?: ""
 
             viewModel.register(username, email, password)
+
+            activity?.hideKeyboard()
         }
 
         // Handle keyboard done action.
