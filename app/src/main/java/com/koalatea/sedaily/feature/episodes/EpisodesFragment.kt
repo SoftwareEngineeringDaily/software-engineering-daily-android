@@ -10,7 +10,6 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
 import com.koalatea.sedaily.R
 import com.koalatea.sedaily.feature.episodes.epoxy.EpisodesEpoxyController
 import com.koalatea.sedaily.feature.home.HomeFragmentDirections
@@ -19,7 +18,6 @@ import com.koalatea.sedaily.network.NetworkState
 import com.koalatea.sedaily.ui.dialog.AlertDialogFragment
 import com.koalatea.sedaily.ui.fragment.BaseFragment
 import com.koalatea.sedaily.util.supportActionBar
-import kotlinx.android.synthetic.main.fragment_auth.*
 import kotlinx.android.synthetic.main.fragment_episodes.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

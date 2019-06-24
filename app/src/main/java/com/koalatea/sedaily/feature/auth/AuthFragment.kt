@@ -79,7 +79,7 @@ class AuthFragment : BaseFragment() {
                     is Resource.Success -> {
                         hideProgressDialog()
 
-                        // TODO :: Finish and switch to profile fragment
+                        activity?.supportFragmentManager?.popBackStack()
                     }
                     is Resource.Error -> {
                         hideProgressDialog()

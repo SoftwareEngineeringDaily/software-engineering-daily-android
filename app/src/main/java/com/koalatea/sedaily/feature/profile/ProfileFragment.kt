@@ -1,10 +1,10 @@
 package com.koalatea.sedaily.feature.profile
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.koalatea.sedaily.R
 import com.koalatea.sedaily.model.Profile
 import com.koalatea.sedaily.network.Resource
@@ -18,6 +18,12 @@ private const val TAG_DIALOG_PROMPT_LOGIN = "prompt_login_dialog"
 class ProfileFragment : BaseFragment() {
 
     private val viewModel: ProfileViewModel by viewModel()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -50,10 +56,31 @@ class ProfileFragment : BaseFragment() {
         viewModel.fetchProfile()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_profile, menu)
+
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.login -> {
+                val direction = ProfileFragmentDirections.openAuthAction()
+                findNavController().navigate(direction)
+
+                return true
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
     private fun showLoading() {
+        Toast.makeText(requireContext(), "Profile loading...", Toast.LENGTH_SHORT).show()
     }
 
     private fun renderProfile(profile: Profile) {
+        Toast.makeText(requireContext(), "Profile loaded", Toast.LENGTH_SHORT).show()
     }
 
 }

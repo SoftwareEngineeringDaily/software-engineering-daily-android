@@ -70,6 +70,10 @@
     <fragment
         android:id="@+id/navigation_profile"
         android:name="com.koalatea.sedaily.feature.profile.ProfileFragment"
-        android:label="@string/profile_title" />
+        android:label="@string/profile_title" >
+        <action
+            android:id="@+id/open_auth_action"
+            app:destination="@id/navigation_auth" />
+    </fragment>
 
 </navigation>

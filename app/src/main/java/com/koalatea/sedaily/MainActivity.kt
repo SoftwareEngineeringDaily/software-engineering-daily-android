@@ -7,9 +7,7 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -17,19 +15,16 @@ import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import com.koalatea.sedaily.database.model.Episode
 import com.koalatea.sedaily.feature.player.AudioService
 import com.koalatea.sedaily.feature.player.PlayerCallback
 import com.koalatea.sedaily.feature.player.PlayerFragment
 import com.koalatea.sedaily.feature.player.PlayerStatus
-import com.koalatea.sedaily.repository.SessionRepository
 import com.koalatea.sedaily.util.isServiceRunning
 import com.koalatea.sedaily.util.setupActionBar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.include_default_toolbar.*
-import org.koin.android.ext.android.inject
 
 private const val TAG_FRAGMENT_PLAYER = "player_fragment"
 
@@ -52,9 +47,6 @@ class MainActivity : AppCompatActivity(), PlayerCallback {
         override fun onServiceDisconnected(name: ComponentName?) {
         }
     }
-
-    // FIXME :: Remove
-    private val sessionRepository: SessionRepository by inject()
 
     private var playerFragment: PlayerFragment? = null
     private var isAudioServiceBound: Boolean = false
@@ -99,32 +91,6 @@ class MainActivity : AppCompatActivity(), PlayerCallback {
 
     private fun setupBottomNavMenu(navController: NavController) = bottomNavigationView?.setupWithNavController(navController)
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater: MenuInflater = menuInflater
-        inflater.inflate(R.menu.menu_main, menu)
-        sessionRepository.token?.let { token ->
-            if (token.isNotBlank()) {
-                setLogout(menu)
-            }
-        }
-
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.search -> {
-                onSearchRequested()
-                true
-            }
-            R.id.home -> {
-                mainNavHostFragment.findNavController().navigate(R.id.navigation_home)
-                true
-            }
-            else -> item.onNavDestinationSelected(mainNavHostFragment.findNavController()) || super.onOptionsItemSelected(item)
-        }
-    }
-
     override fun play(episode: Episode) {
         playerFragment?.play(episode) ?: addPlayerFragment(episode._id, false)
     }
@@ -144,7 +110,7 @@ class MainActivity : AppCompatActivity(), PlayerCallback {
     private fun handleIntent(intent: Intent) {
         if (Intent.ACTION_SEARCH == intent.action) {
             intent.getStringExtra(SearchManager.QUERY)?.also { query ->
-                searchPodcasts(query)
+                searchEpisodes(query)
             }
         }
     }
@@ -155,23 +121,13 @@ class MainActivity : AppCompatActivity(), PlayerCallback {
         }
     }
 
-    private fun searchPodcasts(query: String) {
-
+    private fun searchEpisodes(query: String) {
+        // FIXME :: Search for real!
+        Toast.makeText(this, "Search for $query", Toast.LENGTH_SHORT).show()
     }
 
     override fun onSupportNavigateUp(): Boolean {
         return mainNavHostFragment.findNavController().navigateUp()
-    }
-
-    private fun setLogout(menu: Menu) {
-        val authItem = menu.findItem(R.id.navigation_auth)
-        authItem?.title = "Logout"
-        authItem.setOnMenuItemClickListener {
-            sessionRepository.token = ""
-            val intent = Intent(this@MainActivity, MainActivity::class.java)
-            startActivity(intent)
-            false
-        }
     }
 
     private fun unbindAudioService() {

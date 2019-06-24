@@ -1,14 +1,18 @@
 package com.koalatea.sedaily.feature.home
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import com.koalatea.sedaily.R
 import com.koalatea.sedaily.ui.fragment.BaseFragment
 import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : BaseFragment() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -23,6 +27,24 @@ class HomeFragment : BaseFragment() {
         val sectionsPagerAdapter = HomePagerAdapter(view.context, childFragmentManager)
         viewPager.adapter = sectionsPagerAdapter
         tabs.setupWithViewPager(viewPager)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_home, menu)
+
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.search -> {
+                activity?.onSearchRequested()
+
+                return true
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- IMP :: You have to use the same ids in main_navigation.xml for this to work -->
 
+    <!-- IMP :: You have to use the same ids in main_navigation.xml for this to work -->
     <item
         android:id="@id/navigation_home"
         android:icon="@drawable/vd_home"
@@ -12,7 +12,6 @@
         android:icon="@drawable/vd_bookmark_border"
         android:title="@string/bottom_navigation_saved" />
 
-    <!-- FIXME :: use navigation_profile instead -->
     <item
         android:id="@id/navigation_profile"
         android:icon="@drawable/vd_person_outline"
