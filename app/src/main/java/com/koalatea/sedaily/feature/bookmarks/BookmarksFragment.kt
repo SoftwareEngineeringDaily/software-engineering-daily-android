@@ -18,8 +18,6 @@ import com.koalatea.sedaily.ui.dialog.AlertDialogFragment
 import com.koalatea.sedaily.ui.fragment.BaseFragment
 import com.koalatea.sedaily.util.supportActionBar
 import kotlinx.android.synthetic.main.fragment_bookmarks.*
-import kotlinx.android.synthetic.main.fragment_bookmarks.emptyStateContainer
-import kotlinx.android.synthetic.main.fragment_bookmarks.progressBar
 import kotlinx.android.synthetic.main.include_empty_state.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -58,7 +56,7 @@ class BookmarksFragment : BaseFragment() {
                     viewModel.toggleBookmark(episode)
                 },
                 episodeClickListener = { episode ->
-                    val direction = HomeFragmentDirections.openEpisodeDetailsAction(episode._id)
+                    val direction = BookmarksFragmentDirections.openEpisodeDetailsAction(episode._id)
                     findNavController().navigate(direction)
                 }
         ).apply {
@@ -67,7 +65,11 @@ class BookmarksFragment : BaseFragment() {
 
         viewModel.bookmarksResource.observe(this, Observer { resource ->
             when (resource) {
-                is Resource.Loading -> showLoading()
+                is Resource.Loading -> {
+                    if (bookmarksEpoxyController?.currentData.isNullOrEmpty()) {
+                        showLoading()
+                    }
+                }
                 is Resource.RequireLogin -> showLoginEmptyState()
                 is Resource.Success<List<Episode>> -> renderBookmarks(resource.data)
                 is Resource.Error -> if (resource.isConnected) acknowledgeGenericError() else acknowledgeConnectionError()

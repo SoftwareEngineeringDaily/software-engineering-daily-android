@@ -2,7 +2,6 @@ package com.koalatea.sedaily.feature.bookmarks.epoxy
 
 import com.airbnb.epoxy.TypedEpoxyController
 import com.koalatea.sedaily.database.model.Episode
-import com.koalatea.sedaily.feature.episodes.epoxy.episodeEpoxyModelWithHolder
 
 class BookmarksEpoxyController(
         private val upvoteClickListener: (episode: Episode) -> Unit,
@@ -13,7 +12,7 @@ class BookmarksEpoxyController(
 
     override fun buildModels(episodes: List<Episode>) {
         episodes.forEach { episode ->
-            episodeEpoxyModelWithHolder {
+            bookmarkEpoxyModelWithHolder {
                 id(episode._id)
                 title(episode.titleString)
                 description(episode.excerptString)

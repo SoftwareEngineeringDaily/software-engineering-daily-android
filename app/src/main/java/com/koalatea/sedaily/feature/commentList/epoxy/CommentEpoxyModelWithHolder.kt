@@ -10,7 +10,7 @@ import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.koalatea.sedaily.R
-import com.koalatea.sedaily.util.KotlinEpoxyHolder
+import com.koalatea.sedaily.ui.epoxy.KotlinEpoxyHolder
 
 @EpoxyModelClass(layout = R.layout.view_holder_comment)
 abstract class CommentEpoxyModelWithHolder : EpoxyModelWithHolder<Holder>() {

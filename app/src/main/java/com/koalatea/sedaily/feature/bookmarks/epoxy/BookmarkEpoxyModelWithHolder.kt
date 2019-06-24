@@ -1,11 +1,10 @@
-package com.koalatea.sedaily.feature.episodes.epoxy
+package com.koalatea.sedaily.feature.bookmarks.epoxy
 
 import android.text.format.DateFormat
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.airbnb.epoxy.EpoxyAttribute
@@ -20,8 +19,8 @@ import com.koalatea.sedaily.R
 import com.koalatea.sedaily.ui.epoxy.KotlinEpoxyHolder
 import java.util.*
 
-@EpoxyModelClass(layout = R.layout.view_holder_episode)
-abstract class EpisodeEpoxyModelWithHolder : EpoxyModelWithHolder<Holder>() {
+@EpoxyModelClass(layout = R.layout.view_holder_bookmark)
+abstract class BookmarkEpoxyModelWithHolder : EpoxyModelWithHolder<Holder>() {
 
     @EpoxyAttribute var title: String? = null
     @EpoxyAttribute var description: String? = null
@@ -74,7 +73,11 @@ abstract class EpisodeEpoxyModelWithHolder : EpoxyModelWithHolder<Holder>() {
         holder.likesButton.text = score?.let {
             if (it > 0) { it.toString() } else { "" }
         }
-        holder.likesButton.setOnClickListener { upvoteClickListener() }
+        holder.likesButton.setOnClickListener {
+            it.isEnabled = false
+            upvoteClickListener()
+        }
+        holder.likesButton.isEnabled = true
 
         holder.commentsButton.text = commentsCount?.let {
             if (it > 0) { it.toString() } else { "" }
@@ -82,7 +85,11 @@ abstract class EpisodeEpoxyModelWithHolder : EpoxyModelWithHolder<Holder>() {
         holder.commentsButton.setOnClickListener { commentClickListener() }
 
         holder.bookmarkButton.setIconResource(if (bookmarked == true) R.drawable.vd_bookmark else R.drawable.vd_bookmark_border)
-        holder.bookmarkButton.setOnClickListener { bookmarkClickListener() }
+        holder.bookmarkButton.setOnClickListener {
+            it.isEnabled = false
+            bookmarkClickListener()
+        }
+        holder.bookmarkButton.isEnabled = true
     }
 
 }
@@ -96,5 +103,4 @@ class Holder : KotlinEpoxyHolder() {
     val likesButton by bind<MaterialButton>(R.id.likesButton)
     val commentsButton by bind<Button>(R.id.commentsButton)
     val bookmarkButton by bind<MaterialButton>(R.id.bookmarkButton)
-    val listenedProgressBar by bind<ProgressBar>(R.id.listenedProgressBar)
 }
