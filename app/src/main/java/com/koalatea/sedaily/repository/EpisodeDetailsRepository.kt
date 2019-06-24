@@ -32,6 +32,7 @@ class EpisodeDetailsRepository constructor(
             // In case that was requested before upvote or bookmark calls are done.
             Resource.Success(episode.copy(
                     upvoted = cachedEpisode?.upvoted ?: episode.upvoted,
+                    score = cachedEpisode?.score,
                     bookmarked = cachedEpisode?.bookmarked ?: episode.bookmarked).apply {
                 downloadedId = db.downloadDao().findById(episodeId)?.downloadId
 
