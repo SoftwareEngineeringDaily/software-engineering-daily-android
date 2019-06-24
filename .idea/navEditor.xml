@@ -29,6 +29,15 @@
                             <option name="y" value="1041" />
                           </Point>
                         </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="open_episode_details_action">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
                       </LayoutPositions>
                     </value>
                   </entry>
