@@ -7,9 +7,7 @@ import com.koalatea.sedaily.database.model.Episode
 import com.koalatea.sedaily.feature.downloader.DownloadManager
 import com.koalatea.sedaily.feature.episodes.paging.EpisodesBoundaryCallback
 import com.koalatea.sedaily.model.SearchQuery
-import com.koalatea.sedaily.network.NetworkManager
-import com.koalatea.sedaily.network.PagedResult
-import com.koalatea.sedaily.network.SEDailyApi
+import com.koalatea.sedaily.network.*
 import com.koalatea.sedaily.util.safeApiCall
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -21,7 +19,8 @@ class EpisodesRepository(
         private val api: SEDailyApi,
         private val db: AppDatabase,
         private val networkManager: NetworkManager,
-        private val downloadManager: DownloadManager
+        private val downloadManager: DownloadManager,
+        private val sessionRepository: SessionRepository
 ) {
 
     @MainThread
@@ -51,24 +50,18 @@ class EpisodesRepository(
         )
     }
 
-    suspend fun clearLocalCache(searchQuery: SearchQuery) = withContext(Dispatchers.IO) {
-        db.episodeDao().deleteBySearchQuery(searchQuery.hashCode())
-    }
-
-    suspend fun clear() = withContext(Dispatchers.IO) {
-        db.episodeDao().clearTable()
-        db.listenedDao().clearTable()
-
-        db.downloadDao().getAll().forEach {
-            try {
-                downloadManager.deleteDownload(it.postId)
-            } catch (e: Exception) {
-                // Ignore delete errors and log it to Crashlytics.
-
-                Timber.e(e)
+    suspend fun fetchBookmarks() = withContext(Dispatchers.IO) {
+        if (sessionRepository.isLoggedIn) {
+            val response = safeApiCall { api.getBookmarksAsync().await() }
+            val bookmarks = response?.body()
+            if (response?.isSuccessful == true && bookmarks != null) {
+                Resource.Success(bookmarks)
+            } else {
+                Resource.Error(response?.errorBody().toException(), networkManager.isConnected)
             }
+        } else {
+            Resource.RequireLogin
         }
-        db.downloadDao().clearTable()
     }
 
     // FIXME :: Return Resource instead
@@ -111,6 +104,26 @@ class EpisodesRepository(
         }
 
         return@withContext true
+    }
+
+    suspend fun clearLocalCache(searchQuery: SearchQuery) = withContext(Dispatchers.IO) {
+        db.episodeDao().deleteBySearchQuery(searchQuery.hashCode())
+    }
+
+    suspend fun clear() = withContext(Dispatchers.IO) {
+        db.episodeDao().clearTable()
+        db.listenedDao().clearTable()
+
+        db.downloadDao().getAll().forEach {
+            try {
+                downloadManager.deleteDownload(it.postId)
+            } catch (e: Exception) {
+                // Ignore delete errors and log it to Crashlytics.
+
+                Timber.e(e)
+            }
+        }
+        db.downloadDao().clearTable()
     }
 
     @MainThread

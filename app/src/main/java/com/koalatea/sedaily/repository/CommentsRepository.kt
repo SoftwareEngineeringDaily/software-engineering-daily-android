@@ -1,6 +1,5 @@
-package com.koalatea.sedaily.feature.commentList
+package com.koalatea.sedaily.repository
 
-import com.koalatea.sedaily.database.model.Comment
 import com.koalatea.sedaily.network.SEDailyApi
 import com.koalatea.sedaily.util.safeApiCall
 import kotlinx.coroutines.Dispatchers
@@ -13,10 +12,8 @@ class CommentsRepository(private val api: SEDailyApi) {
 //    }
 
     // FIXME :: Remove and return a results instead
-    suspend fun fetchComments(entityId: String): List<Comment>? {
-        return withContext(Dispatchers.IO) {
-            safeApiCall { api.getEpisodeCommentsAsync(entityId).await() }?.body()!!.result
-        }
+    suspend fun fetchComments(entityId: String) = withContext(Dispatchers.IO) {
+        safeApiCall { api.getEpisodeCommentsAsync(entityId).await() }?.body()!!.result
     }
 
 }

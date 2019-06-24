@@ -18,30 +18,30 @@ class EpisodesEpoxyController(
         }
 ) {
 
-    override fun buildItemModel(currentPosition: Int, item: Episode?): EpoxyModel<*> {
-        return if (item == null) {
+    override fun buildItemModel(currentPosition: Int, episode: Episode?): EpoxyModel<*> {
+        return if (episode == null) {
             EpisodeEpoxyModelWithHolder_()
                     .id(-currentPosition)
                     .title("loading $currentPosition")
         } else {
             EpisodeEpoxyModelWithHolder_()
-                    .id(item._id)
-                    .title(item.titleString)
-                    .description(item.excerptString)
-                    .date(item.utcDate)
-                    .imageUrl(item.httpsFeaturedImageUrl)
+                    .id(episode._id)
+                    .title(episode.titleString)
+                    .description(episode.excerptString)
+                    .date(episode.utcDate)
+                    .imageUrl(episode.httpsFeaturedImageUrl)
 
-                    .upvoted(item.upvoted)
-                    .score(item.score)
-                    .upvoteClickListener { upvoteClickListener(item) }
+                    .upvoted(episode.upvoted)
+                    .score(episode.score)
+                    .upvoteClickListener { upvoteClickListener(episode) }
 
-                    .commentsCount(item.thread?.commentsCount)
-                    .commentClickListener { commentClickListener(item) }
+                    .commentsCount(episode.thread?.commentsCount)
+                    .commentClickListener { commentClickListener(episode) }
 
-                    .bookmarked(item.bookmarked)
-                    .bookmarkClickListener { bookmarkClickListener(item) }
+                    .bookmarked(episode.bookmarked)
+                    .bookmarkClickListener { bookmarkClickListener(episode) }
 
-                    .episodeClickListener { episodeClickListener(item) }
+                    .episodeClickListener { episodeClickListener(episode) }
         }
     }
 

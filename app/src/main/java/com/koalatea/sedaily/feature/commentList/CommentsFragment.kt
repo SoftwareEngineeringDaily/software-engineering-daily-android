@@ -30,7 +30,7 @@ class CommentsFragment : BaseFragment() {
         val safeArgs: CommentsFragmentArgs by navArgs()
         val entityId = safeArgs.entityId
 
-        epoxyRecyclerView.layoutManager = LinearLayoutManager(this.activity, RecyclerView.VERTICAL, false)
+        epoxyRecyclerView.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         epoxyRecyclerView.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
 
         val commentsEpoxyController = CommentsEpoxyController()

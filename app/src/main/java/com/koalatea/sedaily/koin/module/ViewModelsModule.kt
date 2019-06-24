@@ -20,7 +20,7 @@ val viewModelsModule = module {
 
     viewModel { PlayerViewModel(get()) }
 
-    viewModel { BookmarksViewModel(get()) }
+    viewModel { BookmarksViewModel(get(), get()) }
 
     viewModel { AuthViewModel(get(), get()) }
 

@@ -12,12 +12,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import com.google.android.exoplayer2.ui.PlayerView
-import com.google.android.material.snackbar.Snackbar
 import com.koalatea.sedaily.R
 import com.koalatea.sedaily.database.model.Episode
 import com.koalatea.sedaily.network.Resource
 import com.koalatea.sedaily.ui.fragment.BaseFragment
-import kotlinx.android.synthetic.main.fragment_episode_detail.*
 import kotlinx.android.synthetic.main.fragment_player.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

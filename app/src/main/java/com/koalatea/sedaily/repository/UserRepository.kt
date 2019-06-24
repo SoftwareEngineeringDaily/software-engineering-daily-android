@@ -1,16 +1,15 @@
 package com.koalatea.sedaily.repository
 
-import androidx.annotation.MainThread
 import com.google.gson.Gson
-import com.koalatea.sedaily.feature.downloader.DownloadManager
-import com.koalatea.sedaily.network.*
+import com.koalatea.sedaily.network.NetworkManager
+import com.koalatea.sedaily.network.Resource
+import com.koalatea.sedaily.network.SEDailyApi
 import com.koalatea.sedaily.network.response.ErrorResponse
+import com.koalatea.sedaily.network.toObject
 import com.koalatea.sedaily.util.safeApiCall
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import java.io.IOException
-import java.lang.Exception
 
 class UserRepository(
         private val api: SEDailyApi,
@@ -25,14 +24,14 @@ class UserRepository(
             val response = safeApiCall { api.getProfileAsync().await() }
             val profile = response?.body()
             if (response?.isSuccessful == true && profile != null) {
-                Resource.Success(ProfileResult.LoggedIn(profile))
+                Resource.Success(profile)
             } else {
                 Resource.Error(
                         IOException(response?.errorBody().toObject<ErrorResponse>(gson)?.message),
                         networkManager.isConnected)
             }
         } else {
-            Resource.Success(ProfileResult.LoggedOut)
+            Resource.RequireLogin
         }
     }
 

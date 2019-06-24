@@ -13,6 +13,7 @@ import com.koalatea.sedaily.repository.SessionRepository
 import com.koalatea.sedaily.util.Event
 import kotlinx.coroutines.launch
 import java.util.*
+import kotlin.math.max
 
 class EpisodeDetailViewModel internal constructor(
         private val episodeDetailsRepository: EpisodeDetailsRepository,
@@ -69,8 +70,6 @@ class EpisodeDetailViewModel internal constructor(
     val bookmarkLiveData: LiveData<Event<BookmarkEvent>>
         get() = _bookmarkLiveData
 
-    // FIXME :: Add livedata to update play/pause state
-
     private val episode: Episode?
         get() = (episodeDetailsResource.value as? Resource.Success<Episode>)?.data
 
@@ -118,7 +117,7 @@ class EpisodeDetailViewModel internal constructor(
                 if (sessionRepository.isLoggedIn) {
                     val currentUpvoteStatus = _upvoteLiveData.value?.peekContent()
                     val originalState = currentUpvoteStatus?.upvoted ?: false
-                    val originalScore = Math.max(currentUpvoteStatus?.score ?: 0, 0)
+                    val originalScore = max(currentUpvoteStatus?.score ?: 0, 0)
                     val newScore = if (originalState) originalScore - 1 else originalScore + 1
                     _upvoteLiveData.postValue(Event(UpvoteEvent(!originalState, newScore)))
 

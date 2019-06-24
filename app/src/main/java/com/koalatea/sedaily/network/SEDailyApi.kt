@@ -56,4 +56,7 @@ interface SEDailyApi {
     @GET("users/me")
     fun getProfileAsync(): Deferred<Response<Profile>>
 
+    @GET("users/me/bookmarked")
+    fun getBookmarksAsync(): Deferred<Response<List<Episode>>>
+
 }

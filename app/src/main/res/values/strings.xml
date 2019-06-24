@@ -74,7 +74,10 @@
     <string name="logout">Logout</string>
 
     <string name="edit_profile_hint">Please visit the website to edit your profile</string>
-    <string name="login_reason">Login to see your profile here</string>
+    <string name="login_to_manage_profile">Login to see your profile</string>
+
+    <!-- Bookmakrs -->
+    <string name="login_to_manage_bookmarks">Login to see your saved episodes</string>
 
     <!-- Home tabs -->
     <string name="tab_all">All</string>

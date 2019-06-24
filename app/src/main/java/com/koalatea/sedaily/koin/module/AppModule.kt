@@ -6,7 +6,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.GsonBuilder
 import com.koalatea.sedaily.database.AppDatabase
 import com.koalatea.sedaily.repository.SessionRepository
-import com.koalatea.sedaily.feature.commentList.CommentsRepository
+import com.koalatea.sedaily.repository.CommentsRepository
 import com.koalatea.sedaily.feature.downloader.DownloadManager
 import com.koalatea.sedaily.repository.EpisodeDetailsRepository
 import com.koalatea.sedaily.repository.EpisodesRepository
@@ -32,7 +32,7 @@ val appModule = module {
 
     single { EpisodeDetailsRepository(get(), get(), get(), get()) }
 
-    factory { EpisodesRepository(get(), get(), get(), get()) }
+    factory { EpisodesRepository(get(), get(), get(), get(), get()) }
 
     single { CommentsRepository(get()) }
 

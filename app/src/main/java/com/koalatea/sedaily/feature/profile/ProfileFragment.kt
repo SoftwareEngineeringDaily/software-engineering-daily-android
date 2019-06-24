@@ -5,7 +5,7 @@ import android.view.*
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.koalatea.sedaily.R
-import com.koalatea.sedaily.network.ProfileResult
+import com.koalatea.sedaily.model.Profile
 import com.koalatea.sedaily.network.Resource
 import com.koalatea.sedaily.ui.fragment.BaseFragment
 import com.koalatea.sedaily.util.supportActionBar
@@ -40,7 +40,8 @@ class ProfileFragment : BaseFragment() {
         viewModel.profileResource.observe(this, Observer { resource ->
             when (resource) {
                 is Resource.Loading -> showLoading()
-                is Resource.Success<ProfileResult> -> renderProfile(resource.data)
+                is Resource.RequireLogin -> showLoginEmptyState()
+                is Resource.Success<Profile> -> renderProfile(resource.data)
                 is Resource.Error -> if (resource.isConnected) acknowledgeGenericError() else acknowledgeConnectionError()
             }
         })
@@ -87,29 +88,20 @@ class ProfileFragment : BaseFragment() {
         // Update menu.
         activity?.invalidateOptionsMenu()
 
-        emptyStateContainer.textView.text = getString(R.string.login_reason)
+        emptyStateContainer.textView.text = getString(R.string.login_to_manage_profile)
         emptyStateContainer.visibility = View.VISIBLE
     }
 
-    private fun renderProfile(profileResult: ProfileResult) {
-        when(profileResult) {
-            is ProfileResult.LoggedIn -> {
-                val profile = profileResult.profile
-                usernameTextView.text = profile.username
+    private fun renderProfile(profile: Profile) {
+        usernameTextView.text = profile.username
 
-                // Update menu.
-                activity?.invalidateOptionsMenu()
+        // Update menu.
+        activity?.invalidateOptionsMenu()
 
-                emptyStateContainer.visibility = View.GONE
-                progressBar.visibility = View.GONE
+        emptyStateContainer.visibility = View.GONE
+        progressBar.visibility = View.GONE
 
-                profileDetailsContainer.visibility = View.VISIBLE
-            }
-            is ProfileResult.LoggedOut -> {
-                showLoginEmptyState()
-            }
-        }
-
+        profileDetailsContainer.visibility = View.VISIBLE
     }
 
 }

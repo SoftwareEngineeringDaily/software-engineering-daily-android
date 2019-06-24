@@ -81,13 +81,14 @@ class AuthFragment : BaseFragment() {
             it.getContentIfNotHandled()?.let { resource ->
                 when(resource) {
                     is Resource.Loading -> showBlockingProgressDialog()
+                    is Resource.RequireLogin -> hideProgressDialog()
                     is Resource.Success -> {
                         hideProgressDialog()
 
                         activity?.supportFragmentManager?.popBackStack()
                     }
                     is Resource.Error -> {
-                        hideProgressDialog()
+
 
                         if (!resource.isConnected) {
                             acknowledgeConnectionError()
