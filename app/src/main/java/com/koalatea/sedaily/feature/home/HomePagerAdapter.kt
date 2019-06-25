@@ -11,8 +11,9 @@ import com.koalatea.sedaily.feature.episodes.EpisodesFragment
 class HomePagerAdapter(
         private val context: Context,
         fragmentManager: FragmentManager
-) : FragmentStatePagerAdapter(fragmentManager) {
+) : FragmentStatePagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
+    @Suppress("unused")
     private enum class Categories(val categoryId: String?, @StringRes val nameStringRes: Int) {
         All(null, R.string.tab_all),
         GreatestHits("1069", R.string.tab_greatestHits),
@@ -38,4 +39,5 @@ class HomePagerAdapter(
     override fun getCount(): Int {
         return Categories.values().size
     }
+
 }
