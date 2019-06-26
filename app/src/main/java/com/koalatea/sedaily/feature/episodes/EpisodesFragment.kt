@@ -23,6 +23,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 private const val TAG_DIALOG_PROMPT_LOGIN = "prompt_login_dialog"
 
+private const val KEY_SCROLL_POSITION = "scroll_position"
+
 class EpisodesFragment : BaseFragment() {
 
     companion object {
@@ -35,6 +37,8 @@ class EpisodesFragment : BaseFragment() {
     }
 
     private val viewModel: EpisodesViewModel by viewModel()
+
+    private lateinit var episodesEpoxyController: EpisodesEpoxyController
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -53,24 +57,27 @@ class EpisodesFragment : BaseFragment() {
         epoxyRecyclerView.layoutManager = LinearLayoutManager(this.activity, RecyclerView.VERTICAL, false)
         epoxyRecyclerView.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
 
-        val episodesEpoxyController = EpisodesEpoxyController(
-                upvoteClickListener = { episode ->
-                    viewModel.toggleUpvote(episode)
-                },
-                commentClickListener = { episode ->
-                    episode.thread?._id?.let { threadId ->
-                        val direction = HomeFragmentDirections.openCommentsAction(threadId)
+        if (!::episodesEpoxyController.isInitialized) {
+            episodesEpoxyController = EpisodesEpoxyController(
+                    upvoteClickListener = { episode ->
+                        viewModel.toggleUpvote(episode)
+                    },
+                    commentClickListener = { episode ->
+                        episode.thread?._id?.let { threadId ->
+                            val direction = HomeFragmentDirections.openCommentsAction(threadId)
+                            findNavController().navigate(direction)
+                        } ?: acknowledgeGenericError()
+                    },
+                    bookmarkClickListener = { episode ->
+                        viewModel.toggleBookmark(episode)
+                    },
+                    episodeClickListener = { episode ->
+                        val direction = HomeFragmentDirections.openEpisodeDetailsAction(episode._id)
                         findNavController().navigate(direction)
-                    } ?: acknowledgeGenericError()
-                },
-                bookmarkClickListener = { episode ->
-                    viewModel.toggleBookmark(episode)
-                },
-                episodeClickListener = { episode ->
-                    val direction = HomeFragmentDirections.openEpisodeDetailsAction(episode._id)
-                    findNavController().navigate(direction)
-                }
-        )
+                    }
+            )
+        }
+
         epoxyRecyclerView.setControllerAndBuildModels(episodesEpoxyController)
 
         swipeRefreshLayout.setOnRefreshListener {
@@ -120,6 +127,29 @@ class EpisodesFragment : BaseFragment() {
         })
 
         viewModel.fetchPosts(searchQuery)
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+
+        if (savedInstanceState != null) {
+            epoxyRecyclerView.adapter?.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+                override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                    if (positionStart == 0) {
+                        val scrollPosition = savedInstanceState.getInt(KEY_SCROLL_POSITION)
+
+                        epoxyRecyclerView.layoutManager?.scrollToPosition(scrollPosition)
+                    }
+                }
+            })
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        val scrollPosition = (epoxyRecyclerView.layoutManager as? LinearLayoutManager)?.findFirstCompletelyVisibleItemPosition() ?: 0
+        outState.putInt(KEY_SCROLL_POSITION, scrollPosition)
+
+        super.onSaveInstanceState(outState)
     }
 
 }

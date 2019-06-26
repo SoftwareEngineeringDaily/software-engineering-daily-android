@@ -24,8 +24,7 @@ class HomeFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val sectionsPagerAdapter = HomePagerAdapter(view.context, childFragmentManager)
-        viewPager.adapter = sectionsPagerAdapter
+        viewPager.adapter = HomePagerAdapter(view.context, childFragmentManager)
         tabs.setupWithViewPager(viewPager)
     }
 

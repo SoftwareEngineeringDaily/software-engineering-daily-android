@@ -3,12 +3,12 @@ package com.koalatea.sedaily.feature.episodes
 import androidx.annotation.MainThread
 import androidx.lifecycle.*
 import androidx.paging.PagedList
-import com.koalatea.sedaily.repository.SessionRepository
 import com.koalatea.sedaily.database.model.Episode
 import com.koalatea.sedaily.model.SearchQuery
 import com.koalatea.sedaily.network.NetworkState
 import com.koalatea.sedaily.network.PagedResult
 import com.koalatea.sedaily.repository.EpisodesRepository
+import com.koalatea.sedaily.repository.SessionRepository
 import com.koalatea.sedaily.util.Event
 import kotlinx.coroutines.launch
 import kotlin.math.max
