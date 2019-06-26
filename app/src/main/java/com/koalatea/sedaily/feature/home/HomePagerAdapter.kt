@@ -2,10 +2,12 @@ package com.koalatea.sedaily.feature.home
 
 import android.content.Context
 import androidx.annotation.StringRes
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.koalatea.sedaily.R
 import com.koalatea.sedaily.feature.episodes.EpisodesFragment
+import com.koalatea.sedaily.model.SearchQuery
 
 class HomePagerAdapter(
         private val context: Context,
@@ -27,7 +29,11 @@ class HomePagerAdapter(
         Hackers("1085", R.string.tab_hackers);
     }
 
-    override fun getItem(position: Int) = EpisodesFragment.newInstance(Categories.values()[position].categoryId)
+    override fun getItem(position: Int): Fragment {
+        val searchQuery = SearchQuery(categoryId = Categories.values()[position].categoryId)
+
+        return EpisodesFragment.newInstance(searchQuery)
+    }
 
     override fun getPageTitle(position: Int): CharSequence? {
         return context.resources.getString(Categories.values()[position].nameStringRes)

@@ -48,7 +48,7 @@ class BookmarksFragment : BaseFragment() {
                 },
                 commentClickListener = { episode ->
                     episode.thread?._id?.let { threadId ->
-                        val direction = HomeFragmentDirections.openCommentsAction(threadId)
+                        val direction = BookmarksFragmentDirections.openCommentsAction(threadId)
                         findNavController().navigate(direction)
                     } ?: acknowledgeGenericError()
                 },

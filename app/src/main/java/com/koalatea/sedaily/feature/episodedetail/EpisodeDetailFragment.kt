@@ -202,7 +202,7 @@ class EpisodeDetailFragment : BaseFragment() {
                     text = tag.name
 
                     setOnClickListener {
-                        val direction = EpisodeDetailFragmentDirections.openEpisodesAction(SearchQuery(tagId = tag.id.toString()), true)
+                        val direction = EpisodeDetailFragmentDirections.openEpisodesAction(SearchQuery(tagId = tag.id.toString()), true, true)
                         findNavController().navigate(direction)
                     }
                 })

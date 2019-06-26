@@ -1,13 +1,10 @@
 package com.koalatea.sedaily
 
-import android.app.SearchManager
 import android.content.ComponentName
 import android.content.Context
-import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -66,8 +63,6 @@ class MainActivity : AppCompatActivity(), PlayerCallback {
 
         navController.setupActionBar(this, appBarConfiguration)
         setupBottomNavMenu(navController)
-
-        handleIntent(intent)
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -107,23 +102,10 @@ class MainActivity : AppCompatActivity(), PlayerCallback {
         }
     }
 
-    private fun handleIntent(intent: Intent) {
-        if (Intent.ACTION_SEARCH == intent.action) {
-            intent.getStringExtra(SearchManager.QUERY)?.also { query ->
-                searchEpisodes(query)
-            }
-        }
-    }
-
     private fun addPlayerFragment(episodeId: String, isOnlyShowPlayer: Boolean) {
         playerFragment = PlayerFragment.newInstance(episodeId, isOnlyShowPlayer).also {
             supportFragmentManager.beginTransaction().replace(R.id.fragmentContainer, it, TAG_FRAGMENT_PLAYER).commit()
         }
-    }
-
-    private fun searchEpisodes(query: String) {
-        // FIXME :: Search for real!
-        Toast.makeText(this, "Search for $query", Toast.LENGTH_SHORT).show()
     }
 
     override fun onSupportNavigateUp(): Boolean {

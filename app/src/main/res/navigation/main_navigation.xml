@@ -10,9 +10,6 @@
         android:label="@string/home_title"
         tools:layout="@layout/fragment_home">
         <action
-            android:id="@+id/open_episoded_action"
-            app:destination="@id/navigation_episodes" />
-        <action
             android:id="@+id/open_episode_details_action"
             app:destination="@id/navigation_episode_details" />
         <action
@@ -29,8 +26,17 @@
             app:argType="com.koalatea.sedaily.model.SearchQuery"
             app:nullable="true" />
         <argument
+            android:name="elevateToolbar"
+            app:argType="boolean" />
+        <argument
             android:name="doNotCache"
             app:argType="boolean" />
+        <action
+            android:id="@+id/open_episode_details_action"
+            app:destination="@id/navigation_episode_details" />
+        <action
+            android:id="@+id/open_comments_action"
+            app:destination="@id/navigation_comments" />
     </fragment>
 
     <fragment
@@ -70,6 +76,9 @@
         <action
             android:id="@+id/open_episode_details_action"
             app:destination="@id/navigation_episode_details" />
+        <action
+            android:id="@+id/open_comments_action"
+            app:destination="@id/navigation_comments" />
     </fragment>
     <fragment
         android:id="@+id/navigation_profile"

@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.koalatea.sedaily.R
 import com.koalatea.sedaily.feature.episodes.epoxy.EpisodesEpoxyController
-import com.koalatea.sedaily.feature.home.HomeFragmentDirections
 import com.koalatea.sedaily.model.SearchQuery
 import com.koalatea.sedaily.network.NetworkState
 import com.koalatea.sedaily.ui.dialog.AlertDialogFragment
@@ -28,9 +27,10 @@ private const val KEY_SCROLL_POSITION = "scroll_position"
 class EpisodesFragment : BaseFragment() {
 
     companion object {
-        fun newInstance(categoryId: String?): EpisodesFragment {
+
+        fun newInstance(searchQuery: SearchQuery, elevateToolbar: Boolean = false, doNotCache: Boolean = false): EpisodesFragment {
             val fragment = EpisodesFragment()
-            fragment.arguments = EpisodesFragmentArgs.Builder(SearchQuery(categoryId = categoryId), false).build().toBundle()
+            fragment.arguments = EpisodesFragmentArgs.Builder(searchQuery, elevateToolbar, doNotCache).build().toBundle()
 
             return fragment
         }
@@ -52,7 +52,7 @@ class EpisodesFragment : BaseFragment() {
         val searchQuery = safeArgs.searchQuery ?: SearchQuery()
         viewModel.doNotCache = safeArgs.doNotCache
 
-        supportActionBar?.elevation = 0f
+        supportActionBar?.elevation = if (safeArgs.elevateToolbar) resources.getDimension(R.dimen.toolbar_elevation) else 0f
 
         epoxyRecyclerView.layoutManager = LinearLayoutManager(this.activity, RecyclerView.VERTICAL, false)
         epoxyRecyclerView.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
@@ -64,7 +64,7 @@ class EpisodesFragment : BaseFragment() {
                     },
                     commentClickListener = { episode ->
                         episode.thread?._id?.let { threadId ->
-                            val direction = HomeFragmentDirections.openCommentsAction(threadId)
+                            val direction = EpisodesFragmentDirections.openCommentsAction(threadId)
                             findNavController().navigate(direction)
                         } ?: acknowledgeGenericError()
                     },
@@ -72,7 +72,7 @@ class EpisodesFragment : BaseFragment() {
                         viewModel.toggleBookmark(episode)
                     },
                     episodeClickListener = { episode ->
-                        val direction = HomeFragmentDirections.openEpisodeDetailsAction(episode._id)
+                        val direction = EpisodesFragmentDirections.openEpisodeDetailsAction(episode._id)
                         findNavController().navigate(direction)
                     }
             )
