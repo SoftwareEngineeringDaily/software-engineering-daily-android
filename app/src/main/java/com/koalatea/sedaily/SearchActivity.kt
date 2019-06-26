@@ -6,8 +6,6 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.setupActionBarWithNavController
-import com.koalatea.sedaily.feature.episodes.EpisodesFragment
 import com.koalatea.sedaily.feature.episodes.EpisodesFragmentArgs
 import com.koalatea.sedaily.model.SearchQuery
 import kotlinx.android.synthetic.main.activity_search.*
@@ -18,8 +16,6 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
         setSupportActionBar(toolbar)
-
-//        setupActionBarWithNavController(mainNavHostFragment.findNavController())
 
         handleIntent(intent)
     }
@@ -39,10 +35,6 @@ class SearchActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-
-//    override fun onSupportNavigateUp(): Boolean {
-//        return mainNavHostFragment.findNavController().navigateUp()
-//    }
 
     private fun handleIntent(intent: Intent) {
         if (Intent.ACTION_SEARCH == intent.action) {

@@ -18,6 +18,35 @@
     </fragment>
 
     <fragment
+        android:id="@+id/navigation_bookmarks"
+        android:name="com.koalatea.sedaily.feature.bookmarks.BookmarksFragment"
+        android:label="@string/bookmarks_title" >
+        <action
+            android:id="@+id/open_episode_details_action"
+            app:destination="@id/navigation_episode_details" />
+        <action
+            android:id="@+id/open_comments_action"
+            app:destination="@id/navigation_comments" />
+    </fragment>
+
+    <!-- Profile navigation -->
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.koalatea.sedaily.feature.profile.ProfileFragment"
+        android:label="@string/profile_title" >
+        <action
+            android:id="@+id/open_auth_action"
+            app:destination="@id/navigation_auth" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_auth"
+        android:name="com.koalatea.sedaily.feature.auth.AuthFragment"
+        android:label="@string/auth_title"
+        tools:layout="@layout/fragment_auth" />
+
+    <!-- Episodes graph -->
+    <fragment
         android:id="@+id/navigation_episodes"
         android:name="com.koalatea.sedaily.feature.episodes.EpisodesFragment"
         android:label="">
@@ -40,12 +69,6 @@
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_auth"
-        android:name="com.koalatea.sedaily.feature.auth.AuthFragment"
-        android:label="@string/auth_title"
-        tools:layout="@layout/fragment_auth" />
-
-    <fragment
         android:id="@+id/navigation_episode_details"
         android:name="com.koalatea.sedaily.feature.episodedetail.EpisodeDetailFragment"
         android:label="@string/episode_details_title"
@@ -60,6 +83,7 @@
             android:id="@+id/open_episodes_action"
             app:destination="@id/navigation_episodes" />
     </fragment>
+
     <fragment
         android:id="@+id/navigation_comments"
         android:name="com.koalatea.sedaily.feature.commentList.CommentsFragment"
@@ -68,25 +92,6 @@
         <argument
             android:name="entityId"
             app:argType="string" />
-    </fragment>
-    <fragment
-        android:id="@+id/navigation_bookmarks"
-        android:name="com.koalatea.sedaily.feature.bookmarks.BookmarksFragment"
-        android:label="@string/bookmarks_title" >
-        <action
-            android:id="@+id/open_episode_details_action"
-            app:destination="@id/navigation_episode_details" />
-        <action
-            android:id="@+id/open_comments_action"
-            app:destination="@id/navigation_comments" />
-    </fragment>
-    <fragment
-        android:id="@+id/navigation_profile"
-        android:name="com.koalatea.sedaily.feature.profile.ProfileFragment"
-        android:label="@string/profile_title" >
-        <action
-            android:id="@+id/open_auth_action"
-            app:destination="@id/navigation_auth" />
     </fragment>
 
 </navigation>

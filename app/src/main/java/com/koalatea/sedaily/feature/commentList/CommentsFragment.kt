@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.koalatea.sedaily.R
 import com.koalatea.sedaily.feature.commentList.epoxy.CommentsEpoxyController
 import com.koalatea.sedaily.ui.fragment.BaseFragment
+import com.koalatea.sedaily.util.supportActionBar
 import kotlinx.android.synthetic.main.comments_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -29,6 +30,10 @@ class CommentsFragment : BaseFragment() {
 
         val safeArgs: CommentsFragmentArgs by navArgs()
         val entityId = safeArgs.entityId
+
+        supportActionBar?.elevation = resources.getDimension(R.dimen.toolbar_elevation)
+
+        supportActionBar?.title = getString(R.string.comments_title)
 
         epoxyRecyclerView.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         epoxyRecyclerView.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
