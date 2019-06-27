@@ -1,15 +1,12 @@
 package com.koalatea.sedaily.database.model
 
-import android.net.Uri
 import android.os.Build
 import android.text.Html
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import java.text.SimpleDateFormat
+import com.koalatea.sedaily.util.toUTCDate
 import java.util.*
-
-const val EPISODE_DATE_FORMAT = "yyyy-MM-dd\'T\'HH:mm:ss"
 
 @Entity
 data class Episode(
@@ -65,7 +62,7 @@ data class Episode(
         get() = guestImage?.replace(Regex("^http://"), "https://")
 
     val utcDate: Date?
-        get() = date?.toUTCDate(EPISODE_DATE_FORMAT)
+        get() = date?.toUTCDate()
 
     @Ignore
     private fun String.htmlToText(): String {
@@ -74,19 +71,6 @@ data class Episode(
         } else {
             Html.fromHtml(this)
         }.toString()
-    }
-
-    @Ignore
-    private fun String.toUTCDate(format: String): Date? {
-        return try {
-            val inputFormat = SimpleDateFormat(format, Locale.US)
-            inputFormat.timeZone = TimeZone.getTimeZone("Etc/UTC")
-
-            return inputFormat.parse(this)
-        } catch (e: Exception) {
-            // FIXME :: Timber log here
-            null
-        }
     }
 
 }

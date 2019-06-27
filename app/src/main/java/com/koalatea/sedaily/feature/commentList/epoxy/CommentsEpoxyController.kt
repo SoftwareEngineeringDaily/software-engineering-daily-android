@@ -7,26 +7,28 @@ class CommentsEpoxyController : TypedEpoxyController<List<Comment>>() {
 
     override fun buildModels(comments: List<Comment>) {
         comments.forEach { comment ->
-            val imageHttpsUrl = comment.author.avatarUrl?.replace(Regex("^http://"), "https://")
-
             commentEpoxyModelWithHolder {
+                val imageHttpsUrl = comment.author.avatarUrl?.replace(Regex("^http://"), "https://")
+
                 id(comment._id)
                 authorImageUrl(imageHttpsUrl)
                 authorName(comment.author.name)
                 comment(comment.content)
-                date(comment.dateCreated)
+                date(comment.utcDateCreated)
+            }
+
+            comment.replies?.forEach { reply ->
+                replyEpoxyModelWithHolder {
+                    val imageHttpsUrl = reply.author.avatarUrl?.replace(Regex("^http://"), "https://")
+
+                    id(reply._id)
+                    authorImageUrl(imageHttpsUrl)
+                    authorName(reply.author.name)
+                    comment(reply.content)
+                    date(reply.utcDateCreated)
+                }
             }
         }
-    }
-
-    // FIXME :: Remove
-    init {
-        isDebugLoggingEnabled = true
-    }
-
-    // FIXME :: Timber log
-    override fun onExceptionSwallowed(exception: RuntimeException) {
-        throw exception
     }
 
 }

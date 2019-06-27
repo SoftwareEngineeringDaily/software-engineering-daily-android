@@ -1,7 +1,9 @@
 package com.koalatea.sedaily.database.model
 
 import android.os.Parcelable
+import com.koalatea.sedaily.util.toUTCDate
 import kotlinx.android.parcel.Parcelize
+import java.util.*
 
 @Parcelize
 data class Comment(
@@ -16,4 +18,9 @@ data class Comment(
         val replies: List<Comment>?,
         val upvoted: Boolean?,
         val downvoted: Boolean?
-) : Parcelable
+) : Parcelable {
+
+    val utcDateCreated: Date?
+        get() = dateCreated.toUTCDate()
+
+}

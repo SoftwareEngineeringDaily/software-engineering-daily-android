@@ -34,7 +34,7 @@ val appModule = module {
 
     factory { EpisodesRepository(get(), get(), get(), get(), get()) }
 
-    single { CommentsRepository(get()) }
+    single { CommentsRepository(get(), get(), get()) }
 
     single { GsonBuilder().create() }
 

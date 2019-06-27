@@ -28,6 +28,7 @@ class BookmarksViewModel internal constructor(
     val navigateToLogin: LiveData<Event<String>>
         get() = _navigateToLogin
 
+    @MainThread
     fun fetchBookmarks() {
         bookmarksLiveData.value = Unit
     }
