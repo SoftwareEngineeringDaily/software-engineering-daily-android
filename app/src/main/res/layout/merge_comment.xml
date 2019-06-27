@@ -6,8 +6,8 @@
 
     <ImageView
         android:id="@+id/authorImageView"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:layout_marginStart="@dimen/first_keyline"
         android:layout_marginTop="@dimen/first_keyline"
         android:contentDescription="@string/content_description_comment_author_avatar"
@@ -23,7 +23,7 @@
         android:layout_marginStart="16dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
         app:layout_constraintBottom_toBottomOf="@+id/authorImageView"
         app:layout_constraintStart_toEndOf="@+id/authorImageView"
         app:layout_constraintTop_toTopOf="@+id/authorImageView"

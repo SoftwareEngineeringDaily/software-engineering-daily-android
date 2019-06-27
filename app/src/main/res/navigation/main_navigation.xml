@@ -88,7 +88,7 @@
         android:id="@+id/navigation_comments"
         android:name="com.koalatea.sedaily.feature.commentList.CommentsFragment"
         android:label="@string/comments_title"
-        tools:layout="@layout/comments_fragment">
+        tools:layout="@layout/fragment_comments">
         <argument
             android:name="entityId"
             app:argType="string" />

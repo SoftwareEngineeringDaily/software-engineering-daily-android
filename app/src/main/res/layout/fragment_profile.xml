@@ -63,7 +63,7 @@
             android:layout_marginEnd="@dimen/first_keyline"
             android:layout_marginBottom="@dimen/first_keyline"
             android:text="@string/logout"
-            android:textColor="@color/destructive"
+            android:textColor="@color/color_destructive"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

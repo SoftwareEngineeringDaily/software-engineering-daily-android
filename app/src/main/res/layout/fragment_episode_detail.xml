@@ -115,7 +115,7 @@
                 android:layout_height="0dp"
                 android:visibility="gone"
                 app:cornerRadius="48dp"
-                app:drawableTint="@color/destructive"
+                app:drawableTint="@color/color_destructive"
                 app:icon="@drawable/vd_delete"
                 app:layout_constraintBottom_toBottomOf="@+id/downloadButton"
                 app:layout_constraintEnd_toEndOf="@+id/downloadButton"

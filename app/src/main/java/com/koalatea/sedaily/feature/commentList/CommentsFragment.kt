@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.koalatea.sedaily.R
@@ -14,9 +13,10 @@ import com.koalatea.sedaily.database.model.Comment
 import com.koalatea.sedaily.feature.commentList.epoxy.CommentsEpoxyController
 import com.koalatea.sedaily.network.Resource
 import com.koalatea.sedaily.ui.dialog.AlertDialogFragment
+import com.koalatea.sedaily.feature.commentList.epoxy.CommentsItemDecoration
 import com.koalatea.sedaily.ui.fragment.BaseFragment
 import com.koalatea.sedaily.util.supportActionBar
-import kotlinx.android.synthetic.main.comments_fragment.*
+import kotlinx.android.synthetic.main.fragment_comments.*
 import kotlinx.android.synthetic.main.include_empty_state.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -31,7 +31,7 @@ class CommentsFragment : BaseFragment() {
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
-            savedInstanceState: Bundle?): View? = inflater.inflate(R.layout.comments_fragment, container, false)
+            savedInstanceState: Bundle?): View? = inflater.inflate(R.layout.fragment_comments, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -44,7 +44,8 @@ class CommentsFragment : BaseFragment() {
         supportActionBar?.title = getString(R.string.comments_title)
 
         epoxyRecyclerView.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-        epoxyRecyclerView.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
+        val commentDividerLeft = resources.getDimension(R.dimen.comment_divider_left)
+        epoxyRecyclerView.addItemDecoration(CommentsItemDecoration(requireContext(), commentDividerLeft.toInt()))
 
         commentsEpoxyController = CommentsEpoxyController().apply {
             epoxyRecyclerView.setController(this)

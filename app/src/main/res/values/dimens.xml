@@ -11,4 +11,6 @@
 
     <dimen name="player_height">192dp</dimen>
 
+    <dimen name="comment_divider_left">80dp</dimen>
+
 </resources>

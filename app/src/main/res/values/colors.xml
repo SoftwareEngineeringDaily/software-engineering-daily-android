@@ -22,7 +22,9 @@
     <color name="color_status_bar">#000000</color>
     <color name="color_toolbar">#FFFFFF</color>
 
-    <color name="destructive">#EE5F59</color>
+    <color name="color_destructive">#EE5F59</color>
+
+    <color name="color_divider">#0336FF</color>
 
     <!-- Player -->
     <color name="color_played">#FF5F46F4</color>
