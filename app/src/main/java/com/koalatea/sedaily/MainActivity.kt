@@ -5,6 +5,9 @@ import android.content.Context
 import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -18,6 +21,8 @@ import com.koalatea.sedaily.feature.player.AudioService
 import com.koalatea.sedaily.feature.player.PlayerCallback
 import com.koalatea.sedaily.feature.player.PlayerFragment
 import com.koalatea.sedaily.feature.player.PlayerStatus
+import com.koalatea.sedaily.util.dpToPx
+import com.koalatea.sedaily.util.hideKeyboard
 import com.koalatea.sedaily.util.isServiceRunning
 import com.koalatea.sedaily.util.setupActionBar
 import kotlinx.android.synthetic.main.activity_main.*
@@ -45,6 +50,15 @@ class MainActivity : AppCompatActivity(), PlayerCallback {
         }
     }
 
+    private val onGlobalLayoutListener = OnGlobalLayoutListener {
+        val heightDiff = rootContainer.rootView.height - rootContainer.height
+        if (heightDiff > this@MainActivity.dpToPx(200f)) { // if more than 200 dp, it's probably a keyboard...
+            bottomNavigationView.visibility = View.GONE
+        } else {
+            bottomNavigationView.visibility = View.VISIBLE
+        }
+    }
+
     private var playerFragment: PlayerFragment? = null
     private var isAudioServiceBound: Boolean = false
 
@@ -63,6 +77,8 @@ class MainActivity : AppCompatActivity(), PlayerCallback {
 
         navController.setupActionBar(this, appBarConfiguration)
         setupBottomNavMenu(navController)
+
+        rootContainer.viewTreeObserver.addOnGlobalLayoutListener(onGlobalLayoutListener)
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -82,6 +98,20 @@ class MainActivity : AppCompatActivity(), PlayerCallback {
         unbindAudioService()
 
         super.onStop()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        rootContainer.viewTreeObserver.removeOnGlobalLayoutListener(onGlobalLayoutListener)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            hideKeyboard()
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     private fun setupBottomNavMenu(navController: NavController) = bottomNavigationView?.setupWithNavController(navController)

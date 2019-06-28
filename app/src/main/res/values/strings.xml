@@ -107,5 +107,7 @@
     <string name="content_description_comment_author_avatar">Author avatar</string>
     <string name="no_comments_yet">No comments yet. Be the first to post a comment</string>
     <string name="reply">Reply</string>
+    <string name="cancel_reply">Cancel reply</string>
+    <string name="post">Post</string>
 
 </resources>

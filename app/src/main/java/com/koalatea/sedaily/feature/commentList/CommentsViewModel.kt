@@ -32,4 +32,19 @@ class CommentsViewModel(
         commentsLiveData.value = entityId
     }
 
+    @MainThread
+    fun addComment(comment: String) {
+
+    }
+
+    @MainThread
+    fun cancelReply() {
+
+    }
+
+    @MainThread
+    fun replyTo(comment: Comment) {
+
+    }
+
 }

@@ -146,7 +146,7 @@ class EpisodesFragment : BaseFragment() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        val scrollPosition = (epoxyRecyclerView.layoutManager as? LinearLayoutManager)?.findFirstCompletelyVisibleItemPosition() ?: 0
+        val scrollPosition = (epoxyRecyclerView?.layoutManager as? LinearLayoutManager)?.findFirstCompletelyVisibleItemPosition() ?: 0
         outState.putInt(KEY_SCROLL_POSITION, scrollPosition)
 
         super.onSaveInstanceState(outState)

@@ -9,12 +9,19 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.app.Activity
 import android.view.inputmethod.InputMethodManager
+import android.util.TypedValue
+import android.util.DisplayMetrics
 
 @Suppress("DEPRECATION")
 fun Context.isServiceRunning(serviceClassName: String): Boolean {
     val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as? ActivityManager
 
     return activityManager?.getRunningServices(Integer.MAX_VALUE)?.any { it.service.className == serviceClassName } ?: false
+}
+
+fun Context.dpToPx(valueInDp: Float): Float {
+    val metrics = resources.displayMetrics
+    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, valueInDp, metrics)
 }
 
 fun Activity.hideKeyboard() {

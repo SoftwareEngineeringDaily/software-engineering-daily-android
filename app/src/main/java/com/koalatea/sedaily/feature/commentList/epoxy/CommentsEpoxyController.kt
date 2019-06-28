@@ -2,8 +2,11 @@ package com.koalatea.sedaily.feature.commentList.epoxy
 
 import com.airbnb.epoxy.TypedEpoxyController
 import com.koalatea.sedaily.database.model.Comment
+import com.koalatea.sedaily.database.model.Episode
 
-class CommentsEpoxyController : TypedEpoxyController<List<Comment>>() {
+class CommentsEpoxyController(
+        private val replyClickListener: (comment: Comment) -> Unit
+) : TypedEpoxyController<List<Comment>>() {
 
     override fun buildModels(comments: List<Comment>) {
         comments.forEach { comment ->
@@ -15,6 +18,7 @@ class CommentsEpoxyController : TypedEpoxyController<List<Comment>>() {
                 authorName(comment.author.name)
                 comment(comment.content)
                 date(comment.utcDateCreated)
+                replyClickListener { replyClickListener(comment) }
             }
 
             comment.replies?.forEach { reply ->

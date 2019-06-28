@@ -11,9 +11,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.koalatea.sedaily.R
 import com.koalatea.sedaily.database.model.Comment
 import com.koalatea.sedaily.feature.commentList.epoxy.CommentsEpoxyController
+import com.koalatea.sedaily.feature.commentList.epoxy.CommentsItemDecoration
 import com.koalatea.sedaily.network.Resource
 import com.koalatea.sedaily.ui.dialog.AlertDialogFragment
-import com.koalatea.sedaily.feature.commentList.epoxy.CommentsItemDecoration
 import com.koalatea.sedaily.ui.fragment.BaseFragment
 import com.koalatea.sedaily.util.supportActionBar
 import kotlinx.android.synthetic.main.fragment_comments.*
@@ -46,9 +46,22 @@ class CommentsFragment : BaseFragment() {
         epoxyRecyclerView.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         val commentDividerLeft = resources.getDimension(R.dimen.comment_divider_left)
         epoxyRecyclerView.addItemDecoration(CommentsItemDecoration(requireContext(), commentDividerLeft.toInt()))
-
-        commentsEpoxyController = CommentsEpoxyController().apply {
+        commentsEpoxyController = CommentsEpoxyController(
+                replyClickListener = { comment ->
+                    viewModel.replyTo(comment)
+                }
+        ).apply {
             epoxyRecyclerView.setController(this)
+        }
+
+        addCommentButton.setOnClickListener {
+            val comment = commentEditText.text?.trim()?.toString() ?: ""
+
+            viewModel.addComment(comment)
+        }
+
+        cancelReplyButton.setOnClickListener {
+            viewModel.cancelReply()
         }
 
         viewModel.commentsResource.observe(this, Observer { resource ->
