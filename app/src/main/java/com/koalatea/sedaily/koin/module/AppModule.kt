@@ -5,12 +5,8 @@ import androidx.room.Room
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.GsonBuilder
 import com.koalatea.sedaily.database.AppDatabase
-import com.koalatea.sedaily.repository.SessionRepository
-import com.koalatea.sedaily.repository.CommentsRepository
 import com.koalatea.sedaily.feature.downloader.DownloadManager
-import com.koalatea.sedaily.repository.EpisodeDetailsRepository
-import com.koalatea.sedaily.repository.EpisodesRepository
-import com.koalatea.sedaily.repository.UserRepository
+import com.koalatea.sedaily.repository.*
 import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
 

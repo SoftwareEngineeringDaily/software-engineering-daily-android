@@ -4,8 +4,6 @@ import android.app.Dialog
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-import com.koalatea.sedaily.R
-import org.koin.android.ext.android.inject
 
 class SpeedDialog : DialogFragment() {
 

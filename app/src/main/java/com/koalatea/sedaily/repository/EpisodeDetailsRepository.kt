@@ -14,7 +14,6 @@ import com.koalatea.sedaily.util.safeApiCall
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
-import java.lang.Exception
 
 class EpisodeDetailsRepository constructor(
         private val api: SEDailyApi,

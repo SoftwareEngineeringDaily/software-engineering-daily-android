@@ -39,7 +39,7 @@ class CommentsItemDecoration(
 
         val left = offsetStart
         val top = 0
-        val bottom = parent.height
+        val right = parent.width
 
         val childCount = parent.childCount
         for (i in 0 until childCount) {
@@ -47,7 +47,7 @@ class CommentsItemDecoration(
             val viewHolder = parent.getChildViewHolder(child)
             if ((viewHolder as EpoxyViewHolder).model is ReplyEpoxyModelWithHolder) {
                 parent.layoutManager?.getDecoratedBoundsWithMargins(child, boundsRect)
-                val right = boundsRect.right + child.translationX.roundToInt()
+                val bottom = boundsRect.bottom + child.translationY.roundToInt()
                 dividerDrawable?.setBounds(left, top, right, bottom)
                 dividerDrawable?.draw(canvas)
             }

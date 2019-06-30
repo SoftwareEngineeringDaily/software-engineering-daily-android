@@ -4,8 +4,8 @@ import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.koalatea.sedaily.BuildConfig
 import com.koalatea.sedaily.network.NetworkManager
-import com.koalatea.sedaily.repository.SessionRepository
 import com.koalatea.sedaily.network.SEDailyApi
+import com.koalatea.sedaily.repository.SessionRepository
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidApplication
@@ -15,8 +15,8 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import timber.log.Timber
 
 // FIXME :: Move to debug build type
-//private const val BASE_URL: String = "https://sedaily-backend-staging.herokuapp.com/api/"
-private const val BASE_URL: String = "https://software-enginnering-daily-api.herokuapp.com/api/"
+private const val BASE_URL: String = "https://sedaily-backend-staging.herokuapp.com/api/"
+//private const val BASE_URL: String = "https://software-enginnering-daily-api.herokuapp.com/api/"
 
 val networkModule = module {
 

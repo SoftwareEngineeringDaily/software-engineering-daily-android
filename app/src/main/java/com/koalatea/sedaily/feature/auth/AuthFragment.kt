@@ -88,7 +88,7 @@ class AuthFragment : BaseFragment() {
                         activity?.supportFragmentManager?.popBackStack()
                     }
                     is Resource.Error -> {
-
+                        hideProgressDialog()
 
                         if (!resource.isConnected) {
                             acknowledgeConnectionError()

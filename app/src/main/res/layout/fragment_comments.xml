@@ -67,20 +67,23 @@
         <Button
             android:id="@+id/cancelReplyButton"
             style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
             android:layout_width="wrap_content"
-            android:layout_height="32dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="@color/button_destructive_background_tint_colors"
             android:paddingTop="0dp"
             android:paddingBottom="0dp"
-            android:layout_marginEnd="8dp"
             android:text="@string/cancel_reply"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
             android:textColor="@color/color_destructive"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/replyTextView"
             app:layout_constraintEnd_toStartOf="@+id/addCommentButton"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/replyTextView"
-            app:layout_constraintTop_toTopOf="@+id/replyTextView" />
+            app:layout_constraintTop_toTopOf="@+id/replyTextView"
+            tools:visibility="visible" />
 
         <EditText
             android:id="@+id/commentEditText"
@@ -89,8 +92,8 @@
             android:layout_marginStart="@dimen/first_keyline"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:background="@android:color/transparent"
             android:layout_marginBottom="@dimen/first_keyline"
+            android:background="@android:color/transparent"
             android:gravity="start|center_vertical"
             android:inputType="textMultiLine|textCapSentences"
             android:maxLines="5"
@@ -98,7 +101,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/addCommentButton"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/replyTextView" />
+            app:layout_constraintTop_toBottomOf="@+id/cancelReplyButton" />
 
         <Button
             android:id="@+id/addCommentButton"

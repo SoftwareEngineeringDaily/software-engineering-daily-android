@@ -30,8 +30,8 @@
                 android:layout_marginStart="@dimen/first_keyline"
                 android:layout_marginTop="@dimen/first_keyline"
                 android:layout_marginEnd="@dimen/first_keyline"
-                android:visibility="gone"
                 android:scrollbars="none"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -41,7 +41,7 @@
                     android:id="@+id/tagsChipGroup"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:singleLine="true"/>
+                    app:singleLine="true" />
             </HorizontalScrollView>
 
             <TextView
@@ -87,14 +87,14 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:text="@string/stop"
-                app:cornerRadius="48dp"
                 android:visibility="invisible"
+                app:cornerRadius="48dp"
                 app:icon="@drawable/vd_stop"
-                app:layout_constraintEnd_toEndOf="@+id/playButton"
-                app:layout_constraintTop_toTopOf="@+id/playButton"
                 app:layout_constraintBottom_toBottomOf="@+id/playButton"
+                app:layout_constraintEnd_toEndOf="@+id/playButton"
                 app:layout_constraintStart_toStartOf="@+id/playButton"
-                tools:visibility="visible"/>
+                app:layout_constraintTop_toTopOf="@+id/playButton"
+                tools:visibility="visible" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/downloadButton"
@@ -113,6 +113,7 @@
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:backgroundTint="@color/button_destructive_background_tint_colors"
                 android:visibility="gone"
                 app:cornerRadius="48dp"
                 app:drawableTint="@color/color_destructive"

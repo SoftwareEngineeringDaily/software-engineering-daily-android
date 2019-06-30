@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.koalatea.sedaily.feature.auth.event.ValidationStatus
-import com.koalatea.sedaily.network.response.AuthResponse
 import com.koalatea.sedaily.network.Resource
+import com.koalatea.sedaily.network.response.AuthResponse
 import com.koalatea.sedaily.repository.SessionRepository
 import com.koalatea.sedaily.repository.UserRepository
 import com.koalatea.sedaily.util.Event

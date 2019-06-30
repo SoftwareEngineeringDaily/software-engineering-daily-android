@@ -1,16 +1,15 @@
 package com.koalatea.sedaily.util
 
+import android.app.Activity
 import android.app.ActivityManager
 import android.content.Context
+import android.util.TypedValue
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
-import android.app.Activity
-import android.view.inputmethod.InputMethodManager
-import android.util.TypedValue
-import android.util.DisplayMetrics
 
 @Suppress("DEPRECATION")
 fun Context.isServiceRunning(serviceClassName: String): Boolean {

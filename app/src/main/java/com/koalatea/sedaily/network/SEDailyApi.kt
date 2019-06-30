@@ -2,10 +2,7 @@ package com.koalatea.sedaily.network
 
 import com.koalatea.sedaily.database.model.Episode
 import com.koalatea.sedaily.model.Profile
-import com.koalatea.sedaily.network.response.AuthResponse
-import com.koalatea.sedaily.network.response.CommentsResponse
-import com.koalatea.sedaily.network.response.FavoriteResponse
-import com.koalatea.sedaily.network.response.VoteResponse
+import com.koalatea.sedaily.network.response.*
 import kotlinx.coroutines.Deferred
 import retrofit2.Response
 import retrofit2.http.*
@@ -38,12 +35,13 @@ interface SEDailyApi {
     @GET("comments/forEntity/{entity_id}")
     fun getEpisodeCommentsAsync(@Path("entity_id") entityId: String): Deferred<Response<CommentsResponse>>
 
-//    var params = [String: String]()
-//    params[Params.commentContent] = commentContent
-//    params[Params.entityType] = "forumthread"
-
-//    @POST("comments/forEntity/{entity_id}")
-//    fun addEpisodeCommentAsync(@Path("entity_id") entityId: String, ): Deferred<Response<List<Comment>>>
+    @FormUrlEncoded
+    @POST("comments/forEntity/{entity_id}")
+    fun addEpisodeCommentAsync(
+            @Path("entity_id") entityId: String,
+            @Field("parentCommentId") parentCommentId: String?,
+            @Field("content") commentContent: String,
+            @Field("entityType") entityType: String = "forumthread"): Deferred<Response<AddCommentResponse>>
 
     @FormUrlEncoded
     @POST("auth/login")

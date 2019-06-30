@@ -8,6 +8,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.koalatea.sedaily.R
 import com.koalatea.sedaily.database.model.Comment
 import com.koalatea.sedaily.feature.commentList.epoxy.CommentsEpoxyController
@@ -15,6 +16,7 @@ import com.koalatea.sedaily.feature.commentList.epoxy.CommentsItemDecoration
 import com.koalatea.sedaily.network.Resource
 import com.koalatea.sedaily.ui.dialog.AlertDialogFragment
 import com.koalatea.sedaily.ui.fragment.BaseFragment
+import com.koalatea.sedaily.util.hideKeyboard
 import com.koalatea.sedaily.util.supportActionBar
 import kotlinx.android.synthetic.main.fragment_comments.*
 import kotlinx.android.synthetic.main.include_empty_state.view.*
@@ -52,11 +54,19 @@ class CommentsFragment : BaseFragment() {
                 }
         ).apply {
             epoxyRecyclerView.setController(this)
+
+            // Scroll to the bottom when the data is loaded.
+            this.adapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+                override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                    epoxyRecyclerView.layoutManager?.scrollToPosition(commentsEpoxyController?.adapter?.itemCount?.minus(1) ?: 0)
+                }
+            })
         }
 
         addCommentButton.setOnClickListener {
-            val comment = commentEditText.text?.trim()?.toString() ?: ""
+            addCommentButton.isEnabled = false
 
+            val comment = commentEditText.text?.trim()?.toString() ?: ""
             viewModel.addComment(comment)
         }
 
@@ -71,19 +81,46 @@ class CommentsFragment : BaseFragment() {
                         showLoading()
                     }
                 }
-                is Resource.RequireLogin -> showNoCommentsEmptyState()
-                is Resource.Success<List<Comment>> -> renderComments(resource.data)
+                is Resource.Success<List<Comment>> -> {
+                    if (resource.data.isEmpty()) {
+                        showNoCommentsEmptyState()
+                    } else {
+                        renderComments(resource.data)
+                    }
+                }
                 is Resource.Error -> if (resource.isConnected) acknowledgeGenericError() else acknowledgeConnectionError()
             }
         })
 
-        viewModel.navigateToLogin.observe(this, Observer {
-            it.getContentIfNotHandled()?.let { // Only proceed if the event has never been handled
-                AlertDialogFragment.show(
-                        requireFragmentManager(),
-                        message = getString(R.string.prompt_login),
-                        positiveButton = getString(R.string.ok),
-                        tag = TAG_DIALOG_PROMPT_LOGIN)
+        viewModel.replyToCommentLiveData.observe(this, Observer { comment ->
+            val replyViewsVisibility = if (comment != null) View.VISIBLE else View.GONE
+
+            replyTextView.text = comment?.let {
+                getString(R.string.reply_to_, comment.author.name ?: comment.author.username)
+            } ?: getString(R.string.reply)
+            replyTextView.visibility = replyViewsVisibility
+            cancelReplyButton.visibility = replyViewsVisibility
+        })
+
+        viewModel.addCommentLiveData.observe(this, Observer {
+            it.getContentIfNotHandled()?.let { resource ->
+                addCommentButton.isEnabled = true
+
+                when (resource) {
+                    is Resource.RequireLogin -> showPromptLoginDialog()
+                    is Resource.Success -> {
+                        if (resource.data) {
+                            resetContent()
+                            acknowledgeAddCommentSuccess()
+
+                            // Reload comments
+                            viewModel.fetchComments(entityId)
+                        } else {
+                            acknowledgeConnectionError()
+                        }
+                    }
+                    is Resource.Error -> if (resource.isConnected) acknowledgeGenericError() else acknowledgeConnectionError()
+                }
             }
         })
 
@@ -91,7 +128,8 @@ class CommentsFragment : BaseFragment() {
     }
 
     private fun showLoading() {
-        emptyStateContainer.visibility = View.GONE
+        epoxyRecyclerView.visibility = View.VISIBLE
+
         epoxyRecyclerView.visibility = View.GONE
 
         progressBar.visibility = View.VISIBLE
@@ -99,19 +137,37 @@ class CommentsFragment : BaseFragment() {
 
     private fun showNoCommentsEmptyState() {
         epoxyRecyclerView.visibility = View.GONE
+
         progressBar.visibility = View.GONE
 
         emptyStateContainer.textView.text = getString(R.string.no_comments_yet)
         emptyStateContainer.visibility = View.VISIBLE
     }
 
+    private fun resetContent() {
+        commentEditText.text = null
+
+        activity?.hideKeyboard()
+    }
+
     private fun renderComments(comments: List<Comment>) {
-        commentsEpoxyController?.setData(comments)
+        commentsEpoxyController?.setData(comments.reversed())
 
         emptyStateContainer.visibility = View.GONE
         progressBar.visibility = View.GONE
 
         epoxyRecyclerView.visibility = View.VISIBLE
     }
+
+    private fun showPromptLoginDialog() {
+        AlertDialogFragment.show(
+                requireFragmentManager(),
+                message = getString(R.string.prompt_login),
+                positiveButton = getString(R.string.ok),
+                tag = TAG_DIALOG_PROMPT_LOGIN)
+    }
+
+    private fun acknowledgeAddCommentSuccess()
+            = Snackbar.make(requireView(), R.string.add_comment_success, Snackbar.LENGTH_SHORT).show()
 
 }

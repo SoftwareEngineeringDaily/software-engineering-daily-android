@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.koalatea.sedaily.R
 import com.koalatea.sedaily.database.model.Episode
 import com.koalatea.sedaily.feature.bookmarks.epoxy.BookmarksEpoxyController
-import com.koalatea.sedaily.feature.home.HomeFragmentDirections
 import com.koalatea.sedaily.network.Resource
 import com.koalatea.sedaily.ui.dialog.AlertDialogFragment
 import com.koalatea.sedaily.ui.fragment.BaseFragment
