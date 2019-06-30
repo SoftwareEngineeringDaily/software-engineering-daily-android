@@ -15,16 +15,12 @@ class CommentsRepository(
 ) {
 
     suspend fun fetchComments(entityId: String) = withContext(Dispatchers.IO) {
-        if (sessionRepository.isLoggedIn) {
-            val response = safeApiCall { api.getEpisodeCommentsAsync(entityId).await() }
-            val comments = response?.body()
-            if (response?.isSuccessful == true && comments != null) {
-                Resource.Success(comments.result)
-            } else {
-                Resource.Error(response?.errorBody().toException(), networkManager.isConnected)
-            }
+        val response = safeApiCall { api.getEpisodeCommentsAsync(entityId).await() }
+        val comments = response?.body()
+        if (response?.isSuccessful == true && comments != null) {
+            Resource.Success(comments.result)
         } else {
-            Resource.RequireLogin
+            Resource.Error(response?.errorBody().toException(), networkManager.isConnected)
         }
     }
 

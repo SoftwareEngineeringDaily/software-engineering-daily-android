@@ -64,9 +64,8 @@ class CommentsFragment : BaseFragment() {
         }
 
         addCommentButton.setOnClickListener {
-            addCommentButton.isEnabled = false
-
             val comment = commentEditText.text?.trim()?.toString() ?: ""
+
             viewModel.addComment(comment)
         }
 
@@ -108,13 +107,14 @@ class CommentsFragment : BaseFragment() {
 
                 when (resource) {
                     is Resource.RequireLogin -> showPromptLoginDialog()
+                    is Resource.Loading -> addCommentButton.isEnabled = false
                     is Resource.Success -> {
                         if (resource.data) {
                             resetContent()
                             acknowledgeAddCommentSuccess()
 
                             // Reload comments
-                            viewModel.fetchComments(entityId)
+                            viewModel.reloadComments(entityId)
                         } else {
                             acknowledgeConnectionError()
                         }
@@ -128,20 +128,36 @@ class CommentsFragment : BaseFragment() {
     }
 
     private fun showLoading() {
-        epoxyRecyclerView.visibility = View.VISIBLE
-
-        epoxyRecyclerView.visibility = View.GONE
+        hideContent(hideAddComment = true)
+        emptyStateContainer.visibility = View.GONE
 
         progressBar.visibility = View.VISIBLE
     }
 
     private fun showNoCommentsEmptyState() {
-        epoxyRecyclerView.visibility = View.GONE
-
+        hideContent(hideAddComment = false)
         progressBar.visibility = View.GONE
 
         emptyStateContainer.textView.text = getString(R.string.no_comments_yet)
         emptyStateContainer.visibility = View.VISIBLE
+    }
+
+    private fun showContent() {
+        epoxyRecyclerView.visibility = View.VISIBLE
+        addCommentSeparatorView.visibility = View.VISIBLE
+        addCommentContainer.visibility = View.VISIBLE
+    }
+
+    private fun hideContent(hideAddComment: Boolean = false) {
+        epoxyRecyclerView.visibility = View.GONE
+
+        if (hideAddComment) {
+            addCommentSeparatorView.visibility = View.GONE
+            addCommentContainer.visibility = View.GONE
+        } else {
+            addCommentSeparatorView.visibility = View.VISIBLE
+            addCommentContainer.visibility = View.VISIBLE
+        }
     }
 
     private fun resetContent() {
@@ -156,7 +172,7 @@ class CommentsFragment : BaseFragment() {
         emptyStateContainer.visibility = View.GONE
         progressBar.visibility = View.GONE
 
-        epoxyRecyclerView.visibility = View.VISIBLE
+        showContent()
     }
 
     private fun showPromptLoginDialog() {

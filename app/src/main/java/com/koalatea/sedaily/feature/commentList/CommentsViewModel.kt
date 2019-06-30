@@ -32,12 +32,21 @@ class CommentsViewModel(
 
     @MainThread
     fun fetchComments(entityId: String) {
+        if (entityIdLiveData.value != entityId) {
+            entityIdLiveData.value = entityId
+        }
+    }
+
+    @MainThread
+    fun reloadComments(entityId: String) {
         entityIdLiveData.value = entityId
     }
 
     @MainThread
     fun addComment(comment: String) = viewModelScope.launch {
         if (comment.isBlank()) return@launch
+
+        _addCommentLiveData.postValue(Event(Resource.Loading))
 
         entityIdLiveData.value?.let { entityId ->
             val resource = commentsRepository.addComment(entityId, _replyToCommentLiveData.value?._id, comment)
