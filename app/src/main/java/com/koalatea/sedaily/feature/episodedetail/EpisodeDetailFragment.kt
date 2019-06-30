@@ -3,6 +3,8 @@ package com.koalatea.sedaily.feature.episodedetail
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.text.format.DateFormat
 import android.view.LayoutInflater
@@ -217,6 +219,11 @@ class EpisodeDetailFragment : BaseFragment() {
         episode.content?.rendered?.let { html ->
             contentWebView.settings.javaScriptEnabled = true
             contentWebView.webViewClient = object : WebViewClient() {
+                override fun shouldOverrideUrlLoading(view: WebView, url: String?): Boolean {
+                    view.context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                    return true
+                }
+
                 override fun onPageFinished(view: WebView, url: String) {
                     view.loadUrl("javascript:(function() { " +
                             "var head = document.getElementsByClassName('powerpress_player')[0].style.display='none'; " +
@@ -303,8 +310,8 @@ class EpisodeDetailFragment : BaseFragment() {
         stopButton.visibility = View.VISIBLE
     }
 
-    private fun acknowledgeDownloadSucceeded() = Snackbar.make(containerConstraintLayout, R.string.episode_download_succeeded, Snackbar.LENGTH_SHORT).show()
-    private fun acknowledgeDownloadFailed() = Snackbar.make(containerConstraintLayout, R.string.episode_download_failed, Snackbar.LENGTH_SHORT).show()
+    private fun acknowledgeDownloadSucceeded() = Snackbar.make(containerFrameLayout, R.string.episode_download_succeeded, Snackbar.LENGTH_SHORT).show()
+    private fun acknowledgeDownloadFailed() = Snackbar.make(containerFrameLayout, R.string.episode_download_failed, Snackbar.LENGTH_SHORT).show()
     private fun promptDeleteDownload(positiveCallback: () -> Unit) {
         AlertDialog.Builder(requireContext())
                 .setMessage(R.string.episode_delete_download_prompt)
