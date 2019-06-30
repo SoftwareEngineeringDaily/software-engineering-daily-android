@@ -17,13 +17,13 @@ class SearchActivity : AppCompatActivity() {
         setContentView(R.layout.activity_search)
         setSupportActionBar(toolbar)
 
-        handleIntent(intent)
+        handleIntent(intent, firstRun = savedInstanceState == null)
     }
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
 
-        intent?.let { handleIntent(intent) }
+        intent?.let { handleIntent(intent, firstRun = true) }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -36,21 +36,23 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleIntent(intent: Intent) {
+    private fun handleIntent(intent: Intent, firstRun: Boolean) {
         if (Intent.ACTION_SEARCH == intent.action) {
             intent.getStringExtra(SearchManager.QUERY)?.also { query ->
-                searchEpisodes(query)
+                searchEpisodes(query, firstRun)
             }
         }
     }
 
-    private fun searchEpisodes(query: String) {
+    private fun searchEpisodes(query: String, firstRun: Boolean) {
         supportActionBar?.title = query
 
-        navHostFragment
-                .findNavController()
-                .navigate(R.id.navigation_episodes,
-                        EpisodesFragmentArgs.Builder(SearchQuery(searchTerm = query), true, true).build().toBundle())
+        if (firstRun) {
+            navHostFragment
+                    .findNavController()
+                    .navigate(R.id.navigation_episodes,
+                            EpisodesFragmentArgs.Builder(SearchQuery(searchTerm = query), true, true).build().toBundle())
+        }
     }
 
 }
