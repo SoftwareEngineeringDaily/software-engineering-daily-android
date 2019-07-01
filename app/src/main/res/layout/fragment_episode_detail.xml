@@ -34,9 +34,9 @@
                         android:id="@+id/tagsHorizontalScrollView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/first_keyline"
+                        android:paddingStart="@dimen/first_keyline"
+                        android:paddingEnd="@dimen/first_keyline"
                         android:layout_marginTop="@dimen/first_keyline"
-                        android:layout_marginEnd="@dimen/first_keyline"
                         android:scrollbars="none"
                         android:visibility="gone"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -181,12 +181,21 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:layout_marginEnd="@dimen/first_keyline"
                         app:icon="@drawable/vd_bookmark_border"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toEndOf="@+id/commentsButton"
                         app:layout_constraintTop_toTopOf="@+id/likesButton" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/relatedLinksButton"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                        android:layout_width="48dp"
+                        android:layout_height="wrap_content"
+                        app:icon="@drawable/vd_link"
+                        app:layout_constraintEnd_toEndOf="@+id/episodeTitleTextView"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toEndOf="@+id/bookmarkButton"
+                        app:layout_constraintTop_toTopOf="@+id/likesButton"
+                        app:strokeWidth="0dp" />
 
                     <ProgressBar
                         android:id="@+id/downloadProgressBar"

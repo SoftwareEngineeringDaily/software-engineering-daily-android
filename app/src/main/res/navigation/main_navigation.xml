@@ -82,6 +82,9 @@
         <action
             android:id="@+id/open_episodes_action"
             app:destination="@id/navigation_episodes" />
+        <action
+            android:id="@+id/open_related_links_action"
+            app:destination="@id/navigation_related_links" />
     </fragment>
 
     <fragment
@@ -91,6 +94,17 @@
         tools:layout="@layout/fragment_comments">
         <argument
             android:name="entityId"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_related_links"
+        android:name="com.koalatea.sedaily.feature.relatedlinks.RelatedLinksFragment"
+        android:label="@string/related_links_title" >
+        <argument
+            android:name="episodeId"
+            app:argType="string" />
+        <argument
+            android:name="episodeTranscriptUrl"
             app:argType="string" />
     </fragment>
 

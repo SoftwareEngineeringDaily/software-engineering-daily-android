@@ -25,6 +25,7 @@ import com.koalatea.sedaily.database.model.Episode
 import com.koalatea.sedaily.feature.downloader.DownloadStatus
 import com.koalatea.sedaily.feature.player.PlayerCallback
 import com.koalatea.sedaily.feature.player.PlayerStatus
+import com.koalatea.sedaily.koin.module.SEDAILY_URL
 import com.koalatea.sedaily.model.SearchQuery
 import com.koalatea.sedaily.network.Resource
 import com.koalatea.sedaily.ui.dialog.AlertDialogFragment
@@ -78,6 +79,12 @@ class EpisodeDetailFragment : BaseFragment() {
 
         likesButton.setOnClickListener { viewModel.toggleUpvote() }
         bookmarkButton.setOnClickListener { viewModel.toggleBookmark() }
+
+        relatedLinksButton.setOnClickListener {
+            val transcriptUrl = viewModel.episode?.transcriptURL ?: SEDAILY_URL
+            val direction = EpisodeDetailFragmentDirections.openRelatedLinksAction(episodeId, transcriptUrl)
+            findNavController().navigate(direction)
+        }
 
         viewModel.episodeDetailsResource.observe(this, Observer { resource ->
             when (resource) {
@@ -248,7 +255,7 @@ class EpisodeDetailFragment : BaseFragment() {
             contentWebView.settings.javaScriptEnabled = true
             contentWebView.webViewClient = object : WebViewClient() {
                 override fun shouldOverrideUrlLoading(view: WebView, url: String?): Boolean {
-                    view.context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
                     return true
                 }
 

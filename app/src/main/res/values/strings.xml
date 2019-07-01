@@ -7,6 +7,7 @@
     <string name="home_title">Software Engineering Daily</string>
     <string name="comments_title">Comments</string>
     <string name="episode_details_title"/>
+    <string name="related_links_title">Related links</string>
     <string name="bookmarks_title">Saved</string>
     <string name="profile_title">Profile</string>
     <string name="post_error">An error occurred while loading the posts</string>
@@ -103,6 +104,9 @@
     <string name="play">Play</string>
     <string name="stop">Stop</string>
     <string name="share">Share</string>
+    <string name="add_related_link_success">Link added successfully</string>
+    <string name="view_related_link_failed">Cannot view this link at the moment, please try again later</string>
+    <string name="transcript">Transcript</string>
 
     <!-- Comments -->
     <string name="content_description_comment_author_avatar">Author avatar</string>

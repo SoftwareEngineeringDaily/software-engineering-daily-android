@@ -2,6 +2,7 @@ package com.koalatea.sedaily.network
 
 import com.koalatea.sedaily.database.model.Episode
 import com.koalatea.sedaily.model.Profile
+import com.koalatea.sedaily.model.RelatedLink
 import com.koalatea.sedaily.network.response.*
 import kotlinx.coroutines.Deferred
 import retrofit2.Response
@@ -18,19 +19,19 @@ interface SEDailyApi {
             @Query("limit") pageSize: Int): Deferred<Response<List<Episode>>>
 
     @GET("posts/{episode_id}")
-    fun getEpisodeAsync(@Path("episode_id") episode_id: String): Deferred<Response<Episode>>
+    fun getEpisodeAsync(@Path("episode_id") episodeId: String): Deferred<Response<Episode>>
 
     @POST("posts/{episode_id}/favorite")
-    fun favoriteEpisodeAsync(@Path("episode_id") episode_id: String): Deferred<Response<FavoriteResponse>>
+    fun favoriteEpisodeAsync(@Path("episode_id") episodeId: String): Deferred<Response<FavoriteResponse>>
 
     @POST("posts/{episode_id}/unfavorite")
-    fun unfavoriteEpisodeAsync(@Path("episode_id") episode_id: String): Deferred<Response<FavoriteResponse>>
+    fun unfavoriteEpisodeAsync(@Path("episode_id") episodeId: String): Deferred<Response<FavoriteResponse>>
 
     @POST("posts/{episode_id}/upvote")
-    fun upvoteEpisodeAsync(@Path("episode_id") episode_id: String): Deferred<Response<VoteResponse>>
+    fun upvoteEpisodeAsync(@Path("episode_id") episodeId: String): Deferred<Response<VoteResponse>>
 
     @POST("posts/{episode_id}/downvote")
-    fun downvoteEpisodeAsync(@Path("episode_id") episode_id: String): Deferred<Response<VoteResponse>>
+    fun downvoteEpisodeAsync(@Path("episode_id") episodeId: String): Deferred<Response<VoteResponse>>
 
     @GET("comments/forEntity/{entity_id}")
     fun getEpisodeCommentsAsync(@Path("entity_id") entityId: String): Deferred<Response<CommentsResponse>>
@@ -56,5 +57,11 @@ interface SEDailyApi {
 
     @GET("users/me/bookmarked")
     fun getBookmarksAsync(): Deferred<Response<List<Episode>>>
+
+    @GET("posts/{episode_id}/related-links")
+    fun getEpisodeRelatedLinksAsync(@Path("episode_id") episodeId: String): Deferred<Response<List<RelatedLink>>>
+
+    @POST("related-links/{entity_id}/upvote")
+    fun upvoteRelatedLinkAsync(@Path("entity_id") entityId: String): Deferred<Response<VoteResponse>>
 
 }

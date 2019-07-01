@@ -14,6 +14,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import timber.log.Timber
 
+const val SEDAILY_URL = "http://softwareengineeringdaily.com"
+
 // FIXME :: Move to debug build type
 //private const val BASE_URL: String = "https://sedaily-backend-staging.herokuapp.com/api/"
 private const val BASE_URL: String = "https://software-enginnering-daily-api.herokuapp.com/api/"

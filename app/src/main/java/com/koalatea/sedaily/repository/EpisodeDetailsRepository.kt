@@ -58,28 +58,34 @@ class EpisodeDetailsRepository constructor(
         }
     }
 
-    suspend fun addDownload(episodeId: String, downloadId: Long) {
-        withContext(Dispatchers.IO) {
-            db.downloadDao().insert(Download(episodeId, downloadId))
+    suspend fun fetchRelatedLinks(episodeId: String) = withContext(Dispatchers.IO) {
+        val response = safeApiCall { api.getEpisodeRelatedLinksAsync(episodeId).await() }
+        val relatedLinks = response?.body()
+        if (response?.isSuccessful == true && relatedLinks != null) {
+            Resource.Success(relatedLinks)
+        } else {
+            Resource.Error(response?.errorBody().toException(), networkManager.isConnected)
         }
     }
 
-    suspend fun deleteDownload(episode: Episode) {
-        withContext(Dispatchers.IO) {
-            val download = db.downloadDao().findById(episode._id)
+    suspend fun addDownload(episodeId: String, downloadId: Long) = withContext(Dispatchers.IO) {
+        db.downloadDao().insert(Download(episodeId, downloadId))
+    }
 
-            download?.let {
-                // Delete DB entry.
-                db.downloadDao().delete(download)
+    suspend fun deleteDownload(episode: Episode) = withContext(Dispatchers.IO) {
+        val download = db.downloadDao().findById(episode._id)
 
-                // Delete local file
-                try {
-                    downloadManager.deleteDownload(episode._id)
-                } catch (e: Exception) {
-                    // Ignore delete errors and log it to Crashlytics.
+        download?.let {
+            // Delete DB entry.
+            db.downloadDao().delete(download)
 
-                    Timber.e(e)
-                }
+            // Delete local file
+            try {
+                downloadManager.deleteDownload(episode._id)
+            } catch (e: Exception) {
+                // Ignore delete errors and log it to Crashlytics.
+
+                Timber.e(e)
             }
         }
     }
