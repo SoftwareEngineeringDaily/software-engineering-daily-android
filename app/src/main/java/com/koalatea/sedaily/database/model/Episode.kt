@@ -22,7 +22,8 @@ data class Episode(
         val upvoted: Boolean?,
         val bookmarked: Boolean?,
         val thread: Thread?,
-        val filterTags: List<Tag>?
+        val filterTags: List<Tag>?,
+        val link: String
 ) {
 
     @field:PrimaryKey

@@ -70,7 +70,7 @@ class EpisodeDetailViewModel internal constructor(
     val bookmarkLiveData: LiveData<Event<BookmarkEvent>>
         get() = _bookmarkLiveData
 
-    private val episode: Episode?
+    val episode: Episode?
         get() = (episodeDetailsResource.value as? Resource.Success<Episode>)?.data
 
     @MainThread

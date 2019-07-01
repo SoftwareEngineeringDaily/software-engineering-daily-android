@@ -7,9 +7,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.format.DateFormat
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AlertDialog
@@ -44,6 +42,12 @@ class EpisodeDetailFragment : BaseFragment() {
     private val viewModel: EpisodeDetailViewModel by viewModel()
 
     private var playerCallback: PlayerCallback? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -149,6 +153,30 @@ class EpisodeDetailFragment : BaseFragment() {
         super.onDetach()
 
         playerCallback = null
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_episode_details, menu)
+
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.share -> {
+                val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_TEXT, viewModel.episode?.link)
+                    putExtra(Intent.EXTRA_HTML_TEXT, viewModel.episode?.excerpt?.rendered)
+                }
+
+                startActivity(shareIntent)
+
+                return true
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     private fun showDownloadProgress(progress: Float) {

@@ -102,6 +102,7 @@
     <string name="rationale_storage_permission">Storage access is needed to download episodes</string>
     <string name="play">Play</string>
     <string name="stop">Stop</string>
+    <string name="share">Share</string>
 
     <!-- Comments -->
     <string name="content_description_comment_author_avatar">Author avatar</string>
