@@ -1,13 +1,16 @@
 package com.koalatea.sedaily.database.model
 
 import android.os.Build
+import android.os.Parcelable
 import android.text.Html
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.koalatea.sedaily.util.toUTCDate
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 
+@Parcelize
 @Entity
 data class Episode(
         val _id: String,
@@ -25,7 +28,7 @@ data class Episode(
         val filterTags: List<Tag>?,
         val link: String,
         val transcriptURL: String?
-) {
+) : Parcelable {
 
     @field:PrimaryKey
     var uniqueId: String = _id

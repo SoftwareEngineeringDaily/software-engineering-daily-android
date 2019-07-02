@@ -4,7 +4,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.text.format.DateFormat
 import android.view.*
@@ -60,7 +59,7 @@ class EpisodeDetailFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val safeArgs: EpisodeDetailFragmentArgs by navArgs()
-        val episodeId = safeArgs.episodeId
+        val episode = safeArgs.episode
 
         supportActionBar?.elevation = resources.getDimension(R.dimen.toolbar_elevation)
 
@@ -83,7 +82,7 @@ class EpisodeDetailFragment : BaseFragment() {
 
         relatedLinksButton.setOnClickListener {
             val transcriptUrl = viewModel.episode?.transcriptURL ?: SEDAILY_URL
-            val direction = EpisodeDetailFragmentDirections.openRelatedLinksAction(episodeId, transcriptUrl)
+            val direction = EpisodeDetailFragmentDirections.openRelatedLinksAction(episode._id, transcriptUrl)
             findNavController().navigate(direction)
         }
 
@@ -148,7 +147,7 @@ class EpisodeDetailFragment : BaseFragment() {
             }
         })
 
-        viewModel.fetchEpisodeDetails(episodeId)
+        viewModel.fetchEpisodeDetails(episode)
     }
 
     override fun onAttach(context: Context) {

@@ -72,7 +72,7 @@ class EpisodesFragment : BaseFragment() {
                         viewModel.toggleBookmark(episode)
                     },
                     episodeClickListener = { episode ->
-                        val direction = EpisodesFragmentDirections.openEpisodeDetailsAction(episode._id)
+                        val direction = EpisodesFragmentDirections.openEpisodeDetailsAction(episode)
                         findNavController().navigate(direction)
                     }
             )

@@ -1,5 +1,9 @@
 package com.koalatea.sedaily.database.model
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class Thread (
 		val _id : String,
 		val title : String?,
@@ -11,4 +15,4 @@ data class Thread (
 		val commentsCount : Int?,
 		val deleted : Boolean?,
 		val score : Int
-)
+) : Parcelable

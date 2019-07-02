@@ -22,11 +22,12 @@ class EpisodeDetailsRepository constructor(
         private val networkManager: NetworkManager
 ) {
 
-    suspend fun fetchEpisodeDetails(episodeId: String) = withContext(Dispatchers.IO) {
+    suspend fun fetchEpisodeDetails(episodeId: String, cachedEpisode: Episode? = null) = withContext(Dispatchers.IO) {
         val response = safeApiCall { api.getEpisodeAsync(episodeId).await() }
         val episode = response?.body()
         if (response?.isSuccessful == true && episode != null) {
-            val cachedEpisode = db.episodeDao().findById(episodeId)
+            @Suppress("NAME_SHADOWING")
+            val cachedEpisode = cachedEpisode ?: db.episodeDao().findById(episodeId)
 
             // In case that was requested before upvote or bookmark calls are done.
             Resource.Success(episode.copy(

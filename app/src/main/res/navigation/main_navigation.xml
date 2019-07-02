@@ -73,9 +73,6 @@
         android:name="com.koalatea.sedaily.feature.episodedetail.EpisodeDetailFragment"
         android:label="@string/episode_details_title"
         tools:layout="@layout/fragment_episode_detail">
-        <argument
-            android:name="episodeId"
-            app:argType="string" />
         <action
             android:id="@+id/open_comments_action"
             app:destination="@id/navigation_comments" />
@@ -85,6 +82,9 @@
         <action
             android:id="@+id/open_related_links_action"
             app:destination="@id/navigation_related_links" />
+        <argument
+            android:name="episode"
+            app:argType="com.koalatea.sedaily.database.model.Episode" />
     </fragment>
 
     <fragment

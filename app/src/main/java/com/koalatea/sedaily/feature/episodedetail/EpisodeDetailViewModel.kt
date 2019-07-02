@@ -21,12 +21,12 @@ class EpisodeDetailViewModel internal constructor(
         private val sessionRepository: SessionRepository
 ) : ViewModel() {
 
-    private val episodeIdLiveData = MutableLiveData<String>()
-    val episodeDetailsResource: LiveData<Resource<Episode>> = Transformations.switchMap(episodeIdLiveData) { episodeId ->
+    private val episodeLiveData = MutableLiveData<Episode>()
+    val episodeDetailsResource: LiveData<Resource<Episode>> = Transformations.switchMap(episodeLiveData) { cachedEpisode ->
         liveData {
             emit(Resource.Loading)
 
-            when (val resource = episodeDetailsRepository.fetchEpisodeDetails(episodeId)) {
+            when (val resource = episodeDetailsRepository.fetchEpisodeDetails(cachedEpisode._id, cachedEpisode)) {
                 is Resource.Success<Episode> -> {
                     val episode = resource.data
                     episode.downloadedId?.let { downloadId ->
@@ -39,7 +39,7 @@ class EpisodeDetailViewModel internal constructor(
                     }
 
                     _upvoteLiveData.postValue(Event(UpvoteEvent(episode.upvoted
-                            ?: false, Math.max(episode.score ?: 0, 0)), userAction = false))
+                            ?: false, max(episode.score ?: 0, 0)), userAction = false))
                     _bookmarkLiveData.postValue(Event(BookmarkEvent(episode.bookmarked
                             ?: false), userAction = false))
 
@@ -74,9 +74,9 @@ class EpisodeDetailViewModel internal constructor(
         get() = (episodeDetailsResource.value as? Resource.Success<Episode>)?.data
 
     @MainThread
-    fun fetchEpisodeDetails(episodeId: String) {
-        if (episodeIdLiveData.value != episodeId) {
-            episodeIdLiveData.value = episodeId
+    fun fetchEpisodeDetails(episode: Episode?) {
+        if (episodeLiveData.value != episode) {
+            episodeLiveData.value = episode
         }
     }
 
