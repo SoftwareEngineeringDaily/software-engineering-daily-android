@@ -61,7 +61,8 @@ interface SEDailyApi {
     @GET("posts/{episode_id}/related-links")
     fun getEpisodeRelatedLinksAsync(@Path("episode_id") episodeId: String): Deferred<Response<List<RelatedLink>>>
 
-    @POST("related-links/{entity_id}/upvote")
-    fun upvoteRelatedLinkAsync(@Path("entity_id") entityId: String): Deferred<Response<VoteResponse>>
+    @FormUrlEncoded
+    @POST("posts/{episode_id}/related-link")
+    fun addEpisodeRelatedLinkAsync(@Path("episode_id") episodeId: String, @Field("title") title: String, @Field("url") url: String): Deferred<Response<AddCommentResponse>>
 
 }

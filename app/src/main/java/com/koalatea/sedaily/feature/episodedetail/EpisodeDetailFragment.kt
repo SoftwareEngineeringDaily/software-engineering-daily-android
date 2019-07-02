@@ -30,6 +30,7 @@ import com.koalatea.sedaily.model.SearchQuery
 import com.koalatea.sedaily.network.Resource
 import com.koalatea.sedaily.ui.dialog.AlertDialogFragment
 import com.koalatea.sedaily.ui.fragment.BaseFragment
+import com.koalatea.sedaily.util.openUrl
 import com.koalatea.sedaily.util.supportActionBar
 import com.nabinbhandari.android.permissions.PermissionHandler
 import com.nabinbhandari.android.permissions.Permissions
@@ -255,7 +256,12 @@ class EpisodeDetailFragment : BaseFragment() {
             contentWebView.settings.javaScriptEnabled = true
             contentWebView.webViewClient = object : WebViewClient() {
                 override fun shouldOverrideUrlLoading(view: WebView, url: String?): Boolean {
-                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                    url?.let {
+                        if (!openUrl(url)) {
+                            acknowledgeViewEpisodeLinkFailed()
+                        }
+                    }
+
                     return true
                 }
 
@@ -344,6 +350,8 @@ class EpisodeDetailFragment : BaseFragment() {
         playButton.visibility = View.INVISIBLE
         stopButton.visibility = View.VISIBLE
     }
+
+    private fun acknowledgeViewEpisodeLinkFailed() = Snackbar.make(containerFrameLayout, R.string.view_episode_link_failed, Snackbar.LENGTH_SHORT).show()
 
     private fun acknowledgeDownloadSucceeded() = Snackbar.make(containerFrameLayout, R.string.episode_download_succeeded, Snackbar.LENGTH_SHORT).show()
     private fun acknowledgeDownloadFailed() = Snackbar.make(containerFrameLayout, R.string.episode_download_failed, Snackbar.LENGTH_SHORT).show()

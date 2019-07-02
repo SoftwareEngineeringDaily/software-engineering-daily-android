@@ -23,13 +23,16 @@ class RelatedLinksViewModel internal constructor(
         }
     }
 
-    private val _addRelatedLinkLiveData = MutableLiveData<Event<Resource<Boolean>>>()
-    val addRelatedLinkLiveData: LiveData<Event<Resource<Boolean>>>
-        get() = _addRelatedLinkLiveData
+    val episodeId: String?
+        get() = episodeIdLiveData.value
 
     private val _navigateToLogin = MutableLiveData<Event<Unit>>()
     val navigateToLogin: LiveData<Event<Unit>>
         get() = _navigateToLogin
+
+    private val _navigateToAddRelatedLink = MutableLiveData<Event<Unit>>()
+    val navigateToAddRelatedLink: LiveData<Event<Unit>>
+        get() = _navigateToAddRelatedLink
 
     @MainThread
     fun fetchRelatedLinks(episodeId: String) {
@@ -44,13 +47,9 @@ class RelatedLinksViewModel internal constructor(
     }
 
     @MainThread
-    fun addRelatedLink(title: String, url: String) = viewModelScope.launch {
+    fun addRelatedLink() = viewModelScope.launch {
         if (sessionRepository.isLoggedIn) {
-//            _addRelatedLinkLiveData.postValue(Event(Resource.Loading))
-
-//            val resource = episodeDetailsRepository.addRelatedLink(episodeIdLiveData.value, title, url)
-
-//            _addRelatedLinkLiveData.postValue(Event(resource))
+            _navigateToAddRelatedLink.value = Event(Unit)
         } else {
             _navigateToLogin.value = Event(Unit)
         }

@@ -68,6 +68,16 @@ class EpisodeDetailsRepository constructor(
         }
     }
 
+    suspend fun addRelatedLink(episodeId: String, title: String, url: String) = withContext(Dispatchers.IO) {
+        val response = safeApiCall { api.addEpisodeRelatedLinkAsync(episodeId, title, url).await() }
+        val addCommentResponse = response?.body()
+        if (response?.isSuccessful == true) {
+            Resource.Success(addCommentResponse != null)
+        } else {
+            Resource.Error(response?.errorBody().toException(), networkManager.isConnected)
+        }
+    }
+
     suspend fun addDownload(episodeId: String, downloadId: Long) = withContext(Dispatchers.IO) {
         db.downloadDao().insert(Download(episodeId, downloadId))
     }

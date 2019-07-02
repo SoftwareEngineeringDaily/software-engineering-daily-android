@@ -20,6 +20,9 @@
 
     <string name="ok">OK</string>
 
+    <string name="add">Add</string>
+    <string name="cancel">Cancel</string>
+
     <string name="close">Close</string>
 
     <string name="please_wait">Please wait…</string>
@@ -104,9 +107,17 @@
     <string name="play">Play</string>
     <string name="stop">Stop</string>
     <string name="share">Share</string>
+    <string name="view_episode_link_failed">Cannot open this link at the moment, please try again later</string>
+
+    <!-- Related links -->
     <string name="add_related_link_success">Link added successfully</string>
-    <string name="view_related_link_failed">Cannot view this link at the moment, please try again later</string>
+    <string name="add_related_link_failed">@string/error_generic</string>
+    <string name="view_related_link_failed">Cannot open this link at the moment, please try again later</string>
     <string name="transcript">Transcript</string>
+    <string name="title">Title</string>
+    <string name="url">URL</string>
+    <string name="invalid_title">Invalid title</string>
+    <string name="invalid_url">Invalid URL</string>
 
     <!-- Comments -->
     <string name="content_description_comment_author_avatar">Author avatar</string>

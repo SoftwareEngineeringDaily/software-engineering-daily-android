@@ -3,9 +3,7 @@ package com.koalatea.sedaily.feature.relatedlinks
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -18,19 +16,29 @@ import com.koalatea.sedaily.model.RelatedLink
 import com.koalatea.sedaily.network.Resource
 import com.koalatea.sedaily.ui.dialog.AlertDialogFragment
 import com.koalatea.sedaily.ui.fragment.BaseFragment
+import com.koalatea.sedaily.util.openUrl
 import com.koalatea.sedaily.util.supportActionBar
-import kotlinx.android.synthetic.main.fragment_related_links.epoxyRecyclerView
-import kotlinx.android.synthetic.main.fragment_related_links.progressBar
+import kotlinx.android.synthetic.main.fragment_related_links.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 private const val TAG_DIALOG_PROMPT_LOGIN = "prompt_login_dialog"
+private const val TAG_DIALOG_ADD_RELATED_LINK = "add_related_link"
 
-class RelatedLinksFragment : BaseFragment() {
+class RelatedLinksFragment : BaseFragment(), AddRelatedLinkDialogFragment.OnAddRelatedLinkListener {
+
+    override val episodeId: String?
+        get() = viewModel.episodeId
 
     private val viewModel: RelatedLinksViewModel by viewModel()
 
     private var relatedLinksEpoxyController: RelatedLinksEpoxyController? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -53,11 +61,7 @@ class RelatedLinksFragment : BaseFragment() {
                 resources,
                 transcriptUrl,
                 viewRelatedLinkClickListener = { url ->
-                    try {
-                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
-                    } catch (e: Exception) {
-                        Timber.e(e)
-
+                    if (!openUrl(url)) {
                         acknowledgeViewRelatedLinkFailed()
                     }
                 }
@@ -77,36 +81,51 @@ class RelatedLinksFragment : BaseFragment() {
             }
         })
 
-        viewModel.addRelatedLinkLiveData.observe(this, Observer {
-            it.getContentIfNotHandled()?.let { resource ->
-//                addRelatedLinkButton.isEnabled = true
-
-                when (resource) {
-                    is Resource.RequireLogin -> showPromptLoginDialog()
-//                    is Resource.Loading -> addRelatedLinkButton.isEnabled = false
-                    is Resource.Success -> {
-                        if (resource.data) {
-//                            resetContent()
-                            acknowledgeAddRelatedLinkSuccess()
-
-                            // Reload links
-                            viewModel.reloadRelatedLinks()
-                        } else {
-                            acknowledgeConnectionError()
-                        }
-                    }
-                    is Resource.Error -> if (resource.isConnected) acknowledgeGenericError() else acknowledgeConnectionError()
-                }
-            }
-        })
-
         viewModel.navigateToLogin.observe(this, Observer {
             it.getContentIfNotHandled()?.let { // Only proceed if the event has never been handled
                 showPromptLoginDialog()
             }
         })
 
+        viewModel.navigateToAddRelatedLink.observe(this, Observer {
+            it.getContentIfNotHandled()?.let { // Only proceed if the event has never been handled
+                AddRelatedLinkDialogFragment.show(this, requireFragmentManager(), TAG_DIALOG_ADD_RELATED_LINK)
+            }
+        })
+
         viewModel.fetchRelatedLinks(episodeId)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_related_links, menu)
+
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.add -> {
+                viewModel.addRelatedLink()
+
+                return true
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onAddRelatedLinkSuccess() {
+        acknowledgeAddRelatedLinkSuccess()
+
+        viewModel.reloadRelatedLinks()
+    }
+
+    override fun onAddRelatedLinkFailure(e: Exception?, isConnected: Boolean?) {
+        if (isConnected == true) {
+            acknowledgeConnectionError()
+        } else {
+            acknowledgeAddRelatedLinkFailed()
+        }
     }
 
     private fun showLoading() {
@@ -131,16 +150,11 @@ class RelatedLinksFragment : BaseFragment() {
         epoxyRecyclerView.visibility = View.VISIBLE
     }
 
-    // TODO :: Add using a dialog.
-//    private fun resetContent() {
-////        titleEditText.text = null
-////        urlEditText.text = null
-//
-//        activity?.hideKeyboard()
-//    }
-
     private fun acknowledgeAddRelatedLinkSuccess()
             = Snackbar.make(requireView(), R.string.add_related_link_success, Snackbar.LENGTH_SHORT).show()
+
+    private fun acknowledgeAddRelatedLinkFailed()
+            = Snackbar.make(requireView(), R.string.add_related_link_failed, Snackbar.LENGTH_SHORT).show()
 
     private fun acknowledgeViewRelatedLinkFailed()
             = Snackbar.make(requireView(), R.string.view_related_link_failed, Snackbar.LENGTH_SHORT).show()
