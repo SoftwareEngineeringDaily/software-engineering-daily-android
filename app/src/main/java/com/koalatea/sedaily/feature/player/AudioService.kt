@@ -22,6 +22,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import com.google.android.exoplayer2.*
+import com.google.android.exoplayer2.audio.AudioAttributes
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
 import com.google.android.exoplayer2.ext.mediasession.TimelineQueueNavigator
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
@@ -96,6 +97,12 @@ class AudioService : LifecycleService() {
         super.onCreate()
 
         exoPlayer = ExoPlayerFactory.newSimpleInstance(this, DefaultTrackSelector())
+        val audioAttributes = AudioAttributes.Builder()
+                .setUsage(C.USAGE_MEDIA)
+                .setContentType(C.CONTENT_TYPE_SPEECH)
+                .build()
+        exoPlayer.setAudioAttributes(audioAttributes, true)
+
         exoPlayer.addListener(PlayerEventListener())
     }
 
