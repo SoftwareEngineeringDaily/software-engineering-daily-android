@@ -307,6 +307,8 @@ class EpisodeDetailFragment : BaseFragment() {
             monitorPlayback(episode)
 
             playButton.setOnClickListener {
+                viewModel.markEpisodeAsListened(episode._id)
+
                 showStopViews()
                 playerCallback?.play(episode)
 

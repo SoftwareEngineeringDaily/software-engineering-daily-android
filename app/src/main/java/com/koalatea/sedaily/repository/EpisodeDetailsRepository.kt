@@ -78,6 +78,16 @@ class EpisodeDetailsRepository constructor(
         }
     }
 
+    suspend fun markEpisodeAsListened(episodeId: String) = withContext(Dispatchers.IO) {
+        val response = safeApiCall { api.markEpisodeAsListenedAsync(episodeId).await() }
+        val addListenedResponse = response?.body()
+        if (response?.isSuccessful == true) {
+            Resource.Success(addListenedResponse != null)
+        } else {
+            Resource.Error(response?.errorBody().toException(), networkManager.isConnected)
+        }
+    }
+
     suspend fun addDownload(episodeId: String, downloadId: Long) = withContext(Dispatchers.IO) {
         db.downloadDao().insert(Download(episodeId, downloadId))
     }

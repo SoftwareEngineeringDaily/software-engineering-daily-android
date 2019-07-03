@@ -169,4 +169,10 @@ class EpisodeDetailViewModel internal constructor(
                 500L)
     }
 
+    fun markEpisodeAsListened(episodeId: String) = viewModelScope.launch {
+        if (sessionRepository.isLoggedIn) {
+            episodeDetailsRepository.markEpisodeAsListened(episodeId)
+        }
+    }
+
 }

@@ -42,7 +42,7 @@ interface SEDailyApi {
             @Path("entity_id") entityId: String,
             @Field("parentCommentId") parentCommentId: String?,
             @Field("content") commentContent: String,
-            @Field("entityType") entityType: String = "forumthread"): Deferred<Response<AddCommentResponse>>
+            @Field("entityType") entityType: String = "forumthread"): Deferred<Response<GenericResponse>>
 
     @FormUrlEncoded
     @POST("auth/login")
@@ -63,6 +63,9 @@ interface SEDailyApi {
 
     @FormUrlEncoded
     @POST("posts/{episode_id}/related-link")
-    fun addEpisodeRelatedLinkAsync(@Path("episode_id") episodeId: String, @Field("title") title: String, @Field("url") url: String): Deferred<Response<AddCommentResponse>>
+    fun addEpisodeRelatedLinkAsync(@Path("episode_id") episodeId: String, @Field("title") title: String, @Field("url") url: String): Deferred<Response<GenericResponse>>
+
+    @POST("posts/{episode_id}/listened")
+    fun markEpisodeAsListenedAsync(@Path("episode_id") episodeId: String): Deferred<Response<GenericResponse>>
 
 }
