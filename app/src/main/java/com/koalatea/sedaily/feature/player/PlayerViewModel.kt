@@ -8,7 +8,8 @@ import com.koalatea.sedaily.repository.EpisodeDetailsRepository
 import com.koalatea.sedaily.util.Event
 
 class PlayerViewModel(
-        private val episodeDetailsRepository: EpisodeDetailsRepository
+        private val episodeDetailsRepository: EpisodeDetailsRepository,
+        private val playbackManager: PlaybackManager
 ) : ViewModel() {
 
     private val episodeIdLiveData = MutableLiveData<String>()
@@ -18,7 +19,7 @@ class PlayerViewModel(
 
             when (val resource = episodeDetailsRepository.fetchEpisodeDetails(episodeId)) {
                 is Resource.Success<EpisodeDetails> -> {
-                    _playMediaLiveData.postValue(Event(resource.data))
+                    _playMediaLiveData.postValue(Event(Pair(resource.data, playbackManager.playbackSpeed)))
 
                     emit(resource)
                 }
@@ -29,13 +30,27 @@ class PlayerViewModel(
         }
     }
 
-    private val _playMediaLiveData = MutableLiveData<Event<EpisodeDetails>>()
-    val playMediaLiveData: LiveData<Event<EpisodeDetails>>
+    private val _playMediaLiveData = MutableLiveData<Event<Pair<EpisodeDetails, Float>>>()
+    val playMediaLiveData: LiveData<Event<Pair<EpisodeDetails, Float>>>
         get() = _playMediaLiveData
+
+    private val _playbackSpeedLiveData = MutableLiveData<Event<Float>>()
+    val playbackSpeedLiveData: LiveData<Event<Float>>
+        get() = _playbackSpeedLiveData
 
     @MainThread
     fun play(episodeId: String) {
         episodeIdLiveData.value = episodeId
+
+        if (_playbackSpeedLiveData.value?.peekContent() != playbackManager.playbackSpeed) {
+            _playbackSpeedLiveData.value = Event(playbackManager.playbackSpeed)
+        }
+    }
+
+    fun changePlaybackSpeed(playbackSpeed: Float) {
+        playbackManager.playbackSpeed = playbackSpeed
+
+        _playbackSpeedLiveData.value = Event(playbackSpeed)
     }
 
 }

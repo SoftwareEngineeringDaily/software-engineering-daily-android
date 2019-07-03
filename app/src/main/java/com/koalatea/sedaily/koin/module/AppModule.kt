@@ -5,7 +5,8 @@ import androidx.room.Room
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.GsonBuilder
 import com.koalatea.sedaily.database.AppDatabase
-import com.koalatea.sedaily.feature.downloader.DownloadManager
+import com.koalatea.sedaily.downloader.DownloadManager
+import com.koalatea.sedaily.feature.player.PlaybackManager
 import com.koalatea.sedaily.repository.*
 import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
@@ -31,6 +32,8 @@ val appModule = module {
     factory { EpisodesRepository(get(), get(), get(), get(), get()) }
 
     single { CommentsRepository(get(), get(), get()) }
+
+    single { PlaybackManager(get()) }
 
     single { GsonBuilder().create() }
 

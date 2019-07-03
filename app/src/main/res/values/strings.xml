@@ -49,14 +49,9 @@
 
     <string name="error_log_in">Failed to log in, please check that your username and password are correct</string>
 
-    <!-- Playbar -->
-    <string name="speed">Speed</string>
-    <string name="playbarTitleViewDesc">Current Song</string>
-    <string name="playbarStartTextDefault">0:00</string>
-    <string name="back_15">Back 15</string>
-    <string name="skip_15">Skip 15</string>
-    <string name="_1x">1x</string>
-    <string name="play_pause">Play/Pause</string>
+    <!-- Player -->
+    <string name="playback_speed_title">Speed</string>
+    <string name="playback_speed">%sx</string>
 
     <!-- Auth -->
     <string name="login">Login</string>

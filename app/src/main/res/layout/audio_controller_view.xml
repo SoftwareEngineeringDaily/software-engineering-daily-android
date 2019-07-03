@@ -7,8 +7,8 @@
     android:layout_gravity="bottom"
     android:layoutDirection="ltr"
     android:orientation="vertical"
-    android:paddingTop="@dimen/first_keyline"
     android:paddingStart="@dimen/first_keyline"
+    android:paddingTop="@dimen/first_keyline"
     android:paddingEnd="@dimen/first_keyline"
     android:paddingBottom="8dp">
 
@@ -67,7 +67,7 @@
             style="@style/ExoMediaButton.Rewind"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="32dp"
             android:src="@drawable/vd_replay_30"
             android:tint="@color/color_primary"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -116,27 +116,25 @@
             style="@style/ExoMediaButton.FastForward"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="32dp"
             android:layout_marginEnd="16dp"
             android:src="@drawable/vd_forward_30"
             android:tint="@color/color_primary"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/speedButton"
+            app:layout_constraintEnd_toStartOf="@+id/playbackSpeedButton"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/playPauseButtonAnchorView"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/speedButton"
+            android:id="@+id/playbackSpeedButton"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="0dp"
-            tools:text="1x"
-            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="1x" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

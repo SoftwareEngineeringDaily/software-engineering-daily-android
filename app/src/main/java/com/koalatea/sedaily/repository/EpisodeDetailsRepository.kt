@@ -5,8 +5,8 @@ import com.koalatea.sedaily.database.AppDatabase
 import com.koalatea.sedaily.database.model.Download
 import com.koalatea.sedaily.database.model.Episode
 import com.koalatea.sedaily.database.model.EpisodeDetails
-import com.koalatea.sedaily.feature.downloader.DownloadManager
-import com.koalatea.sedaily.feature.downloader.DownloadStatus
+import com.koalatea.sedaily.downloader.DownloadManager
+import com.koalatea.sedaily.downloader.DownloadStatus
 import com.koalatea.sedaily.network.NetworkManager
 import com.koalatea.sedaily.network.Resource
 import com.koalatea.sedaily.network.SEDailyApi

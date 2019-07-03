@@ -24,7 +24,7 @@ val viewModelsModule = module {
 
     viewModel { AddRelatedLinkViewModel(get()) }
 
-    viewModel { PlayerViewModel(get()) }
+    viewModel { PlayerViewModel(get(), get()) }
 
     viewModel { BookmarksViewModel(get(), get()) }
 

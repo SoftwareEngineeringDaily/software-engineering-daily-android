@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="speed_options">
-        <item>1x</item>
-        <item>1.5x</item>
-        <item>2x</item>
+
+    <string-array name="playback_speed_options">
+        <item>1</item>
+        <item>1.2</item>
+        <item>1.4</item>
+        <item>1.6</item>
+        <item>1.8</item>
+        <item>2</item>
+        <item>2.5</item>
+        <item>3</item>
     </string-array>
+
 </resources>

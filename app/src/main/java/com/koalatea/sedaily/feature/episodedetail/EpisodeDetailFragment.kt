@@ -22,7 +22,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.koalatea.sedaily.R
 import com.koalatea.sedaily.database.model.Episode
 import com.koalatea.sedaily.database.model.EpisodeDetails
-import com.koalatea.sedaily.feature.downloader.DownloadStatus
+import com.koalatea.sedaily.downloader.DownloadStatus
 import com.koalatea.sedaily.feature.player.PlayerCallback
 import com.koalatea.sedaily.feature.player.PlayerStatus
 import com.koalatea.sedaily.koin.module.SEDAILY_URL

@@ -17,13 +17,17 @@ import com.koalatea.sedaily.database.model.Episode
 import com.koalatea.sedaily.database.model.EpisodeDetails
 import com.koalatea.sedaily.network.Resource
 import com.koalatea.sedaily.ui.fragment.BaseFragment
+import kotlinx.android.synthetic.main.audio_controller_view.*
 import kotlinx.android.synthetic.main.fragment_player.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.text.DecimalFormat
 
 private const val ARG_EPISODE_ID = "episode_id"
 private const val ARG_ONLY_SHOW_PLAYER = "auto_play"
 
-class PlayerFragment : BaseFragment() {
+private const val TAG_DIALOG_PLAYBACK_SPEED = "playback_speed_dialog"
+
+class PlayerFragment : BaseFragment(), PlaybackSpeedDialogFragment.OnPlaybackChangedListener {
 
     companion object {
         fun newInstance(episodeId: String, isOnlyShowPlayer: Boolean): PlayerFragment {
@@ -64,6 +68,10 @@ class PlayerFragment : BaseFragment() {
 
         isOnlyShowPlayer = arguments?.getBoolean(ARG_ONLY_SHOW_PLAYER) ?: false
 
+        playbackSpeedButton.setOnClickListener {
+            PlaybackSpeedDialogFragment.show(this, requireFragmentManager(), TAG_DIALOG_PLAYBACK_SPEED)
+        }
+
         viewModel.episodeDetailsResource.observe(this, Observer { resource ->
             when (resource) {
                 is Resource.Loading -> {} // Do nothing.
@@ -73,15 +81,27 @@ class PlayerFragment : BaseFragment() {
         })
 
         viewModel.playMediaLiveData.observe(this, Observer {
-            it.getContentIfNotHandled()?.let { episode ->
+            it.getContentIfNotHandled()?.let { pair ->
                 if (isOnlyShowPlayer) {
                     isOnlyShowPlayer = false
                 } else {
-                    AudioService.newIntent(requireContext(), episode).also { intent ->
+                    val episode = pair.first
+                    val playbackSpeed = pair.second
+
+                    AudioService.newIntent(requireContext(), episode, playbackSpeed).also { intent ->
                         // This service will get converted to foreground service using the PlayerNotificationManager notification Id.
                         activity?.startService(intent)
                     }
                 }
+            }
+        })
+
+        viewModel.playbackSpeedLiveData.observe(this, Observer {
+            it.getContentIfNotHandled()?.let { playbackSpeed ->
+                val formatter = DecimalFormat("0.#")
+                playbackSpeedButton.text = getString(R.string.playback_speed, formatter.format(playbackSpeed))
+
+                audioService?.changePlaybackSpeed(playbackSpeed)
             }
         })
 
@@ -105,6 +125,10 @@ class PlayerFragment : BaseFragment() {
         audioService = null
 
         super.onStop()
+    }
+
+    override fun onPlaybackSpeedChanged(playbackSpeed: Float) {
+        viewModel.changePlaybackSpeed(playbackSpeed)
     }
 
     fun play(episode: Episode) = viewModel.play(episode._id)

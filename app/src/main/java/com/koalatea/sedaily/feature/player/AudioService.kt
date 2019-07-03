@@ -54,6 +54,7 @@ private const val ARG_EPISODE_ID = "episode_id"
 private const val ARG_URI = "uri_string"
 private const val ARG_TITLE = "title"
 private const val ARG_START_POSITION = "start_position"
+private const val ARG_PLAYBACK_SPEED = "playback_speed"
 
 class AudioService : LifecycleService() {
 
@@ -65,7 +66,7 @@ class AudioService : LifecycleService() {
     companion object {
 
         @MainThread
-        fun newIntent(context: Context, episodeDetails: EpisodeDetails? = null) = Intent(context, AudioService::class.java).apply {
+        fun newIntent(context: Context, episodeDetails: EpisodeDetails? = null, playbackSpeed: Float = 1f) = Intent(context, AudioService::class.java).apply {
             episodeDetails?.let {
                 val episode = episodeDetails.episode
 
@@ -73,6 +74,7 @@ class AudioService : LifecycleService() {
                 episode.titleString?.let { title -> putExtra(ARG_TITLE, title) }
                 episode.uriString?.let{ uriString -> putExtra(ARG_URI, Uri.parse(uriString)) }
                 putExtra(ARG_START_POSITION, episodeDetails.listened?.startPosition)
+                putExtra(ARG_PLAYBACK_SPEED, playbackSpeed)
             }
         }
 
@@ -85,6 +87,7 @@ class AudioService : LifecycleService() {
     var episodeId: String? = null
         private set
 
+    // FIXME :: Make it private
     lateinit var exoPlayer: SimpleExoPlayer
         private set
 
@@ -136,7 +139,7 @@ class AudioService : LifecycleService() {
     }
 
     @MainThread
-    fun play(uri: Uri, startPosition: Long) {
+    fun play(uri: Uri, startPosition: Long, playbackSpeed: Float? = null) {
         val userAgent = Util.getUserAgent(applicationContext, BuildConfig.APPLICATION_ID)
         val mediaSource = ExtractorMediaSource(
                 uri,
@@ -150,11 +153,15 @@ class AudioService : LifecycleService() {
             exoPlayer.seekTo(startPosition)
         }
 
-//        // Variable speed playback https://medium.com/google-exoplayer/variable-speed-playback-with-exoplayer-e6e6a71e0343
-////        exoPlayer.setPlaybackParameters
+        playbackSpeed?.let { changePlaybackSpeed(playbackSpeed) }
 
         exoPlayer.prepare(mediaSource, !haveStartPosition, false)
         exoPlayer.playWhenReady = true
+    }
+
+    @MainThread
+    fun changePlaybackSpeed(playbackSpeed: Float) {
+        exoPlayer.playbackParameters = PlaybackParameters(playbackSpeed)
     }
 
     @MainThread
@@ -240,8 +247,9 @@ class AudioService : LifecycleService() {
         intent?.let {
             intent.getParcelableExtra<Uri>(ARG_URI)?.also { uri ->
                 val startPosition = intent.getLongExtra(ARG_START_POSITION, C.POSITION_UNSET.toLong())
+                val playbackSpeed = intent.getFloatExtra(ARG_PLAYBACK_SPEED, 1f)
 
-                play(uri, startPosition)
+                play(uri, startPosition, playbackSpeed)
             }
         }
     }

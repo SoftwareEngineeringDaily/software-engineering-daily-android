@@ -1,4 +1,4 @@
-package com.koalatea.sedaily.feature.downloader
+package com.koalatea.sedaily.downloader
 
 import android.app.DownloadManager
 import android.content.Context

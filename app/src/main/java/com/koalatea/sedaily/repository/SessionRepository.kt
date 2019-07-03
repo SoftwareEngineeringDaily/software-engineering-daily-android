@@ -2,18 +2,18 @@ package com.koalatea.sedaily.repository
 
 import android.content.SharedPreferences
 
-private const val TOKEN_KEY = "token-key"
+private const val KEY_TOKEN = "token-key"
 
 class SessionRepository(
-        private val preferences: SharedPreferences
+        private val sharedPreferences: SharedPreferences
 ) {
 
-    var token: String? = preferences.getString(TOKEN_KEY, "")
+    var token: String? = sharedPreferences.getString(KEY_TOKEN, "")
         set(value) {
             field = value
 
-            val editor = preferences.edit()
-            editor.putString(TOKEN_KEY, token)
+            val editor = sharedPreferences.edit()
+            editor.putString(KEY_TOKEN, value)
             editor.apply()
         }
 
