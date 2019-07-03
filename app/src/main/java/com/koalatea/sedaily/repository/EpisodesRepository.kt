@@ -46,8 +46,7 @@ class EpisodesRepository(
         return PagedResult(
                 pagedList = livePagedList,
                 networkState = boundaryCallback.networkState,
-                refresh = { boundaryCallback.refresh() },
-                refreshState = boundaryCallback.refreshState
+                refresh = { boundaryCallback.refresh() }
         )
     }
 

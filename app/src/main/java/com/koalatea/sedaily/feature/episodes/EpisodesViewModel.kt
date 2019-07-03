@@ -27,9 +27,7 @@ class EpisodesViewModel internal constructor(
     }
 
     val episodesPagedList: LiveData<PagedList<EpisodeDetails>> = Transformations.switchMap(episodesPagedResult) { it.pagedList }
-    // FIXME :: This can be delivered more than once.
-    val networkState: LiveData<NetworkState> = Transformations.switchMap(episodesPagedResult) { it.networkState }
-    val refreshState: LiveData<NetworkState> = Transformations.switchMap(episodesPagedResult) { it.refreshState }
+    val networkState: LiveData<Event<NetworkState>> = Transformations.switchMap(episodesPagedResult) { it.networkState }
 
     private val _navigateToLogin = MutableLiveData<Event<String>>()
     val navigateToLogin: LiveData<Event<String>>

@@ -9,6 +9,7 @@ import com.koalatea.sedaily.model.SearchQuery
 import com.koalatea.sedaily.network.NetworkManager
 import com.koalatea.sedaily.network.NetworkState
 import com.koalatea.sedaily.network.SEDailyApi
+import com.koalatea.sedaily.util.Event
 import com.koalatea.sedaily.util.safeApiCall
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -23,8 +24,7 @@ class EpisodesBoundaryCallback(
         private val networkPageSize: Int)
     : PagedList.BoundaryCallback<EpisodeDetails>() {
 
-    val networkState = MutableLiveData<NetworkState>()
-    val refreshState = MutableLiveData<NetworkState>()
+    val networkState = MutableLiveData<Event<NetworkState>>()
 
     private var isRequestInProgress = false
 
@@ -54,10 +54,7 @@ class EpisodesBoundaryCallback(
 
         GlobalScope.launch(Dispatchers.Main) {
             isRequestInProgress = true
-            networkState.value = NetworkState.Loading
-            if (createdAtBefore == null) {// First request.
-                refreshState.value = NetworkState.Loading
-            }
+            networkState.value = Event(NetworkState.Loading)
 
             val response = safeApiCall {
                 api.getEpisodesAsync(
@@ -71,17 +68,11 @@ class EpisodesBoundaryCallback(
             if (response?.isSuccessful == true) {
                 callback(searchQuery, response.body())
 
-                networkState.value = NetworkState.Loaded(response.body()?.size ?: 0)
-                if (createdAtBefore == null) {
-                    refreshState.value = NetworkState.Loaded(response.body()?.size ?: 0)
-                }
+                networkState.value = Event(NetworkState.Loaded(response.body()?.size ?: 0))
             } else {
                 val error = NetworkState.Error(response?.errorBody()?.string(), networkManager.isConnected)
 
-                networkState.value = error
-                if (createdAtBefore == null) {
-                    refreshState.value = error
-                }
+                networkState.value = Event(error)
             }
 
             isRequestInProgress = false

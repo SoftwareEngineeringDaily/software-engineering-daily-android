@@ -89,21 +89,21 @@ class EpisodesFragment : BaseFragment() {
             epoxyRecyclerView.requestModelBuild()
         })
 
-        viewModel.networkState.observe(this, Observer { networkState ->
-            when (networkState) {
-                is NetworkState.Error -> {
-                    if (!networkState.isConnected) {
-                        acknowledgeConnectionError()
-                    } else {
-                        networkState.message?.let { acknowledgeError(it) } ?: acknowledgeGenericError()
-                    }
-                }
-                else -> { }// Ignore
-            }
-        })
+        viewModel.networkState.observe(this, Observer {
+            swipeRefreshLayout.isRefreshing = it.peekContent() == NetworkState.Loading
 
-        viewModel.refreshState.observe(this, Observer {
-            swipeRefreshLayout.isRefreshing = it == NetworkState.Loading
+            it.getContentIfNotHandled()?.let { networkState ->
+                when (networkState) {
+                    is NetworkState.Error -> {
+                        if (!networkState.isConnected) {
+                            acknowledgeConnectionError()
+                        } else {
+                            networkState.message?.let { acknowledgeError(it) } ?: acknowledgeGenericError()
+                        }
+                    }
+                    else -> { }// Ignore
+                }
+            }
         })
 
         viewModel.navigateToLogin.observe(this, Observer {
