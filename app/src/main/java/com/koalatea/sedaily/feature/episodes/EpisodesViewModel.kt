@@ -4,6 +4,7 @@ import androidx.annotation.MainThread
 import androidx.lifecycle.*
 import androidx.paging.PagedList
 import com.koalatea.sedaily.database.model.Episode
+import com.koalatea.sedaily.database.model.EpisodeDetails
 import com.koalatea.sedaily.model.SearchQuery
 import com.koalatea.sedaily.network.NetworkState
 import com.koalatea.sedaily.network.PagedResult
@@ -21,11 +22,11 @@ class EpisodesViewModel internal constructor(
     var doNotCache: Boolean = false
 
     private val searchQueryLiveData = MutableLiveData<SearchQuery>()
-    private val episodesPagedResult: LiveData<PagedResult<Episode>> = Transformations.map(searchQueryLiveData) { searchQuery ->
+    private val episodesPagedResult: LiveData<PagedResult<EpisodeDetails>> = Transformations.map(searchQueryLiveData) { searchQuery ->
         episodesRepository.fetchEpisodes(searchQuery)
     }
 
-    val episodesPagedList: LiveData<PagedList<Episode>> = Transformations.switchMap(episodesPagedResult) { it.pagedList }
+    val episodesPagedList: LiveData<PagedList<EpisodeDetails>> = Transformations.switchMap(episodesPagedResult) { it.pagedList }
     // FIXME :: This can be delivered more than once.
     val networkState: LiveData<NetworkState> = Transformations.switchMap(episodesPagedResult) { it.networkState }
     val refreshState: LiveData<NetworkState> = Transformations.switchMap(episodesPagedResult) { it.refreshState }

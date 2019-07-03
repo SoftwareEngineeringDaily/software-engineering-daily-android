@@ -85,7 +85,6 @@ class EpisodesFragment : BaseFragment() {
         }
 
         viewModel.episodesPagedList.observe(this, Observer { results ->
-//            showEmptyList(it?.size == 0)
             episodesEpoxyController.submitList(results)
             epoxyRecyclerView.requestModelBuild()
         })
@@ -105,15 +104,6 @@ class EpisodesFragment : BaseFragment() {
 
         viewModel.refreshState.observe(this, Observer {
             swipeRefreshLayout.isRefreshing = it == NetworkState.Loading
-
-            when (it) {
-                is NetworkState.Loaded -> {
-                    if (it.itemsCount == 0) {
-                        // TODO :: Handle empty state
-                    }
-                }
-                else -> { }// Ignore
-            }
         })
 
         viewModel.navigateToLogin.observe(this, Observer {

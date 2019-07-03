@@ -4,6 +4,7 @@ import androidx.annotation.MainThread
 import androidx.paging.toLiveData
 import com.koalatea.sedaily.database.AppDatabase
 import com.koalatea.sedaily.database.model.Episode
+import com.koalatea.sedaily.database.model.EpisodeDetails
 import com.koalatea.sedaily.feature.downloader.DownloadManager
 import com.koalatea.sedaily.feature.episodes.paging.EpisodesBoundaryCallback
 import com.koalatea.sedaily.model.SearchQuery
@@ -24,7 +25,7 @@ class EpisodesRepository(
 ) {
 
     @MainThread
-    fun fetchEpisodes(searchQuery: SearchQuery, pageSize: Int = 20): PagedResult<Episode> {
+    fun fetchEpisodes(searchQuery: SearchQuery, pageSize: Int = 20): PagedResult<EpisodeDetails> {
         val networkPageSize = pageSize * 2
 
         val boundaryCallback = EpisodesBoundaryCallback(

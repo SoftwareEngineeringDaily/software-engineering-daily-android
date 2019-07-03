@@ -1,7 +1,5 @@
 package com.koalatea.sedaily.feature.relatedlinks
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import androidx.lifecycle.Observer
@@ -20,7 +18,6 @@ import com.koalatea.sedaily.util.openUrl
 import com.koalatea.sedaily.util.supportActionBar
 import kotlinx.android.synthetic.main.fragment_related_links.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import timber.log.Timber
 
 private const val TAG_DIALOG_PROMPT_LOGIN = "prompt_login_dialog"
 private const val TAG_DIALOG_ADD_RELATED_LINK = "add_related_link"

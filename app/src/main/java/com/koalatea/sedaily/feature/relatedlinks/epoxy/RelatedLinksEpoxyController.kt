@@ -3,7 +3,6 @@ package com.koalatea.sedaily.feature.relatedlinks.epoxy
 import android.content.res.Resources
 import com.airbnb.epoxy.TypedEpoxyController
 import com.koalatea.sedaily.R
-import com.koalatea.sedaily.database.model.Episode
 import com.koalatea.sedaily.model.RelatedLink
 
 class RelatedLinksEpoxyController(

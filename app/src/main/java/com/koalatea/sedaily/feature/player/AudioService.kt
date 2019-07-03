@@ -14,6 +14,7 @@ import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.annotation.DrawableRes
+import androidx.annotation.MainThread
 import androidx.annotation.Nullable
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
@@ -35,14 +36,19 @@ import com.koalatea.sedaily.BuildConfig
 import com.koalatea.sedaily.MainActivity
 import com.koalatea.sedaily.R
 import com.koalatea.sedaily.database.AppDatabase
-import com.koalatea.sedaily.database.model.Episode
+import com.koalatea.sedaily.database.model.EpisodeDetails
 import com.koalatea.sedaily.database.model.Listened
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
+import java.util.*
 
 private const val PLAYBACK_CHANNEL_ID = "playback_channel"
 private const val PLAYBACK_NOTIFICATION_ID = 1
 private const val MEDIA_SESSION_TAG = "sed_audio"
+
+private const val PLAYBACK_TIMER_DELAY = 5 * 1000L
 
 private const val ARG_EPISODE_ID = "episode_id"
 private const val ARG_URI = "uri_string"
@@ -58,18 +64,23 @@ class AudioService : LifecycleService() {
 
     companion object {
 
-        fun newIntent(context: Context, episode: Episode? = null) = Intent(context, AudioService::class.java).apply {
-            episode?.let {
+        @MainThread
+        fun newIntent(context: Context, episodeDetails: EpisodeDetails? = null) = Intent(context, AudioService::class.java).apply {
+            episodeDetails?.let {
+                val episode = episodeDetails.episode
+
                 putExtra(ARG_EPISODE_ID, episode._id)
                 episode.titleString?.let { title -> putExtra(ARG_TITLE, title) }
                 episode.uriString?.let{ uriString -> putExtra(ARG_URI, Uri.parse(uriString)) }
-                putExtra(ARG_START_POSITION, episode.startPosition)
+                putExtra(ARG_START_POSITION, episodeDetails.listened?.startPosition)
             }
         }
 
     }
 
     private val appDatabase: AppDatabase by inject()
+
+    private var playbackTimer: Timer? = null
 
     var episodeId: String? = null
         private set
@@ -113,7 +124,7 @@ class AudioService : LifecycleService() {
     }
 
     override fun onDestroy() {
-        saveLastListeningPosition()
+        cancelPlaybackMonitor()
 
         mediaSession?.release()
         mediaSessionConnector?.setPlayer(null)
@@ -124,6 +135,7 @@ class AudioService : LifecycleService() {
         super.onDestroy()
     }
 
+    @MainThread
     fun play(uri: Uri, startPosition: Long) {
         val userAgent = Util.getUserAgent(applicationContext, BuildConfig.APPLICATION_ID)
         val mediaSource = ExtractorMediaSource(
@@ -138,13 +150,14 @@ class AudioService : LifecycleService() {
             exoPlayer.seekTo(startPosition)
         }
 
-        exoPlayer.prepare(mediaSource, !haveStartPosition, false)
-        exoPlayer.playWhenReady = true
-
 //        // Variable speed playback https://medium.com/google-exoplayer/variable-speed-playback-with-exoplayer-e6e6a71e0343
 ////        exoPlayer.setPlaybackParameters
+
+        exoPlayer.prepare(mediaSource, !haveStartPosition, false)
+        exoPlayer.playWhenReady = true
     }
 
+    @MainThread
     private fun handleIntent(intent: Intent?) {
         episodeId = intent?.getStringExtra(ARG_EPISODE_ID)
 
@@ -233,10 +246,44 @@ class AudioService : LifecycleService() {
         }
     }
 
+    @MainThread
     private fun saveLastListeningPosition() = lifecycleScope.launch {
-            episodeId?.let { appDatabase.listenedDao().insert(Listened(it, exoPlayer.contentPosition, exoPlayer.duration)) }
-        }
+        episodeId?.let { appDatabase.listenedDao().insert(Listened(it, exoPlayer.contentPosition, exoPlayer.duration)) }
+    }
 
+    @MainThread
+    private fun monitorPlaybackProgress() {
+        if (playbackTimer == null) {
+            playbackTimer = Timer()
+
+            playbackTimer?.scheduleAtFixedRate(
+                    object : TimerTask() {
+                        override fun run() {
+                            saveLastListeningPosition()
+
+                            lifecycleScope.launch {
+                                withContext(Dispatchers.Main) {
+                                    if (exoPlayer.duration - exoPlayer.contentPosition <= PLAYBACK_TIMER_DELAY) {
+                                        playbackTimer?.cancel()
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    PLAYBACK_TIMER_DELAY,
+                    PLAYBACK_TIMER_DELAY)
+        }
+    }
+
+    @MainThread
+    private fun cancelPlaybackMonitor() {
+        saveLastListeningPosition()
+
+        playbackTimer?.cancel()
+        playbackTimer = null
+    }
+
+    @MainThread
     private fun getBitmapFromVectorDrawable(context: Context, @DrawableRes drawableId: Int): Bitmap? {
         return ContextCompat.getDrawable(context, drawableId)?.let {
             val drawable = DrawableCompat.wrap(it).mutate()
@@ -256,10 +303,12 @@ class AudioService : LifecycleService() {
             if (playbackState == Player.STATE_READY) {
                 if (exoPlayer.playWhenReady) {
                     episodeId?.let { _playerStatusLiveData.value = PlayerStatus.Playing(it) }
+
+                    monitorPlaybackProgress()
                 } else {// Paused
                     episodeId?.let { _playerStatusLiveData.value = PlayerStatus.Paused(it) }
 
-                    saveLastListeningPosition()
+                    cancelPlaybackMonitor()
                 }
             } else {
                 episodeId?.let { _playerStatusLiveData.value = PlayerStatus.Other(it) }

@@ -30,6 +30,7 @@ data class Episode(
         val transcriptURL: String?
 ) : Parcelable {
 
+    @Suppress("SuspiciousVarProperty")
     @field:PrimaryKey
     var uniqueId: String = _id
         get() = _id + searchQueryHashCode?.toString()
@@ -44,12 +45,6 @@ data class Episode(
 
     @Ignore
     var uriString: String? = null
-
-    @Ignore
-    var startPosition: Long = 0L
-
-    @Ignore
-    var total: Long? = null
 
     val titleString: String?
         get() = title?.rendered?.htmlToText()

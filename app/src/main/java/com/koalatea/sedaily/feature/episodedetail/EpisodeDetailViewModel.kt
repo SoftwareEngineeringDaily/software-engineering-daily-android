@@ -3,6 +3,7 @@ package com.koalatea.sedaily.feature.episodedetail
 import androidx.annotation.MainThread
 import androidx.lifecycle.*
 import com.koalatea.sedaily.database.model.Episode
+import com.koalatea.sedaily.database.model.EpisodeDetails
 import com.koalatea.sedaily.feature.downloader.DownloadStatus
 import com.koalatea.sedaily.feature.episodedetail.event.BookmarkEvent
 import com.koalatea.sedaily.feature.episodedetail.event.UpvoteEvent
@@ -22,13 +23,13 @@ class EpisodeDetailViewModel internal constructor(
 ) : ViewModel() {
 
     private val episodeLiveData = MutableLiveData<Episode>()
-    val episodeDetailsResource: LiveData<Resource<Episode>> = Transformations.switchMap(episodeLiveData) { cachedEpisode ->
+    val episodeDetailsResource: LiveData<Resource<EpisodeDetails>> = Transformations.switchMap(episodeLiveData) { cachedEpisode ->
         liveData {
             emit(Resource.Loading)
 
             when (val resource = episodeDetailsRepository.fetchEpisodeDetails(cachedEpisode._id, cachedEpisode)) {
-                is Resource.Success<Episode> -> {
-                    val episode = resource.data
+                is Resource.Success<EpisodeDetails> -> {
+                    val episode = resource.data.episode
                     episode.downloadedId?.let { downloadId ->
                         val downloadStatus = episodeDetailsRepository.getDownloadStatus(downloadId)
                         if (downloadStatus is DownloadStatus.Downloading) {
@@ -42,8 +43,6 @@ class EpisodeDetailViewModel internal constructor(
                             ?: false, max(episode.score ?: 0, 0)), userAction = false))
                     _bookmarkLiveData.postValue(Event(BookmarkEvent(episode.bookmarked
                             ?: false), userAction = false))
-
-                    // FIXME :: Update update play/pause livedata
 
                     emit(resource)
                 }
@@ -71,7 +70,7 @@ class EpisodeDetailViewModel internal constructor(
         get() = _bookmarkLiveData
 
     val episode: Episode?
-        get() = (episodeDetailsResource.value as? Resource.Success<Episode>)?.data
+        get() = (episodeDetailsResource.value as? Resource.Success<EpisodeDetails>)?.data?.episode
 
     @MainThread
     fun fetchEpisodeDetails(episode: Episode?) {

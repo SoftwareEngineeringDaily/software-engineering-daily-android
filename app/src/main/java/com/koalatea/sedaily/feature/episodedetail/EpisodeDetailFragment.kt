@@ -21,6 +21,7 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
 import com.koalatea.sedaily.R
 import com.koalatea.sedaily.database.model.Episode
+import com.koalatea.sedaily.database.model.EpisodeDetails
 import com.koalatea.sedaily.feature.downloader.DownloadStatus
 import com.koalatea.sedaily.feature.player.PlayerCallback
 import com.koalatea.sedaily.feature.player.PlayerStatus
@@ -89,7 +90,7 @@ class EpisodeDetailFragment : BaseFragment() {
         viewModel.episodeDetailsResource.observe(this, Observer { resource ->
             when (resource) {
                 is Resource.Loading -> showLoading()
-                is Resource.Success<Episode> -> renderEpisode(resource.data)
+                is Resource.Success<EpisodeDetails> -> renderEpisodeDetails(resource.data)
                 is Resource.Error -> if (resource.isConnected) acknowledgeGenericError() else acknowledgeConnectionError()
             }
         })
@@ -199,7 +200,9 @@ class EpisodeDetailFragment : BaseFragment() {
         progressBar.visibility = View.VISIBLE
     }
 
-    private fun renderEpisode(episode: Episode) {
+    private fun renderEpisodeDetails(episodeDetails: EpisodeDetails) {
+        val episode = episodeDetails.episode
+
         renderTags(episode)
 
         supportActionBar?.title = episode.titleString

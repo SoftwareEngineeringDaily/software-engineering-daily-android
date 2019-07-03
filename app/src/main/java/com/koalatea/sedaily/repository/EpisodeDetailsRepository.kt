@@ -4,6 +4,7 @@ import androidx.annotation.MainThread
 import com.koalatea.sedaily.database.AppDatabase
 import com.koalatea.sedaily.database.model.Download
 import com.koalatea.sedaily.database.model.Episode
+import com.koalatea.sedaily.database.model.EpisodeDetails
 import com.koalatea.sedaily.feature.downloader.DownloadManager
 import com.koalatea.sedaily.feature.downloader.DownloadStatus
 import com.koalatea.sedaily.network.NetworkManager
@@ -27,33 +28,31 @@ class EpisodeDetailsRepository constructor(
         val episode = response?.body()
         if (response?.isSuccessful == true && episode != null) {
             @Suppress("NAME_SHADOWING")
-            val cachedEpisode = cachedEpisode ?: db.episodeDao().findById(episodeId)
+            val cachedEpisode = cachedEpisode ?: db.episodeDao().findById(episodeId)?.episode
 
             // In case that was requested before upvote or bookmark calls are done.
-            Resource.Success(episode.copy(
-                    upvoted = cachedEpisode?.upvoted ?: episode.upvoted,
-                    score = cachedEpisode?.score,
-                    bookmarked = cachedEpisode?.bookmarked ?: episode.bookmarked).apply {
-                downloadedId = db.downloadDao().findById(episodeId)?.downloadId
+            Resource.Success(EpisodeDetails(
+                    episode = episode
+                            .copy(
+                                    upvoted = cachedEpisode?.upvoted ?: episode.upvoted,
+                                    score = cachedEpisode?.score,
+                                    bookmarked = cachedEpisode?.bookmarked ?: episode.bookmarked)
+                            .apply {
+                                downloadedId = db.downloadDao().findById(episodeId)?.downloadId
 
-                // Get local uriString if file was already download downloaded otherwise use remote url.
-                downloadedId?.let {
-                    val downloadStatus = getDownloadStatus(it)
-                    uriString = if (downloadStatus is DownloadStatus.Downloaded) {
-                        downloadStatus.uriString
-                    } else {
-                        episode.httpsMp3Url
-                    }
-                } ?: run {
-                    uriString = episode.httpsMp3Url
-                }
-
-                // Continue from where the user left off.
-                db.listenedDao().findById(episodeId)?.let {
-                    startPosition = it.startPosition
-                    total = it.total
-                }
-            })
+                                // Get local uriString if file was already download downloaded otherwise use remote url.
+                                downloadedId?.let {
+                                    val downloadStatus = getDownloadStatus(it)
+                                    uriString = if (downloadStatus is DownloadStatus.Downloaded) {
+                                        downloadStatus.uriString
+                                    } else {
+                                        episode.httpsMp3Url
+                                    }
+                                } ?: run {
+                                    uriString = episode.httpsMp3Url
+                                }
+                            },
+                    listened = db.listenedDao().findById(episodeId)))
         } else {
             Resource.Error(response?.errorBody().toException(), networkManager.isConnected)
         }

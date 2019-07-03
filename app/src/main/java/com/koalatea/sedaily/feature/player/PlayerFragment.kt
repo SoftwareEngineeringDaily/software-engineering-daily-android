@@ -14,6 +14,7 @@ import androidx.lifecycle.Observer
 import com.google.android.exoplayer2.ui.PlayerView
 import com.koalatea.sedaily.R
 import com.koalatea.sedaily.database.model.Episode
+import com.koalatea.sedaily.database.model.EpisodeDetails
 import com.koalatea.sedaily.network.Resource
 import com.koalatea.sedaily.ui.fragment.BaseFragment
 import kotlinx.android.synthetic.main.fragment_player.*
@@ -66,7 +67,7 @@ class PlayerFragment : BaseFragment() {
         viewModel.episodeDetailsResource.observe(this, Observer { resource ->
             when (resource) {
                 is Resource.Loading -> {} // Do nothing.
-                is Resource.Success<Episode> -> renderContent(resource.data)
+                is Resource.Success<EpisodeDetails> -> renderContent(resource.data)
                 is Resource.Error -> acknowledgeGenericError()
             }
         })
@@ -112,8 +113,8 @@ class PlayerFragment : BaseFragment() {
         activity?.stopService(Intent(context, AudioService::class.java))
     }
 
-    private fun renderContent(episode: Episode) {
-        playerView.findViewById<TextView>(R.id.titleTextView).text = episode.titleString ?: getString(R.string.loading_dots)
+    private fun renderContent(episodeDetails: EpisodeDetails) {
+        playerView.findViewById<TextView>(R.id.titleTextView).text = episodeDetails.episode.titleString ?: getString(R.string.loading_dots)
     }
 
 }

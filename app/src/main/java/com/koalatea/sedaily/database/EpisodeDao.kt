@@ -6,21 +6,24 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.koalatea.sedaily.database.model.Episode
+import com.koalatea.sedaily.database.model.EpisodeDetails
 
 @Dao
 interface EpisodeDao {
 
-    @Query("SELECT * FROM episode ORDER BY indexInResponse ASC")
-    suspend fun getEpisodes(): List<Episode>
-
-    @Query("SELECT * FROM episode WHERE searchQueryHashCode = :searchQueryHashCode ORDER BY indexInResponse ASC")
-    fun getEpisodesBySearchQuery(searchQueryHashCode: Int) : DataSource.Factory<Int, Episode>
+    @Query("SELECT * FROM episode " +
+            "LEFT JOIN listened ON listened.postId = episode._id " +
+            "WHERE episode.searchQueryHashCode = :searchQueryHashCode " +
+            "ORDER BY episode.indexInResponse ASC")
+    fun getEpisodesBySearchQuery(searchQueryHashCode: Int): DataSource.Factory<Int, EpisodeDetails>
 
     @Query("SELECT MAX(indexInResponse) + 1 FROM episode WHERE searchQueryHashCode = :searchQueryHashCode")
-    fun getNextIndexBySearchQuery(searchQueryHashCode: Int) : Int
+    fun getNextIndexBySearchQuery(searchQueryHashCode: Int): Int
 
-    @Query("SELECT * FROM episode WHERE _id = :id LIMIT 1")
-    suspend fun findById(id: String): Episode?
+    @Query("SELECT * FROM episode " +
+            "LEFT JOIN listened ON listened.postId = episode._id " +
+            "WHERE episode._id = :id LIMIT 1")
+    suspend fun findById(id: String): EpisodeDetails?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(episodes: List<Episode>)
@@ -33,7 +36,7 @@ interface EpisodeDao {
 
     @Query("DELETE FROM episode WHERE searchQueryHashCode = :searchQueryHashCode")
     fun deleteBySearchQuery(searchQueryHashCode: Int)
-    
+
     @Query("DELETE FROM episode")
     fun clearTable()
 
