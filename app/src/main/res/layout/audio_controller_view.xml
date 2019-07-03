@@ -7,7 +7,10 @@
     android:layout_gravity="bottom"
     android:layoutDirection="ltr"
     android:orientation="vertical"
-    android:padding="@dimen/first_keyline">
+    android:paddingTop="@dimen/first_keyline"
+    android:paddingStart="@dimen/first_keyline"
+    android:paddingEnd="@dimen/first_keyline"
+    android:paddingBottom="8dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -54,36 +57,87 @@
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
         tools:text="Episode Title" />
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
 
         <ImageButton
             android:id="@id/exo_rew"
             style="@style/ExoMediaButton.Rewind"
-            android:tint="@color/color_primary" />
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/vd_replay_30"
+            android:tint="@color/color_primary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/playPauseButtonAnchorView"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/playPauseButtonAnchorView"
+            android:layout_width="@dimen/play_button_width"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
             android:id="@id/exo_play"
             style="@style/ExoMediaButton.Play"
-            android:layout_width="128dp"
-            android:layout_height="128dp"
-            android:tint="@color/color_primary" />
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:src="@drawable/vd_play_circle_outline"
+            android:tint="@color/color_primary"
+            app:layout_constraintBottom_toBottomOf="@+id/playPauseButtonAnchorView"
+            app:layout_constraintEnd_toEndOf="@+id/playPauseButtonAnchorView"
+            app:layout_constraintStart_toStartOf="@+id/playPauseButtonAnchorView"
+            app:layout_constraintTop_toTopOf="@+id/playPauseButtonAnchorView" />
 
         <ImageButton
             android:id="@id/exo_pause"
             style="@style/ExoMediaButton.Pause"
-            android:layout_width="128dp"
-            android:layout_height="128dp"
-            android:tint="@color/color_primary" />
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:src="@drawable/vd_pause_circle_outline"
+            android:tint="@color/color_primary"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/playPauseButtonAnchorView"
+            app:layout_constraintEnd_toEndOf="@+id/playPauseButtonAnchorView"
+            app:layout_constraintStart_toStartOf="@+id/playPauseButtonAnchorView"
+            app:layout_constraintTop_toTopOf="@+id/playPauseButtonAnchorView"
+            tools:visibility="visible" />
 
         <ImageButton
             android:id="@id/exo_ffwd"
             style="@style/ExoMediaButton.FastForward"
-            android:tint="@color/color_primary" />
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/vd_forward_30"
+            android:tint="@color/color_primary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/speedButton"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/playPauseButtonAnchorView"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </LinearLayout>
+        <Button
+            android:id="@+id/speedButton"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="0dp"
+            tools:text="1x"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

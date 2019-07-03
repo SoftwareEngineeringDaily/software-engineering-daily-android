@@ -10,6 +10,7 @@
     <dimen name="image_corner_radius">8dp</dimen>
 
     <dimen name="player_height">192dp</dimen>
+    <dimen name="play_button_width">54dp</dimen>
 
     <dimen name="comment_divider_left">80dp</dimen>
 
