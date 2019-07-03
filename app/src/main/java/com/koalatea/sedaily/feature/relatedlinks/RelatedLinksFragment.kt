@@ -74,7 +74,11 @@ class RelatedLinksFragment : BaseFragment(), AddRelatedLinkDialogFragment.OnAddR
                     }
                 }
                 is Resource.Success -> renderRelatedLinks(resource.data)
-                is Resource.Error -> if (resource.isConnected) acknowledgeGenericError() else acknowledgeConnectionError()
+                is Resource.Error -> {
+                    hideLoading()
+
+                    if (resource.isConnected) acknowledgeGenericError() else acknowledgeConnectionError()
+                }
             }
         })
 
@@ -129,6 +133,10 @@ class RelatedLinksFragment : BaseFragment(), AddRelatedLinkDialogFragment.OnAddR
         epoxyRecyclerView.visibility = View.GONE
 
         progressBar.visibility = View.VISIBLE
+    }
+
+    private fun hideLoading() {
+        progressBar.visibility = View.GONE
     }
 
     private fun showPromptLoginDialog() {

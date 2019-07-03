@@ -119,7 +119,11 @@ class CommentsFragment : BaseFragment() {
                             acknowledgeConnectionError()
                         }
                     }
-                    is Resource.Error -> if (resource.isConnected) acknowledgeGenericError() else acknowledgeConnectionError()
+                    is Resource.Error -> {
+                        hideLoading()
+
+                        if (resource.isConnected) acknowledgeGenericError() else acknowledgeConnectionError()
+                    }
                 }
             }
         })
@@ -132,6 +136,10 @@ class CommentsFragment : BaseFragment() {
         emptyStateContainer.visibility = View.GONE
 
         progressBar.visibility = View.VISIBLE
+    }
+
+    private fun hideLoading() {
+        progressBar.visibility = View.GONE
     }
 
     private fun showNoCommentsEmptyState() {

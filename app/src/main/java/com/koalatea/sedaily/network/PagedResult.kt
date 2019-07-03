@@ -3,15 +3,16 @@ package com.koalatea.sedaily.network
 import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
 
+// Inspired by https://github.com/googlesamples/android-architecture-components/blob/corotuine-network-bound-resource/PagingWithNetworkSample/app/src/main/java/com/android/example/paging/pagingwithnetwork/reddit/repository/Listing.kt
 data class PagedResult<T>(
-        // the LiveData of paged lists for the UI to observe
+        // The LiveData of paged lists for the UI to observe
         val pagedList: LiveData<PagedList<T>>,
-        // represents the network request status to show to the user
+        // Represents the network request status to show to the user
         val networkState: LiveData<NetworkState>,
-        // represents the refresh status to show to the user. Separate from networkState, this
+        // Represents the refresh status to show to the user. Separate from networkState, this
         // value is importantly only when refresh is requested.
         val refreshState: LiveData<NetworkState>,
-        // refreshes the whole data and fetches it from scratch.
+        // Refreshes the whole data and fetches it from scratch.
         val refresh: () -> Unit
 )
 

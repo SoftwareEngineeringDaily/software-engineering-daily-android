@@ -42,7 +42,11 @@ class ProfileFragment : BaseFragment() {
                 is Resource.Loading -> showLoading()
                 is Resource.RequireLogin -> showLoginEmptyState()
                 is Resource.Success<Profile> -> renderProfile(resource.data)
-                is Resource.Error -> if (resource.isConnected) acknowledgeGenericError() else acknowledgeConnectionError()
+                is Resource.Error -> {
+                    hideLoading()
+
+                    if (resource.isConnected) acknowledgeGenericError() else acknowledgeConnectionError()
+                }
             }
         })
 
@@ -79,6 +83,10 @@ class ProfileFragment : BaseFragment() {
         profileDetailsContainer.visibility = View.GONE
 
         progressBar.visibility = View.VISIBLE
+    }
+
+    private fun hideLoading() {
+        progressBar.visibility = View.GONE
     }
 
     private fun showLoginEmptyState() {

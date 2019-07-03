@@ -91,7 +91,11 @@ class EpisodeDetailFragment : BaseFragment() {
             when (resource) {
                 is Resource.Loading -> showLoading()
                 is Resource.Success<EpisodeDetails> -> renderEpisodeDetails(resource.data)
-                is Resource.Error -> if (resource.isConnected) acknowledgeGenericError() else acknowledgeConnectionError()
+                is Resource.Error -> {
+                    hideLoading()
+
+                    if (resource.isConnected) acknowledgeGenericError() else acknowledgeConnectionError()
+                }
             }
         })
 
@@ -198,6 +202,10 @@ class EpisodeDetailFragment : BaseFragment() {
         headerCardView.visibility = View.GONE
         detailsCardView.visibility = View.GONE
         progressBar.visibility = View.VISIBLE
+    }
+
+    private fun hideLoading() {
+        progressBar.visibility = View.GONE
     }
 
     private fun renderEpisodeDetails(episodeDetails: EpisodeDetails) {

@@ -71,7 +71,11 @@ class BookmarksFragment : BaseFragment() {
                 }
                 is Resource.RequireLogin -> showLoginEmptyState()
                 is Resource.Success<List<Episode>> -> renderBookmarks(resource.data)
-                is Resource.Error -> if (resource.isConnected) acknowledgeGenericError() else acknowledgeConnectionError()
+                is Resource.Error -> {
+                    hideLoading()
+
+                    if (resource.isConnected) acknowledgeGenericError() else acknowledgeConnectionError()
+                }
             }
         })
 
@@ -93,6 +97,10 @@ class BookmarksFragment : BaseFragment() {
         epoxyRecyclerView.visibility = View.GONE
 
         progressBar.visibility = View.VISIBLE
+    }
+
+    private fun hideLoading() {
+        progressBar.visibility = View.GONE
     }
 
     private fun showLoginEmptyState() {
