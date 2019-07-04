@@ -12,14 +12,16 @@ class PlayerViewModel(
         private val playbackManager: PlaybackManager
 ) : ViewModel() {
 
-    private val episodeIdLiveData = MutableLiveData<String>()
-    val episodeDetailsResource: LiveData<Resource<EpisodeDetails>> = Transformations.switchMap(episodeIdLiveData) { episodeId ->
+    private val episodeIdLiveData = MutableLiveData<Pair<String, Boolean>>()
+    val episodeDetailsResource: LiveData<Resource<EpisodeDetails>> = Transformations.switchMap(episodeIdLiveData) { (episodeId, forcePlay) ->
         liveData {
             emit(Resource.Loading)
 
             when (val resource = episodeDetailsRepository.fetchEpisodeDetails(episodeId)) {
                 is Resource.Success<EpisodeDetails> -> {
-                    _playMediaLiveData.postValue(Event(Pair(resource.data, playbackManager.playbackSpeed)))
+                    if (forcePlay) {
+                        _playMediaLiveData.postValue(Event(resource.data))
+                    }
 
                     emit(resource)
                 }
@@ -30,8 +32,8 @@ class PlayerViewModel(
         }
     }
 
-    private val _playMediaLiveData = MutableLiveData<Event<Pair<EpisodeDetails, Float>>>()
-    val playMediaLiveData: LiveData<Event<Pair<EpisodeDetails, Float>>>
+    private val _playMediaLiveData = MutableLiveData<Event<EpisodeDetails>>()
+    val playMediaLiveData: LiveData<Event<EpisodeDetails>>
         get() = _playMediaLiveData
 
     private val _playbackSpeedLiveData = MutableLiveData<Event<Float>>()
@@ -39,14 +41,22 @@ class PlayerViewModel(
         get() = _playbackSpeedLiveData
 
     @MainThread
+    fun refreshIfNecessary(episodeId: String) {
+        if (episodeDetailsResource.value == null) {
+            episodeIdLiveData.value = Pair(episodeId, false)
+        }
+    }
+
+    @MainThread
     fun play(episodeId: String) {
-        episodeIdLiveData.value = episodeId
+        episodeIdLiveData.value = Pair(episodeId, true)
 
         if (_playbackSpeedLiveData.value?.peekContent() != playbackManager.playbackSpeed) {
             _playbackSpeedLiveData.value = Event(playbackManager.playbackSpeed)
         }
     }
 
+    @MainThread
     fun changePlaybackSpeed(playbackSpeed: Float) {
         playbackManager.playbackSpeed = playbackSpeed
 

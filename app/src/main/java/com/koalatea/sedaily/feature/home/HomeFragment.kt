@@ -6,8 +6,8 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.SearchView
+import com.koalatea.sedaily.MainActivity
 import com.koalatea.sedaily.R
-import com.koalatea.sedaily.SearchActivity
 import com.koalatea.sedaily.ui.fragment.BaseFragment
 import kotlinx.android.synthetic.main.fragment_home.*
 
@@ -39,24 +39,12 @@ class HomeFragment : BaseFragment() {
         context?.let { context ->
             val searchView = menu.findItem(R.id.search).actionView as? SearchView
             val searchManager = context.getSystemService(Context.SEARCH_SERVICE) as? SearchManager
-            val componentName = ComponentName(context, SearchActivity::class.java)
+            val componentName = ComponentName(context, MainActivity::class.java)
 
             searchView?.setSearchableInfo(searchManager?.getSearchableInfo(componentName))
         }
 
         super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.search -> {
-                activity?.onSearchRequested()
-
-                return true
-            }
-        }
-
-        return super.onOptionsItemSelected(item)
     }
 
 }

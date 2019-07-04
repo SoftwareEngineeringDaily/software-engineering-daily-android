@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDialogFragment
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.koalatea.sedaily.R
 
@@ -16,11 +15,10 @@ class PlaybackSpeedDialogFragment : AppCompatDialogFragment() {
 
     companion object {
 
-        fun show(targetFragment: Fragment, fragmentManager: FragmentManager, tag: String) {
+        fun show(fragmentManager: FragmentManager, tag: String) {
             val dialogFragment = fragmentManager.findFragmentByTag(tag)
             if (dialogFragment == null) {
                 val dialog = PlaybackSpeedDialogFragment()
-                dialog.setTargetFragment(targetFragment, 0)
 
                 dialog.show(fragmentManager, tag)
             }

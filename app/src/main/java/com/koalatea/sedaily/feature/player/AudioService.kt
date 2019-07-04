@@ -54,19 +54,21 @@ private const val ARG_EPISODE_ID = "episode_id"
 private const val ARG_URI = "uri_string"
 private const val ARG_TITLE = "title"
 private const val ARG_START_POSITION = "start_position"
-private const val ARG_PLAYBACK_SPEED = "playback_speed"
 
 class AudioService : LifecycleService() {
 
     inner class AudioServiceBinder : Binder() {
         val service
             get() = this@AudioService
+
+        val exoPlayer
+            get() = this@AudioService.exoPlayer
     }
 
     companion object {
 
         @MainThread
-        fun newIntent(context: Context, episodeDetails: EpisodeDetails? = null, playbackSpeed: Float = 1f) = Intent(context, AudioService::class.java).apply {
+        fun newIntent(context: Context, episodeDetails: EpisodeDetails? = null) = Intent(context, AudioService::class.java).apply {
             episodeDetails?.let {
                 val episode = episodeDetails.episode
 
@@ -74,22 +76,20 @@ class AudioService : LifecycleService() {
                 episode.titleString?.let { title -> putExtra(ARG_TITLE, title) }
                 episode.uriString?.let{ uriString -> putExtra(ARG_URI, Uri.parse(uriString)) }
                 putExtra(ARG_START_POSITION, episodeDetails.listened?.startPosition)
-                putExtra(ARG_PLAYBACK_SPEED, playbackSpeed)
             }
         }
 
     }
 
     private val appDatabase: AppDatabase by inject()
+    private val playbackManager: PlaybackManager by inject()
 
     private var playbackTimer: Timer? = null
 
     var episodeId: String? = null
         private set
 
-    // FIXME :: Make it private
-    lateinit var exoPlayer: SimpleExoPlayer
-        private set
+    private lateinit var exoPlayer: SimpleExoPlayer
 
     private var playerNotificationManager: PlayerNotificationManager? = null
     private var mediaSession: MediaSessionCompat? = null
@@ -157,6 +157,11 @@ class AudioService : LifecycleService() {
 
         exoPlayer.prepare(mediaSource, !haveStartPosition, false)
         exoPlayer.playWhenReady = true
+    }
+
+    @MainThread
+    fun pause() {
+        exoPlayer.playWhenReady = false
     }
 
     @MainThread
@@ -247,7 +252,7 @@ class AudioService : LifecycleService() {
         intent?.let {
             intent.getParcelableExtra<Uri>(ARG_URI)?.also { uri ->
                 val startPosition = intent.getLongExtra(ARG_START_POSITION, C.POSITION_UNSET.toLong())
-                val playbackSpeed = intent.getFloatExtra(ARG_PLAYBACK_SPEED, 1f)
+                val playbackSpeed = playbackManager.playbackSpeed
 
                 play(uri, startPosition, playbackSpeed)
             }

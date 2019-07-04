@@ -54,8 +54,8 @@
         android:ellipsize="end"
         android:gravity="center"
         android:lines="@integer/player_title_lines"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-        tools:text="Episode Title" />
+        android:text="@string/loading_dots"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/linearLayout"

@@ -52,6 +52,7 @@ class EpisodesFragment : BaseFragment() {
         val searchQuery = safeArgs.searchQuery ?: SearchQuery()
         viewModel.doNotCache = safeArgs.doNotCache
 
+        searchQuery.searchTerm?.let{ supportActionBar?.title = it }
         supportActionBar?.elevation = if (safeArgs.elevateToolbar) resources.getDimension(R.dimen.toolbar_elevation) else 0f
 
         epoxyRecyclerView.layoutManager = LinearLayoutManager(this.activity, RecyclerView.VERTICAL, false)
