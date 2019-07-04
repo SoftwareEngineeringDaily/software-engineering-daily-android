@@ -64,7 +64,7 @@ class EpisodesRepository(
         }
     }
 
-    // FIXME :: Return Resource instead
+    // TODO :: Return Resource instead
     suspend fun vote(episodeId: String, originalState: Boolean, originalScore: Int) = withContext(Dispatchers.IO) {
         val response = if (originalState) {
             db.episodeDao().vote(episodeId, !originalState, originalScore - 1)
@@ -86,7 +86,7 @@ class EpisodesRepository(
         return@withContext true
     }
 
-    // FIXME :: Return Resource instead
+    // TODO :: Return Resource instead
     suspend fun bookmark(episodeId: String, originalState: Boolean) = withContext(Dispatchers.IO) {
         // Update UI right away.
         db.episodeDao().bookmark(episodeId, !originalState)

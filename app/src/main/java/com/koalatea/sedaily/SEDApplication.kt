@@ -16,7 +16,7 @@ open class SEDApplication : Application() {
 
         // Start Koin
         startKoin{
-            androidLogger()// FIXME :: Should this be in a production build.
+            androidLogger()
             androidContext(this@SEDApplication)
             modules(listOf(appModule, networkModule, viewModelsModule))
         }

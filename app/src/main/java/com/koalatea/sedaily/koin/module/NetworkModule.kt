@@ -16,7 +16,7 @@ import timber.log.Timber
 
 const val SEDAILY_URL = "http://softwareengineeringdaily.com"
 
-// FIXME :: Move to debug build type
+// TODO :: Move to debug build type
 //private const val BASE_URL: String = "https://sedaily-backend-staging.herokuapp.com/api/"
 private const val BASE_URL: String = "https://software-enginnering-daily-api.herokuapp.com/api/"
 

@@ -324,6 +324,7 @@ class EpisodeDetailFragment : BaseFragment() {
     }
 
     private fun monitorPlayback(episode: Episode) {
+        playerCallback?.playerStatusLiveData?.removeObservers(this)
         playerCallback?.playerStatusLiveData?.observe(this, Observer { playerStatus ->
             if (episode._id == playerStatus.episodeId) {
                 when (playerStatus) {

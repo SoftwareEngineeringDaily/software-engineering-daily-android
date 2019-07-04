@@ -2,6 +2,7 @@ package com.koalatea.sedaily
 
 import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
@@ -86,11 +87,7 @@ class MainActivity : AppCompatActivity(), PlayerCallback {
 
         // If audio service is running, add the player fragment
         if (applicationContext.isServiceRunning(AudioService::class.java.name)) {
-            AudioService.newIntent(this).also { intent ->
-                bindService(intent, connection, Context.BIND_AUTO_CREATE)
-
-                isAudioServiceBound = true
-            }
+            bindToAudioService()
         }
     }
 
@@ -117,6 +114,8 @@ class MainActivity : AppCompatActivity(), PlayerCallback {
     private fun setupBottomNavMenu(navController: NavController) = bottomNavigationView?.setupWithNavController(navController)
 
     override fun play(episode: Episode) {
+        bindToAudioService()
+
         playerFragment?.play(episode) ?: addPlayerFragment(episode._id, false)
     }
 
@@ -129,6 +128,16 @@ class MainActivity : AppCompatActivity(), PlayerCallback {
 
             supportFragmentManager.beginTransaction().remove(it).commit()
             playerFragment = null
+        }
+    }
+
+    private fun bindToAudioService() {
+        if (!isAudioServiceBound) {
+            AudioService.newIntent(this).also { intent ->
+                bindService(intent, connection, Context.BIND_AUTO_CREATE)
+
+                isAudioServiceBound = true
+            }
         }
     }
 
