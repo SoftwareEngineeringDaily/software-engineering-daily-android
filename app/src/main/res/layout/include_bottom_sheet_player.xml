@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/playerOverlayContainerConstraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/color_background"
+    app:behavior_peekHeight="@dimen/player_overlay_peek_height"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <View
+        android:id="@+id/topPlayerOverlayPeekDivider"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:background="@drawable/shadow"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/playerOverlayPeekLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/player_overlay_placeholder_height"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topPlayerOverlayPeekDivider">
+
+        <ImageView
+            android:id="@+id/playerOverlayImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/first_keyline"
+            android:minWidth="48dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            tools:src="@drawable/vd_play_arrow" />
+
+        <TextView
+            android:id="@+id/playerOverlayTitleTextView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:lines="@integer/player_title_lines"
+            android:text="@string/loading_dots"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1" />
+
+        <ImageButton
+            android:id="@+id/playerOverlayPlayImageButton"
+            style="@style/ExoMediaButton.Play"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:padding="16dp"
+            android:src="@drawable/vd_play_arrow"
+            android:tint="@color/color_primary" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/bottomPlayerOverlayPeekDivider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color_divider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/playerOverlayPeekLinearLayout" />
+
+    <com.google.android.exoplayer2.ui.PlayerView
+        android:id="@+id/playerView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/player_height"
+        app:auto_show="true"
+        app:controller_layout_id="@layout/audio_controller_view"
+        app:fastforward_increment="@integer/increment_ms"
+        app:hide_on_touch="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bottomPlayerOverlayPeekDivider"
+        app:player_layout_id="@layout/audio_player_view"
+        app:resize_mode="fixed_height"
+        app:rewind_increment="@integer/increment_ms"
+        app:show_buffering="always"
+        app:show_timeout="0"
+        app:use_controller="true" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

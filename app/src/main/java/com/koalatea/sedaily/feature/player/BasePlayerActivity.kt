@@ -6,19 +6,29 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
+import android.view.MotionEvent
 import android.view.View
+import android.view.Window
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.MultiTransformation
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.koalatea.sedaily.R
 import com.koalatea.sedaily.database.model.Episode
 import com.koalatea.sedaily.database.model.EpisodeDetails
 import com.koalatea.sedaily.network.Resource
+import com.koalatea.sedaily.ui.BaseWindowCallback
 import com.koalatea.sedaily.util.isServiceRunning
+import com.koalatea.sedaily.util.pointInView
 import kotlinx.android.synthetic.main.audio_controller_view.*
-import kotlinx.android.synthetic.main.bottom_sheet_player.*
+import kotlinx.android.synthetic.main.include_bottom_sheet_player.*
+import kotlinx.android.synthetic.main.include_content_main.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.text.DecimalFormat
@@ -26,6 +36,21 @@ import java.text.DecimalFormat
 private const val TAG_DIALOG_PLAYBACK_SPEED = "playback_speed_dialog"
 
 abstract class BasePlayerActivity : AppCompatActivity(), PlayerCallback, PlaybackSpeedDialogFragment.OnPlaybackChangedListener {
+
+    private inner class PlayerWindowCallback(localCallback: Window.Callback) : BaseWindowCallback(localCallback) {
+
+        override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+            // Collapse the bottom sheet if touch will not be handle by the bottom sheet view.
+            if (event.action == MotionEvent.ACTION_UP &&
+                    !playerOverlayContainerConstraintLayout.pointInView(event.x, event.y)) {
+
+                collapsePlayerOverlay()
+            }
+
+            return super.dispatchTouchEvent(event)
+        }
+
+    }
 
     private var audioService: AudioService? = null
     private val connection = object : ServiceConnection {
@@ -39,12 +64,15 @@ abstract class BasePlayerActivity : AppCompatActivity(), PlayerCallback, Playbac
             // Pass player updates to interested observers.
             audioService?.playerStatusLiveData?.observe(this@BasePlayerActivity, Observer {
                 _playerStatusLiveData.value = it
+
+                // FIXME :: Update playerOverlayPlayImageButton state
+//                playerOverlayPlayImageButton.setchc
             })
 
             // Show player after config change.
             val episodeId = audioService?.episodeId
             if (episodeId != null) {
-                playerContainerConstraintLayout.visibility = View.VISIBLE
+                showPlayerOverlay()
 
                 viewModel.refreshIfNecessary(episodeId)
             }
@@ -64,9 +92,15 @@ abstract class BasePlayerActivity : AppCompatActivity(), PlayerCallback, Playbac
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
 
+        setupPlayerBottomSheet()
+
         // Show the player, if the audio service is already running.
         if (applicationContext.isServiceRunning(AudioService::class.java.name)) {
             bindToAudioService()
+        }
+
+        playerOverlayPlayImageButton.setOnClickListener {
+            // FIXME :: Play/Pause
         }
 
         playbackSpeedButton.setOnClickListener {
@@ -113,7 +147,7 @@ abstract class BasePlayerActivity : AppCompatActivity(), PlayerCallback, Playbac
     }
 
     override fun play(episode: Episode) {
-        playerContainerConstraintLayout.visibility = View.VISIBLE
+        showPlayerOverlay()
 
         bindToAudioService()
 
@@ -121,7 +155,7 @@ abstract class BasePlayerActivity : AppCompatActivity(), PlayerCallback, Playbac
     }
 
     override fun stop() {
-        playerContainerConstraintLayout.visibility = View.GONE
+        dismissPlayerOverlay()
 
         stopAudioService()
         _playerStatusLiveData.value = PlayerStatus.Other()
@@ -152,8 +186,83 @@ abstract class BasePlayerActivity : AppCompatActivity(), PlayerCallback, Playbac
         audioService = null
     }
 
+    private fun setupPlayerBottomSheet() {
+        dismissPlayerOverlay()
+
+        window.callback = PlayerWindowCallback(window.callback)
+
+        BottomSheetBehavior.from(playerOverlayContainerConstraintLayout).apply {
+            setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+                override fun onStateChanged(bottomSheet: View, newState: Int) = when (newState) {
+                    BottomSheetBehavior.STATE_HIDDEN -> hidePlayerOverlayPlaceHolder()
+                    BottomSheetBehavior.STATE_EXPANDED -> showPlayerOverlayPlaceHolder()
+                    BottomSheetBehavior.STATE_COLLAPSED -> showPlayerOverlayPlaceHolder()
+                    else -> { }
+                }
+
+                override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                }
+            })
+        }
+
+        playerOverlayPeekLinearLayout.setOnClickListener {
+            togglePlayerOverlayShowState()
+        }
+    }
+
     private fun renderContent(episodeDetails: EpisodeDetails) {
-        playerView.findViewById<TextView>(R.id.titleTextView).text = episodeDetails.episode.titleString ?: getString(R.string.loading_dots)
+        val episodeTitle = episodeDetails.episode.titleString ?: getString(R.string.loading_dots)
+
+        playerOverlayTitleTextView.text = episodeTitle
+        playerView.findViewById<TextView>(R.id.titleTextView).text = episodeTitle
+
+        Glide.with(this)
+                .load(episodeDetails.episode.httpsGuestImageUrl)
+                .transform(MultiTransformation(CenterCrop(), CircleCrop()))
+                .placeholder(R.drawable.vd_image)
+                .error(R.drawable.vd_broken_image)
+                .into(playerOverlayImageView)
+    }
+
+    private fun showPlayerOverlay() {
+        BottomSheetBehavior.from(playerOverlayContainerConstraintLayout).apply {
+            isHideable = false
+
+            showPlayerOverlayPlaceHolder()
+        }
+    }
+
+    private fun collapsePlayerOverlay() {
+        BottomSheetBehavior.from(playerOverlayContainerConstraintLayout).apply {
+            if (state == BottomSheetBehavior.STATE_EXPANDED) {
+                state = BottomSheetBehavior.STATE_COLLAPSED
+            }
+        }
+    }
+
+    private fun togglePlayerOverlayShowState() {
+        BottomSheetBehavior.from(playerOverlayContainerConstraintLayout).apply {
+            val isCollapsed = state == BottomSheetBehavior.STATE_EXPANDED
+
+            state = if (isCollapsed) BottomSheetBehavior.STATE_COLLAPSED else BottomSheetBehavior.STATE_EXPANDED
+        }
+    }
+
+    private fun dismissPlayerOverlay() {
+        BottomSheetBehavior.from(playerOverlayContainerConstraintLayout).apply {
+            isHideable = true
+
+            hidePlayerOverlayPlaceHolder()
+            state = BottomSheetBehavior.STATE_HIDDEN
+        }
+    }
+
+    private fun showPlayerOverlayPlaceHolder() {
+        collapsedPlayerOverlayPlaceHolderView.visibility = View.VISIBLE
+    }
+
+    private fun hidePlayerOverlayPlaceHolder() {
+        collapsedPlayerOverlayPlaceHolderView.visibility = View.GONE
     }
 
 }

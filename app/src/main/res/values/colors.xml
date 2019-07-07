@@ -24,7 +24,7 @@
 
     <color name="color_destructive">#EE5F59</color>
 
-    <color name="color_divider">#0336FF</color>
+    <color name="color_divider">#1f000000</color>
 
     <!-- Player -->
     <color name="color_played">#FF5F46F4</color>
