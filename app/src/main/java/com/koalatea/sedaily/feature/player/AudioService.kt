@@ -160,6 +160,11 @@ class AudioService : LifecycleService() {
     }
 
     @MainThread
+    fun resume() {
+        exoPlayer.playWhenReady = true
+    }
+
+    @MainThread
     fun pause() {
         exoPlayer.playWhenReady = false
     }

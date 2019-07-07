@@ -14,12 +14,12 @@ kapt {
 }
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
 
     defaultConfig {
         applicationId "com.koalatea.sedaily"
         minSdkVersion 21
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 20
         versionName "0.20"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

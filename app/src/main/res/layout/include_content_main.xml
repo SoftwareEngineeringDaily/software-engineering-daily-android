@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/contentLinearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <fragment
+        android:id="@+id/mainNavHostFragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/main_navigation" />
+
+    <View
+        android:id="@+id/collapsedPlayerOverlayPlaceHolderView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/player_overlay_placeholder_height"
+        android:layout_gravity="bottom"
+        android:visibility="gone" />
+
+</LinearLayout>

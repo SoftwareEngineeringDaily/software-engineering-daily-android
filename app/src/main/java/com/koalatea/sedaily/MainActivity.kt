@@ -17,7 +17,8 @@ import com.koalatea.sedaily.util.dpToPx
 import com.koalatea.sedaily.util.hideKeyboard
 import com.koalatea.sedaily.util.setupActionBar
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.include_default_toolbar.toolbar
+import kotlinx.android.synthetic.main.include_content_main.*
+import kotlinx.android.synthetic.main.include_default_toolbar.*
 
 class MainActivity : BasePlayerActivity() {
 
