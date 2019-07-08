@@ -20,14 +20,6 @@ open class SEDApplication : Application() {
             androidContext(this@SEDApplication)
             modules(listOf(appModule, networkModule, viewModelsModule))
         }
-
-        appContext = applicationContext
     }
 
-    companion object {
-
-        @Deprecated("Do not use")
-        var appContext: Context? = null
-            private set
-    }
 }
