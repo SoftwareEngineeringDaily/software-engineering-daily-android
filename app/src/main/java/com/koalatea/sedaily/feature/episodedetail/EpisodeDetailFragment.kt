@@ -279,7 +279,7 @@ class EpisodeDetailFragment : BaseFragment() {
                     view.loadUrl("javascript:(function() { " +
                             "var head = document.getElementsByClassName('powerpress_player')[0].style.display='none'; " +
                             "var head = document.getElementsByClassName('powerpress_links')[0].style.display='none'; " +
-                            "var head = document.getElementsByClassName('wp-image-2475')[0].style.display='none'; " +
+                            "var head = document.getElementsByTagName('img')[0].style.display='none'; " +
                             "})()")
                 }
             }
