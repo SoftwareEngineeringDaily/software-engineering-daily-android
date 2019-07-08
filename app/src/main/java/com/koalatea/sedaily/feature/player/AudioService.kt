@@ -328,6 +328,8 @@ class AudioService : LifecycleService() {
 
                     cancelPlaybackMonitor()
                 }
+            } else if (playbackState == Player.STATE_ENDED) {
+                episodeId?.let { _playerStatusLiveData.value = PlayerStatus.Ended(it) }
             } else {
                 episodeId?.let { _playerStatusLiveData.value = PlayerStatus.Other(it) }
             }
