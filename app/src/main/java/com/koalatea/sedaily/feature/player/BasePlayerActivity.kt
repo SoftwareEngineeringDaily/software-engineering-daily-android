@@ -40,8 +40,6 @@ abstract class BasePlayerActivity : AppCompatActivity(), PlayerCallback, Playbac
     private inner class PlayerWindowCallback(val originalCallback: Window.Callback) : BaseWindowCallback(originalCallback) {
 
         override fun dispatchTouchEvent(event: MotionEvent): Boolean {
-            Timber.w("ZZZ, view: ${findViewById<View>(R.id.stopButton)}, inView: ${findViewById<View>(R.id.stopButton)?.pointInView(event.x, event.y)}")
-
             // Collapse the bottom sheet if touch will not be handle by the bottom sheet view.
             if (event.action == MotionEvent.ACTION_UP &&
                     findViewById<View>(R.id.stopButton)?.pointInView(event.x, event.y) == false &&
