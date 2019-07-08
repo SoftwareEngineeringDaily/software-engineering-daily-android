@@ -5,7 +5,7 @@ import androidx.core.text.HtmlCompat
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import com.koalatea.sedaily.util.HtmlHelper
+import com.koalatea.sedaily.util.EpisodeHtmlUtils
 import com.koalatea.sedaily.util.toUTCDate
 import kotlinx.android.parcel.Parcelize
 import java.util.*
@@ -50,7 +50,7 @@ data class Episode(
         get() = title?.rendered?.htmlToText()
 
     val excerptString: String?
-        get() = content?.rendered?.let { HtmlHelper.removePlayerAndLinksTags(it).htmlToText(consecutive = true) }
+        get() = content?.rendered?.let { EpisodeHtmlUtils.removePlayerAndLinksTags(it).htmlToText(consecutive = true) }
 
     val httpsMp3Url: String?
         get() = mp3?.replace(Regex("^http://"), "https://")

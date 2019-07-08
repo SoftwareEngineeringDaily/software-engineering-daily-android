@@ -1,6 +1,9 @@
 package com.koalatea.sedaily.util
 
-object HtmlHelper {
+object EpisodeHtmlUtils {
+
+    fun cleanHtml(html: String) : String =
+            removeImage(html = addScaleMeta(html = removePlayerAndLinksTags(html = html)))
 
     fun removePlayerAndLinksTags(html: String) : String {
         var modifiedHtml = html
@@ -26,5 +29,21 @@ object HtmlHelper {
         return modifiedHtml
     }
 
+    private fun removeImage(html: String) : String {
+        var modifiedHtml = html
+
+        val endTag = "data-recalc-dims=\"1\" />"
+        val playerRange = IntRange(
+                start = modifiedHtml.indexOf("<img"),
+                endInclusive = modifiedHtml.indexOf(endTag) + endTag.length - 1)
+        if (playerRange.first >= 0 && playerRange.first < playerRange.last) {
+            modifiedHtml = modifiedHtml.removeRange(playerRange)
+        }
+
+        return modifiedHtml
+    }
+
+    private fun addScaleMeta(html: String) : String =
+            "<meta name=\"viewport\" content=\"initial-scale=1.0\" />$html"
 
 }

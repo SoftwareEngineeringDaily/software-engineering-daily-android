@@ -30,6 +30,7 @@ import com.koalatea.sedaily.model.SearchQuery
 import com.koalatea.sedaily.network.Resource
 import com.koalatea.sedaily.ui.dialog.AlertDialogFragment
 import com.koalatea.sedaily.ui.fragment.BaseFragment
+import com.koalatea.sedaily.util.EpisodeHtmlUtils
 import com.koalatea.sedaily.util.openUrl
 import com.koalatea.sedaily.util.supportActionBar
 import com.nabinbhandari.android.permissions.PermissionHandler
@@ -263,7 +264,6 @@ class EpisodeDetailFragment : BaseFragment() {
     @SuppressLint("SetJavaScriptEnabled")
     private fun renderContent(episode: Episode) {
         episode.content?.rendered?.let { html ->
-            contentWebView.settings.javaScriptEnabled = true
             contentWebView.webViewClient = object : WebViewClient() {
                 override fun shouldOverrideUrlLoading(view: WebView, url: String?): Boolean {
                     url?.let {
@@ -274,18 +274,10 @@ class EpisodeDetailFragment : BaseFragment() {
 
                     return true
                 }
-
-                override fun onPageFinished(view: WebView, url: String) {
-                    view.loadUrl("javascript:(function() { " +
-                            "var head = document.getElementsByClassName('powerpress_player')[0].style.display='none'; " +
-                            "var head = document.getElementsByClassName('powerpress_links')[0].style.display='none'; " +
-                            "var head = document.getElementsByTagName('img')[0].style.display='none'; " +
-                            "})()")
-                }
             }
 
             contentWebView.settings.defaultTextEncodingName = "utf-8"
-            contentWebView.loadDataWithBaseURL(null, html, "text/html", "utf-8", null)
+            contentWebView.loadDataWithBaseURL(null, EpisodeHtmlUtils.cleanHtml(html), "text/html", "utf-8", null)
         }
     }
 
