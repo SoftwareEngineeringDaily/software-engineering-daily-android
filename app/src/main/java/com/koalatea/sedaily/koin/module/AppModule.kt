@@ -17,7 +17,7 @@ val appModule = module {
 
     single {
         Room
-                .databaseBuilder(androidApplication(), AppDatabase::class.java, "sedaily")
+                .databaseBuilder(androidApplication(), AppDatabase::class.java, "sedaily.db")
                 .fallbackToDestructiveMigration()
                 .build()
     }
