@@ -3,14 +3,13 @@
 /local.properties
 .idea
 .DS_Store
-/build
+build
 /captures
 .externalNativeBuild
 
+# Release
 app/release/
-app/google-services.json
 fastlane/report.xml
 .google/key.json
-
 release.properties
 release.keystore
