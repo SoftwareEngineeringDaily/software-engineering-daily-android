@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.koalatea.sedaily.feature.home.HomeFragment"
+        android:label="@string/home_title"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/open_episode_details_action"
+            app:destination="@id/navigation_episode_details" />
+        <action
+            android:id="@+id/open_comments_action"
+            app:destination="@id/navigation_comments" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_bookmarks"
+        android:name="com.koalatea.sedaily.feature.bookmarks.BookmarksFragment"
+        android:label="@string/bookmarks_title" >
+        <action
+            android:id="@+id/open_episode_details_action"
+            app:destination="@id/navigation_episode_details" />
+        <action
+            android:id="@+id/open_comments_action"
+            app:destination="@id/navigation_comments" />
+    </fragment>
+
+    <!-- Profile navigation -->
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.koalatea.sedaily.feature.profile.ProfileFragment"
+        android:label="@string/profile_title" >
+        <action
+            android:id="@+id/open_auth_action"
+            app:destination="@id/navigation_auth" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_auth"
+        android:name="com.koalatea.sedaily.feature.auth.AuthFragment"
+        android:label="@string/auth_title"
+        tools:layout="@layout/fragment_auth" />
+
+    <!-- Episodes graph -->
+    <fragment
+        android:id="@+id/navigation_episodes"
+        android:name="com.koalatea.sedaily.feature.episodes.EpisodesFragment"
+        android:label="">
+        <argument
+            android:name="searchQuery"
+            app:argType="com.koalatea.sedaily.model.SearchQuery"
+            app:nullable="true" />
+        <argument
+            android:name="elevateToolbar"
+            app:argType="boolean" />
+        <argument
+            android:name="doNotCache"
+            app:argType="boolean" />
+        <action
+            android:id="@+id/open_episode_details_action"
+            app:destination="@id/navigation_episode_details" />
+        <action
+            android:id="@+id/open_comments_action"
+            app:destination="@id/navigation_comments" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_episode_details"
+        android:name="com.koalatea.sedaily.feature.episodedetail.EpisodeDetailFragment"
+        android:label="@string/episode_details_title"
+        tools:layout="@layout/fragment_episode_detail">
+        <action
+            android:id="@+id/open_comments_action"
+            app:destination="@id/navigation_comments" />
+        <action
+            android:id="@+id/open_episodes_action"
+            app:destination="@id/navigation_episodes" />
+        <action
+            android:id="@+id/open_related_links_action"
+            app:destination="@id/navigation_related_links" />
+        <argument
+            android:name="episode"
+            app:argType="com.koalatea.sedaily.database.model.Episode" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_comments"
+        android:name="com.koalatea.sedaily.feature.commentList.CommentsFragment"
+        android:label="@string/comments_title"
+        tools:layout="@layout/fragment_comments">
+        <argument
+            android:name="entityId"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_related_links"
+        android:name="com.koalatea.sedaily.feature.relatedlinks.RelatedLinksFragment"
+        android:label="@string/related_links_title" >
+        <argument
+            android:name="episodeId"
+            app:argType="string" />
+        <argument
+            android:name="episodeTranscriptUrl"
+            app:argType="string" />
+    </fragment>
+
+</navigation>

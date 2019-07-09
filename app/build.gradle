@@ -4,30 +4,33 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'androidx.navigation.safeargs'
-apply plugin: 'com.google.gms.google-services'
+
+androidExtensions {
+    experimental = true
+}
+
+kapt {
+    correctErrorTypes = true
+}
 
 android {
-    compileSdkVersion 28
-
-    dataBinding {
-        enabled = true
-    }
+    compileSdkVersion 29
 
     defaultConfig {
         applicationId "com.koalatea.sedaily"
         minSdkVersion 21
-        targetSdkVersion 28
-        versionCode 15
-        versionName "0.15"
+        targetSdkVersion 29
+        versionCode 16
+        versionName "1.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     signingConfigs {
         release {
-            storeFile file(SEDAILY_RELEASE_STORE_FILE)
-            storePassword SEDAILY_RELEASE_STORE_PASS
-            keyAlias SEDAILY_RELEASE_KEY_ALIAS
-            keyPassword SEDAILY_RELEASE_KEY_PASS
+//            storeFile file(SEDAILY_RELEASE_STORE_FILE)
+//            storePassword SEDAILY_RELEASE_STORE_PASS
+//            keyAlias SEDAILY_RELEASE_KEY_ALIAS
+//            keyPassword SEDAILY_RELEASE_KEY_PASS
         }
     }
 
@@ -36,6 +39,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
+        }
+        debug {
+            applicationIdSuffix '.debug'
+            versionNameSuffix '-debug'
         }
     }
 
@@ -49,68 +56,87 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // AndroidX
-    implementation 'androidx.appcompat:appcompat:1.1.0-alpha03'
+    implementation "androidx.core:core-ktx:1.1.0-rc01"
+    implementation 'androidx.appcompat:appcompat:1.1.0-beta01'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta1'
-    implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.lifecycleVersion"
-    implementation "androidx.recyclerview:recyclerview:$rootProject.supportLibraryVersion"
+    implementation "androidx.recyclerview:recyclerview:1.0.0"
+    implementation "com.google.android.material:material:1.1.0-alpha04"
 
     // Android Arch
-    implementation "android.arch.navigation:navigation-fragment-ktx:$rootProject.navigationVersion"
-    implementation "android.arch.navigation:navigation-ui-ktx:$rootProject.navigationVersion"
-    implementation "android.arch.persistence.room:runtime:$room_version"
-    kapt "android.arch.persistence.room:compiler:$room_version"
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleKtxVersion"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleKtxVersion"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleKtxVersion"
+
+    // Navigation
+    implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
+    implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
+
+    // Room
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
 
     // UI
-    implementation "com.google.android.material:material:$rootProject.supportLibraryVersion"
-    kapt "com.github.bumptech.glide:compiler:$rootProject.glideVersion"
-    implementation "com.github.bumptech.glide:glide:$rootProject.glideVersion"
+    kapt "com.github.bumptech.glide:compiler:$glideVersion"
+    implementation "com.github.bumptech.glide:glide:$glideVersion"
+
+    // Epoxy
+    implementation 'com.airbnb.android:epoxy:3.5.1'
+    kapt 'com.airbnb.android:epoxy-processor:3.5.1'
+    implementation 'com.airbnb.android:epoxy-paging:2.18.0'
+    implementation "androidx.paging:paging-runtime-ktx:$pagingKtxVersion"
+
+    // Manage permissions
+    implementation 'com.nabinbhandari.android:permissions:3.8'
 
     // Media
     implementation 'androidx.media2:media2:1.0.0-alpha04'
 
-    // Downloads
-    implementation 'br.com.bemobi:medescope:1.1.0'
-
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.1'
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.1"
+
+    // Koin
+    implementation 'org.koin:koin-androidx-viewmodel:2.0.0'
 
     // Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-moshi:$retrofit_version"
+    implementation 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2'
 
     // Okhttp
-    implementation "com.squareup.okhttp3:okhttp:$rootProject.okhttp3Version"
-    implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.okhttp3Version"
+    implementation "com.squareup.okhttp3:okhttp:$okhttp3Version"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp3Version"
 
-    //Rx
-    implementation "io.reactivex.rxjava2:rxjava:2.2.2"
-    implementation "io.reactivex.rxjava2:rxandroid:2.1.0"
+    // Stetho
+    implementation 'com.facebook.stetho:stetho:1.5.1'
+    implementation 'com.facebook.stetho:stetho-okhttp3:1.5.1'
+
+    // Gson
+    implementation 'com.google.code.gson:gson:2.8.5'
 
     // Audio
-    if (findProject(':exoplayer-library-core') != null) {
-        api project(':exoplayer-library-core')
-        api project(':exoplayer-library-ui')
-        api project(':exoplayer-extension-mediasession')
-    } else {
-        api "com.google.android.exoplayer:exoplayer-core:$exoplayer_version"
-        api "com.google.android.exoplayer:exoplayer-ui:$exoplayer_version"
-        api "com.google.android.exoplayer:extension-mediasession:$exoplayer_version"
-    }
+    implementation "com.google.android.exoplayer:exoplayer-core:$exoplayer_version"
+    implementation "com.google.android.exoplayer:exoplayer-ui:$exoplayer_version"
+    implementation "com.google.android.exoplayer:extension-mediasession:$exoplayer_version"
 
     // Firebase
-    implementation 'com.google.firebase:firebase-core:16.0.9'
-    implementation 'com.google.firebase:firebase-crash:16.2.1'
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.0'
+    implementation 'com.google.firebase:firebase-core:17.0.0'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
 
     // Leaks
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.2'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.2'
 
+    // Timber
+    implementation 'com.jakewharton.timber:timber:4.7.1'
+
     // Testing
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.2.0-beta01'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0-beta01'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }
+
+apply plugin: 'com.google.gms.google-services'
