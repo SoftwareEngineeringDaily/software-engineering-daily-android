@@ -23,6 +23,10 @@ class PlayerViewModel(
                         _playMediaLiveData.postValue(Event(resource.data))
                     }
 
+                    if (_playbackSpeedLiveData.value?.peekContent() != playbackManager.playbackSpeed) {
+                        _playbackSpeedLiveData.value = Event(playbackManager.playbackSpeed)
+                    }
+
                     emit(resource)
                 }
                 is Resource.Error -> {
@@ -50,10 +54,6 @@ class PlayerViewModel(
     @MainThread
     fun play(episodeId: String) {
         episodeIdLiveData.value = Pair(episodeId, true)
-
-        if (_playbackSpeedLiveData.value?.peekContent() != playbackManager.playbackSpeed) {
-            _playbackSpeedLiveData.value = Event(playbackManager.playbackSpeed)
-        }
     }
 
     @MainThread

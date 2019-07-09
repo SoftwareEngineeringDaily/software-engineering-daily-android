@@ -128,10 +128,10 @@ abstract class BasePlayerActivity : AppCompatActivity(), PlayerCallback, Playbac
         })
 
         viewModel.playbackSpeedLiveData.observe(this, Observer {
-            it.getContentIfNotHandled()?.let { playbackSpeed ->
-                val formatter = DecimalFormat("0.#")
-                playbackSpeedButton.text = getString(R.string.playback_speed, formatter.format(playbackSpeed))
+            val formatter = DecimalFormat("0.#")
+            playbackSpeedButton.text = getString(R.string.playback_speed, formatter.format(it.peekContent()))
 
+            it.getContentIfNotHandled()?.let { playbackSpeed ->
                 audioService?.changePlaybackSpeed(playbackSpeed)
             }
         })
