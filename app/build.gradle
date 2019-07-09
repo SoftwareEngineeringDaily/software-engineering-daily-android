@@ -20,8 +20,8 @@ android {
         applicationId "com.koalatea.sedaily"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 21
-        versionName "0.21"
+        versionCode 16
+        versionName "1.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -38,7 +38,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-//            signingConfig signingConfigs.release
+            signingConfig signingConfigs.release
         }
         debug {
             applicationIdSuffix '.debug'
