@@ -9,7 +9,9 @@ Getting Started
 The app has 2 build types: debug and release with minor differences between both builds. [`Stetho`](http://facebook.github.io/stetho/) for example is only enabled for debug builds. And [`Timber`](https://github.com/JakeWharton/timber) to log warnings and errors as Crashlytics non-fatal crashes in release builds.
 
 We also use different app icons for debug and release builds and you can keep both builds on your device and run them side by side.
+
 ![](screenshots/debug-release-icons.png)
+
 
 The app is 100% [Kotlin](http://kotlinlang.org) and we think it is better to keep it this way.
 
@@ -29,10 +31,7 @@ And then compile the project with Gradle using
 
 Screenshots
 -----------
-![](screenshots/1.png)
-![](screenshots/2.png)
-![](screenshots/3.png)
-![](screenshots/4.png)
+![App screenshots](screenshots/app_screenshots.png)
 
 Libraries Used
 --------------
@@ -73,7 +72,7 @@ Libraries Used
 
 Upcoming features
 -----------------
-Interested in seeing a particular feature implemented in this app? Please open a new [issue](https://github.com/SoftwareEngineeringDaily/software-engineering-daily-android/issues) with a [feature proposal](https://github.com/SoftwareEngineeringDaily/software-engineering-daily-android#feature-proposals).
+Interested in seeing a particular feature implemented in this app? Please open a new [issue](https://github.com/SoftwareEngineeringDaily/software-engineering-daily-android/issues) with a [feature proposal](https://github.com/SoftwareEngineeringDaily/software-engineering-daily-android/blob/master/CONTRIBUTING.md#feature-proposals).
 
 Contributing
 ------------
