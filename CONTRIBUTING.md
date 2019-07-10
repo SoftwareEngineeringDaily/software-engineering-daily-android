@@ -9,7 +9,7 @@ We use [gitflow](https://www.atlassian.com/git/tutorials/comparing-workflows/git
 Workflow
 --------
 If you would like to contribute to this project, please:
-- Pick an [issue](https://github.com/SoftwareEngineeringDaily/software-engineering-daily-android/issues) to work on or create a [proposal](https://github.com/SoftwareEngineeringDaily/software-engineering-daily-android#feature-proposals) for a new feature.
+- Pick an [issue](https://github.com/SoftwareEngineeringDaily/software-engineering-daily-android/issues) to work on or create a [proposal](https://github.com/SoftwareEngineeringDaily/software-engineering-daily-android/blob/master/CONTRIBUTING.md#feature-proposals) for a new feature.
 - Fork this project.
 - Create your feature branch based off the `develop` branch.
 - Create a pull request to get your worked reviewed and merged back into the upstream `develop` branch.
