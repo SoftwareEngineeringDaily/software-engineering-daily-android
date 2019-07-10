@@ -1,9 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--<color name="colorPrimary">#008577</color>-->
-    <!--<color name="colorPrimaryDark">#00574B</color>-->
-    <!--<color name="colorAccent">#D81B60</color>-->
-    <color name="colorPrimary">#303F9F</color>
-    <color name="colorPrimaryDark">#856aff</color>
-    <color name="colorAccent">#008577</color>
+
+    <!-- Global colors -->
+    <color name="color_primary">#5f46f4</color>
+    <color name="color_primary_variant">#6200ee</color>
+    <color name="color_on_primary">#FFFFFF</color>
+
+    <color name="color_secondary">#000000</color>
+    <color name="color_secondary_variant">#111111</color>
+    <color name="color_on_secondary">#FFFFFF</color>
+
+    <color name="color_error">#F44336</color>
+    <color name="color_on_error">#FFFFFF</color>
+
+    <color name="color_surface">#FFFFFF</color>
+    <color name="color_on_surface">#000000</color>
+
+    <color name="color_background">#FAFAFA</color>
+    <color name="color_on_background">#000000</color>
+
+    <color name="color_status_bar">#000000</color>
+    <color name="color_toolbar">#FFFFFF</color>
+
+    <color name="color_destructive">#EE5F59</color>
+
+    <color name="color_divider">#979797</color>
+
+    <!-- Player -->
+    <color name="color_played">#FF5F46F4</color>
+    <color name="color_buffered">#1F5F46F4</color>
+    <color name="color_unplayed">#FFBEBEBE</color>
+
 </resources>

@@ -23,16 +23,13 @@ platform :android do
 
   lane :beta do
     # Adjust the `build_type` and `flavor` params as needed to build the right APK for your setup
-    gradle(
-        task: 'assemble',
-        build_type: 'Release'
-    )
+    gradle(task: "clean bundleRelease")
     upload_to_play_store(track: 'beta')
   end
 
   desc "Deploy a new version to the Google Play"
   lane :deploy do
-    gradle(task: "clean assembleRelease")
+    gradle(task: "clean bundleRelease")
     upload_to_play_store
   end
 end

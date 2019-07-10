@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "139717358510",
+    "firebase_url": "https://sedaily-ebb27.firebaseio.com",
+    "project_id": "sedaily-ebb27",
+    "storage_bucket": "sedaily-ebb27.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:139717358510:android:1f044abc4948dfd0",
+        "android_client_info": {
+          "package_name": "com.koalatea.sedaily"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "139717358510-itbktmviunbub9h2p9fem5n918g0346i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7hy-mQG6gIztbb3FjJyYAAhc4kqSkM_U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "139717358510-itbktmviunbub9h2p9fem5n918g0346i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:139717358510:android:0306d4b3382938f9",
+        "android_client_info": {
+          "package_name": "com.koalatea.sedaily.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "139717358510-itbktmviunbub9h2p9fem5n918g0346i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7hy-mQG6gIztbb3FjJyYAAhc4kqSkM_U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "139717358510-itbktmviunbub9h2p9fem5n918g0346i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,16 +1,15 @@
 *.iml
 .gradle
 /local.properties
-/.idea/caches/build_file_checksums.ser
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
+.idea
 .DS_Store
-/build
+build
 /captures
 .externalNativeBuild
 
+# Release
 app/release/
-app/google-services.json
 fastlane/report.xml
 .google/key.json
+release.properties
+release.keystore

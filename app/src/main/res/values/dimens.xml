@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="fab_margin">16dp</dimen>
-    <dimen name="app_bar_height">200dp</dimen>
 
-    <dimen name="margin_normal">16dp</dimen>
+    <dimen name="first_keyline">16dp</dimen>
+    <dimen name="second_keyline">72dp</dimen>
+    <dimen name="toolbar_elevation">4dp</dimen>
+
     <dimen name="margin_small">8dp</dimen>
 
-    <dimen name="plant_item_image_height">100dp</dimen>
+    <dimen name="image_corner_radius">8dp</dimen>
 
-    <dimen name="navigation_drawer_header_height">192dp</dimen>
-    <dimen name="navigation_drawer_header_padding">16dp</dimen>
-    <dimen name="navigation_drawer_image_width">100dp</dimen>
+    <dimen name="player_height">192dp</dimen>
+    <dimen name="play_button_width">54dp</dimen>
+
+    <dimen name="comment_divider_left">80dp</dimen>
+
+    <dimen name="player_overlay_peek_height">61dp</dimen>
+    <dimen name="player_overlay_placeholder_height">56dp</dimen>
+
 </resources>

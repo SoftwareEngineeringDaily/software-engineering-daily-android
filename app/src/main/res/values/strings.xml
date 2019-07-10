@@ -2,22 +2,38 @@
     <string name="app_name">SEDaily</string>
     <string name="navigation_drawer_header_title" translatable="false">SoftwareDaily</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="downloads_title">Downloads</string>
     <string name="auth_title">Authentication</string>
-    <string name="home_title" >Home</string>
-    <string name="episode_details_title">Episode</string>
-    <string name="garden_empty">Your garden is empty</string>
+    <string name="home_title">Software Engineering Daily</string>
+    <string name="comments_title">Comments</string>
+    <string name="episode_details_title"/>
+    <string name="related_links_title">Related links</string>
+    <string name="bookmarks_title">Saved</string>
+    <string name="profile_title">Profile</string>
     <string name="post_error">An error occurred while loading the posts</string>
-    <string name="search_hint">Search for a podcast</string>
+    <string name="search_hint">Search for an episode</string>
 
-    <!-- Accessibility -->
-    <string name="a11y_plant_item_image" translation_description="Accessibility text for each of the plant images shown in the 'My garden' and 'Plant list' screens.">Picture of plant</string>
+    <string name="loading_dots">…</string>
+
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
+    <string name="ok">OK</string>
+
+    <string name="add">Add</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="close">Close</string>
+
+    <string name="please_wait">Please wait…</string>
+
+    <!-- Bottom navigation -->
+    <string name="bottom_navigation_latest">Latest</string>
+    <string name="bottom_navigation_saved">Saved</string>
+    <string name="bottom_navigation_profile">Profile</string>
 
     <!-- Notificaiton Channel -->
-    <string name="notification_channel">Now Playing</string>
-    <string name="notification_channel_description">Shows what music is currently playing in UAMP</string>
+    <string name="playback_channel_name">Now Playing</string>
 
     <!-- Notification actions -->
     <string name="notification_skip_to_previous">Skip to previous track</string>
@@ -26,25 +42,85 @@
     <string name="notification_pause">Pause</string>
 
     <!-- Error messages -->
+    <string name="error_generic">Something went wrong, please try again later</string>
+    <string name="error_not_connected">Connection error, please check your internet connection</string>
+
     <string name="error_media_not_found">Could not locate requested media.</string>
 
-    <!-- Playbar -->
-    <string name="speed">Speed</string>
-    <string name="playbarTitleViewDesc">Current Song</string>
-    <string name="playbarStartTextDefault">0:00</string>
-    <string name="back_15">Back 15</string>
-    <string name="skip_15">Skip 15</string>
-    <string name="_1x">1x</string>
-    <string name="play_pause">Play/Pause</string>
+    <string name="error_log_in">Failed to log in, please check that your username and password are correct</string>
+
+    <!-- Player -->
+    <string name="playback_speed_title">Speed</string>
+    <string name="playback_speed">%sx</string>
 
     <!-- Auth -->
     <string name="login">Login</string>
     <string name="register">Register</string>
     <string name="email">Email</string>
     <string name="username">Username</string>
-    <string name="usernameOrEmail">Username or Email</string>
-    <string name="forgotPassword">Forgot Password</string>
+    <string name="username_or_email">Username or Email</string>
     <string name="password">Password</string>
-    <string name="remove_download">Remove Download</string>
-    <string name="downloading_title">Downloading</string>
+    <string name="back_to_login_in">Already a member? Login</string>
+    <string name="back_to_create_account">No account yet? Create one</string>
+
+    <string name="invalid_username">Invalid username</string>
+    <string name="invalid_email">Invalid email</string>
+    <string name="invalid_password">Invalid password</string>
+
+    <string name="prompt_login">You must login to use this feature</string>
+
+    <!-- Profile -->
+    <string name="logout">Logout</string>
+
+    <string name="edit_profile_hint">Please visit the website to edit your profile</string>
+    <string name="login_to_manage_profile">Login to see your profile</string>
+
+    <!-- Bookmakrs -->
+    <string name="login_to_manage_bookmarks">Login to see your saved episodes</string>
+
+    <!-- Home tabs -->
+    <string name="tab_all">All</string>
+    <string name="tab_businessAndPhilosophy">Business and Philosophy</string>
+    <string name="tab_blockchain">Blockchain</string>
+    <string name="tab_cloudEngineering">Cloud Engineering</string>
+    <string name="tab_data">Data</string>
+    <string name="tab_javaScript">JavaScript</string>
+    <string name="tab_machineLearning">Machine Learning</string>
+    <string name="tab_openSource">Open Source</string>
+    <string name="tab_security">Security</string>
+    <string name="tab_hackers">Hackers</string>
+    <string name="tab_greatestHits">Greatest Hits</string>
+    <string name="content_description_podcast_episode_logo">Podcast episode logo</string>
+
+    <!-- Episode details -->
+    <string name="download">Download</string>
+    <string name="delete">Delete</string>
+    <string name="episode_download_succeeded">Episode downloaded successfully</string>
+    <string name="episode_download_failed">Episode downloaded failed, please try again later</string>
+    <string name="episode_delete_download_prompt">Do you really want to delete this download?</string>
+    <string name="rationale_storage_permission">Storage access is needed to download episodes</string>
+    <string name="play">Play</string>
+    <string name="stop">Stop</string>
+    <string name="share">Share</string>
+    <string name="view_episode_link_failed">Cannot open this link at the moment, please try again later</string>
+
+    <!-- Related links -->
+    <string name="add_related_link_success">Link added successfully</string>
+    <string name="add_related_link_failed">@string/error_generic</string>
+    <string name="view_related_link_failed">Cannot open this link at the moment, please try again later</string>
+    <string name="transcript">Transcript</string>
+    <string name="title">Title</string>
+    <string name="url">URL</string>
+    <string name="invalid_title">Invalid title</string>
+    <string name="invalid_url">Invalid URL</string>
+
+    <!-- Comments -->
+    <string name="content_description_comment_author_avatar">Author avatar</string>
+    <string name="no_comments_yet">No comments yet. Be the first to post a comment</string>
+    <string name="reply">Reply</string>
+    <string name="reply_to_">Reply to %s</string>
+    <string name="cancel_reply">Cancel reply</string>
+    <string name="post">Post</string>
+    <string name="add_comment_success">Comment added successfully</string>
+
 </resources>
