@@ -98,7 +98,7 @@ class BookmarksFragment : BaseFragment() {
 
     private fun showLoading() {
         emptyStateContainer.visibility = View.GONE
-        epoxyRecyclerView.visibility = View.GONE
+        swipeRefreshLayoutBookmarks.visibility = View.GONE
 
         swipeRefreshLayoutBookmarks.isRefreshing = true
     }
@@ -108,7 +108,7 @@ class BookmarksFragment : BaseFragment() {
     }
 
     private fun showLoginEmptyState() {
-        epoxyRecyclerView.visibility = View.GONE
+        swipeRefreshLayoutBookmarks.visibility = View.GONE
         swipeRefreshLayoutBookmarks.isRefreshing = false
 
         emptyStateContainer.textView.text = getString(R.string.login_to_manage_bookmarks)
@@ -121,7 +121,7 @@ class BookmarksFragment : BaseFragment() {
         emptyStateContainer.visibility = View.GONE
         swipeRefreshLayoutBookmarks.isRefreshing = false
 
-        epoxyRecyclerView.visibility = View.VISIBLE
+        swipeRefreshLayoutBookmarks.visibility = View.VISIBLE
     }
 
 }
