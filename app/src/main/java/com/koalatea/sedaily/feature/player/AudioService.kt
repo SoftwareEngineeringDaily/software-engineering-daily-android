@@ -88,6 +88,7 @@ class AudioService : LifecycleService() {
 
     var episodeId: String? = null
         private set
+    private var episodeTitle: String? = null
 
     private lateinit var exoPlayer: SimpleExoPlayer
 
@@ -117,7 +118,99 @@ class AudioService : LifecycleService() {
                 .build()
         exoPlayer.setAudioAttributes(audioAttributes, true)
 
+        // Monitor ExoPlayer events.
         exoPlayer.addListener(PlayerEventListener())
+
+        // Setup notification and media session.
+        playerNotificationManager = PlayerNotificationManager.createWithNotificationChannel(
+                applicationContext,
+                PLAYBACK_CHANNEL_ID,
+                R.string.playback_channel_name,
+                PLAYBACK_NOTIFICATION_ID,
+                object : PlayerNotificationManager.MediaDescriptionAdapter {
+                    override fun getCurrentContentTitle(player: Player): String {
+                        return episodeTitle ?: getString(R.string.loading_dots)
+                    }
+
+                    @Nullable
+                    override fun createCurrentContentIntent(player: Player): PendingIntent? = PendingIntent.getActivity(
+                            applicationContext,
+                            0,
+                            Intent(applicationContext, MainActivity::class.java),
+                            PendingIntent.FLAG_UPDATE_CURRENT)
+
+                    @Nullable
+                    override fun getCurrentContentText(player: Player): String? {
+                        return null
+                    }
+
+                    @Nullable
+                    override fun getCurrentLargeIcon(player: Player, callback: PlayerNotificationManager.BitmapCallback): Bitmap? {
+                        return getBitmapFromVectorDrawable(applicationContext, R.drawable.vd_sed_icon)
+                    }
+                },
+                object : PlayerNotificationManager.NotificationListener {
+                    override fun onNotificationStarted(notificationId: Int, notification: Notification?) {
+                        startForeground(notificationId, notification)
+                    }
+
+                    override fun onNotificationCancelled(notificationId: Int) {
+                        _playerStatusLiveData.value = PlayerStatus.Cancelled(episodeId)
+
+                        stopSelf()
+                    }
+
+                    override fun onNotificationPosted(notificationId: Int, notification: Notification?, ongoing: Boolean) {
+                        if (ongoing) {
+                            // Make sure the service will not get destroyed while playing media.
+                            startForeground(notificationId, notification)
+                        } else {
+                            // Make notification cancellable.
+                            stopForeground(false)
+                        }
+                    }
+                }
+        ).apply {
+            // Omit skip previous and next actions.
+            setUseNavigationActions(false)
+
+            // Add stop action.
+            setUseStopAction(true)
+
+            val incrementMs = resources.getInteger(R.integer.increment_ms).toLong()
+            setFastForwardIncrementMs(incrementMs)
+            setRewindIncrementMs(incrementMs)
+
+            setPlayer(exoPlayer)
+        }
+
+        // Show lock screen controls and let apps like Google assistant manager playback.
+        mediaSession = MediaSessionCompat(applicationContext, MEDIA_SESSION_TAG).apply {
+            isActive = true
+        }
+        playerNotificationManager?.setMediaSessionToken(mediaSession?.sessionToken)
+
+        mediaSessionConnector = MediaSessionConnector(mediaSession).apply {
+            setQueueNavigator(object : TimelineQueueNavigator(mediaSession) {
+                override fun getMediaDescription(player: Player, windowIndex: Int): MediaDescriptionCompat {
+                    val bitmap = getBitmapFromVectorDrawable(applicationContext, R.drawable.vd_sed_icon)
+                    val extras = Bundle().apply {
+                        putParcelable(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, bitmap)
+                        putParcelable(MediaMetadataCompat.METADATA_KEY_DISPLAY_ICON, bitmap)
+                    }
+
+                    val title = episodeTitle ?: getString(R.string.loading_dots)
+
+                    return MediaDescriptionCompat.Builder()
+                            .setIconBitmap(bitmap)
+                            .setTitle(title)
+                            .setExtras(extras)
+                            .build()
+                }
+            })
+
+            setPlayer(exoPlayer)
+        }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -136,6 +229,22 @@ class AudioService : LifecycleService() {
         exoPlayer.release()
 
         super.onDestroy()
+    }
+
+    @MainThread
+    private fun handleIntent(intent: Intent?) {
+        episodeId = intent?.getStringExtra(ARG_EPISODE_ID)
+        episodeTitle = intent?.getStringExtra(ARG_TITLE)
+
+        // Play
+        intent?.let {
+            intent.getParcelableExtra<Uri>(ARG_URI)?.also { uri ->
+                val startPosition = intent.getLongExtra(ARG_START_POSITION, C.POSITION_UNSET.toLong())
+                val playbackSpeed = playbackManager.playbackSpeed
+
+                play(uri, startPosition, playbackSpeed)
+            }
+        }
     }
 
     @MainThread
@@ -172,96 +281,6 @@ class AudioService : LifecycleService() {
     @MainThread
     fun changePlaybackSpeed(playbackSpeed: Float) {
         exoPlayer.playbackParameters = PlaybackParameters(playbackSpeed)
-    }
-
-    @MainThread
-    private fun handleIntent(intent: Intent?) {
-        episodeId = intent?.getStringExtra(ARG_EPISODE_ID)
-
-        playerNotificationManager = PlayerNotificationManager.createWithNotificationChannel(
-                applicationContext,
-                PLAYBACK_CHANNEL_ID,
-                R.string.playback_channel_name,
-                PLAYBACK_NOTIFICATION_ID,
-                object : PlayerNotificationManager.MediaDescriptionAdapter {
-                    override fun getCurrentContentTitle(player: Player): String {
-                        return intent?.getStringExtra(ARG_TITLE) ?: getString(R.string.loading_dots)
-                    }
-
-                    @Nullable
-                    override fun createCurrentContentIntent(player: Player): PendingIntent? = PendingIntent.getActivity(
-                            applicationContext,
-                            0,
-                            Intent(applicationContext, MainActivity::class.java),
-                            PendingIntent.FLAG_UPDATE_CURRENT)
-
-                    @Nullable
-                    override fun getCurrentContentText(player: Player): String? {
-                        return null
-                    }
-
-                    @Nullable
-                    override fun getCurrentLargeIcon(player: Player, callback: PlayerNotificationManager.BitmapCallback): Bitmap? {
-                        return getBitmapFromVectorDrawable(applicationContext, R.drawable.vd_sed_icon)
-                    }
-                },
-                object : PlayerNotificationManager.NotificationListener {
-                    override fun onNotificationStarted(notificationId: Int, notification: Notification?) {
-                        startForeground(notificationId, notification)
-                    }
-
-                    override fun onNotificationCancelled(notificationId: Int) {
-                        stopSelf()
-                    }
-                }
-        ).apply {
-            // omit skip previous and next actions
-            setUseNavigationActions(false)
-
-            val incrementMs = resources.getInteger(R.integer.increment_ms).toLong()
-            setFastForwardIncrementMs(incrementMs)
-            setRewindIncrementMs(incrementMs)
-
-            setPlayer(exoPlayer)
-        }
-
-        // Show lock screen controls and let apps like Google assistant manager playback.
-        mediaSession = MediaSessionCompat(applicationContext, MEDIA_SESSION_TAG).apply {
-            isActive = true
-        }
-        playerNotificationManager?.setMediaSessionToken(mediaSession?.sessionToken)
-
-        mediaSessionConnector = MediaSessionConnector(mediaSession).apply {
-            setQueueNavigator(object : TimelineQueueNavigator(mediaSession) {
-                override fun getMediaDescription(player: Player, windowIndex: Int): MediaDescriptionCompat {
-                    val bitmap = getBitmapFromVectorDrawable(applicationContext, R.drawable.vd_sed_icon)
-                    val extras = Bundle().apply {
-                        putParcelable(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, bitmap)
-                        putParcelable(MediaMetadataCompat.METADATA_KEY_DISPLAY_ICON, bitmap)
-                    }
-
-                    val title = intent?.getStringExtra(ARG_TITLE) ?: getString(R.string.loading_dots)
-
-                    return MediaDescriptionCompat.Builder()
-                            .setIconBitmap(bitmap)
-                            .setTitle(title)
-                            .setExtras(extras)
-                            .build()
-                }
-            })
-
-            setPlayer(exoPlayer)
-        }
-
-        // Play
-        intent?.let {
-            intent.getParcelableExtra<Uri>(ARG_URI)?.also { uri ->
-                val startPosition = intent.getLongExtra(ARG_START_POSITION, C.POSITION_UNSET.toLong())
-                val playbackSpeed = playbackManager.playbackSpeed
-
-                play(uri, startPosition, playbackSpeed)
-            }
-        }
     }
 
     @MainThread
@@ -321,17 +340,20 @@ class AudioService : LifecycleService() {
             if (playbackState == Player.STATE_READY) {
                 if (exoPlayer.playWhenReady) {
                     episodeId?.let { _playerStatusLiveData.value = PlayerStatus.Playing(it) }
-
-                    monitorPlaybackProgress()
                 } else {// Paused
                     episodeId?.let { _playerStatusLiveData.value = PlayerStatus.Paused(it) }
-
-                    cancelPlaybackMonitor()
                 }
             } else if (playbackState == Player.STATE_ENDED) {
                 episodeId?.let { _playerStatusLiveData.value = PlayerStatus.Ended(it) }
             } else {
                 episodeId?.let { _playerStatusLiveData.value = PlayerStatus.Other(it) }
+            }
+
+            // Only monitor playback to record progress when playing.
+            if (playbackState == Player.STATE_READY && exoPlayer.playWhenReady) {
+                monitorPlaybackProgress()
+            } else {
+                cancelPlaybackMonitor()
             }
         }
 
