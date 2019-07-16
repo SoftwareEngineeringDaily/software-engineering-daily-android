@@ -323,6 +323,7 @@ class EpisodeDetailFragment : BaseFragment() {
                     is PlayerStatus.Playing -> showStopViews()
                     is PlayerStatus.Paused -> showPlayViews()
                     is PlayerStatus.Ended -> showPlayViews()
+                    is PlayerStatus.Cancelled -> showPlayViews()
                     is PlayerStatus.Error -> acknowledgeGenericError()
                 }
             }

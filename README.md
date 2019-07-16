@@ -76,4 +76,4 @@ Interested in seeing a particular feature implemented in this app? Please open a
 
 Contributing
 ------------
-Checkout [CONTRIBUTING.md](https://github.com/SoftwareEngineeringDaily/software-engineering-daily-android/CONTRIBUTING.md) for details.
+Checkout [CONTRIBUTING.md](https://github.com/SoftwareEngineeringDaily/software-engineering-daily-android/blob/master/CONTRIBUTING.md) for details.

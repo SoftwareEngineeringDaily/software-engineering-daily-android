@@ -66,6 +66,12 @@ abstract class BasePlayerActivity : AppCompatActivity(), PlayerCallback, Playbac
                 _playerStatusLiveData.value = it
 
                 playerOverlayPlayMaterialButton.isSelected = it is PlayerStatus.Playing
+
+                if (it is PlayerStatus.Cancelled) {
+                    dismissPlayerOverlay()
+
+                    stopAudioService()
+                }
             })
 
             // Show player after config change.
@@ -92,11 +98,6 @@ abstract class BasePlayerActivity : AppCompatActivity(), PlayerCallback, Playbac
         super.onPostCreate(savedInstanceState)
 
         setupPlayerBottomSheet()
-
-        // Show the player, if the audio service is already running.
-        if (applicationContext.isServiceRunning(AudioService::class.java.name)) {
-            bindToAudioService()
-        }
 
         playerOverlayPlayMaterialButton.setOnClickListener {
             if (playerOverlayPlayMaterialButton.isSelected) {
@@ -139,6 +140,17 @@ abstract class BasePlayerActivity : AppCompatActivity(), PlayerCallback, Playbac
         playerView.showController()
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        // Show the player, if the audio service is already running.
+        if (applicationContext.isServiceRunning(AudioService::class.java.name)) {
+            bindToAudioService()
+        } else {
+            dismissPlayerOverlay()
+        }
+    }
+
     override fun onStop() {
         unbindAudioService()
 
@@ -160,8 +172,12 @@ abstract class BasePlayerActivity : AppCompatActivity(), PlayerCallback, Playbac
     override fun stop() {
         dismissPlayerOverlay()
 
+        audioService?.episodeId?.let { episodeId ->
+            _playerStatusLiveData.value = PlayerStatus.Paused(episodeId)
+        } ?: run {
+            _playerStatusLiveData.value = PlayerStatus.Other()
+        }
         stopAudioService()
-        _playerStatusLiveData.value = PlayerStatus.Other()
     }
 
     private fun bindToAudioService() {
