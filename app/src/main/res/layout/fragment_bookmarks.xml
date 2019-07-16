@@ -7,14 +7,15 @@
     tools:context=".MainActivity">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRefreshLayoutBookmarks"
+        android:id="@+id/bookmarksSwipeRefreshLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible">
 
         <com.airbnb.epoxy.EpoxyRecyclerView
             android:id="@+id/epoxyRecyclerView"
@@ -24,8 +25,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:listitem="@layout/view_holder_bookmark"
-            tools:visibility="visible" />
+            tools:listitem="@layout/view_holder_bookmark" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
