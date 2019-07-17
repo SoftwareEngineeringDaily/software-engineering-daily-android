@@ -36,26 +36,25 @@ class DownloadManager(
         downloadManager?.let {
             val query = DownloadManager.Query().setFilterById(downloadId)
 
-            val cursor = downloadManager.query(query).apply {
-                moveToFirst()
-            }
+            val cursor = downloadManager.query(query)
+            if (cursor.moveToFirst()) {
+                val status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
+                val uri = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI))
+                val reason = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_REASON))
+                val bytesDownloaded = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR))
+                val bytesTotal = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES))
+                val progress = bytesDownloaded * 100f / bytesTotal
 
-            val status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
-            val uri = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI))
-            val reason = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_REASON))
-            val bytesDownloaded = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR))
-            val bytesTotal = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES))
-            val progress = bytesDownloaded * 100f / bytesTotal
+                cursor.close()
 
-            cursor.close()
-
-            return when(status) {
-                DownloadManager.STATUS_SUCCESSFUL -> DownloadStatus.Downloaded(uri)
-                DownloadManager.STATUS_FAILED -> DownloadStatus.Error(reason)
-                DownloadManager.STATUS_RUNNING -> DownloadStatus.Downloading(progress)
-                DownloadManager.STATUS_PAUSED -> DownloadStatus.Downloading(progress)
-                DownloadManager.STATUS_PENDING -> DownloadStatus.Downloading(progress)
-                else -> DownloadStatus.Unknown
+                return when (status) {
+                    DownloadManager.STATUS_SUCCESSFUL -> DownloadStatus.Downloaded(uri)
+                    DownloadManager.STATUS_FAILED -> DownloadStatus.Error(reason)
+                    DownloadManager.STATUS_RUNNING -> DownloadStatus.Downloading(progress)
+                    DownloadManager.STATUS_PAUSED -> DownloadStatus.Downloading(progress)
+                    DownloadManager.STATUS_PENDING -> DownloadStatus.Downloading(progress)
+                    else -> DownloadStatus.Unknown
+                }
             }
         }
 
