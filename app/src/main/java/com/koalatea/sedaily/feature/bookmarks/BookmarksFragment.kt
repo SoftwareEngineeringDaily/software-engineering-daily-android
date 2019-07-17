@@ -62,6 +62,10 @@ class BookmarksFragment : BaseFragment() {
             epoxyRecyclerView.setController(this)
         }
 
+        bookmarksSwipeRefreshLayout.setOnRefreshListener {
+            viewModel.fetchBookmarks()
+        }
+
         viewModel.bookmarksResource.observe(this, Observer { resource ->
             when (resource) {
                 is Resource.Loading -> {
@@ -94,18 +98,18 @@ class BookmarksFragment : BaseFragment() {
 
     private fun showLoading() {
         emptyStateContainer.visibility = View.GONE
-        epoxyRecyclerView.visibility = View.GONE
+        bookmarksSwipeRefreshLayout.visibility = View.GONE
 
-        progressBar.visibility = View.VISIBLE
+        bookmarksSwipeRefreshLayout.isRefreshing = true
     }
 
     private fun hideLoading() {
-        progressBar.visibility = View.GONE
+        bookmarksSwipeRefreshLayout.isRefreshing = false
     }
 
     private fun showLoginEmptyState() {
-        epoxyRecyclerView.visibility = View.GONE
-        progressBar.visibility = View.GONE
+        bookmarksSwipeRefreshLayout.visibility = View.GONE
+        bookmarksSwipeRefreshLayout.isRefreshing = false
 
         emptyStateContainer.textView.text = getString(R.string.login_to_manage_bookmarks)
         emptyStateContainer.visibility = View.VISIBLE
@@ -115,9 +119,9 @@ class BookmarksFragment : BaseFragment() {
         bookmarksEpoxyController?.setData(episodes)
 
         emptyStateContainer.visibility = View.GONE
-        progressBar.visibility = View.GONE
+        bookmarksSwipeRefreshLayout.isRefreshing = false
 
-        epoxyRecyclerView.visibility = View.VISIBLE
+        bookmarksSwipeRefreshLayout.visibility = View.VISIBLE
     }
 
 }
