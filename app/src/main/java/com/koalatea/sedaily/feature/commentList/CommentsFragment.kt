@@ -20,7 +20,6 @@ import com.koalatea.sedaily.util.hideKeyboard
 import com.koalatea.sedaily.util.supportActionBar
 import kotlinx.android.synthetic.main.fragment_comments.*
 import kotlinx.android.synthetic.main.include_empty_state.view.*
-import kotlinx.android.synthetic.main.view_holder_comment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 private const val TAG_DIALOG_PROMPT_LOGIN = "prompt_login_dialog"
@@ -83,6 +82,11 @@ class CommentsFragment : BaseFragment() {
                     is Resource.RequireLogin -> showPromptLoginDialog()
                     is Resource.Success -> {
                         viewModel.reloadComments(entityId)
+                    }
+                    is Resource.Error -> {
+                        hideLoading()
+
+                        if (resource.isConnected) acknowledgeGenericError() else acknowledgeConnectionError()
                     }
                 }
             }

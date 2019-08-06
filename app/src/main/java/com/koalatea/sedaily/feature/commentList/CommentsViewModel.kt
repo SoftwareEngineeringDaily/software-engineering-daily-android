@@ -50,8 +50,11 @@ class CommentsViewModel(
     fun upVoteComment(comment: Comment) = viewModelScope.launch {
 
             _addCommentLiveData.postValue(Event(Resource.Loading))
+
             val resource = commentsRepository.upVoteComment(comment._id)
+
             _commentVoteLiveData.postValue(Event(resource))
+
 
     }
 
