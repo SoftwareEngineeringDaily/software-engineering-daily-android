@@ -38,4 +38,16 @@ class CommentsRepository(
         }
     }
 
+    suspend fun upVoteComment(entityId: String) = withContext(Dispatchers.IO) {
+        if(sessionRepository.isLoggedIn) {
+            val response = safeApiCall { api.upVoteCommentsAsync(entityId).await()}
+            if(response?.body() != null){
+                println(response.message())
+            }
+            Resource.Success(true)
+        } else {
+            Resource.RequireLogin
+        }
+    }
+
 }

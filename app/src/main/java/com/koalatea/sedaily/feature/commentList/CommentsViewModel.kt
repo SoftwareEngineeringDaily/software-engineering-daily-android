@@ -26,6 +26,10 @@ class CommentsViewModel(
     val replyToCommentLiveData: LiveData<Comment?>
         get() = _replyToCommentLiveData
 
+    private val _commentVoteLiveData = MutableLiveData<Event<Resource<Boolean>>>()
+    val commentVoteLiveData: LiveData<Event<Resource<Boolean>>>
+        get() = _commentVoteLiveData
+
     private val _addCommentLiveData = MutableLiveData<Event<Resource<Boolean>>>()
     val addCommentLiveData: LiveData<Event<Resource<Boolean>>>
         get() = _addCommentLiveData
@@ -40,6 +44,15 @@ class CommentsViewModel(
     @MainThread
     fun reloadComments(entityId: String) {
         entityIdLiveData.value = entityId
+    }
+
+    @MainThread
+    fun upVoteComment(comment: Comment) = viewModelScope.launch {
+
+            _addCommentLiveData.postValue(Event(Resource.Loading))
+            val resource = commentsRepository.upVoteComment(comment._id)
+            _commentVoteLiveData.postValue(Event(resource))
+
     }
 
     @MainThread

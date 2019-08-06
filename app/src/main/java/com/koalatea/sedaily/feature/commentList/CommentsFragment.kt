@@ -20,6 +20,7 @@ import com.koalatea.sedaily.util.hideKeyboard
 import com.koalatea.sedaily.util.supportActionBar
 import kotlinx.android.synthetic.main.fragment_comments.*
 import kotlinx.android.synthetic.main.include_empty_state.view.*
+import kotlinx.android.synthetic.main.view_holder_comment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 private const val TAG_DIALOG_PROMPT_LOGIN = "prompt_login_dialog"
@@ -51,6 +52,8 @@ class CommentsFragment : BaseFragment() {
         commentsEpoxyController = CommentsEpoxyController(
                 replyClickListener = { comment ->
                     viewModel.replyTo(comment)
+                }, upVoteClickListener = {comment ->
+                    viewModel.upVoteComment(comment)
                 }
         ).apply {
             epoxyRecyclerView.setController(this)
@@ -63,6 +66,8 @@ class CommentsFragment : BaseFragment() {
             })
         }
 
+
+
         addCommentButton.setOnClickListener {
             val comment = commentEditText.text?.trim()?.toString() ?: ""
 
@@ -72,6 +77,16 @@ class CommentsFragment : BaseFragment() {
         cancelReplyButton.setOnClickListener {
             viewModel.cancelReply()
         }
+
+        viewModel.commentVoteLiveData.observe(this, Observer { it.getContentIfNotHandled()?.let { resource ->
+                when (resource) {
+                    is Resource.RequireLogin -> showPromptLoginDialog()
+                    is Resource.Success -> {
+                        viewModel.reloadComments(entityId)
+                    }
+                }
+            }
+        })
 
         viewModel.commentsResource.observe(this, Observer { resource ->
             when (resource) {
