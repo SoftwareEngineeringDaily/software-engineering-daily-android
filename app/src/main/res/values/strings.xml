@@ -125,6 +125,5 @@
     <string name="post">Post</string>
     <string name="add_comment_success">Comment added successfully</string>
     <string name="vote_placeholder">0</string>
-    <string name="upvote">▲ UPVOTE</string>
 
 </resources>

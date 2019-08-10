@@ -19,6 +19,8 @@ abstract class ReplyEpoxyModelWithHolder : BaseCommentEpoxyModelWithHolder<Reply
 
         holder.upVoteButton.setOnClickListener { upVoteClickListener() }
         holder.upVoteButton.setTypeface(null, textWeight)
+        holder.upVoteButton.isSelected = upvoted
+        holder.upVoteButton.text = score.toString()
     }
 }
 

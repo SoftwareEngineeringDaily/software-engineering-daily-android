@@ -51,7 +51,8 @@ class CommentsFragment : BaseFragment() {
         commentsEpoxyController = CommentsEpoxyController(
                 replyClickListener = { comment ->
                     viewModel.replyTo(comment)
-                }, upVoteClickListener = {comment ->
+                },
+                upVoteClickListener = {comment ->
                     viewModel.upVoteComment(comment)
                 }
         ).apply {

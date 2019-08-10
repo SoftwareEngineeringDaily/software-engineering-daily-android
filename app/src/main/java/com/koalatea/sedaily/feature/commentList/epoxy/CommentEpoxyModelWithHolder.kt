@@ -12,7 +12,6 @@ abstract class CommentEpoxyModelWithHolder : BaseCommentEpoxyModelWithHolder<Com
 
     @EpoxyAttribute lateinit var replyClickListener: () -> Unit
     @EpoxyAttribute lateinit var upVoteClickListener: () -> Unit
-    @EpoxyAttribute var textWeight: Int = Typeface.NORMAL
 
 
     override fun bind(holder: CommentHolder) {
@@ -20,14 +19,13 @@ abstract class CommentEpoxyModelWithHolder : BaseCommentEpoxyModelWithHolder<Com
 
         holder.replayButton.setOnClickListener { replyClickListener() }
         holder.upVoteButton.setOnClickListener { upVoteClickListener() }
-
-        holder.upVoteButton.setTypeface(null, textWeight)
-
+        holder.upVoteButton.isSelected = upvoted
+        holder.upVoteButton.text = score.toString()
     }
 
 }
 
 class CommentHolder : BaseCommentHolder() {
     val replayButton by bind<Button>(R.id.replyButton)
-    val upVoteButton by bind<TextView>(R.id.commentUpvoteButton)
+    val upVoteButton by bind<Button>(R.id.commentUpvoteButton)
 }

@@ -22,13 +22,7 @@ class CommentsEpoxyController(
                 score(comment.score)
                 replyClickListener { replyClickListener(comment) }
                 upVoteClickListener { upVoteClickListener(comment) }
-
-                if(comment.upvoted == false) {
-                    textWeight(Typeface.NORMAL)
-                } else {
-                    textWeight(Typeface.BOLD)
-                }
-
+                upvoted(comment?.upvoted ?: false)
             }
 
             comment.replies?.forEach { reply ->
@@ -40,15 +34,9 @@ class CommentsEpoxyController(
                     authorName(reply.author.name ?: comment.author.username)
                     comment(reply.content)
                     date(reply.utcDateCreated)
-                    score(reply.score)
                     upVoteClickListener { upVoteClickListener(reply) }
-
-                    if(reply.upvoted == false) {
-                        textWeight(Typeface.NORMAL)
-                    } else {
-                        textWeight(Typeface.BOLD)
-                    }
-
+                    upvoted(reply?.upvoted ?: false)
+                    score(reply.score)
                 }
             }
         }

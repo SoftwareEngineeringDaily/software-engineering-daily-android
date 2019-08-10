@@ -22,6 +22,7 @@ abstract class BaseCommentEpoxyModelWithHolder<Holder: BaseCommentHolder> : Epox
     @EpoxyAttribute lateinit var comment: String
     @EpoxyAttribute var date: Date? = null
     @EpoxyAttribute var score: Int? = 0
+    @EpoxyAttribute var upvoted: Boolean = false
 
     @CallSuper
     override fun bind(holder: Holder) {
@@ -36,10 +37,6 @@ abstract class BaseCommentEpoxyModelWithHolder<Holder: BaseCommentHolder> : Epox
 
         holder.authorNameTextView.text = authorName
         holder.commentTextView.text = comment
-        holder.scoreTextView.text = score.toString()
-
-
-
 
         date?.let {
             holder.dateTextView.text = DateFormat.getDateFormat(context).format(date)
@@ -48,7 +45,6 @@ abstract class BaseCommentEpoxyModelWithHolder<Holder: BaseCommentHolder> : Epox
             holder.dateTextView.visibility = View.GONE
         }
     }
-
 }
 
 abstract class BaseCommentHolder : KotlinEpoxyHolder() {
@@ -56,5 +52,4 @@ abstract class BaseCommentHolder : KotlinEpoxyHolder() {
     val authorNameTextView by bind<TextView>(R.id.authorNameTextView)
     val commentTextView by bind<TextView>(R.id.commentTextView)
     val dateTextView by bind<TextView>(R.id.dateTextView)
-    val scoreTextView by bind<TextView>(R.id.scoreTextView)
 }
