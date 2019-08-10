@@ -39,11 +39,11 @@ class CommentsRepository(
     }
 
     suspend fun upVoteComment(entityId: String) = withContext(Dispatchers.IO) {
-        if(sessionRepository.isLoggedIn) {
-            val response = safeApiCall { api.upVoteCommentsAsync(entityId).await()}
-            if(response?.isSuccessful == true){
+        if (sessionRepository.isLoggedIn) {
+            val response = safeApiCall { api.upVoteCommentsAsync(entityId).await() }
+            if (response?.isSuccessful == true) {
                 Resource.Success(true)
-            }else {
+            } else {
                 Resource.Error(response?.errorBody().toException(), networkManager.isConnected)
             }
 
