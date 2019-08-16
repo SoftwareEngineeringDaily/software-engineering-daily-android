@@ -1,5 +1,6 @@
 linters:
-  rubocop:
-    fixer: true
+    ktlint:
+        android: true
+        fixer: true
 fixers:
-  enable: true
+    enable: true
