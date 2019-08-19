@@ -21,7 +21,6 @@ abstract class CommentEpoxyModelWithHolder : BaseCommentEpoxyModelWithHolder<Com
             if(it > 0) { it.toString() } else {""}
         }
     }
-
 }
 
 class CommentHolder : BaseCommentHolder() {
