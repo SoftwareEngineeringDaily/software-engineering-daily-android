@@ -86,7 +86,6 @@ class CommentsFragment : BaseFragment() {
                     }
                     is Resource.Error -> {
                         hideLoading()
-
                         if (resource.isConnected) acknowledgeGenericError() else acknowledgeConnectionError()
                     }
                 }
