@@ -1,9 +1,6 @@
 package com.koalatea.sedaily.feature.commentList.epoxy
 
-import android.graphics.Typeface
 import android.widget.Button
-import android.widget.ImageButton
-import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.koalatea.sedaily.R
@@ -12,15 +9,15 @@ import com.koalatea.sedaily.R
 abstract class ReplyEpoxyModelWithHolder : BaseCommentEpoxyModelWithHolder<ReplyHolder>() {
 
     @EpoxyAttribute lateinit var upVoteClickListener: () -> Unit
-    @EpoxyAttribute var textWeight: Int = Typeface.NORMAL
 
     override fun bind(holder: ReplyHolder) {
         super.bind(holder)
 
         holder.upVoteButton.setOnClickListener { upVoteClickListener() }
-        holder.upVoteButton.setTypeface(null, textWeight)
         holder.upVoteButton.isSelected = upvoted
-        holder.upVoteButton.text = score.toString()
+        holder.upVoteButton.text = score?.let {
+            if(it > 0) { it.toString() } else {""}
+        }
     }
 }
 

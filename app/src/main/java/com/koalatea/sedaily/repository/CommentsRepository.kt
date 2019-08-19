@@ -46,7 +46,6 @@ class CommentsRepository(
             } else {
                 Resource.Error(response?.errorBody().toException(), networkManager.isConnected)
             }
-
         } else {
             Resource.RequireLogin
         }
