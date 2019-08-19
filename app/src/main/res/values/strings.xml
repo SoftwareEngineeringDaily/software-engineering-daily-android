@@ -116,8 +116,6 @@
 
     <!-- Comments -->
     <string name="content_description_comment_author_avatar">Author avatar</string>
-    <string name="content_description_downvote_arrow">Down-vote Arrow</string>
-    <string name="content_description_upvote_arrow">Up-vote Arrow</string>
     <string name="no_comments_yet">No comments yet. Be the first to post a comment</string>
     <string name="reply">Reply</string>
     <string name="reply_to_">Reply to %s</string>
