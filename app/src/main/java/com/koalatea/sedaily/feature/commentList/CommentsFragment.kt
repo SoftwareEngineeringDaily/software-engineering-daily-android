@@ -21,7 +21,7 @@ import com.koalatea.sedaily.util.supportActionBar
 import kotlinx.android.synthetic.main.fragment_comments.*
 import kotlinx.android.synthetic.main.include_empty_state.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-//
+
 private const val TAG_DIALOG_PROMPT_LOGIN = "prompt_login_dialog"
 
 class CommentsFragment : BaseFragment() {
