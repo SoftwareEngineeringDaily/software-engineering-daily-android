@@ -1,0 +1,6 @@
+linters:
+    ktlint:
+        android: true
+        fixer: true
+fixers:
+    enable: true
