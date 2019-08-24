@@ -18,7 +18,11 @@ abstract class CommentEpoxyModelWithHolder : BaseCommentEpoxyModelWithHolder<Com
         holder.upVoteButton.setOnClickListener { upVoteClickListener() }
         holder.upVoteButton.isSelected = upvoted
         holder.upVoteButton.text = score?.let {
-            if(it > 0) { it.toString() } else {""}
+            if (it > 0) { 
+                it.toString() 
+            } else {
+                ""
+            }
         }
     }
 }
