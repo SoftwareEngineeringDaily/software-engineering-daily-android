@@ -49,7 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/first_keyline"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="@dimen/first_keyline"
+        android:layout_marginRight="@dimen/first_keyline"
         android:layout_marginBottom="@dimen/first_keyline"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
         app:layout_constraintBottom_toBottomOf="parent"

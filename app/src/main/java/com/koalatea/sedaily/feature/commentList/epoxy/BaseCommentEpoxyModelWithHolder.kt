@@ -21,6 +21,8 @@ abstract class BaseCommentEpoxyModelWithHolder<Holder: BaseCommentHolder> : Epox
     @EpoxyAttribute lateinit var authorName: String
     @EpoxyAttribute lateinit var comment: String
     @EpoxyAttribute var date: Date? = null
+    @EpoxyAttribute var score: Int? = 0
+    @EpoxyAttribute var upvoted: Boolean = false
 
     @CallSuper
     override fun bind(holder: Holder) {
@@ -43,7 +45,6 @@ abstract class BaseCommentEpoxyModelWithHolder<Holder: BaseCommentHolder> : Epox
             holder.dateTextView.visibility = View.GONE
         }
     }
-
 }
 
 abstract class BaseCommentHolder : KotlinEpoxyHolder() {

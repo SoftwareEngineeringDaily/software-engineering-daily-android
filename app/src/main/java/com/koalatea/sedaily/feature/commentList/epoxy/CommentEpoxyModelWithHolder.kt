@@ -9,15 +9,21 @@ import com.koalatea.sedaily.R
 abstract class CommentEpoxyModelWithHolder : BaseCommentEpoxyModelWithHolder<CommentHolder>() {
 
     @EpoxyAttribute lateinit var replyClickListener: () -> Unit
+    @EpoxyAttribute lateinit var upVoteClickListener: () -> Unit
 
     override fun bind(holder: CommentHolder) {
         super.bind(holder)
 
         holder.replayButton.setOnClickListener { replyClickListener() }
+        holder.upVoteButton.setOnClickListener { upVoteClickListener() }
+        holder.upVoteButton.isSelected = upvoted
+        holder.upVoteButton.text = score?.let {
+            if (it > 0) { it.toString() } else { "" }
+        } ?: ""
     }
-
 }
 
 class CommentHolder : BaseCommentHolder() {
     val replayButton by bind<Button>(R.id.replyButton)
+    val upVoteButton by bind<Button>(R.id.commentUpvoteButton)
 }
