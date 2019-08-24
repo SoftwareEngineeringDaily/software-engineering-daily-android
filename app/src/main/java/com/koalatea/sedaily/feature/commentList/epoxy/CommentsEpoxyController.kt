@@ -1,6 +1,5 @@
 package com.koalatea.sedaily.feature.commentList.epoxy
 
-import android.graphics.Typeface
 import com.airbnb.epoxy.TypedEpoxyController
 import com.koalatea.sedaily.database.model.Comment
 
