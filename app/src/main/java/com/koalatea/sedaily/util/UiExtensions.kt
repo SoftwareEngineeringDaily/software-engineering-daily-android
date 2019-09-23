@@ -3,11 +3,11 @@ package com.koalatea.sedaily.util
 import android.app.Activity
 import android.app.ActivityManager
 import android.content.Context
-import android.content.Intent
 import android.net.Uri
 import android.util.TypedValue
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -46,16 +46,12 @@ fun Fragment.openUrl(url: String): Boolean {
             url
         }
 
-        val intent = Intent(Intent.ACTION_VIEW).setData(Uri.parse(validUrl))
+        CustomTabsIntent.Builder()
+            .setShowTitle(true)
+            .build()
+            .launchUrl(context, Uri.parse(validUrl))
 
-        val context = this.context
-        if (context != null && intent.resolveActivity(context.packageManager) != null) {
-            startActivity(intent)
-
-            return true
-        }
-
-        return false
+        return true
     } catch (e: Exception) {
         Timber.e(e)
 
