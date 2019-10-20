@@ -51,6 +51,9 @@ class CommentsFragment : BaseFragment() {
         commentsEpoxyController = CommentsEpoxyController(
                 replyClickListener = { comment ->
                     viewModel.replyTo(comment)
+                },
+                upVoteClickListener = {comment ->
+                    viewModel.upVoteComment(comment)
                 }
         ).apply {
             epoxyRecyclerView.setController(this)
@@ -63,6 +66,8 @@ class CommentsFragment : BaseFragment() {
             })
         }
 
+
+
         addCommentButton.setOnClickListener {
             val comment = commentEditText.text?.trim()?.toString() ?: ""
 
@@ -72,6 +77,21 @@ class CommentsFragment : BaseFragment() {
         cancelReplyButton.setOnClickListener {
             viewModel.cancelReply()
         }
+
+        viewModel.commentVoteLiveData.observe(this, Observer { it.getContentIfNotHandled()?.let { resource ->
+                when (resource) {
+                    is Resource.RequireLogin -> showPromptLoginDialog()
+                    is Resource.Success -> {
+                        viewModel.reloadComments(entityId)
+                    }
+                    is Resource.Error -> {
+                        hideLoading()
+
+                        if (resource.isConnected) acknowledgeGenericError() else acknowledgeConnectionError()
+                    }
+                }
+            }
+        })
 
         viewModel.commentsResource.observe(this, Observer { resource ->
             when (resource) {
