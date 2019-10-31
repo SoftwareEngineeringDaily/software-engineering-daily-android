@@ -100,14 +100,6 @@ class AudioService : LifecycleService() {
     val playerStatusLiveData: LiveData<PlayerStatus>
         get() = _playerStatusLiveData
 
-    override fun onBind(intent: Intent?): IBinder {
-        super.onBind(intent)
-
-        handleIntent(intent)
-
-        return AudioServiceBinder()
-    }
-
     override fun onCreate() {
         super.onCreate()
 
@@ -213,6 +205,14 @@ class AudioService : LifecycleService() {
         }
     }
 
+    override fun onBind(intent: Intent?): IBinder {
+        super.onBind(intent)
+
+        handleIntent(intent)
+
+        return AudioServiceBinder()
+    }
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         handleIntent(intent)
 
@@ -233,12 +233,11 @@ class AudioService : LifecycleService() {
 
     @MainThread
     private fun handleIntent(intent: Intent?) {
-        episodeId = intent?.getStringExtra(ARG_EPISODE_ID)
-        episodeTitle = intent?.getStringExtra(ARG_TITLE)
-
         // Play
         intent?.let {
             intent.getParcelableExtra<Uri>(ARG_URI)?.also { uri ->
+                episodeId = intent.getStringExtra(ARG_EPISODE_ID)
+                episodeTitle = intent.getStringExtra(ARG_TITLE)
                 val startPosition = intent.getLongExtra(ARG_START_POSITION, C.POSITION_UNSET.toLong())
                 val playbackSpeed = playbackManager.playbackSpeed
 
