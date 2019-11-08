@@ -66,10 +66,9 @@ class EpisodesBoundaryCallback(
             }
 
             if (response?.isSuccessful == true) {
-                val episodes = response.body()?.filter { it.mp3 != null }
-                callback(searchQuery, episodes)
+                callback(searchQuery, response.body())
 
-                networkState.value = Event(NetworkState.Loaded(episodes?.size ?: 0))
+                networkState.value = Event(NetworkState.Loaded(response.body()?.size ?: 0))
             } else {
                 val error = NetworkState.Error(response?.errorBody()?.string(), networkManager.isConnected)
 

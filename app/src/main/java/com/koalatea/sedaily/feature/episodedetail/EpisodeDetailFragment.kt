@@ -292,8 +292,8 @@ class EpisodeDetailFragment : BaseFragment() {
     }
 
     private fun renderPlay(episode: Episode) {
-        // Playback is not supported
-        if (playerCallback == null) {
+        // Playback is not supported or viewing an article
+        if (playerCallback == null || episode.httpsMp3Url.isNullOrBlank()) {
             hidePlayerViews()
         } else {
             monitorPlayback(episode)
@@ -312,6 +312,13 @@ class EpisodeDetailFragment : BaseFragment() {
 
                 playerCallback?.playerStatusLiveData?.removeObservers(this)
             }
+        }
+
+        // Cannot download an article
+        if (episode.httpsMp3Url.isNullOrBlank()) {
+            hideDownloadViews()
+
+            relatedLinksButton.visibility = View.INVISIBLE
         }
     }
 
@@ -334,6 +341,12 @@ class EpisodeDetailFragment : BaseFragment() {
         deleteButton.visibility = View.GONE
         downloadButton.isEnabled = true
         downloadButton.visibility = View.VISIBLE
+        downloadProgressBar.visibility = View.INVISIBLE
+    }
+
+    private fun hideDownloadViews() {
+        deleteButton.visibility = View.GONE
+        downloadButton.visibility = View.INVISIBLE
         downloadProgressBar.visibility = View.INVISIBLE
     }
 
