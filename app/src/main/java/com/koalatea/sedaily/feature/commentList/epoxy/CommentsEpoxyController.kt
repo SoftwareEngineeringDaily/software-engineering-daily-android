@@ -4,8 +4,8 @@ import com.airbnb.epoxy.TypedEpoxyController
 import com.koalatea.sedaily.database.model.Comment
 
 class CommentsEpoxyController(
-        private val replyClickListener: (comment: Comment) -> Unit,
-        private val upVoteClickListener: (comment:Comment) -> Unit
+    private val replyClickListener: (comment: Comment) -> Unit,
+    private val upVoteClickListener: (comment: Comment) -> Unit
 ) : TypedEpoxyController<List<Comment>>() {
 
     override fun buildModels(comments: List<Comment>) {

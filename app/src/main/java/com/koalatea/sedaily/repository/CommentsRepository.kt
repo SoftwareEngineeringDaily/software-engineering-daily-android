@@ -50,5 +50,4 @@ class CommentsRepository(
             Resource.RequireLogin
         }
     }
-
 }

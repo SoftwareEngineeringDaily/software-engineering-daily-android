@@ -52,7 +52,7 @@ class CommentsFragment : BaseFragment() {
                 replyClickListener = { comment ->
                     viewModel.replyTo(comment)
                 },
-                upVoteClickListener = {comment ->
+                upVoteClickListener = { comment ->
                     viewModel.upVoteComment(comment)
                 }
         ).apply {
@@ -65,8 +65,6 @@ class CommentsFragment : BaseFragment() {
                 }
             })
         }
-
-
 
         addCommentButton.setOnClickListener {
             val comment = commentEditText.text?.trim()?.toString() ?: ""
