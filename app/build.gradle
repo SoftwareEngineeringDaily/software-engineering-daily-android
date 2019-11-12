@@ -20,8 +20,8 @@ android {
         applicationId "com.koalatea.sedaily"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 18
-        versionName "1.0.2"
+        versionCode 19
+        versionName "1.0.3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -140,6 +140,9 @@ dependencies {
 
     // Timber
     implementation 'com.jakewharton.timber:timber:4.7.1'
+
+    // Custom Tabs
+    implementation 'androidx.browser:browser:1.0.0'
 
     // Testing
     testImplementation 'junit:junit:4.12'

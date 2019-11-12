@@ -11,7 +11,6 @@ data class Comment(
         val author: Author,
         val rootEntity: String,
         val content: String,
-        val mentions: List<String>?,
         val deleted: Boolean?,
         val dateCreated: String,
         val score: Int?,

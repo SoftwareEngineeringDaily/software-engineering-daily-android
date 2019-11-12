@@ -36,6 +36,9 @@ interface SEDailyApi {
     @GET("comments/forEntity/{entity_id}")
     fun getEpisodeCommentsAsync(@Path("entity_id") entityId: String): Deferred<Response<CommentsResponse>>
 
+    @POST("comments/{entity_id}/upvote")
+    fun upVoteCommentsAsync(@Path("entity_id") entityId: String): Deferred<Response<GenericResponse>>
+
     @FormUrlEncoded
     @POST("comments/forEntity/{entity_id}")
     fun addEpisodeCommentAsync(

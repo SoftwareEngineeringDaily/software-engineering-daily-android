@@ -42,6 +42,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
+import timber.log.Timber
 import java.util.*
 
 private const val PLAYBACK_CHANNEL_ID = "playback_channel"
@@ -99,14 +100,6 @@ class AudioService : LifecycleService() {
     private val _playerStatusLiveData = MutableLiveData<PlayerStatus>()
     val playerStatusLiveData: LiveData<PlayerStatus>
         get() = _playerStatusLiveData
-
-    override fun onBind(intent: Intent?): IBinder {
-        super.onBind(intent)
-
-        handleIntent(intent)
-
-        return AudioServiceBinder()
-    }
 
     override fun onCreate() {
         super.onCreate()
@@ -213,6 +206,14 @@ class AudioService : LifecycleService() {
         }
     }
 
+    override fun onBind(intent: Intent?): IBinder {
+        super.onBind(intent)
+
+        handleIntent(intent)
+
+        return AudioServiceBinder()
+    }
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         handleIntent(intent)
 
@@ -233,17 +234,16 @@ class AudioService : LifecycleService() {
 
     @MainThread
     private fun handleIntent(intent: Intent?) {
-        episodeId = intent?.getStringExtra(ARG_EPISODE_ID)
-        episodeTitle = intent?.getStringExtra(ARG_TITLE)
-
         // Play
         intent?.let {
             intent.getParcelableExtra<Uri>(ARG_URI)?.also { uri ->
+                episodeId = intent.getStringExtra(ARG_EPISODE_ID)
+                episodeTitle = intent.getStringExtra(ARG_TITLE)
                 val startPosition = intent.getLongExtra(ARG_START_POSITION, C.POSITION_UNSET.toLong())
                 val playbackSpeed = playbackManager.playbackSpeed
 
                 play(uri, startPosition, playbackSpeed)
-            }
+            } ?: Timber.w("Playback uri was not set")
         }
     }
 

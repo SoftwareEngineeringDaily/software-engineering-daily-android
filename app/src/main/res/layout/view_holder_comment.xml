@@ -15,13 +15,27 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:gravity="start|center_vertical"
-        android:text="@string/reply"
         android:paddingStart="0dp"
+        android:paddingEnd="0dp"
+        android:text="@string/reply"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/commentTextView"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/commentTextView"
         app:layout_constraintTop_toBottomOf="@+id/commentTextView"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/commentUpvoteButton"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="start|center_vertical"
+        android:paddingStart="0dp"
+        android:paddingEnd="0dp"
+        app:icon="@drawable/upvote_downvote_src"
+        app:iconPadding="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/replyButton"
+        app:layout_constraintTop_toTopOf="@+id/replyButton"
         app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
