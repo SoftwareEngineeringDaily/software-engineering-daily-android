@@ -314,7 +314,7 @@ class EpisodeDetailFragment : BaseFragment() {
             }
         }
 
-        // Cannot download an article
+        // Cannot download or view related links for an article
         if (episode.httpsMp3Url.isNullOrBlank()) {
             hideDownloadViews()
 

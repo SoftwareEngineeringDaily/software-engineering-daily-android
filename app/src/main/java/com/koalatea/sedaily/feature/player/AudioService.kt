@@ -42,6 +42,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
+import timber.log.Timber
 import java.util.*
 
 private const val PLAYBACK_CHANNEL_ID = "playback_channel"
@@ -242,7 +243,7 @@ class AudioService : LifecycleService() {
                 val playbackSpeed = playbackManager.playbackSpeed
 
                 play(uri, startPosition, playbackSpeed)
-            }
+            } ?: Timber.w("Playback uri was not set")
         }
     }
 
