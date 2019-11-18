@@ -12,7 +12,7 @@ If you would like to contribute to this project, please:
 - Pick an [issue](https://github.com/SoftwareEngineeringDaily/software-engineering-daily-android/issues) to work on or create a [proposal](https://github.com/SoftwareEngineeringDaily/software-engineering-daily-android/blob/master/CONTRIBUTING.md#feature-proposals) for a new feature.
 - Fork this project.
 - Create your feature branch based off the `develop` branch.
-- Create a pull request to get your worked reviewed and merged back into the upstream `develop` branch.
+- Create a pull request to get your work reviewed and merged back into the upstream `develop` branch.
 
 Please include screenshots of your app changes and write down the test scenarios you followed to verify that your code works.
 
