@@ -201,7 +201,10 @@ class AudioService : LifecycleService() {
                             .build()
                 }
             })
-
+            //override media connector increment speed
+            val incrementMs = resources.getInteger(R.integer.increment_ms)
+            setFastForwardIncrementMs(incrementMs)
+            setRewindIncrementMs(incrementMs)
             setPlayer(exoPlayer)
         }
     }
