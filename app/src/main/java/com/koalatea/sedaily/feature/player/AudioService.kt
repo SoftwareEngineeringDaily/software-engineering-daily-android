@@ -38,12 +38,12 @@ import com.koalatea.sedaily.R
 import com.koalatea.sedaily.database.AppDatabase
 import com.koalatea.sedaily.database.model.EpisodeDetails
 import com.koalatea.sedaily.database.model.Listened
+import java.util.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
 import timber.log.Timber
-import java.util.*
 
 private const val PLAYBACK_CHANNEL_ID = "playback_channel"
 private const val PLAYBACK_NOTIFICATION_ID = 1
@@ -75,11 +75,10 @@ class AudioService : LifecycleService() {
 
                 putExtra(ARG_EPISODE_ID, episode._id)
                 episode.titleString?.let { title -> putExtra(ARG_TITLE, title) }
-                episode.uriString?.let{ uriString -> putExtra(ARG_URI, Uri.parse(uriString)) }
+                episode.uriString?.let { uriString -> putExtra(ARG_URI, Uri.parse(uriString)) }
                 putExtra(ARG_START_POSITION, episodeDetails.listened?.startPosition)
             }
         }
-
     }
 
     private val appDatabase: AppDatabase by inject()
@@ -344,7 +343,7 @@ class AudioService : LifecycleService() {
             if (playbackState == Player.STATE_READY) {
                 if (exoPlayer.playWhenReady) {
                     episodeId?.let { _playerStatusLiveData.value = PlayerStatus.Playing(it) }
-                } else {// Paused
+                } else { // Paused
                     episodeId?.let { _playerStatusLiveData.value = PlayerStatus.Paused(it) }
                 }
             } else if (playbackState == Player.STATE_ENDED) {
@@ -364,7 +363,5 @@ class AudioService : LifecycleService() {
         override fun onPlayerError(e: ExoPlaybackException?) {
             episodeId?.let { _playerStatusLiveData.value = PlayerStatus.Error(it, e) }
         }
-
     }
-
 }
