@@ -202,6 +202,10 @@ class AudioService : LifecycleService() {
                 }
             })
 
+            val incrementMs = resources.getInteger(R.integer.increment_ms)
+            setFastForwardIncrementMs(incrementMs)
+            setRewindIncrementMs(incrementMs)
+
             setPlayer(exoPlayer)
         }
     }
